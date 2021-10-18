@@ -4,7 +4,9 @@
   "description": "A tool to evaluate the documentation of source code",
   "main": "index.js",
   "scripts": {
+    "launch":"tsc && node build/index.js",
     "test": "jest"
+  
   },
   "keywords": [
     "documentation",
