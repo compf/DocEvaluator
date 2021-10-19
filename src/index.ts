@@ -13,7 +13,5 @@ function main(args:Array<string>){
     let traverser= new DirectoryTraverser(workingDirectory);
     traverser.getRelevantFiles();
 }
-export function small_test(a:number,b:number){
-    return a+b;
-}
+
 main(process.argv.slice(2))
