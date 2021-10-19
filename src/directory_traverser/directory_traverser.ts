@@ -7,9 +7,6 @@ import { EvaluatorConf,JSONConf } from "../conf/EvaluatorConf";
 const CONF_FILENAME = "comment_conf.json";
 
 
-const MiniMatchConf = { dot: true, matchBase: true };
-
-
 /**
  * Converts a jsonObject that contains the necessary information about the directory traverser to a equivalent 
  * DirectoryTraverserConfig
