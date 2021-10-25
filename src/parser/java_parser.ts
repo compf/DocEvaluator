@@ -5,9 +5,13 @@ var  JavaLexer =require( "./antlr_files/java/JavaLexer").JavaLexer;
 
 export class JavaParser extends BaseParser{
     override parse(filename:string):ParseResult{
-        let tokens=this.getTokens(filename,JavaLexer);
+        let tokens=this.getTokens(filename);
         tokens.fill()
+        
         console.log(tokens);
         return new ParseResult();
+    }
+    override getLexerType(){
+        return JavaLexer;
     }
 }

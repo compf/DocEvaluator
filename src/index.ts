@@ -13,7 +13,7 @@ function main(args:Array<string>){
         workingDirectory=args[0];
     }
     let traverser= new DirectoryTraverser(workingDirectory);
-    traverser.getRelevantFiles();
+    const relevantFiley=traverser.getRelevantFiles();
     var parser:BaseParser=new JavaParser();
    var tokens= parser.parse("Player.java");
    console.log(tokens);

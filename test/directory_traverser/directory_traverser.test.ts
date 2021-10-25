@@ -20,7 +20,7 @@ for(let p of [dirA,dirB,dirC,subDir]){
     createDirectory(path.join(basePath,p));
 }
 
-createEmptyFile(path.join(basePath,"main.java"));
+createEmptyFile(path.join(basePath,"Main.java"));
 createEmptyFile(path.join(basePath,dirA,"moduleA.java"));
 createEmptyFile(path.join(basePath,dirA,"moduleB.java"));
 createEmptyFile(path.join(basePath,dirA,"irrelevant.txt"));
