@@ -27,7 +27,6 @@ coverage
 .nyc_output
 *.java
 *.js
-testDir/
 *.zip
 out.txt
 # Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)

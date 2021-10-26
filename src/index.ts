@@ -15,8 +15,8 @@ function main(args:Array<string>){
     let traverser= new DirectoryTraverser(workingDirectory);
     const relevantFiley=traverser.getRelevantFiles();
     var parser:BaseParser=new JavaParser();
-   var tokens= parser.parse("Player.java");
-   console.log(tokens);
+   var tokens= parser.parse("testDir/commented_class.java");
+   //console.log(tokens);
 }
 
 main(process.argv.slice(2))

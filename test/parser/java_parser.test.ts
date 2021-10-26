@@ -2,7 +2,7 @@ import { JavaParser } from "../../src/parser/java_parser";
 import fs from "fs"
 import { JavaLexer } from "../../src/parser/antlr_files/java/JavaLexer";
 import { WSA_E_CANCELLED } from "constants";
-import { Token } from "antlr4";
+import { Token } from "antlr4ts";
 
 let tokens:Token[]=[]
 const numberTokensMainJava=33;
@@ -17,7 +17,7 @@ beforeAll(()=>{
     }
     
     const parser=new JavaParser();
-    tokens=parser.getTokens("testDir/Main.java").tokens;
+    tokens=parser.getTokens("testDir/Main.java").getTokens();
 });
 test("Test java lexer token size",()=>{
     expect(tokens.length).toBe(numberTokensMainJava);  
@@ -34,3 +34,4 @@ let tokenTypes=tokens.map((x)=>x.type);
 expect(tokenTypes).toStrictEqual(correctTokens);
 expect(correctTokens.length).toBe(numberTokensMainJava)
 })
+test("test ")

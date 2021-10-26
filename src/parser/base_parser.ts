@@ -1,15 +1,32 @@
 import { ParseResult } from './parse_result';
-import antlr4, { CommonTokenStream } from 'antlr4';
+import antlr4 from 'antlr4';
+import { CommonTokenStream } from 'antlr4ts';
 import  fs  from 'fs';
+import { TokenStream } from 'antlr4ts';
 import { CharStream, CharStreams } from 'antlr4ts';
-//import {antlr4} from "antlr4/index"
 export abstract class BaseParser{
+    /**
+     * Parse the specified  parser using the parser of the derived class
+     * @param filepath a path to a source code file
+     * @returns an A object that represent the parse result
+     */
     public  parse(filepath:string):ParseResult{
         let input=fs.readFileSync(filepath).toString();
         return this.parseString(input);
     }
+    /**
+     * Parse the string using the parser of the derived class
+     * @param content the string that contains the source code to parse
+     * @returns A object that represent the parse result
+     */
     public abstract parseString(content:string):ParseResult;
-    public getTokens<T>(content:string):antlr4.CommonTokenStream{
+
+    /**
+     * Reads all tokens from the source code file
+     * @param content a string that contains valid source code
+     * @returns a CommonTokenStream that contains all read tokens
+     */
+    public getTokens<T>(content:string):CommonTokenStream{
        
         let inputStream= CharStreams.fromString(content);
         const lexerType=this.getLexerType();
@@ -18,13 +35,10 @@ export abstract class BaseParser{
         tokenStream.fill();
         return tokenStream;
     }
+    /**
+     * Returns the type of the lexer which will be used to simply instantiate the lexer
+     */
     public abstract getLexerType<T>():{ new(stream:CharStream): T ;}
-    public abstract getParserType<T>():{ new(stream:antlr4.CommonTokenStream): T ;};
 
-    public getParser<T>(tokens:antlr4.CommonTokenStream):antlr4.Parser{
-        const parserType=this.getParserType();
-        let parser= new parserType(tokens) as unknown as antlr4.Parser;
-        parser.buildParseTrees=true;
-        return parser;
-    }
+ 
 }
