@@ -6,7 +6,7 @@ import { CharStream, CharStreams } from 'antlr4ts';
 
 
 export class JavaParser extends BaseParser{
-    override parse(filename:string):ParseResult{
+    override parseString(filename:string):ParseResult{
         let tokens=this.getTokens(filename);
         tokens.fill()
         

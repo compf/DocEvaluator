@@ -4,10 +4,14 @@ import  fs  from 'fs';
 import { CharStream, CharStreams } from 'antlr4ts';
 //import {antlr4} from "antlr4/index"
 export abstract class BaseParser{
-    public abstract parse(filepath:string):ParseResult;
-    public getTokens<T>(filepath:string):antlr4.CommonTokenStream{
+    public  parse(filepath:string):ParseResult{
         let input=fs.readFileSync(filepath).toString();
-        let inputStream= CharStreams.fromString(input);
+        return this.parseString(input);
+    }
+    public abstract parseString(content:string):ParseResult;
+    public getTokens<T>(content:string):antlr4.CommonTokenStream{
+       
+        let inputStream= CharStreams.fromString(content);
         const lexerType=this.getLexerType();
         let lexer=new lexerType(inputStream)
         let tokenStream= new CommonTokenStream(lexer as any)
