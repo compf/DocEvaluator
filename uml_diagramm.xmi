@@ -119,7 +119,7 @@
             <details xmi:id="_vOuWgBffEDqDBetmB9Ubtw00" key="uuid" value="_vOuWgBffEDqDBetmB9Ubtw"/>
           </eAnnotations>
         </xmi:Extension>
-        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_DZ0W0BfgEDqDBetmB9Ubtw" value="100">
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_DZ0W0BfgEDqDBetmB9Ubtw" value="*">
           <xmi:Extension extender="http://www.eclipse.org/emf/2002/Ecore">
             <eAnnotations xmi:id="_DZ0W0BfgEDqDBetmB9Ubtw0" source="genmymodel">
               <details xmi:id="_DZ0W0BfgEDqDBetmB9Ubtw00" key="uuid" value="_DZ0W0BfgEDqDBetmB9Ubtw"/>
@@ -255,7 +255,7 @@
             <details xmi:id="_8d0rgBfTEDqDBetmB9Ubtw00" key="uuid" value="_8d0rgBfTEDqDBetmB9Ubtw"/>
           </eAnnotations>
         </xmi:Extension>
-        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_F50E0BfUEDqDBetmB9Ubtw" value="100">
+        <upperValue xsi:type="uml:LiteralUnlimitedNatural" xmi:id="_F50E0BfUEDqDBetmB9Ubtw" value="*">
           <xmi:Extension extender="http://www.eclipse.org/emf/2002/Ecore">
             <eAnnotations xmi:id="_F50E0BfUEDqDBetmB9Ubtw0" source="genmymodel">
               <details xmi:id="_F50E0BfUEDqDBetmB9Ubtw00" key="uuid" value="_F50E0BfUEDqDBetmB9Ubtw"/>

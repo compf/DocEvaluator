@@ -1,4 +1,5 @@
-import { ParseResult } from './parse_result';
+import { ParseResult } from "./parse_result/ParseResult";
+
 import antlr4 from 'antlr4';
 import { CommonTokenStream } from 'antlr4ts';
 import  fs  from 'fs';

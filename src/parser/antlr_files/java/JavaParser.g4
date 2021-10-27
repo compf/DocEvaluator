@@ -1,21 +1,26 @@
 parser grammar JavaParser;
 options { tokenVocab=JavaLexer; }
-javaFile:relevantComponent*;
-classDec: modifierer*  CLASS IDENTIFIER generics? (EXTENDS IDENTIFIER)? (IMPLEMENTS IDENTIFIER)* classBlock;
-classBlock: '{' (classBlock | methodDecl) '}';
+javaFile:commentComponentPair*;
+allRelevantComponents:importStatement* commentComponentPair*;
+classDec: modifierer*  CLASS id generics? extendsStatement? implementStatement* classBlock;
+classBlock: '{' commentComponentPair* '}';
 blockStart: '{';
 blockEnd: '}';
-
-interfaceDec: modifierer* INTERFACE IDENTIFIER (IMPLEMENTS IDENTIFIER)* blockStart;
-relevantComponent: COMMENT? (classDec | interfaceDec|methodDecl);
-modifierer: PUBLIC|STATIC|PROTECTED|PRIVATE|FINAL;
+extendsStatement: (EXTENDS qualifiedName);
+implementStatement: (IMPLEMENTS qualifiedName);
+importStatement: IMPORT qualifiedName ';';
+interfaceDec: modifierer* INTERFACE id (IMPLEMENTS qualifiedName)* blockStart;
+commentComponentPair: COMMENT? component;
+component: (classDec | interfaceDec | methodDecl|fieldDec);
+modifierer: PUBLIC|STATIC|PROTECTED|PRIVATE|FINAL|(AT IDENTIFIER);
 generics: '<' IDENTIFIER '>';
-methodDecl: modifierer* dataType IDENTIFIER '(' params? ')' block;
+methodDecl: modifierer* dataType id '(' params? ')' block;
+fieldDec: modifierer* dataType id ';';
 block: '{' .*? (block .*?)? '}';
-dataType: (VOID | INT | LONG |DOUBLE | FLOAT |SHORT | IDENTIFIER) ('['  ']')?;
+dataType: (VOID | INT | LONG |DOUBLE | FLOAT |SHORT | qualifiedName) ('['  ']')?;
 params: param (',' param)* param?;
 param: dataType IDENTIFIER;
-fieldDec: modifierer* dataType IDENTIFIER ';';
 comment: COMMENT;
-allRelevantComponents: relevantComponent+;
 notInteresting: ~'}'*;
+id: IDENTIFIER;
+qualifiedName: id ('.' id)*;

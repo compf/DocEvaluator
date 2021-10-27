@@ -4,23 +4,29 @@
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
 import { JavaFileContext } from "./JavaParser";
+import { AllRelevantComponentsContext } from "./JavaParser";
 import { ClassDecContext } from "./JavaParser";
 import { ClassBlockContext } from "./JavaParser";
 import { BlockStartContext } from "./JavaParser";
 import { BlockEndContext } from "./JavaParser";
+import { ExtendsStatementContext } from "./JavaParser";
+import { ImplementStatementContext } from "./JavaParser";
+import { ImportStatementContext } from "./JavaParser";
 import { InterfaceDecContext } from "./JavaParser";
-import { RelevantComponentContext } from "./JavaParser";
+import { CommentComponentPairContext } from "./JavaParser";
+import { ComponentContext } from "./JavaParser";
 import { ModifiererContext } from "./JavaParser";
 import { GenericsContext } from "./JavaParser";
 import { MethodDeclContext } from "./JavaParser";
+import { FieldDecContext } from "./JavaParser";
 import { BlockContext } from "./JavaParser";
 import { DataTypeContext } from "./JavaParser";
 import { ParamsContext } from "./JavaParser";
 import { ParamContext } from "./JavaParser";
-import { FieldDecContext } from "./JavaParser";
 import { CommentContext } from "./JavaParser";
-import { AllRelevantComponentsContext } from "./JavaParser";
 import { NotInterestingContext } from "./JavaParser";
+import { IdContext } from "./JavaParser";
+import { QualifiedNameContext } from "./JavaParser";
 
 
 /**
@@ -37,6 +43,13 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitJavaFile?: (ctx: JavaFileContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.allRelevantComponents`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitAllRelevantComponents?: (ctx: AllRelevantComponentsContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `JavaParser.classDec`.
@@ -67,6 +80,27 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitBlockEnd?: (ctx: BlockEndContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `JavaParser.extendsStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExtendsStatement?: (ctx: ExtendsStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.implementStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitImplementStatement?: (ctx: ImplementStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.importStatement`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitImportStatement?: (ctx: ImportStatementContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `JavaParser.interfaceDec`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -74,11 +108,18 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitInterfaceDec?: (ctx: InterfaceDecContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `JavaParser.relevantComponent`.
+	 * Visit a parse tree produced by `JavaParser.commentComponentPair`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitRelevantComponent?: (ctx: RelevantComponentContext) => Result;
+	visitCommentComponentPair?: (ctx: CommentComponentPairContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.component`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitComponent?: (ctx: ComponentContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `JavaParser.modifierer`.
@@ -100,6 +141,13 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitMethodDecl?: (ctx: MethodDeclContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.fieldDec`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFieldDec?: (ctx: FieldDecContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `JavaParser.block`.
@@ -130,13 +178,6 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitParam?: (ctx: ParamContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `JavaParser.fieldDec`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitFieldDec?: (ctx: FieldDecContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `JavaParser.comment`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -144,17 +185,24 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitComment?: (ctx: CommentContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by `JavaParser.allRelevantComponents`.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	visitAllRelevantComponents?: (ctx: AllRelevantComponentsContext) => Result;
-
-	/**
 	 * Visit a parse tree produced by `JavaParser.notInteresting`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	visitNotInteresting?: (ctx: NotInterestingContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.id`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitId?: (ctx: IdContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.qualifiedName`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitQualifiedName?: (ctx: QualifiedNameContext) => Result;
 }
 
