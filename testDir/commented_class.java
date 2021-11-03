@@ -1,4 +1,4 @@
-import java.util;
+import java.util.*;
 /**
  * A class
  */
@@ -13,7 +13,7 @@ public class Main {
     private int field;
 }
 
-public class SecondClass extends Object implements Object{
+public class SecondClass extends Object implements List<Integer>{
 
     public void test(int a) throws Exception{
         int gh1;
@@ -25,4 +25,5 @@ public class SecondClass extends Object implements Object{
     private String hallo(){
 
     }
+    int multiple,many;
 }

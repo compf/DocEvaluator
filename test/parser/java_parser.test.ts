@@ -1,13 +1,14 @@
 import { JavaParser } from "../../src/parser/java_parser";
 import fs from "fs"
 import { JavaLexer } from "../../src/parser/antlr_files/java/JavaLexer";
-import { WSA_E_CANCELLED } from "constants";
+import exp, { WSA_E_CANCELLED } from "constants";
 import { Token } from "antlr4ts";
 import { HierarchicalMember } from "../../src/parser/parse_result/HierarchicalMember";
 import { MethodComponent } from "../../src/parser/parse_result/MethodComponent";
 import { ClassMemberComponent } from "../../src/parser/parse_result/ClassMemberComponent";
 import { Accessibility } from "../../src/parser/parse_result/Component";
 import { ClassComponent } from "../../src/parser/parse_result/ClassComponent";
+import { JavaClassData } from "../../src/parser/parse_result/java/JavaClassData";
 
 let tokens:Token[]=[]
 const numberTokensMainJava=33;
@@ -23,7 +24,6 @@ beforeAll(()=>{
     tokens=stream.getTokens();
 });
 test("Test java lexer token size",()=>{
-    console.log(tokens);
     expect(tokens.length).toBe(numberTokensMainJava);  
 });
 test("test token types correct",()=>{
@@ -72,7 +72,13 @@ test("test java parser",()=>{
     expect(secondClass.getName()).toBe("SecondClass");
     expect(secondClass.getComment()).toBeNull();
     let secondClassChildren=(secondClass as ClassComponent).getChildren();
-    expect(secondClassChildren).toHaveLength(2);
+    expect(secondClassChildren).toHaveLength(3);
+
+    let secondClassData=secondClass.getComponentMetaInformation() as JavaClassData;
+    expect(secondClassData).not.toBeNull();
+    expect(secondClassData.getBaseClass()).toBe("Object");
+    expect(secondClassData.getImplementedInterfaces()).toHaveLength(1);
+    expect(secondClassData.getImplementedInterfaces()[0]).toBe("List<Integer>");
 
     let testMethod=secondClassChildren[0] as MethodComponent;
     expect(testMethod.getName()).toBe("test");
@@ -91,7 +97,19 @@ test("test java parser",()=>{
     //expect(halloMethod.getAccessibilty()).toBe(Accessibility.Private)
     expect(halloMethod.getComponentMetaInformation().isPublic()).toBeFalsy();
     expect(halloMethod.getParams()).toHaveLength(0);
-    
+
+    let multipleFields=secondClassChildren[2] as HierarchicalMember
+    expect(multipleFields).not.toBeNull();
+    expect(multipleFields.getChildren()).toHaveLength(2);
+   let fieldChild1=multipleFields.getChildren()[0] as ClassMemberComponent; 
+   expect(fieldChild1).not.toBeNull();
+   expect(fieldChild1.getReturnType()).toBe("int"); 
+   expect(fieldChild1.getName()).toBe("multiple");
+
+   let fieldChild2=multipleFields.getChildren()[1] as ClassMemberComponent; 
+   expect(fieldChild2).not.toBeNull();
+   expect(fieldChild2.getReturnType()).toBe("int"); 
+   expect(fieldChild2.getName()).toBe("many");
 
 
 

@@ -79,7 +79,7 @@ classDeclaration
       implementInterfaces?
       classBody
     ;
-extendClass: typeType;
+extendClass: EXTENDS typeType;
 implementInterfaces: (IMPLEMENTS typeList);
 typeParameters
     : '<' typeParameter (',' typeParameter)* '>'

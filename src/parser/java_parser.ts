@@ -24,10 +24,7 @@ export class JavaParser extends BaseParser {
         let parser = new Antlr_JavaParser(tokens);
         let visitor = new FileVisitor();
         let rel = parser.compilationUnit()
-        console.log("hallo",rel.text);
         var res=visitor.visit(rel) as HierarchicalMember;
-        //console.log(res);
-        //console.log(tokens);
         return  {members:res};
     }
     public override getLexerType<T>(): { new(stream: CharStream): T; } {
@@ -35,34 +32,6 @@ export class JavaParser extends BaseParser {
     }
 
 }
-/*class ComponentVisitor  extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
-    protected defaultResult(): Component | null {
-        return null;
-    }
-   /*visitComponent(ctx:ComponentContext){
-        return this.visit(ctx.getChild(0))
-    }
-    private parent:Component|null;
-    private comment:StructuredComment|null;
-    constructor(parent:Component|null,comment:StructuredComment|null){
-        super();
-        this.parent=parent;
-        this.comment=comment;
-    }
-    visitMethodDecl(meth: MethodDeclarationContext) {
-        let methodVisitor = new MethodVisitor(this.parent,this.comment,new DefaultComponentMetaInformation(false));
-        let methodDeclaration = methodVisitor.visit(meth);
-        console.log("method " + meth.text)
-        return methodDeclaration;
-    }
-    visitClassDec(cls:ClassDeclarationContext){
-        return new ClassDecVisitor(this.parent,this.comment).visit(cls);
-    }
-    visitFieldDec(field:FieldDeclarationContext){
-        return new FieldDecVisitor(this.parent,this.comment).visit(field);
-    }
-
-}*/
 class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     
     protected defaultResult(): Component | null {
@@ -73,15 +42,6 @@ class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
      private comment:StructuredComment|null;
      private meta: ComponentMetaInformation;
      private field:Component|null=null;
-     /*visitId(ctx:IdContext){
-         this.name=ctx.text;
-         this.fieldComponent= new ClassMemberComponent(this.name,this.type,this.parent,this.comment,this.accessibility,this.isStatic)
-         return null;
-     }*/
-     /*visitDataType(dt:DataTypeContext){
-        this.type=dt.text;
-        return null;
-     }*/
      visitTypeType(ctx:TypeTypeContext){
          this.type=ctx.text;
          return null;
@@ -98,7 +58,7 @@ class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
             }
             else{
                 //TODO find better solution in case of fields with comma separated names
-                let names=ctx.children.map((c)=>c.getChild(0).text);
+                let names=ctx.children.filter((c)=>c.childCount>0).map((c)=>c.getChild(0).text);
                 let groupedField=new HierarchicalMember(names.join(","),this.parent,this.comment,this.meta);
                 this.field=groupedField;
                 for(let n of names){
@@ -125,10 +85,10 @@ class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<{implement
        return {baseClass:"",implementedInterfaces:[]}
     }
     visitImplementInterfaces(ctx:ImplementInterfacesContext){
-        this.implementedInterface=ctx.getChild(0).text.split(",");
+        this.implementedInterface=ctx.getChild(1).text.split(",");
     }
     visitExtendClass(ctx:ExtendClassContext){
-        this.baseClass=ctx.getChild(0).text;
+        this.baseClass=ctx.getChild(1).text;
     }
     private implementedInterface:string[]=[];
     private baseClass:string="";
@@ -145,12 +105,6 @@ class ClassDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
     private parent:Component|null;
     private isPublic:boolean=false;
     private comment:StructuredComment|null;
-    /*visitClassOrInterfaceModifier(mod:ClassOrInterfaceModifierContext){
-        let modifier= new ModifierVisitor().visitClassOrInterfaceModifier(mod);
-        this.isPublic=modifier.accessibilty==Accessibility.Public;;
-        return null;
-
-    }*/
     visitClassDeclaration(ctx:ClassDeclarationContext){
         this.className=ctx.getChild(1).text;
         let blck=ctx.classBody().classBodyDeclaration();
@@ -173,19 +127,6 @@ class ClassDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
         return clsComponent;
         
     }
-    /*visitClass(blck:ClassBodyContext){
-        let visitor=new CommentComponentPairVisitor(this.clsComponent);
-        if(blck.children==undefined)return null;
-        for(var child of blck.children){
-            var item=visitor.visit(child);
-            if(item!=null){
-                this.clsComponent?.addChild(item);
-
-            }
-        }
-        return null;
-    }*/
-    
     constructor(parent:Component|null,comment:StructuredComment|null,isPublic:boolean){
         super();
         this.parent=parent;
@@ -227,14 +168,7 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
         super();
         this.parent = parent;
     }
-    /*visitClassDeclaration(ctx:ClassDeclarationContext) :Component|null{
-        let visitor=new ClassDecVisitor(this.parent,this.comment);
-        return visitor.visit(ctx);
-    }*/
-    /*visitTypeDeclaration(ctx:TypeDeclarationContext){
-        let visitor=new ClassDecVisitor(this.parent,this.comment,new DefaultComponentMetaInformation(this.modifier.accessibilty==Accessibility.Public) );
-        return visitor.visit(ctx);
-    }*/
+
     visitClassOrInterfaceModifier(ctx:ClassOrInterfaceModifierContext){
         this.modifier=this.modifierVisitor.visitClassOrInterfaceModifier(ctx);
         return null;
@@ -256,51 +190,7 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
         let visitor=new FieldDecVisitor(this.parent,this.comment,new DefaultComponentMetaInformation(this.modifier.accessibilty==Accessibility.Public));
         return visitor.visit(ctx);
     }
-    /*visitCommentComponentPair(ctx: ParserRuleContext) {
-
-        let comment: StructuredComment | null = null;
-        let component: HierarchicalMember;
-        let visitor;
-        if (ctx.childCount == 2) {
-            let commentText = ctx.getChild(0).text;
-            comment = new StructuredComment(commentText);
-           let declContext=ctx.getChild(1);
-           let componentVisitor=new ComponentVisitor(this.parent,comment);
-          return  componentVisitor.visit(declContext);
-           
-        }
-        else if (ctx.childCount == 1) {
-            let declContext=ctx.getChild(0);
-           let componentVisitor=new ComponentVisitor(this.parent,comment);
-          return  componentVisitor.visit(declContext);
-
-        }
-        else {
-            return null;
-        }
-
-    }*/
-    /*visitCompilationUnit(ctx: CompilationUnitContext) {
-
-        let hierarchical = new HierarchicalMember("", this.parent, null,Accessibility.Public,false);
-        if (ctx.children == undefined) return null;
-        for (let child of ctx.children) {
-            let visitor = new CommentComponentPairVisitor(hierarchical);
-            let component = visitor.visitCommentComponentPair(child as CommentComponentPairContext);
-
-            if (component != null) {
-                hierarchical.addChild(component);
-
-            }
-        }
-        return hierarchical;
-    }*/
-
-
-
     
-
-
 
 }
 
@@ -353,9 +243,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     private methodParams:{type:string,name:string}[]=[];
     private thrownException:string[]=[];
     
-    visitThrowList(ctx:ThrowListContext){
-        console.log("hallo");
-    }
+   
     
     visitMethodDeclaration(ctx:MethodDeclarationContext){
         this.returnType=ctx.getChild(0).text
@@ -364,26 +252,11 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
        let paramsThrow=visitor.visit(ctx);
        this.methodParams=paramsThrow.params;
        this.thrownException=paramsThrow.thrownException;
-       console.log("test")
+      
      
      
     }
     
-    
-    /*visitId(ctx: IdContext) {
-        this.methodName = ctx.text;
-        console.log(this.methodName);
-    }
-    visitDataType(ctx: DataTypeContext) {
-        this.returnType = ctx.text;
-        console.log("return " + this.returnType);
-    }
-    visitParam(param:FormalParameterContext){
-        let type=param.getChild(0).text;
-        let name=param.getChild(1).text;
-        this.methodParams.push({type,name})
-        console.log("param",type,name)
-    }*/
     visit(ctx: RuleContext): MethodComponent {
         super.visit(ctx);
         return new MethodComponent(this.methodName,this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic,this.isOverriding,this.thrownException),this.methodParams)
@@ -403,7 +276,7 @@ class ModifierVisitor extends AbstractParseTreeVisitor<ModifiererInformation> im
         }
         
         for (let child of mod.children) {
-            console.log(child.text);
+
             switch (child.text.toLowerCase()) {
                 case "public":
                     this.result.accessibilty = Accessibility.Public; break;
@@ -415,8 +288,6 @@ class ModifierVisitor extends AbstractParseTreeVisitor<ModifiererInformation> im
                     this.result.isStatic = true; break;
                 case "@override":
                     this.result.isOverride = true; break;
-
-
 
             }
         }
