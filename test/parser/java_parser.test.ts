@@ -58,16 +58,16 @@ test("test java parser",()=>{
     expect(mainMethodParams[0].name).toBe("args");
     expect(mainMethodParams[0].type).toBe("String[]");
 
-    expect(mainMethod.getType()).toBe("void");
-    expect(mainMethod.getAccessibilty()).toBe(Accessibility.Public);
-    expect(mainMethod.isStatic()).toBeTruthy();
+    //expect(mainMethod.getType()).toBe("void");
+    //expect(mainMethod.getAccessibilty()).toBe(Accessibility.Public);
+    expect(mainMethod.getComponentMetaInformation().isPublic()).toBeTruthy();
 
     let field=firstClassChildren[1] as ClassMemberComponent
     expect(field.getName()).toBe("field");
     expect(field.getComment()).toBeNull();
-    expect(field.getType()).toBe("int");
-    expect(field.getAccessibilty()).toBe(Accessibility.Private);
-    expect(field.isStatic()).toBeFalsy();
+    expect(field.getReturnType()).toBe("int");
+    //expect(field.getAccessibilty()).toBe(Accessibility.Private);
+    expect(field.getComponentMetaInformation().isPublic()).toBeFalsy();
 
     expect(secondClass.getName()).toBe("SecondClass");
     expect(secondClass.getComment()).toBeNull();
@@ -76,20 +76,20 @@ test("test java parser",()=>{
 
     let testMethod=secondClassChildren[0] as MethodComponent;
     expect(testMethod.getName()).toBe("test");
-    expect(testMethod.getAccessibilty()).toBe(Accessibility.Public)
-    expect(testMethod.isStatic()).toBeFalsy();
+    expect(testMethod.getComponentMetaInformation().isPublic()).toBeTruthy();
+
     expect(testMethod.getParams()).toHaveLength(1);
-    expect(testMethod.getType()).toBe("void");
+    expect(testMethod.getReturnType()).toBe("void");
     let testMethodParam=testMethod.getParams()[0];
     expect(testMethodParam.name).toBe("a");
     expect(testMethodParam.type).toBe("int");
 
     let halloMethod=secondClassChildren[1] as MethodComponent;
     expect(halloMethod.getName()).toBe("hallo");
-    expect(halloMethod.getType()).toBe("String");
+    expect(halloMethod.getReturnType()).toBe("String");
 
-    expect(halloMethod.getAccessibilty()).toBe(Accessibility.Private)
-    expect(halloMethod.isStatic()).toBeFalsy();
+    //expect(halloMethod.getAccessibilty()).toBe(Accessibility.Private)
+    expect(halloMethod.getComponentMetaInformation().isPublic()).toBeFalsy();
     expect(halloMethod.getParams()).toHaveLength(0);
     
 

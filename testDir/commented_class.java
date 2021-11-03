@@ -13,14 +13,15 @@ public class Main {
     private int field;
 }
 
-public class SecondClass{
+public class SecondClass extends Object implements Object{
 
-    public void test(int a){
+    public void test(int a) throws Exception{
         int gh1;
     }
     /**
      * 
      */
+    @Override
     private String hallo(){
 
     }

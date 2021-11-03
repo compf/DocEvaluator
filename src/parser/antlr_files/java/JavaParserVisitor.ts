@@ -11,6 +11,8 @@ import { ModifierContext } from "./JavaParser";
 import { ClassOrInterfaceModifierContext } from "./JavaParser";
 import { VariableModifierContext } from "./JavaParser";
 import { ClassDeclarationContext } from "./JavaParser";
+import { ExtendClassContext } from "./JavaParser";
+import { ImplementInterfacesContext } from "./JavaParser";
 import { TypeParametersContext } from "./JavaParser";
 import { TypeParameterContext } from "./JavaParser";
 import { TypeBoundContext } from "./JavaParser";
@@ -25,6 +27,7 @@ import { InterfaceBodyContext } from "./JavaParser";
 import { ClassBodyDeclarationContext } from "./JavaParser";
 import { MemberDeclarationContext } from "./JavaParser";
 import { MethodDeclarationContext } from "./JavaParser";
+import { ThrowListContext } from "./JavaParser";
 import { MethodBodyContext } from "./JavaParser";
 import { TypeTypeOrVoidContext } from "./JavaParser";
 import { GenericMethodDeclarationContext } from "./JavaParser";
@@ -176,6 +179,20 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitClassDeclaration?: (ctx: ClassDeclarationContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `JavaParser.extendClass`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExtendClass?: (ctx: ExtendClassContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.implementInterfaces`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitImplementInterfaces?: (ctx: ImplementInterfacesContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `JavaParser.typeParameters`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -272,6 +289,13 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitMethodDeclaration?: (ctx: MethodDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.throwList`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitThrowList?: (ctx: ThrowListContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `JavaParser.methodBody`.

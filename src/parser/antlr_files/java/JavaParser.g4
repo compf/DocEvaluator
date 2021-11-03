@@ -75,11 +75,12 @@ variableModifier
 
 classDeclaration
     : CLASS IDENTIFIER typeParameters?
-      (EXTENDS typeType)?
-      (IMPLEMENTS typeList)?
+      extendClass?
+      implementInterfaces?
       classBody
     ;
-
+extendClass: typeType;
+implementInterfaces: (IMPLEMENTS typeList);
 typeParameters
     : '<' typeParameter (',' typeParameter)* '>'
     ;
@@ -145,10 +146,10 @@ memberDeclaration
  */
 methodDeclaration
     : typeTypeOrVoid IDENTIFIER formalParameters ('[' ']')*
-      (THROWS qualifiedNameList)?
+      throwList?
       methodBody
     ;
-
+throwList: (THROWS qualifiedNameList);
 methodBody
     : block
     | ';'

@@ -1,40 +1,17 @@
 import { Accessibility, Component } from "./Component";
+import { ComponentMetaInformation } from "./ComponentData";
 import { StructuredComment } from "./StructuredComment";
-export class HierarchicalMember implements Component{
-    private parent:Component|null;
-    private name:string;
-    private comment:StructuredComment|null;
+export class HierarchicalMember extends Component{
     private children:Component[];
-    private accessibility:Accessibility;
-    private _isStatic:boolean;
-    getParent(): Component|null {
-        return this.parent;
-    }
-    getName(): string {
-        return this.name;
-    }
-    getComment(): StructuredComment|null {
-        return this.comment;
-    }
     addChild(child:Component){
         this.children.push(child);
     }
     getChildren():Component[]{
         return this.children;
     }
-    getAccessibilty():Accessibility{
-        return this.accessibility;
-    }
-    isStatic():boolean{
-        return this._isStatic;
-    }
-    constructor(name:string,parent:Component|null,comment:StructuredComment|null,accessibilty:Accessibility,isStatic:boolean){
-        this.name=name;
-        this.parent=parent;
-        this.comment=comment;
+    constructor(name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
+        super(name,parent,comment,meta)
         this.children=[];
-        this.accessibility=accessibilty;
-        this._isStatic=isStatic;
     }
     
 }
