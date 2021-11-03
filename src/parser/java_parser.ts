@@ -2,15 +2,14 @@ import { BaseParser } from "./base_parser";
 import { ParseResult } from "./parse_result/ParseResult";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import antlr4, { CommonTokenStream } from 'antlr4';
-import { CharStream, CharStreams, RuleContext } from 'antlr4ts';
+import { CharStream, CharStreams, ParserRuleContext, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Accessibility, Component } from "./parse_result/Component";
 import { ErrorNode } from "antlr4ts/tree/ErrorNode";
 import { ParseTree } from "antlr4ts/tree/ParseTree";
 import { RuleNode } from "antlr4ts/tree/RuleNode";
 import { TerminalNode } from "antlr4ts/tree/TerminalNode";
-import { CommentContext, JavaParser as Antlr_JavaParser, JavaFileContext, ComponentContext, ClassBlockContext } from "./antlr_files/java/JavaParser";
-import { ClassDecContext, BlockStartContext, BlockEndContext, InterfaceDecContext, IdContext, CommentComponentPairContext, ModifiererContext, GenericsContext, MethodDeclContext, DataTypeContext, ParamsContext, ParamContext, FieldDecContext, AllRelevantComponentsContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser,  CompilationUnitContext, ClassBodyDeclarationContext, TypeDeclarationContext, ModifierContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, FormalParameterContext, ClassBodyContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { ContextSensitivityInfo } from "antlr4ts/atn/ContextSensitivityInfo";
 import { StructuredComment } from "./parse_result/StructuredComment";
@@ -29,8 +28,8 @@ export class JavaParser extends BaseParser {
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
         let visitor = new CommentComponentPairVisitor(null);
-        let rel = parser.allRelevantComponents()
-        //console.log(rel.text);
+        let rel = parser.compilationUnit()
+        console.log("hallo",rel.text);
         var res=visitor.visit(rel) as HierarchicalMember;
         //console.log(res);
         //console.log(tokens);
@@ -45,9 +44,9 @@ class ComponentVisitor  extends AbstractParseTreeVisitor<Component | null> imple
     protected defaultResult(): Component | null {
         return null;
     }
-    visitComponent(ctx:ComponentContext){
+   /*visitComponent(ctx:ComponentContext){
         return this.visit(ctx.getChild(0))
-    }
+    }*/
     private parent:Component|null;
     private comment:StructuredComment|null;
     constructor(parent:Component|null,comment:StructuredComment|null){
@@ -55,16 +54,16 @@ class ComponentVisitor  extends AbstractParseTreeVisitor<Component | null> imple
         this.parent=parent;
         this.comment=comment;
     }
-    visitMethodDecl(meth: MethodDeclContext) {
+    visitMethodDecl(meth: MethodDeclarationContext) {
         let methodVisitor = new MethodVisitor(this.parent,this.comment);
         let methodDeclaration = methodVisitor.visit(meth);
         console.log("method " + meth.text)
         return methodDeclaration;
     }
-    visitClassDec(cls:ClassDecContext){
+    visitClassDec(cls:ClassDeclarationContext){
         return new ClassDecVisitor(this.parent,this.comment).visit(cls);
     }
-    visitFieldDec(field:FieldDecContext){
+    visitFieldDec(field:FieldDeclarationContext){
         return new FieldDecVisitor(this.parent,this.comment).visit(field);
     }
 
@@ -80,16 +79,16 @@ class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
      private isStatic:boolean=false;
      private comment:StructuredComment|null;
      private fieldComponent:ClassMemberComponent|null=null;
-     visitId(ctx:IdContext){
+     /*visitId(ctx:IdContext){
          this.name=ctx.text;
          this.fieldComponent= new ClassMemberComponent(this.name,this.type,this.parent,this.comment,this.accessibility,this.isStatic)
          return null;
-     }
-     visitDataType(dt:DataTypeContext){
+     }*/
+     /*visitDataType(dt:DataTypeContext){
         this.type=dt.text;
         return null;
-     }
-     visitModifierer(mod:ModifiererContext){
+     }*/
+     visitModifierer(mod:ModifierContext){
          let modifier= new ModifierVisitor().visitModifierer(mod);
          this.accessibility=modifier.accessibilty;
          this.isStatic=modifier.isStatic;
@@ -119,19 +118,15 @@ class ClassDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
     private isStatic:boolean=false;
     private comment:StructuredComment|null;
     private clsComponent:ClassComponent|null=null;
-    visitId(ctx:IdContext){
-        this.className=ctx.text;
-        this.clsComponent= new ClassComponent(this.className,this.parent,this.comment,this.accessibility,this.isStatic)
-        return null;
-    }
-    visitModifierer(mod:ModifiererContext){
+    
+    visitModifierer(mod:ModifierContext){
         let modifier= new ModifierVisitor().visitModifierer(mod);
         this.accessibility=modifier.accessibilty;
         this.isStatic=modifier.isStatic;
         return null;
 
     }
-    visitClassBlock(blck:ClassBlockContext){
+    visitClassBlock(blck:ClassBodyContext){
         let visitor=new CommentComponentPairVisitor(this.clsComponent);
         if(blck.children==undefined)return null;
         for(var child of blck.children){
@@ -162,11 +157,24 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
     }
     
     parent: Component | null = null;
+    comment:StructuredComment|null=null;
     constructor(parent: Component | null) {
         super();
         this.parent = parent;
     }
-    visitCommentComponentPair(ctx: CommentComponentPairContext) {
+    visitClassBodyDeclaration(ctx:ClassBodyDeclarationContext) :Component|null{
+        let visitor=new ClassDecVisitor(this.parent,this.comment);
+        return visitor.visit(ctx);
+    }
+    visitTypeDeclaration(ctx:TypeDeclarationContext){
+        let visitor=new ClassDecVisitor(this.parent,this.comment);
+        return visitor.visit(ctx);
+    }
+    visitComment(ctx:CommentContext):null{
+        this.comment=new StructuredComment(ctx.text);
+        return null;
+    }
+    /*visitCommentComponentPair(ctx: ParserRuleContext) {
 
         let comment: StructuredComment | null = null;
         let component: HierarchicalMember;
@@ -189,8 +197,8 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
             return null;
         }
 
-    }
-    visitAllRelevantComponents(ctx: AllRelevantComponentsContext) {
+    }*/
+    /*visitCompilationUnit(ctx: CompilationUnitContext) {
 
         let hierarchical = new HierarchicalMember("", this.parent, null,Accessibility.Public,false);
         if (ctx.children == undefined) return null;
@@ -204,7 +212,7 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
             }
         }
         return hierarchical;
-    }
+    }*/
 
 
 
@@ -230,10 +238,10 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     private returnType = "";
     private parent: Component | null;
     private methodParams:{type:string,name:string}[]=[];
-    visitModifierer(ctx: ModifiererContext) {
+    visitModifierer(ctx: ModifierContext) {
         this.modifiers = this.modifierVisitor.visitModifierer(ctx);
     }
-    visitId(ctx: IdContext) {
+    /*visitId(ctx: IdContext) {
         this.methodName = ctx.text;
         console.log(this.methodName);
     }
@@ -241,12 +249,12 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         this.returnType = ctx.text;
         console.log("return " + this.returnType);
     }
-    visitParam(param:ParamContext){
+    visitParam(param:FormalParameterContext){
         let type=param.getChild(0).text;
         let name=param.getChild(1).text;
         this.methodParams.push({type,name})
         console.log("param",type,name)
-    }
+    }*/
     visit(ctx: RuleContext): MethodComponent {
         super.visit(ctx);
         return new MethodComponent(this.methodName,this.returnType, this.parent, this.comment, this.modifiers.accessibilty, this.modifiers.isStatic, this.modifiers.isOverride,this.methodParams)
@@ -259,7 +267,7 @@ class ModifierVisitor extends AbstractParseTreeVisitor<ModifiererInformation> im
     }
 
    
-    visitModifierer(mod: ModifiererContext): ModifiererInformation {
+    visitModifierer(mod: ModifierContext): ModifiererInformation {
         if (mod.children == undefined) {
             return this.defaultResult();
         }
@@ -275,7 +283,7 @@ class ModifierVisitor extends AbstractParseTreeVisitor<ModifiererInformation> im
                     result.accessibilty = Accessibility.Protected;break;
                 case "static":
                     result.isStatic = true; break;
-                case "@override":
+                case "@Override":
                     result.isOverride = true; break;
 
 
