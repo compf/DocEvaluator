@@ -32,6 +32,13 @@ export class JavaParser extends BaseParser {
     }
 
 }
+class JavaDocVisitor extends AbstractParseTreeVisitor<StructuredComment|null>{
+    protected defaultResult(): StructuredComment | null {
+        return null;
+    }
+    
+
+}
 class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     
     protected defaultResult(): Component | null {
@@ -52,17 +59,19 @@ class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
      }
      visitVariableDeclarators(ctx:VariableDeclaratorsContext){
          if(ctx.children!=undefined){
+             let lineNumber=ctx.start.line;
             if(ctx.children.length==1){
                 let name=ctx.getChild(0).getChild(0).text;
-                this.field= new ClassMemberComponent(name,this.type,this.parent,this.comment,this.meta)
+                
+                this.field= new ClassMemberComponent(lineNumber,name,this.type,this.parent,this.comment,this.meta)
             }
             else{
                 //TODO find better solution in case of fields with comma separated names
                 let names=ctx.children.filter((c)=>c.childCount>0).map((c)=>c.getChild(0).text);
-                let groupedField=new HierarchicalMember(names.join(","),this.parent,this.comment,this.meta);
+                let groupedField=new HierarchicalMember(lineNumber,names.join(","),this.parent,this.comment,this.meta);
                 this.field=groupedField;
                 for(let n of names){
-                    let child= new ClassMemberComponent(n,this.type,this.parent,this.comment,this.meta)
+                    let child= new ClassMemberComponent(lineNumber,n,this.type,this.parent,this.comment,this.meta)
                     groupedField.addChild(child)
                 }
             }
@@ -111,8 +120,8 @@ class ClassDecVisitor  extends AbstractParseTreeVisitor<Component | null> implem
         let extendImplementData=new ClassExtendAndImplementVisitor().visit(ctx);
         let baseClass=extendImplementData.baseClass;
         let implementedInterfaces=extendImplementData.implementedInterfaces; 
-        
-        let clsComponent=new ClassComponent(this.className,this.parent,this.comment,new JavaClassData(this.isPublic,baseClass,implementedInterfaces));
+        let lineNumber=ctx.start.line;
+        let clsComponent=new ClassComponent(lineNumber,this.className,this.parent,this.comment,new JavaClassData(this.isPublic,baseClass,implementedInterfaces));
         
         if(blck==undefined)return null;
         for(var child of blck){
@@ -140,7 +149,7 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
     protected defaultResult(): null | Component {
         return null;
     }
-    private parent:HierarchicalMember=new HierarchicalMember("",null,null,new DefaultComponentMetaInformation(true));
+    private parent:HierarchicalMember=new HierarchicalMember(0,"",null,null,new DefaultComponentMetaInformation(true));
     visitTypeDeclaration(ctx:TypeDeclarationContext){
         
         let visitor=new CommentComponentPairVisitor(this.parent);
@@ -148,6 +157,7 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
         if(result!=null){
             this.parent.addChild(result);
         }
+        
         
         return this.parent;
     }
@@ -234,7 +244,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         this.isOverriding=isOverriding;
     }
     private modifierVisitor = new ModifierVisitor()
-    private modifiers = this.modifierVisitor.defaultResult();
+    private lineNumber:number=0;
     private comment:StructuredComment|null=null;
     private methodName = "";
     private returnType = "";
@@ -248,6 +258,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     visitMethodDeclaration(ctx:MethodDeclarationContext){
         this.returnType=ctx.getChild(0).text
         this.methodName=ctx.getChild(1).text;
+        this.lineNumber=ctx.start.line;
        let visitor=new MethodParamsAndThrowVisitor();
        let paramsThrow=visitor.visit(ctx);
        this.methodParams=paramsThrow.params;
@@ -259,7 +270,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     
     visit(ctx: RuleContext): MethodComponent {
         super.visit(ctx);
-        return new MethodComponent(this.methodName,this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic,this.isOverriding,this.thrownException),this.methodParams)
+        return new MethodComponent(this.lineNumber,this.methodName,this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic,this.isOverriding,this.thrownException),this.methodParams)
     }
 
 }

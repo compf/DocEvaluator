@@ -9,8 +9,8 @@ export class HierarchicalMember extends Component{
     getChildren():Component[]{
         return this.children;
     }
-    constructor(name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
-        super(name,parent,comment,meta)
+    constructor(lineNumber:number,name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
+        super(lineNumber,name,parent,comment,meta)
         this.children=[];
     }
     

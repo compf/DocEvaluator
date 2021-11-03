@@ -10,8 +10,8 @@ export class ClassMemberComponent extends Component{
     }
    
     
-    constructor(name:string,type:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
-       super(name,parent,comment,meta)
+    constructor(lineNumber:number,name:string,type:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
+       super(lineNumber,name,parent,comment,meta)
         this.returnType=type;
     }
 

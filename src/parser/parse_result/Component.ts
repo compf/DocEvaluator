@@ -1,9 +1,11 @@
+import internal from "stream";
 import { ComponentMetaInformation } from "./ComponentData";
 import { StructuredComment } from "./StructuredComment";
 export enum Accessibility{
     Public,Protected,Private
 }
 export class Component{
+    private lineNumber:number;
     private parent:Component|null;
     private name:string;
     private comment:StructuredComment|null;
@@ -20,10 +22,14 @@ export class Component{
     getComponentMetaInformation():ComponentMetaInformation{
         return this.metaInformation;
     }
-    constructor(name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
+    getLineNumber():number{
+        return this.lineNumber;
+    }
+    constructor(lineNumber:number,name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
         this.name=name;
         this.comment=comment;
         this.parent=parent;
         this.metaInformation=meta;
+        this.lineNumber=lineNumber;
     }
 }
