@@ -1,0 +1,22 @@
+\section{Einführung}
+Zur Umsetzung des Tools wurde das Projekt in verschiedene Arbeitspakete zerlegt, wobei jeder Arbeitspaket auf den Vorgänger aufbaut. Diese Arbeitspakete und die damit verbundenen Herausforderungen werden nun erläutert.  
+
+  
+
+\subsection{Traversierung aller relevanten Dateien} 
+
+Softwareprojekte bestehen aus Hunderten von Dateien, die nicht alle Quellcode enthalten. Beispielsweise gehören Konfigurationsdateien, Ressourcedateien wie Bilder oder binäre Dateien zu den Dateien, bei denen eine Analyse der Softwaredokumentation nicht zweckmäßig wäre oder sogar zu Fehlern führen könnte. Daher ist es sinnvoll bestimmte Dateien bei der Analyse auszuschließen beziehungsweise nur bestimmte Dateien zu betrachten. Beim JavadocEvaluator wird hierzu die NPM-Bibliothek Minimatch \cite{MiniMatch} verwendet, die es ermöglicht Dateinamen mit Wildcard-Patterns zu vergleichen. Zum Beispiel könnte der Dateiname \enquote{test.txt} mit der Wildcard \enquote{test.*} verglichen werden und die Bibliothek würde eine Übereinstimmung melden.  
+
+  
+
+In der Konfigurationsdatei können solche Wildcard-Patterns sowohl für Dateien, die zwingend analysiert werden müssen, als auch Dateien, die in jeden Fall ausgeschlossen werden müssen, definiert werden. So kann der Benutzer des Tools beispielsweise nur Dateien mit der Dateiendung \textit{.java} analysieren, was in der Standardeinstellung auch so passiert, und Dateien aus bestimmten Verzeichnissen ignorieren, weil sie Unit-Tests enthalten.   
+
+  
+
+\subsection{Parsing der Java-Dateien} 
+
+Jede Datei, die laut den vorherigen Arbeitspaket relevant sein soll, muss anschließend weiterverarbeitet werden. Für die Bewertung der Dokumentation sind nur wenige Bestandteile relevant. Beispielsweise sind alle For-Schleifen, If-Verzweigungen und viele andere Komponenten in Methodenrümpfen nicht relevant, da diese nur mit normalen Kommentaren und nicht mit Javadoc kommentiert werden.  Aus diesen Gründen müssen die notwendigen Informationen extrahiert werden. Zudem ist es ein Ziel des Tools, eine Erweiterbarkeit auf andere objektorientierte Programmiersprachen zu ermöglichen. Daher müssen die Informationen in ein abstraktes Format gebracht werden, welches eine gute Annäherung für die meisten objektorientierten Programmiersprachen ist. Beispielsweise unterscheiden sich die Zugriffsmodifizierer vieler Programmiersprache, sodass eine einheitliche Schnittstelle schwer umsetzbar ist. Daher enthält die abstrakte Repräsentation nur Informationen, ob eine Komponente als öffentlich markiert ist. Dies ist sinnvolle, da öffentliche Komponenten als Teil der öffentlichen Schnittstelle eher dokumentiert werden sollten als nichtöffentliche und eine weitergehende Differenzierung kaum Vorteile bietet. Außerdem werden in der abstrakten Repräsentation die Vererbung etwas vereinfacht dargestellt, indem nicht zwischen Basisklassen und Schnittstellen unterschieden wird, da es auch hier Unterschiede zwischen Programmiersprachen gibt, und die Informationen über die Vererbung, falls die überhaupt von einer Metrik verwendet wird, vermutlich nicht so detailreich sein müsste. Zudem werden Konstruktoren als Methoden mit den Namen \enquote{constructor} und Schnittstellen als Klassen repräsentiert, da auch hier eine zu feine Spezifikation nicht notwendig sein wird.  
+
+  
+
+In anderen Fällen gibt es jedoch viele Gemeinsamkeiten zwischen objektorientierten Programmiersprachen; so gibt es in allen Sprachen Klassen, Methoden und Felder, die alle einen Namen haben. Des Weiteren haben Methoden und Felder einen (Rückgabe-)Type und Methoden besitzen Parameter, die ihrerseits durch einen Namen und einen Typen definiert sind. Zudem sind viele Komponenten hierarchisch; in den meisten Sprachen können beispielsweise Klassen andere Klassen enthalten, sodass diese abstrakte Struktur diese Tatsache berücksichtigen müsste. 
