@@ -1,19 +1,23 @@
 import { BaseParser } from "./base_parser";
 import { ParseResult } from "./parse_result/ParseResult";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
-import { CharStream, RuleContext } from 'antlr4ts';
+import { CharStream, CharStreams, CommonTokenStream, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Accessibility, Component } from "./parse_result/Component";
-import { CommentContext, JavaParser as Antlr_JavaParser,  TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
-import { StructuredComment } from "./parse_result/StructuredComment";
+import { StructuredComment, StructuredCommentTag } from "./parse_result/StructuredComment";
 import { HierarchicalMember } from "./parse_result/HierarchicalMember";
-import {  ClassMemberComponent } from "./parse_result/ClassMemberComponent";
+import { ClassMemberComponent } from "./parse_result/ClassMemberComponent";
 import { MethodComponent } from "./parse_result/MethodComponent";
 import { ClassComponent } from "./parse_result/ClassComponent";
 import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./parse_result/ComponentData";
 import { JavaMethodData } from "./parse_result/java/JavaMethodData";
 import { JavaClassData } from "./parse_result/java/JavaClassData";
+import { arrayBuffer } from "stream/consumers";
+import { stringify } from "querystring";
+//import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
+//import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
 
 
 
@@ -24,123 +28,128 @@ export class JavaParser extends BaseParser {
         let parser = new Antlr_JavaParser(tokens);
         let visitor = new FileVisitor();
         let rel = parser.compilationUnit()
-        var res=visitor.visit(rel) as HierarchicalMember;
-        return  {members:res};
+        var res = visitor.visit(rel) as HierarchicalMember;
+        return { members: res };
     }
     public override getLexerType<T>(): { new(stream: CharStream): T; } {
         return JavaLexer;
     }
 
 }
-class JavaDocVisitor extends AbstractParseTreeVisitor<StructuredComment|null>{
+/*class JavaDocVisitor extends AbstractParseTreeVisitor<StructuredComment|null>{
     protected defaultResult(): StructuredComment | null {
         return null;
     }
+    private description:string=""
+    private tags:StructuredCommentTag[]=[]
+    visitDescription(ctx:DescriptionContext){
+        this.description=ctx.text;
+    }
     
 
-}
-class FieldDecVisitor  extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
-    
+}*/
+class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
+
     protected defaultResult(): Component | null {
         return null;
-     }
-     private type="";
-     private parent:Component|null;
-     private comment:StructuredComment|null;
-     private meta: ComponentMetaInformation;
-     private field:Component|null=null;
-     visitTypeType(ctx:TypeTypeContext){
-         this.type=ctx.text;
-         return null;
-     }
-     visit(ctx:RuleContext){
-         super.visit(ctx);
-         return this.field;
-     }
-     visitVariableDeclarators(ctx:VariableDeclaratorsContext){
-         if(ctx.children!=undefined){
-             let lineNumber=ctx.start.line;
-            if(ctx.children.length==1){
-                let name=ctx.getChild(0).getChild(0).text;
-                
-                this.field= new ClassMemberComponent(lineNumber,name,this.type,this.parent,this.comment,this.meta)
+    }
+    private type = "";
+    private parent: Component | null;
+    private comment: StructuredComment | null;
+    private meta: ComponentMetaInformation;
+    private field: Component | null = null;
+    visitTypeType(ctx: TypeTypeContext) {
+        this.type = ctx.text;
+        return null;
+    }
+    visit(ctx: RuleContext) {
+        super.visit(ctx);
+        return this.field;
+    }
+    visitVariableDeclarators(ctx: VariableDeclaratorsContext) {
+        if (ctx.children != undefined) {
+            let lineNumber = ctx.start.line;
+            if (ctx.children.length == 1) {
+                let name = ctx.getChild(0).getChild(0).text;
+
+                this.field = new ClassMemberComponent(lineNumber, name, this.type, this.parent, this.comment, this.meta)
             }
-            else{
+            else {
                 //TODO find better solution in case of fields with comma separated names
-                let names=ctx.children.filter((c)=>c.childCount>0).map((c)=>c.getChild(0).text);
-                let groupedField=new HierarchicalMember(lineNumber,names.join(","),this.parent,this.comment,this.meta);
-                this.field=groupedField;
-                for(let n of names){
-                    let child= new ClassMemberComponent(lineNumber,n,this.type,this.parent,this.comment,this.meta)
+                let names = ctx.children.filter((c) => c.childCount > 0).map((c) => c.getChild(0).text);
+                let groupedField = new HierarchicalMember(lineNumber, names.join(","), this.parent, this.comment, this.meta);
+                this.field = groupedField;
+                for (let n of names) {
+                    let child = new ClassMemberComponent(lineNumber, n, this.type, this.parent, this.comment, this.meta)
                     groupedField.addChild(child)
                 }
             }
-         }
-         return null;
-         
-     }
-     
+        }
+        return null;
+
+    }
 
 
-     constructor(parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
+
+    constructor(parent: Component | null, comment: StructuredComment | null, meta: ComponentMetaInformation) {
         super();
-        this.parent=parent;
-        this.comment=comment;
-        this.meta=meta;
+        this.parent = parent;
+        this.comment = comment;
+        this.meta = meta;
     }
 }
-class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<{implementedInterfaces:string[],baseClass:string}>{
+class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<{ implementedInterfaces: string[], baseClass: string }>{
     protected defaultResult(): { implementedInterfaces: string[]; baseClass: string; } {
-       return {baseClass:"",implementedInterfaces:[]}
+        return { baseClass: "", implementedInterfaces: [] }
     }
-    visitImplementInterfaces(ctx:ImplementInterfacesContext){
-        this.implementedInterface=ctx.getChild(1).text.split(",");
+    visitImplementInterfaces(ctx: ImplementInterfacesContext) {
+        this.implementedInterface = ctx.getChild(1).text.split(",");
     }
-    visitExtendClass(ctx:ExtendClassContext){
-        this.baseClass=ctx.getChild(1).text;
+    visitExtendClass(ctx: ExtendClassContext) {
+        this.baseClass = ctx.getChild(1).text;
     }
-    private implementedInterface:string[]=[];
-    private baseClass:string="";
-    visit(ctx:RuleContext){
+    private implementedInterface: string[] = [];
+    private baseClass: string = "";
+    visit(ctx: RuleContext) {
         super.visit(ctx);
-        return {implementedInterfaces:this.implementedInterface,baseClass:this.baseClass};
+        return { implementedInterfaces: this.implementedInterface, baseClass: this.baseClass };
     }
 }
-class ClassDecVisitor  extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
+class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     protected defaultResult(): Component | null {
-       return null;
+        return null;
     }
-    private className:string="";
-    private parent:Component|null;
-    private isPublic:boolean=false;
-    private comment:StructuredComment|null;
-    visitClassDeclaration(ctx:ClassDeclarationContext){
-        this.className=ctx.getChild(1).text;
-        let blck=ctx.classBody().classBodyDeclaration();
-        let extendImplementData=new ClassExtendAndImplementVisitor().visit(ctx);
-        let baseClass=extendImplementData.baseClass;
-        let implementedInterfaces=extendImplementData.implementedInterfaces; 
-        let lineNumber=ctx.start.line;
-        let clsComponent=new ClassComponent(lineNumber,this.className,this.parent,this.comment,new JavaClassData(this.isPublic,baseClass,implementedInterfaces));
-        
-        if(blck==undefined)return null;
-        for(var child of blck){
-            let visitor=new CommentComponentPairVisitor(clsComponent);
-            var item=visitor.visit(child);
-            if(item!=null){
+    private className: string = "";
+    private parent: Component | null;
+    private isPublic: boolean = false;
+    private comment: StructuredComment | null;
+    visitClassDeclaration(ctx: ClassDeclarationContext) {
+        this.className = ctx.getChild(1).text;
+        let blck = ctx.classBody().classBodyDeclaration();
+        let extendImplementData = new ClassExtendAndImplementVisitor().visit(ctx);
+        let baseClass = extendImplementData.baseClass;
+        let implementedInterfaces = extendImplementData.implementedInterfaces;
+        let lineNumber = ctx.start.line;
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new JavaClassData(this.isPublic, baseClass, implementedInterfaces));
+
+        if (blck == undefined) return null;
+        for (var child of blck) {
+            let visitor = new CommentComponentPairVisitor(clsComponent);
+            var item = visitor.visit(child);
+            if (item != null) {
                 clsComponent?.addChild(item);
 
             }
         }
-      
+
         return clsComponent;
-        
+
     }
-    constructor(parent:Component|null,comment:StructuredComment|null,isPublic:boolean){
+    constructor(parent: Component | null, comment: StructuredComment | null, isPublic: boolean) {
         super();
-        this.parent=parent;
-        this.comment=comment;
-        this.isPublic=isPublic;
+        this.parent = parent;
+        this.comment = comment;
+        this.isPublic = isPublic;
     }
 
 
@@ -149,85 +158,158 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
     protected defaultResult(): null | Component {
         return null;
     }
-    private parent:HierarchicalMember=new HierarchicalMember(0,"",null,null,new DefaultComponentMetaInformation(true));
-    visitTypeDeclaration(ctx:TypeDeclarationContext){
-        
-        let visitor=new CommentComponentPairVisitor(this.parent);
-        let result=visitor.visit(ctx);
-        if(result!=null){
+    private parent: HierarchicalMember = new HierarchicalMember(0, "", null, null, new DefaultComponentMetaInformation(true));
+    visitTypeDeclaration(ctx: TypeDeclarationContext) {
+
+        let visitor = new CommentComponentPairVisitor(this.parent);
+        let result = visitor.visit(ctx);
+        if (result != null) {
             this.parent.addChild(result);
         }
-        
-        
+
+
         return this.parent;
     }
-    visit(ctx:RuleContext){
+    visit(ctx: RuleContext) {
         super.visit(ctx);
         return this.parent;
+    }
+}
+export class JavadocParser{
+    private getElementOrDefault<T>(array: T[], index: number): T | null {
+        if (index < array.length) {
+            return array[index];
+        }
+        else return null;
+    }
+    private splitWithRemainder(str:string,delim:string,max:number){
+        let splitted=str.split(delim);
+        let result=[]
+        let last="";
+        for(let i=0;i<splitted.length;i++){
+            if(i<max-1){
+                result.push(splitted[i])
+            }
+            else{
+                last+=splitted[i]+" ";
+            }
+            
+        }
+        result.push(last.trim());
+        return result;
+    }
+    parseTag(line: string): StructuredCommentTag {
+        let splitted: string[] = []
+        if (this.hasParam(line)) {
+            splitted = this.splitWithRemainder(line," ",3);
+            let tag = this.getElementOrDefault(splitted, 0)
+            let param = this.getElementOrDefault(splitted, 1)
+            let descr = this.getElementOrDefault(splitted, 2)
+            return new StructuredCommentTag(tag, param, descr);
+        }
+        else {
+            splitted = this.splitWithRemainder(line," ",2);
+            let tag = this.getElementOrDefault(splitted, 0)
+            let descr = this.getElementOrDefault(splitted, 1)
+            return new StructuredCommentTag(tag, null, descr);
+        }
+
+    }
+    hasParam(line: string): boolean {
+        let tagsWithParams = ["@param", "@throws"];
+        return tagsWithParams.some((t) => line.startsWith(t));
+    }
+    parseCommentText(text: string): StructuredComment {
+        let lines = text.split("\n");
+        let toReplace = ["/**", "*/", "*"]
+        for (let i = 0; i < lines.length; i++) {
+            for (let replace of toReplace) {
+                if (lines[i].startsWith(replace)) {
+                    lines[i] = lines[i].substring(replace.length);
+                    lines[i] = lines[i].trim();
+                }
+            }
+        }
+        let descriptionLines: string[] = [];
+        let tags: StructuredCommentTag[] = []
+        let foundTag = false;
+        for (let line of lines) {
+            if (line.startsWith("@")) {
+                let tag = this.parseTag(line);
+                tags.push(tag);
+                foundTag = true;
+            }
+            else if(line!="") {
+                descriptionLines.push(line)
+            }
+        }
+        return new StructuredComment(descriptionLines.join("\n"), tags);
     }
 }
 class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     protected defaultResult(): null | Component {
         return null;
     }
-    private modifierVisitor=new ModifierVisitor();
+    private modifierVisitor = new ModifierVisitor();
     parent: Component | null = null;
-    comment:StructuredComment|null=null;
-    modifier:ModifiererInformation={accessibilty:Accessibility.Private,isOverride:false,isStatic:false}
+    comment: StructuredComment | null = null;
+    modifier: ModifiererInformation = { accessibilty: Accessibility.Private, isOverride: false, isStatic: false }
     constructor(parent: Component | null) {
         super();
         this.parent = parent;
     }
 
-    visitClassOrInterfaceModifier(ctx:ClassOrInterfaceModifierContext){
-        this.modifier=this.modifierVisitor.visitClassOrInterfaceModifier(ctx);
+    visitClassOrInterfaceModifier(ctx: ClassOrInterfaceModifierContext) {
+        this.modifier = this.modifierVisitor.visitClassOrInterfaceModifier(ctx);
         return null;
     }
-    visitMethodDeclaration(ctx:MethodDeclarationContext){
-        let visitor=new MethodVisitor(this.parent,this.comment,this.modifier?.accessibilty==Accessibility.Public,this.modifier.isOverride);
+    visitMethodDeclaration(ctx: MethodDeclarationContext) {
+        let visitor = new MethodVisitor(this.parent, this.comment, this.modifier?.accessibilty == Accessibility.Public, this.modifier.isOverride);
         return visitor.visit(ctx);
 
     }
-    visitClassDeclaration(ctx:ClassDeclarationContext){
-        let visitor=new ClassDecVisitor(this.parent,this.comment,(this.modifier.accessibilty==Accessibility.Public));
+    visitClassDeclaration(ctx: ClassDeclarationContext) {
+        let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
         return visitor.visit(ctx);
     }
-    visitComment(ctx:CommentContext):null{
-        this.comment=new StructuredComment(ctx.text);
+    visitComment(ctx: CommentContext): null {
+        let commentText = ctx.text;
+        let parser=new JavadocParser();
+        this.comment = parser.parseCommentText(commentText);
         return null;
     }
-    visitFieldDeclaration(ctx:FieldDeclarationContext){
-        let visitor=new FieldDecVisitor(this.parent,this.comment,new DefaultComponentMetaInformation(this.modifier.accessibilty==Accessibility.Public));
+    visitFieldDeclaration(ctx: FieldDeclarationContext) {
+        let visitor = new FieldDecVisitor(this.parent, this.comment, new DefaultComponentMetaInformation(this.modifier.accessibilty == Accessibility.Public));
         return visitor.visit(ctx);
     }
-    
+
 
 }
 
-type ParamsAndThrow={params:{type:string,name:string}[],thrownException:string[]}
+type ParamsAndThrow = { params: { type: string, name: string }[], thrownException: string[] }
 class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThrow>{
     protected defaultResult(): ParamsAndThrow {
-        return {params:[],thrownException:[]}
+        return { params: [], thrownException: [] }
     }
-    private thrownException:string[]=[];
-    private params:{type:string,name:string}[]=[];
-    visitThrowList(ctx:ThrowListContext){
-       this.thrownException=ctx.getChild(1).text.split(",");
+    private thrownException: string[] = [];
+    private params: { type: string, name: string }[] = [];
+    visitThrowList(ctx: ThrowListContext) {
+        this.thrownException = ctx.getChild(1).text.split(",");
     }
-    visitFormalParameterList(ctx:FormalParameterListContext){
-        if(ctx.children!=undefined){
-            for(let param of ctx.children){
-                let name=param.getChild(param.childCount-1).text;
-                let type=param.getChild(param.childCount-2).text;
-                this.params.push({type,name});
+    visitFormalParameterList(ctx: FormalParameterListContext) {
+        if (ctx.children != undefined) {
+            for (let param of ctx.children) {
+                let name = param.getChild(param.childCount - 1).text;
+                let type = param.getChild(param.childCount - 2).text;
+                this.params.push({ type, name });
             }
         }
     }
-    visit(ctx:RuleContext){
+    visit(ctx: RuleContext) {
         super.visit(ctx);
-        return {thrownException:this.thrownException,params:this.params}
+        return { thrownException: this.thrownException, params: this.params }
     }
-    
+
 }
 type ModifiererInformation = { accessibilty: Accessibility, isStatic: boolean, isOverride: boolean }
 class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> implements JavaParserVisitor<MethodComponent | void>{
@@ -236,41 +318,41 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     protected defaultResult(): void {
 
     }
-    constructor(parent: Component | null,comment:StructuredComment|null,isPublic:boolean,isOverriding:boolean) {
+    constructor(parent: Component | null, comment: StructuredComment | null, isPublic: boolean, isOverriding: boolean) {
         super();
         this.parent = parent;
-        this.comment=comment;
-        this.isPublic=isPublic;
-        this.isOverriding=isOverriding;
+        this.comment = comment;
+        this.isPublic = isPublic;
+        this.isOverriding = isOverriding;
     }
     private modifierVisitor = new ModifierVisitor()
-    private lineNumber:number=0;
-    private comment:StructuredComment|null=null;
+    private lineNumber: number = 0;
+    private comment: StructuredComment | null = null;
     private methodName = "";
     private returnType = "";
-    private isPublic:boolean;
+    private isPublic: boolean;
     private parent: Component | null;
-    private methodParams:{type:string,name:string}[]=[];
-    private thrownException:string[]=[];
-    
-   
-    
-    visitMethodDeclaration(ctx:MethodDeclarationContext){
-        this.returnType=ctx.getChild(0).text
-        this.methodName=ctx.getChild(1).text;
-        this.lineNumber=ctx.start.line;
-       let visitor=new MethodParamsAndThrowVisitor();
-       let paramsThrow=visitor.visit(ctx);
-       this.methodParams=paramsThrow.params;
-       this.thrownException=paramsThrow.thrownException;
-      
-     
-     
+    private methodParams: { type: string, name: string }[] = [];
+    private thrownException: string[] = [];
+
+
+
+    visitMethodDeclaration(ctx: MethodDeclarationContext) {
+        this.returnType = ctx.getChild(0).text
+        this.methodName = ctx.getChild(1).text;
+        this.lineNumber = ctx.start.line;
+        let visitor = new MethodParamsAndThrowVisitor();
+        let paramsThrow = visitor.visit(ctx);
+        this.methodParams = paramsThrow.params;
+        this.thrownException = paramsThrow.thrownException;
+
+
+
     }
-    
+
     visit(ctx: RuleContext): MethodComponent {
         super.visit(ctx);
-        return new MethodComponent(this.lineNumber,this.methodName,this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic,this.isOverriding,this.thrownException),this.methodParams)
+        return new MethodComponent(this.lineNumber, this.methodName, this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic, this.isOverriding, this.thrownException), this.methodParams)
     }
 
 }
@@ -279,22 +361,22 @@ class ModifierVisitor extends AbstractParseTreeVisitor<ModifiererInformation> im
         return { accessibilty: Accessibility.Private, isStatic: false, isOverride: false };
     }
 
-    private result:ModifiererInformation=this.defaultResult();
-   
+    private result: ModifiererInformation = this.defaultResult();
+
     visitClassOrInterfaceModifier(mod: ClassOrInterfaceModifierContext): ModifiererInformation {
         if (mod.children == undefined) {
             return this.defaultResult();
         }
-        
+
         for (let child of mod.children) {
 
             switch (child.text.toLowerCase()) {
                 case "public":
                     this.result.accessibilty = Accessibility.Public; break;
                 case "private":
-                    this.result.accessibilty = Accessibility.Private;break;
+                    this.result.accessibilty = Accessibility.Private; break;
                 case "protected":
-                    this.result.accessibilty = Accessibility.Protected;break;
+                    this.result.accessibilty = Accessibility.Protected; break;
                 case "static":
                     this.result.isStatic = true; break;
                 case "@override":

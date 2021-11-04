@@ -1,4 +1,4 @@
-import { JavaParser } from "../../src/parser/java_parser";
+import { JavadocParser, JavaParser } from "../../src/parser/java_parser";
 import fs from "fs"
 import { JavaLexer } from "../../src/parser/antlr_files/java/JavaLexer";
 import exp, { WSA_E_CANCELLED } from "constants";
@@ -114,4 +114,33 @@ test("test java parser",()=>{
 
 
 
+});
+test("test javadoc parser",()=>{
+    const testComment="/**\n"+
+    "This is test method\n"+
+    "it has many features\n"+
+    "@return a positive number\n"+
+    "@param a a parameter\n"+
+    "@throws Exception an exception to be thrown\n*/";
+let parser=new JavadocParser();
+let comment=parser.parseCommentText(testComment);
+expect(comment.getGeneralDescription()).not.toBeNull();
+let descriptionLines=comment.getGeneralDescription()?.split("\n");
+expect(descriptionLines).toHaveLength(2);
+expect(comment.getTags()).toHaveLength(3);
+
+let returnTag=comment.getTags()[0];
+expect(returnTag.getKind()).toBe("@return");
+expect(returnTag.getParam()).toBeNull();
+expect(returnTag.getDescription()).toBe("a positive number");
+
+let paramTag=comment.getTags()[1];
+expect(paramTag.getKind()).toBe("@param");
+expect(paramTag.getParam()).toBe("a");
+expect(paramTag.getDescription()).toBe("a parameter");
+
+let throwTag=comment.getTags()[2];
+expect(throwTag.getKind()).toBe("@throws");
+expect(throwTag.getParam()).toBe("Exception");
+expect(throwTag.getDescription()).toBe("an exception to be thrown");
 });
