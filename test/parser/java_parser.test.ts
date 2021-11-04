@@ -41,14 +41,14 @@ expect(correctTokens.length).toBe(numberTokensMainJava)
 test("test java parser",()=>{
     var parser=new JavaParser();
     let res=parser.parse("testDir/commented_class.java");
-    expect(res.members.getChildren().length).toBe(2);
+    expect(res.members.getChildren().length).toBe(3);
     let firstClass=res.members.getChildren()[0];
     let secondClass=res.members.getChildren()[1];
 
     expect(firstClass.getName()).toBe("Main");
     expect(firstClass.getComment()).not.toBe(null);
     let firstClassChildren=(firstClass as ClassComponent).getChildren();
-    expect(firstClassChildren.length).toBe(2);
+    expect(firstClassChildren.length).toBe(3);
 
     let mainMethod=firstClassChildren[0] as MethodComponent
     expect(mainMethod.getName()).toBe("main");
@@ -69,6 +69,22 @@ test("test java parser",()=>{
     //expect(field.getAccessibilty()).toBe(Accessibility.Private);
     expect(field.getComponentMetaInformation().isPublic()).toBeFalsy();
 
+
+    let interfaceChild=firstClassChildren[2] as ClassComponent;
+    expect(interfaceChild).not.toBeNull();
+    expect(interfaceChild.getName()).toBe("ISimpleInterface");
+   let interfaceData=interfaceChild.getComponentMetaInformation() as JavaClassData
+    expect(interfaceData.isPublic()).toBeFalsy();
+    expect(interfaceData.getSuperClasses()).toStrictEqual(["IAnotherInterface"]);
+    
+    expect(interfaceChild.getChildren()).toHaveLength(1);
+    let interfaceMethod=interfaceChild.getChildren()[0] as MethodComponent;
+    expect(interfaceMethod.getName()).toBe("testMethod");
+    expect(interfaceMethod.getReturnType()).toBe("void");
+    expect(interfaceMethod.getParams()).toHaveLength(1);
+    let interfaceMethodParam=interfaceMethod.getParams()[0];
+    expect(interfaceMethodParam).toStrictEqual({type:"double",name:"arg"});
+
     expect(secondClass.getName()).toBe("SecondClass");
     expect(secondClass.getComment()).toBeNull();
     let secondClassChildren=(secondClass as ClassComponent).getChildren();
@@ -76,9 +92,11 @@ test("test java parser",()=>{
 
     let secondClassData=secondClass.getComponentMetaInformation() as JavaClassData;
     expect(secondClassData).not.toBeNull();
-    expect(secondClassData.getBaseClass()).toBe("Object");
+    let superClasses=["Object","List<Integer>"];
+    expect(secondClassData.getSuperClasses()).toStrictEqual(superClasses);
+    /*expect(secondClassData.getBaseClass()).toBe("Object");
     expect(secondClassData.getImplementedInterfaces()).toHaveLength(1);
-    expect(secondClassData.getImplementedInterfaces()[0]).toBe("List<Integer>");
+    expect(secondClassData.getImplementedInterfaces()[0]).toBe("List<Integer>");*/
 
     let testMethod=secondClassChildren[0] as MethodComponent;
     expect(testMethod.getName()).toBe("test");
@@ -112,6 +130,15 @@ test("test java parser",()=>{
    expect(fieldChild2.getName()).toBe("many");
 
 
+    let thirdClass=res.members.getChildren()[2] as ClassComponent;
+    expect(thirdClass.getName()).toBe("ThirdClass");
+    expect(thirdClass.getComment()).toBeNull();
+    expect(thirdClass.getChildren()).toHaveLength(1);
+    let constructor=thirdClass.getChildren()[0] as MethodComponent;
+    expect(constructor.getName()).toBe("constructor");
+    expect(constructor.getParams()).toHaveLength(1);
+    let constructorParam=constructor.getParams()[0];
+    expect(constructorParam).toStrictEqual({type:"float",name:"pr"});
 
 
 });

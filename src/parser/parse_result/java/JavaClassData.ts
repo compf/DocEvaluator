@@ -1,17 +1,13 @@
 import { DefaultComponentMetaInformation } from "../ComponentData";
 
 export class JavaClassData extends DefaultComponentMetaInformation{
-    private baseClass:string;
-    private implementedInterfaces:string[];
-    constructor(isPublic:boolean,baseClass:string,implementedInterfaces:string[]){
+    private superTypes:string[];
+    constructor(isPublic:boolean,superTypes:string[]){
         super(isPublic)
-        this.baseClass=baseClass;
-        this.implementedInterfaces=implementedInterfaces;
+        this.superTypes=superTypes;
     }
-    public getBaseClass():string{
-        return this.baseClass;
-    }
-    public getImplementedInterfaces():string[]{
-        return this.implementedInterfaces;
+   
+    public getSuperClasses():string[]{
+        return this.superTypes;
     }
 }

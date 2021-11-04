@@ -110,8 +110,9 @@ enumBodyDeclarations
     ;
 
 interfaceDeclaration
-    : INTERFACE IDENTIFIER typeParameters? (EXTENDS typeList)? interfaceBody
+    : INTERFACE IDENTIFIER typeParameters? extendInterface? interfaceBody
     ;
+extendInterface: EXTENDS typeList;
 comment:COMMENT;
 classBody
     : '{' classBodyDeclaration* '}'
@@ -205,7 +206,7 @@ constantDeclarator
 // public int[][] return2DArray() { ... }
 interfaceMethodDeclaration
     : interfaceMethodModifier* (typeTypeOrVoid | typeParameters annotation* typeTypeOrVoid)
-      IDENTIFIER formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+      IDENTIFIER formalParameters ('[' ']')* throwList? methodBody
     ;
 
 // Java8

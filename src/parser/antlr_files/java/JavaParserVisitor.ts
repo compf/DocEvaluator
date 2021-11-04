@@ -21,6 +21,7 @@ import { EnumConstantsContext } from "./JavaParser";
 import { EnumConstantContext } from "./JavaParser";
 import { EnumBodyDeclarationsContext } from "./JavaParser";
 import { InterfaceDeclarationContext } from "./JavaParser";
+import { ExtendInterfaceContext } from "./JavaParser";
 import { CommentContext } from "./JavaParser";
 import { ClassBodyContext } from "./JavaParser";
 import { InterfaceBodyContext } from "./JavaParser";
@@ -247,6 +248,13 @@ export interface JavaParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitInterfaceDeclaration?: (ctx: InterfaceDeclarationContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `JavaParser.extendInterface`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitExtendInterface?: (ctx: ExtendInterfaceContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `JavaParser.comment`.

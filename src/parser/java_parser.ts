@@ -4,7 +4,7 @@ var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStream, CharStreams, CommonTokenStream, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Accessibility, Component } from "./parse_result/Component";
-import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/StructuredComment";
 import { HierarchicalMember } from "./parse_result/HierarchicalMember";
@@ -98,23 +98,44 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         this.meta = meta;
     }
 }
-class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<{ implementedInterfaces: string[], baseClass: string }>{
-    protected defaultResult(): { implementedInterfaces: string[]; baseClass: string; } {
-        return { baseClass: "", implementedInterfaces: [] }
+class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<string[]>{
+    protected defaultResult(): string[] {
+        return []
     }
     visitImplementInterfaces(ctx: ImplementInterfacesContext) {
-        this.implementedInterface = ctx.getChild(1).text.split(",");
+        let splitted= ctx.getChild(1).text.split(",");
+        for(let s of splitted){
+            this.superTypes.push(s);
+        }
     }
     visitExtendClass(ctx: ExtendClassContext) {
-        this.baseClass = ctx.getChild(1).text;
+        this.superTypes.push( ctx.getChild(1).text);
     }
-    private implementedInterface: string[] = [];
-    private baseClass: string = "";
+    private superTypes: string[] = [];
+    
     visit(ctx: RuleContext) {
         super.visit(ctx);
-        return { implementedInterfaces: this.implementedInterface, baseClass: this.baseClass };
+        return this.superTypes;
     }
 }
+class InterfaceExtendVisitor extends AbstractParseTreeVisitor<string[]>{
+    protected defaultResult(): string[] {
+        return []
+    }
+    visitExtendInterface(ctx: ExtendInterfaceContext) {
+        let splitted= ctx.getChild(1).text.split(",");
+        for(let s of splitted){
+            this.superTypes.push(s);
+        }
+    }
+    private superTypes: string[] = [];
+    
+    visit(ctx: RuleContext) {
+        super.visit(ctx);
+        return this.superTypes;
+    }
+}
+
 class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     protected defaultResult(): Component | null {
         return null;
@@ -126,11 +147,16 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
     visitClassDeclaration(ctx: ClassDeclarationContext) {
         this.className = ctx.getChild(1).text;
         let blck = ctx.classBody().classBodyDeclaration();
-        let extendImplementData = new ClassExtendAndImplementVisitor().visit(ctx);
-        let baseClass = extendImplementData.baseClass;
-        let implementedInterfaces = extendImplementData.implementedInterfaces;
+        let superTypes = new ClassExtendAndImplementVisitor().visit(ctx);
         let lineNumber = ctx.start.line;
-        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new JavaClassData(this.isPublic, baseClass, implementedInterfaces));
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new JavaClassData(this.isPublic, superTypes));
+
+        this.visitClassOrInterfaceMembers(blck,clsComponent);
+
+        return clsComponent;
+
+    }
+    visitClassOrInterfaceMembers(blck:RuleContext[],clsComponent:ClassComponent){
 
         if (blck == undefined) return null;
         for (var child of blck) {
@@ -141,9 +167,18 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
 
             }
         }
+    }
+    //TODO reduce duplication if possible
+    visitInterfaceDeclaration(ctx:InterfaceDeclarationContext){
+        this.className = ctx.getChild(1).text;
+        let blck = ctx.interfaceBody().interfaceBodyDeclaration();
+        let superTypes = new InterfaceExtendVisitor().visit(ctx);
+        let lineNumber = ctx.start.line;
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new JavaClassData(this.isPublic, superTypes));
+
+        this.visitClassOrInterfaceMembers(blck,clsComponent);
 
         return clsComponent;
-
     }
     constructor(parent: Component | null, comment: StructuredComment | null, isPublic: boolean) {
         super();
@@ -268,7 +303,22 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
         return visitor.visit(ctx);
 
     }
+    visitInterfaceMethodDeclaration(ctx: InterfaceMethodDeclarationContext) {
+        let visitor = new MethodVisitor(this.parent, this.comment, this.modifier?.accessibilty == Accessibility.Public, this.modifier.isOverride);
+        return visitor.visit(ctx);
+
+    }
+    visitConstructorDeclaration(ctx:ConstructorDeclarationContext){
+        let visitor = new MethodVisitor(this.parent, this.comment, this.modifier?.accessibilty == Accessibility.Public, this.modifier.isOverride);
+        return visitor.visit(ctx);
+    }
     visitClassDeclaration(ctx: ClassDeclarationContext) {
+        let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
+        return visitor.visit(ctx);
+    }
+    visitInterfaceDeclaration(ctx:InterfaceDeclarationContext){
+        // We are treating classes and interfaces to be equivalent, this is a compromise to have good compatibility with 
+        // other oop languages
         let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
         return visitor.visit(ctx);
     }
@@ -338,16 +388,29 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
 
 
     visitMethodDeclaration(ctx: MethodDeclarationContext) {
-        this.returnType = ctx.getChild(0).text
-        this.methodName = ctx.getChild(1).text;
         this.lineNumber = ctx.start.line;
+        this.visitMethod(ctx);
+    }
+    visitInterfaceMethodDeclaration(ctx:InterfaceMethodDeclarationContext){
+        this.lineNumber = ctx.start.line;
+        this.visitMethod(ctx);
+    }
+    visitConstructorDeclaration(ctx:ConstructorDeclarationContext){
+        this.lineNumber = ctx.start.line;
+        this.returnType="void";
+        this.methodName="constructor";
         let visitor = new MethodParamsAndThrowVisitor();
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
-
-
-
+    }
+    private visitMethod(ctx:RuleContext){
+        this.returnType = ctx.getChild(0).text
+        this.methodName = ctx.getChild(1).text;
+        let visitor = new MethodParamsAndThrowVisitor();
+        let paramsThrow = visitor.visit(ctx);
+        this.methodParams = paramsThrow.params;
+        this.thrownException = paramsThrow.thrownException;
     }
 
     visit(ctx: RuleContext): MethodComponent {

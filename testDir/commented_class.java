@@ -11,6 +11,10 @@ public class Main {
         System.out.println("Hello World");
     }
     private int field;
+
+    private interface ISimpleInterface extends IAnotherInterface{
+        public void testMethod(double arg);
+    }
 }
 
 public class SecondClass extends Object implements List<Integer>{
@@ -26,4 +30,11 @@ public class SecondClass extends Object implements List<Integer>{
 
     }
     int multiple,many;
+}
+class ThirdClass{
+    public ThirdClass(float pr){
+        if(true){
+            System.out.println("test");
+        }
+    }
 }
