@@ -159,7 +159,6 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         if (blck == undefined) return null;
         for (var child of blck) {
             let visitor = new CommentComponentPairVisitor(clsComponent);
-            console.log(child.text);
             var item = visitor.visit(child);
             if (item != null) {
                 clsComponent?.addChild(item);
