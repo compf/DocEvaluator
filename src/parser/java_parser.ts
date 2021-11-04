@@ -4,7 +4,7 @@ var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStream, CharStreams, CommonTokenStream, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Accessibility, Component } from "./parse_result/Component";
-import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/StructuredComment";
 import { HierarchicalMember } from "./parse_result/HierarchicalMember";
@@ -159,6 +159,7 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         if (blck == undefined) return null;
         for (var child of blck) {
             let visitor = new CommentComponentPairVisitor(clsComponent);
+            console.log(child.text);
             var item = visitor.visit(child);
             if (item != null) {
                 clsComponent?.addChild(item);
@@ -344,14 +345,21 @@ class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThro
     visitThrowList(ctx: ThrowListContext) {
         this.thrownException = ctx.getChild(1).text.split(",");
     }
-    visitFormalParameterList(ctx: FormalParameterListContext) {
-        if (ctx.children != undefined) {
-            for (let param of ctx.children) {
-                let name = param.getChild(param.childCount - 1).text;
-                let type = param.getChild(param.childCount - 2).text;
-                this.params.push({ type, name });
-            }
+    visitFormalParameter(ctx: FormalParameterContext) {
+     
+        let name =  ctx.variableDeclaratorId().text;
+        let type = ctx.typeType().text;
+        this.params.push({ type, name });
+    }
+    visitLastFormalParameter(ctx:LastFormalParameterContext){
+       
+        let name =  ctx.variableDeclaratorId().text;
+        let type = ctx.typeType().text;
+        // TODO error handling in case of varags in java, might lead to bugs so better solution should be looked for
+        if(ctx.childCount==3 && ctx.getChild(1).text=="..."){
+            type+="[]";
         }
+        this.params.push({ type, name });
     }
     visit(ctx: RuleContext) {
         super.visit(ctx);

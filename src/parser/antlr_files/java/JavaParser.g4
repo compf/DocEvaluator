@@ -401,7 +401,7 @@ statement
     | THROW expression ';'
     | BREAK IDENTIFIER? ';'
     | CONTINUE IDENTIFIER? ';'
-    | SEMI
+    | SEMI|comment
     | statementExpression=expression ';'
     | identifierLabel=IDENTIFIER ':' statement
     ;
