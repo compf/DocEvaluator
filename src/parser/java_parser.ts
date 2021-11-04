@@ -13,9 +13,7 @@ import { MethodComponent } from "./parse_result/MethodComponent";
 import { ClassComponent } from "./parse_result/ClassComponent";
 import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./parse_result/ComponentData";
 import { JavaMethodData } from "./parse_result/java/JavaMethodData";
-import { JavaClassData } from "./parse_result/java/JavaClassData";
-import { arrayBuffer } from "stream/consumers";
-import { stringify } from "querystring";
+
 //import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
 //import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
 
@@ -149,7 +147,7 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         let blck = ctx.classBody().classBodyDeclaration();
         let superTypes = new ClassExtendAndImplementVisitor().visit(ctx);
         let lineNumber = ctx.start.line;
-        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new JavaClassData(this.isPublic, superTypes));
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new DefaultComponentMetaInformation(this.isPublic),superTypes);
 
         this.visitClassOrInterfaceMembers(blck,clsComponent);
 
@@ -174,7 +172,7 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         let blck = ctx.interfaceBody().interfaceBodyDeclaration();
         let superTypes = new InterfaceExtendVisitor().visit(ctx);
         let lineNumber = ctx.start.line;
-        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new JavaClassData(this.isPublic, superTypes));
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new DefaultComponentMetaInformation(this.isPublic),superTypes);
 
         this.visitClassOrInterfaceMembers(blck,clsComponent);
 

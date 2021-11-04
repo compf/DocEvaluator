@@ -1,6 +1,6 @@
 import { DefaultComponentMetaInformation } from "../ComponentData";
-
-export class JavaClassData extends DefaultComponentMetaInformation{
+//TODO Consider to delete
+/*export class JavaClassData extends DefaultComponentMetaInformation{
     private superTypes:string[];
     constructor(isPublic:boolean,superTypes:string[]){
         super(isPublic)
@@ -10,4 +10,4 @@ export class JavaClassData extends DefaultComponentMetaInformation{
     public getSuperClasses():string[]{
         return this.superTypes;
     }
-}
+}*/

@@ -8,7 +8,6 @@ import { MethodComponent } from "../../src/parser/parse_result/MethodComponent";
 import { ClassMemberComponent } from "../../src/parser/parse_result/ClassMemberComponent";
 import { Accessibility } from "../../src/parser/parse_result/Component";
 import { ClassComponent } from "../../src/parser/parse_result/ClassComponent";
-import { JavaClassData } from "../../src/parser/parse_result/java/JavaClassData";
 
 let tokens:Token[]=[]
 const numberTokensMainJava=33;
@@ -43,7 +42,7 @@ test("test java parser",()=>{
     let res=parser.parse("testDir/commented_class.java");
     expect(res.members.getChildren().length).toBe(3);
     let firstClass=res.members.getChildren()[0];
-    let secondClass=res.members.getChildren()[1];
+    let secondClass=res.members.getChildren()[1] as ClassComponent;
 
     expect(firstClass.getName()).toBe("Main");
     expect(firstClass.getComment()).not.toBe(null);
@@ -73,9 +72,9 @@ test("test java parser",()=>{
     let interfaceChild=firstClassChildren[2] as ClassComponent;
     expect(interfaceChild).not.toBeNull();
     expect(interfaceChild.getName()).toBe("ISimpleInterface");
-   let interfaceData=interfaceChild.getComponentMetaInformation() as JavaClassData
+   let interfaceData=interfaceChild.getComponentMetaInformation()
     expect(interfaceData.isPublic()).toBeFalsy();
-    expect(interfaceData.getSuperClasses()).toStrictEqual(["IAnotherInterface"]);
+    expect(interfaceChild.getSuperTypes()).toStrictEqual(["IAnotherInterface"]);
     
     expect(interfaceChild.getChildren()).toHaveLength(1);
     let interfaceMethod=interfaceChild.getChildren()[0] as MethodComponent;
@@ -90,10 +89,9 @@ test("test java parser",()=>{
     let secondClassChildren=(secondClass as ClassComponent).getChildren();
     expect(secondClassChildren).toHaveLength(3);
 
-    let secondClassData=secondClass.getComponentMetaInformation() as JavaClassData;
-    expect(secondClassData).not.toBeNull();
+    
     let superClasses=["Object","List<Integer>"];
-    expect(secondClassData.getSuperClasses()).toStrictEqual(superClasses);
+    expect(secondClass.getSuperTypes()).toStrictEqual(superClasses);
     /*expect(secondClassData.getBaseClass()).toBe("Object");
     expect(secondClassData.getImplementedInterfaces()).toHaveLength(1);
     expect(secondClassData.getImplementedInterfaces()[0]).toBe("List<Integer>");*/
