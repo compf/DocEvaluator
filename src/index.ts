@@ -13,7 +13,8 @@ function main(args:Array<string>){
         workingDirectory=args[0];
     }
     let traverser= new DirectoryTraverser(workingDirectory);
-    const relevantFiley=traverser.getRelevantFiles();
+    const relevantFiles=traverser.getRelevantFiles();
+    console.log(relevantFiles);
     var parser:BaseParser=new JavaParser();
    var tokens= parser.parse("testDir/commented_class.java");
    //console.log(tokens);
