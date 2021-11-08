@@ -1,9 +1,9 @@
 import { Component } from "./Component";
 import { ComponentMetaInformation } from "./ComponentData";
-import { HierarchicalMember } from "./HierarchicalMember";
+import { HierarchicalComponent } from "./HierarchialComponent";
 import { StructuredComment } from "./StructuredComment";
 
-export class ClassComponent extends HierarchicalMember{
+export class ClassComponent extends HierarchicalComponent{
     private superTypes:string[]
     constructor(lineNumber:number,name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation,superTypes:string[]){
         super(lineNumber,name,parent,comment,meta);

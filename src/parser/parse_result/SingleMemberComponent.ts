@@ -2,7 +2,7 @@ import { Accessibility, Component } from "./Component";
 import { ComponentMetaInformation } from "./ComponentData";
 import { StructuredComment } from "./StructuredComment";
 
-export class ClassMemberComponent extends Component{
+export class SingleMemberComponent extends Component{
     private returnType:string;
    
     getReturnType():string{

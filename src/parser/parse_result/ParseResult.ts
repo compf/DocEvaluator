@@ -1,3 +1,3 @@
-import { HierarchicalMember } from "./HierarchicalMember";
+import { HierarchicalComponent } from "./HierarchialComponent";
 
-export type ParseResult={members:HierarchicalMember}
+export type ParseResult={root:HierarchicalComponent}

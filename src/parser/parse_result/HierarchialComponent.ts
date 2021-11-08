@@ -1,7 +1,7 @@
 import { Accessibility, Component } from "./Component";
 import { ComponentMetaInformation } from "./ComponentData";
 import { StructuredComment } from "./StructuredComment";
-export class HierarchicalMember extends Component{
+export class HierarchicalComponent extends Component{
     private children:Component[];
     addChild(child:Component){
         this.children.push(child);

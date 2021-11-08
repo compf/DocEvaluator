@@ -7,8 +7,8 @@ import { Accessibility, Component } from "./parse_result/Component";
 import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/StructuredComment";
-import { HierarchicalMember } from "./parse_result/HierarchicalMember";
-import { ClassMemberComponent } from "./parse_result/ClassMemberComponent";
+import { HierarchicalComponent } from "./parse_result/HierarchialComponent";
+import { SingleMemberComponent } from "./parse_result/SingleMemberComponent";
 import { MethodComponent } from "./parse_result/MethodComponent";
 import { ClassComponent } from "./parse_result/ClassComponent";
 import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./parse_result/ComponentData";
@@ -26,8 +26,8 @@ export class JavaParser extends BaseParser {
         let parser = new Antlr_JavaParser(tokens);
         let visitor = new FileVisitor();
         let rel = parser.compilationUnit()
-        var res = visitor.visit(rel) as HierarchicalMember;
-        return { members: res };
+        var res = visitor.visit(rel) as HierarchicalComponent;
+        return { root: res };
     }
     public override getLexerType<T>(): { new(stream: CharStream): T; } {
         return JavaLexer;
@@ -70,15 +70,15 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
             if (ctx.children.length == 1) {
                 let name = ctx.getChild(0).getChild(0).text;
 
-                this.field = new ClassMemberComponent(lineNumber, name, this.type, this.parent, this.comment, this.meta)
+                this.field = new SingleMemberComponent(lineNumber, name, this.type, this.parent, this.comment, this.meta)
             }
             else {
                 //TODO find better solution in case of fields with comma separated names
                 let names = ctx.children.filter((c) => c.childCount > 0).map((c) => c.getChild(0).text);
-                let groupedField = new HierarchicalMember(lineNumber, names.join(","), this.parent, this.comment, this.meta);
+                let groupedField = new HierarchicalComponent(lineNumber, names.join(","), this.parent, this.comment, this.meta);
                 this.field = groupedField;
                 for (let n of names) {
-                    let child = new ClassMemberComponent(lineNumber, n, this.type, this.parent, this.comment, this.meta)
+                    let child = new SingleMemberComponent(lineNumber, n, this.type, this.parent, this.comment, this.meta)
                     groupedField.addChild(child)
                 }
             }
@@ -191,7 +191,7 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
     protected defaultResult(): null | Component {
         return null;
     }
-    private parent: HierarchicalMember = new HierarchicalMember(0, "", null, null, new DefaultComponentMetaInformation(true));
+    private parent: HierarchicalComponent = new HierarchicalComponent(0, "", null, null, new DefaultComponentMetaInformation(true));
     visitTypeDeclaration(ctx: TypeDeclarationContext) {
 
         let visitor = new CommentComponentPairVisitor(this.parent);
