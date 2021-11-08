@@ -16,7 +16,8 @@ function main(args:Array<string>){
     const relevantFiles=traverser.getRelevantFiles();
     console.log(relevantFiles);
     var parser:BaseParser=new JavaParser();
-   var tokens= parser.parse("testDir/commented_class.java");
+    throw new Error("an error")
+   //var tokens= parser.parse("testDir/commented_class.java");
    //console.log(tokens);
 }
 
