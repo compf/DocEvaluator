@@ -113,7 +113,7 @@ interfaceDeclaration
     : INTERFACE IDENTIFIER typeParameters? extendInterface? interfaceBody
     ;
 extendInterface: EXTENDS typeList;
-comment:COMMENT;
+comment:JCOMMENT;
 classBody
     : '{' classBodyDeclaration* '}'
     ;
