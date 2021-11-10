@@ -1,6 +1,6 @@
 import internal from "stream";
-import { ComponentMetaInformation } from "./ComponentData";
-import { StructuredComment } from "./StructuredComment";
+import { ComponentMetaInformation } from "./component_data";
+import { StructuredComment } from "./structured_comment";
 export enum Accessibility{
     Public,Protected,Private
 }
@@ -24,6 +24,15 @@ export class Component{
     }
     getLineNumber():number{
         return this.lineNumber;
+    }
+    getQualifiedName():string{
+       let  names:string[]=[]
+       let curr:Component|null=this;
+       while(curr!=null && curr.getName()!=""){
+           names.unshift(curr.getName());
+           curr=curr.getParent();
+       }
+       return names.join(".");
     }
     constructor(lineNumber:number,name:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation){
         this.name=name;

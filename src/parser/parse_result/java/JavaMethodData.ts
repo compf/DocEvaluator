@@ -1,4 +1,4 @@
-import { DefaultComponentMetaInformation } from "../ComponentData";
+import { DefaultComponentMetaInformation } from "../component_data";
 
 export class JavaMethodData extends DefaultComponentMetaInformation{
     private  isOverriding:boolean;

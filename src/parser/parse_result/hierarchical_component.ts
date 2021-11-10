@@ -1,6 +1,6 @@
-import { Accessibility, Component } from "./Component";
-import { ComponentMetaInformation } from "./ComponentData";
-import { StructuredComment } from "./StructuredComment";
+import { Accessibility, Component } from "./component";
+import { ComponentMetaInformation } from "./component_data";
+import { StructuredComment } from "./structured_comment";
 export class HierarchicalComponent extends Component{
     private children:Component[];
     addChild(child:Component){

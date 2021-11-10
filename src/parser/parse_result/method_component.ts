@@ -1,7 +1,7 @@
-import {  SingleMemberComponent } from "./SingleMemberComponent";
-import { Accessibility, Component } from "./Component";
-import { ComponentMetaInformation } from "./ComponentData";
-import { StructuredComment } from "./StructuredComment";
+import {  SingleMemberComponent } from "./single_member_component";
+import { Accessibility, Component } from "./component";
+import { ComponentMetaInformation } from "./component_data";
+import { StructuredComment } from "./structured_comment";
 
 export class MethodComponent  extends SingleMemberComponent{
     private params: { type: string; name: string; }[];

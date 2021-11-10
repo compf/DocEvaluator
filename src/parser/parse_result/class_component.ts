@@ -1,7 +1,7 @@
-import { Component } from "./Component";
-import { ComponentMetaInformation } from "./ComponentData";
-import { HierarchicalComponent } from "./HierarchialComponent";
-import { StructuredComment } from "./StructuredComment";
+import { Component } from "./component";
+import { ComponentMetaInformation } from "./component_data";
+import { HierarchicalComponent } from "./hierarchical_component";
+import { StructuredComment } from "./structured_comment";
 
 export class ClassComponent extends HierarchicalComponent{
     private superTypes:string[]

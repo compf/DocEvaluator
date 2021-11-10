@@ -1,4 +1,4 @@
-import { DefaultComponentMetaInformation } from "../ComponentData";
+import { DefaultComponentMetaInformation } from "../component_data";
 //TODO Consider to delete
 /*export class JavaClassData extends DefaultComponentMetaInformation{
     private superTypes:string[];
