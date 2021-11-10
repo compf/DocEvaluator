@@ -2,55 +2,55 @@
 <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
 <svg xmlns='http://www.w3.org/2000/svg' viewBox='-19 10 648 554' xmlns:xlink='http://www.w3.org/1999/xlink' width='648.0px' font-size='13' font-family='Arial, LiberationSans' version='1.1' height='554.0px'>
   <defs>
-<style type='text/css'><![CDATA[svg text {text-rendering: geometricPrecision;}]]></style>    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='59197552-8f6f-4eba-9a19-e8c61f9fff05' spreadMethod='pad'>
+<style type='text/css'><![CDATA[svg text {text-rendering: geometricPrecision;}]]></style>    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='f78a6258-b306-4aff-ba6e-fe47b54f521d' spreadMethod='pad'>
       <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
       <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
     </linearGradient>
-    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='677124f6-ce84-4aad-81c8-5c940362d509' spreadMethod='pad'>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='949c3c93-370a-405a-b911-347163798642' spreadMethod='pad'>
       <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
       <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
     </linearGradient>
-    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='9db8ecbb-0591-49e2-9864-03fd8e77f7bd' spreadMethod='pad'>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='6c230f41-2920-4725-89ef-a59974a0f15d' spreadMethod='pad'>
       <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
       <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
     </linearGradient>
-    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='569f439b-2870-4501-a35d-8e4659b82899' spreadMethod='pad'>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='b3394792-3da8-4a9e-8c73-d2fac81aa7e4' spreadMethod='pad'>
       <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
       <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
     </linearGradient>
-    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='3beebc73-3b1c-4719-8c29-0fb956934260' spreadMethod='pad'>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='fe5f1991-18da-4c84-a593-0ad0921e724d' spreadMethod='pad'>
       <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
       <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
     </linearGradient>
-    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='b1bf41e8-a84c-4499-a86b-374ee4dd2ff2' spreadMethod='pad'>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='f35ceb21-8f89-48ca-a79c-7c0f677f3f9d' spreadMethod='pad'>
       <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
       <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
     </linearGradient>
   </defs>
   <desc>ClassDiagram</desc>
   <g transform='translate(11.0,160.0)' id='_VdnsMCOhEDqw_ueO7rIpXA'>
-    <rect rx='3.0' ry='3.0' x='0.0' width='292.0px' y='0.0' stroke-width='1.0' fill='url(#59197552-8f6f-4eba-9a19-e8c61f9fff05)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
-    <text font-weight='bold' text-anchor='middle' x='146.0' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>FileAnalyzer</text>
-    <line y1='26.0' x1='0.0' y2='26.0' x2='292.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <rect rx='3.0' ry='3.0' x='0.0' width='325.0px' y='0.0' stroke-width='1.0' fill='url(#f78a6258-b306-4aff-ba6e-fe47b54f521d)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='162.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>FileAnalyzer</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='325.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
     <g transform='translate(0.0,26.0)' id='_X2Ta0COhEDqw_ueO7rIpXA'>
       <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
       <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
-      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>analyze(HierarchicalComponent, String): Real</text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>analyze(ParseResult, MetricAnalyzer): MetricResult</text>
     </g>
   </g>
   <g transform='translate(64.0,253.0)' id='_T8mI4COiEDqw_ueO7rIpXA'>
-    <rect rx='3.0' ry='3.0' x='0.0' width='183.0px' y='0.0' stroke-width='1.0' fill='url(#677124f6-ce84-4aad-81c8-5c940362d509)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
-    <text font-weight='bold' text-anchor='middle' x='91.5' y='18.0' font-size='12' fill='rgb(105, 105, 105)'>« Interface »</text>
-    <text font-weight='bold' text-anchor='middle' x='91.5' y='35.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricAnalyzer</text>
-    <line y1='42.0' x1='0.0' y2='42.0' x2='183.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <rect rx='3.0' ry='3.0' x='0.0' width='228.0px' y='0.0' stroke-width='1.0' fill='url(#949c3c93-370a-405a-b911-347163798642)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='114.0' y='18.0' font-size='12' fill='rgb(105, 105, 105)'>« Interface »</text>
+    <text font-weight='bold' text-anchor='middle' x='114.0' y='35.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricAnalyzer</text>
+    <line y1='42.0' x1='0.0' y2='42.0' x2='228.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
     <g transform='translate(0.0,42.0)' id='_V4z98iOiEDqw_ueO7rIpXA'>
       <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
       <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
-      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>analyze(Component): Real</text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>analyze(Component): MetricResult</text>
     </g>
   </g>
   <g transform='translate(374.0,202.0)' id='_YzDhgCOiEDqw_ueO7rIpXA'>
-    <rect rx='3.0' ry='3.0' x='0.0' width='225.0px' y='0.0' stroke-width='1.0' fill='url(#9db8ecbb-0591-49e2-9864-03fd8e77f7bd)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <rect rx='3.0' ry='3.0' x='0.0' width='225.0px' y='0.0' stroke-width='1.0' fill='url(#6c230f41-2920-4725-89ef-a59974a0f15d)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
     <text font-weight='bold' text-anchor='middle' x='112.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricResult</text>
     <line y1='26.0' x1='0.0' y2='26.0' x2='225.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
     <g transform='translate(0.0,26.0)' id='_aDZIACOiEDqw_ueO7rIpXA'>
@@ -65,9 +65,9 @@
     </g>
   </g>
   <g transform='translate(240.0,40.0)' id='_j6CdACOiEDqw_ueO7rIpXA'>
-    <rect rx='3.0' ry='3.0' x='0.0' width='239.0px' y='0.0' stroke-width='1.0' fill='url(#569f439b-2870-4501-a35d-8e4659b82899)' stroke='rgb(187, 187, 187)' look='allInOne' height='90.0px'/>
-    <text font-weight='bold' text-anchor='middle' x='119.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricResultBuilder</text>
-    <line y1='26.0' x1='0.0' y2='26.0' x2='239.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <rect rx='3.0' ry='3.0' x='0.0' width='243.0px' y='0.0' stroke-width='1.0' fill='url(#b3394792-3da8-4a9e-8c73-d2fac81aa7e4)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='121.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricResultBuilder</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='243.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
     <g transform='translate(0.0,26.0)' id='_oVoekCOiEDqw_ueO7rIpXA'>
       <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
       <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
@@ -76,16 +76,11 @@
     <g transform='translate(0.0,46.0)' id='_sWGYcCOkEDqw_ueO7rIpXA'>
       <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
       <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
-      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getAggregratedResult(): Real</text>
-    </g>
-    <g transform='translate(0.0,66.0)' id='_A4CfkCOyEDqw_ueO7rIpXA'>
-      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
-      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
-      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getAllLogMessages(): LogMessage[]</text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getAggregratedResult(): MetricResult</text>
     </g>
   </g>
   <g transform='translate(90.0,454.0)' id='_4pDX0COkEDqw_ueO7rIpXA'>
-    <rect rx='3.0' ry='3.0' x='0.0' width='206.0px' y='0.0' stroke-width='1.0' fill='url(#3beebc73-3b1c-4719-8c29-0fb956934260)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <rect rx='3.0' ry='3.0' x='0.0' width='206.0px' y='0.0' stroke-width='1.0' fill='url(#fe5f1991-18da-4c84-a593-0ad0921e724d)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
     <text font-weight='bold' text-anchor='middle' x='103.0' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricManager</text>
     <line y1='26.0' x1='0.0' y2='26.0' x2='206.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
     <g transform='translate(0.0,26.0)' id='_OA9JgCOlEDqw_ueO7rIpXA'>
@@ -100,13 +95,18 @@
     </g>
   </g>
   <g transform='translate(396.0,347.0)' id='_z7-40COxEDqw_ueO7rIpXA'>
-    <rect rx='3.0' ry='3.0' x='0.0' width='91.0px' y='0.0' stroke-width='1.0' fill='url(#b1bf41e8-a84c-4499-a86b-374ee4dd2ff2)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
-    <text font-weight='bold' text-anchor='middle' x='45.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>LogMessage</text>
-    <line y1='26.0' x1='0.0' y2='26.0' x2='91.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <rect rx='3.0' ry='3.0' x='0.0' width='123.0px' y='0.0' stroke-width='1.0' fill='url(#f35ceb21-8f89-48ca-a79c-7c0f677f3f9d)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='61.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>LogMessage</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='123.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
     <g transform='translate(0.0,26.0)' id='_5ZzMYCOxEDqw_ueO7rIpXA'>
       <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
       <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
       <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>print()</text>
+    </g>
+    <g transform='translate(0.0,46.0)' id='_cwXeoCQxEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>toString(): String</text>
     </g>
   </g>
 </svg>

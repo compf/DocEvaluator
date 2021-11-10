@@ -1,17 +1,19 @@
-import { ParseResult } from "./parse_result/ParseResult";
+import { ParseResult } from "./parse_result/parse_result";
 
 import antlr4 from 'antlr4';
 import { CommonTokenStream } from 'antlr4ts';
 import  fs  from 'fs';
 import { TokenStream } from 'antlr4ts';
 import { CharStream, CharStreams } from 'antlr4ts';
+import { HierarchicalComponent } from "./parse_result/hierarchical_component";
 export abstract class BaseParser{
+
     /**
      * Parse the specified  parser using the parser of the derived class
      * @param filepath a path to a source code file
      * @returns an A object that represent the parse result
      */
-    public  parse(filepath:string):ParseResult{
+    public  parse(filepath:string):HierarchicalComponent{
         let input=fs.readFileSync(filepath).toString();
         return this.parseString(input);
     }
@@ -20,7 +22,7 @@ export abstract class BaseParser{
      * @param content the string that contains the source code to parse
      * @returns A object that represent the parse result
      */
-    public abstract parseString(content:string):ParseResult;
+    public abstract parseString(content:string):HierarchicalComponent;
 
     /**
      * Reads all tokens from the source code file

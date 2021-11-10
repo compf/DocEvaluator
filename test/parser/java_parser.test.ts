@@ -3,11 +3,12 @@ import fs from "fs"
 import { JavaLexer } from "../../src/parser/antlr_files/java/JavaLexer";
 import exp, { WSA_E_CANCELLED } from "constants";
 import { Token } from "antlr4ts";
-import { HierarchicalComponent } from "../../src/parser/parse_result/HierarchialComponent";
-import { MethodComponent } from "../../src/parser/parse_result/MethodComponent";
-import { SingleMemberComponent } from "../../src/parser/parse_result/SingleMemberComponent";
-import { Accessibility } from "../../src/parser/parse_result/Component";
-import { ClassComponent } from "../../src/parser/parse_result/ClassComponent";
+import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
+import { MethodComponent } from "../../src/parser/parse_result/method_component";
+import { SingleMemberComponent } from "../../src/parser/parse_result/single_member_component";
+import { Accessibility } from "../../src/parser/parse_result/component";
+import { ClassComponent } from "../../src/parser/parse_result/class_component";
+import { GroupedMemberComponent } from "../../src/parser/parse_result/grouped_member_component";
 
 let tokens:Token[]=[]
 const numberTokensMainJava=33;
@@ -40,9 +41,9 @@ expect(correctTokens.length).toBe(numberTokensMainJava)
 test("test java parser",()=>{
     var parser=new JavaParser();
     let res=parser.parse("testDir/commented_class.java");
-    expect(res.root.getChildren().length).toBe(3);
-    let firstClass=res.root.getChildren()[0];
-    let secondClass=res.root.getChildren()[1] as ClassComponent;
+    expect(res.getChildren().length).toBe(3);
+    let firstClass=res.getChildren()[0];
+    let secondClass=res.getChildren()[1] as ClassComponent;
 
     expect(firstClass.getName()).toBe("Main");
     expect(firstClass.getComment()).not.toBe(null);
@@ -114,21 +115,20 @@ test("test java parser",()=>{
     expect(halloMethod.getComponentMetaInformation().isPublic()).toBeFalsy();
     expect(halloMethod.getParams()).toHaveLength(0);
 
-    let multipleFields=secondClassChildren[2] as HierarchicalComponent
+    let multipleFields=secondClassChildren[2] as GroupedMemberComponent
     expect(multipleFields).not.toBeNull();
-    expect(multipleFields.getChildren()).toHaveLength(2);
-   let fieldChild1=multipleFields.getChildren()[0] as SingleMemberComponent; 
+    expect(multipleFields.getReturnType()).toBe("int"); 
+    expect(multipleFields.getChildNames()).toHaveLength(2);
+   let fieldChild1=multipleFields.getChildNames()[0];
    expect(fieldChild1).not.toBeNull();
-   expect(fieldChild1.getReturnType()).toBe("int"); 
-   expect(fieldChild1.getName()).toBe("multiple");
+   expect(fieldChild1).toBe("multiple");
 
-   let fieldChild2=multipleFields.getChildren()[1] as SingleMemberComponent; 
+   let fieldChild2=multipleFields.getChildNames()[1];
    expect(fieldChild2).not.toBeNull();
-   expect(fieldChild2.getReturnType()).toBe("int"); 
-   expect(fieldChild2.getName()).toBe("many");
+   expect(fieldChild2).toBe("many");
 
 
-    let thirdClass=res.root.getChildren()[2] as ClassComponent;
+    let thirdClass=res.getChildren()[2] as ClassComponent;
     expect(thirdClass.getName()).toBe("ThirdClass");
     expect(thirdClass.getComment()).toBeNull();
     expect(thirdClass.getChildren()).toHaveLength(1);

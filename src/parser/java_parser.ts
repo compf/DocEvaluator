@@ -1,18 +1,19 @@
 import { BaseParser } from "./base_parser";
-import { ParseResult } from "./parse_result/ParseResult";
+import { ParseResult } from "./parse_result/parse_result";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStream, CharStreams, CommonTokenStream, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
-import { Accessibility, Component } from "./parse_result/Component";
+import { Accessibility, Component } from "./parse_result/component";
 import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
-import { StructuredComment, StructuredCommentTag } from "./parse_result/StructuredComment";
-import { HierarchicalComponent } from "./parse_result/HierarchialComponent";
-import { SingleMemberComponent } from "./parse_result/SingleMemberComponent";
-import { MethodComponent } from "./parse_result/MethodComponent";
-import { ClassComponent } from "./parse_result/ClassComponent";
-import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./parse_result/ComponentData";
+import { StructuredComment, StructuredCommentTag } from "./parse_result/structured_comment";
+import { HierarchicalComponent } from "./parse_result/hierarchical_component";
+import { SingleMemberComponent } from "./parse_result/single_member_component";
+import { MethodComponent } from "./parse_result/method_component";
+import { ClassComponent } from "./parse_result/class_component";
+import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./parse_result/component_data";
 import { JavaMethodData } from "./parse_result/java/JavaMethodData";
+import { GroupedMemberComponent } from "./parse_result/grouped_member_component";
 
 //import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
 //import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
@@ -20,14 +21,14 @@ import { JavaMethodData } from "./parse_result/java/JavaMethodData";
 
 
 export class JavaParser extends BaseParser {
-    override parseString(content: string): ParseResult {
+    override parseString(content: string): HierarchicalComponent {
         let tokens = this.getTokens(content);
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
         let visitor = new FileVisitor();
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as HierarchicalComponent;
-        return { root: res };
+        return res;
     }
     public override getLexerType<T>(): { new(stream: CharStream): T; } {
         return JavaLexer;
@@ -75,11 +76,11 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
             else {
                 //TODO find better solution in case of fields with comma separated names
                 let names = ctx.children.filter((c) => c.childCount > 0).map((c) => c.getChild(0).text);
-                let groupedField = new HierarchicalComponent(lineNumber, names.join(","), this.parent, this.comment, this.meta);
+                let groupedField = new GroupedMemberComponent(lineNumber, /*will be ignored*/"",this.type, this.parent, this.comment, this.meta);
                 this.field = groupedField;
                 for (let n of names) {
-                    let child = new SingleMemberComponent(lineNumber, n, this.type, this.parent, this.comment, this.meta)
-                    groupedField.addChild(child)
+                   
+                    groupedField.addChildName(n)
                 }
             }
         }
