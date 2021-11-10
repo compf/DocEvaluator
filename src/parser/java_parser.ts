@@ -1,7 +1,7 @@
 import { BaseParser } from "./base_parser";
 import { ParseResult } from "./parse_result/parse_result";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
-import { CharStream, CharStreams, CommonTokenStream, RuleContext } from 'antlr4ts';
+import { CharStream, CharStreams, CommonTokenStream, ConsoleErrorListener, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Accessibility, Component } from "./parse_result/component";
 import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext } from "./antlr_files/java/JavaParser";
@@ -25,6 +25,7 @@ export class JavaParser extends BaseParser {
         let tokens = this.getTokens(content);
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
+        parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         let visitor = new FileVisitor();
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as HierarchicalComponent;

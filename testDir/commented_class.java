@@ -26,7 +26,7 @@ public class SecondClass extends Object implements List<Integer>{
      * 
      */
     @Override
-    private String hallo(){
+    private /*test*/ String hallo(){
 
     }
     int multiple,many;
