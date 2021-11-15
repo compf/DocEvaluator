@@ -1,30 +1,13 @@
 import fs from "fs"
 import path from "path"
-import minimatch, { Minimatch } from "minimatch"
+import minimatch, { IMinimatch, Minimatch } from "minimatch"
 import chalk from "chalk";
-import { EvaluatorConf,JSONConf } from "../conf/EvaluatorConf";
+import { EvaluatorConf } from "../conf/EvaluatorConf";
 
 const CONF_FILENAME = "comment_conf.json";
 
+const MiniMatchConf = { dot: true, matchBase: true };
 
-/**
- * Converts a jsonObject that contains the necessary information about the directory traverser to a equivalent 
- * DirectoryTraverserConfig
- * @param jsonObject a json Object that is compatible with the JSONConf interface
- * @returns a valid DirectorytraverserConfig that holds the converted information
- */
-function convertJSONToDirectoryTraverserConf(jsonObject:JSONConf):EvaluatorConf{
-    let resultObject=new EvaluatorConf();
-    resultObject.exclude=jsonObject.exclude;
-    resultObject.include=jsonObject.include;
-    /*for(let s of jsonObject.exclude){
-        resultObject.exclude.push(new Minimatch(s, MiniMatchConf));
-    }
-    for(let s of jsonObject.include){
-        resultObject.include.push(new Minimatch(s, MiniMatchConf));
-    }*/
-    return resultObject;
-}
 /**
      * load the configuration from the comment_conf.json file
      * @returns A valid DirectoryTraverserConfig that is set to default values if no config file is found
@@ -33,7 +16,7 @@ function convertJSONToDirectoryTraverserConf(jsonObject:JSONConf):EvaluatorConf{
     try {
         let jsonContent = fs.readFileSync(path.join(basePath, CONF_FILENAME)).toString();
         let jsonObject=JSON.parse(jsonContent);
-        return convertJSONToDirectoryTraverserConf(jsonObject); 
+        return  jsonObject;
     }
     catch (err) {
         console.log(chalk.yellow("No config file found. Using default values "))
@@ -55,16 +38,25 @@ export class DirectoryTraverser {
      * 
      * @param basePath The path to the directory where traversing should start
      */
-    constructor(basePath: string, jsonObject:JSONConf|null = null) {
+    constructor(basePath: string, jsonObject:EvaluatorConf|null = null) {
         this.basePath = basePath;
         if (jsonObject != null) {
-            this.conf = convertJSONToDirectoryTraverserConf(jsonObject);
+            this.conf =jsonObject
         }
         else {
             this.conf = loadConfFromFile(this.basePath);
         }
-
+        // Add all include/exclude items from the conf to the array
+        // which contains Minimatch objects, this will done for caching and preventing
+        // to create Minimatch objects for each file
+        for(let include of this.conf.include){
+            this.includeItems.push(new Minimatch(include,MiniMatchConf));
+        }
+        for(let exclude of this.conf.exclude){
+            this.excludeItems.push(new Minimatch(exclude,MiniMatchConf));
+        }
     }
+
 
     /**
      * Traverse the directory and return all relevant files recursively
@@ -75,14 +67,16 @@ export class DirectoryTraverser {
         this.getRelevantFilesRec(this.basePath, resultSet);
         return resultSet;
     }
+    private excludeItems:IMinimatch[]=[]
+    private includeItems:IMinimatch[]=[]
     /**
      * Determine if a file should be ignored
      * @param filename the filename to check
      * @returns true if file matched an exclude pattern or no include pattern, else false
      */
     private shallIgnore(filename: string): boolean {
-        let exclude = this.conf.getExcludeItems().some((v) => v.match(filename));
-        let include = this.conf.getIncludeItems().some((v) => v.match(filename));
+        let exclude = this.excludeItems.some((v) => v.match(filename));
+        let include = this.includeItems.some((v) => v.match(filename));
         return exclude || !include;
     }
     /**
