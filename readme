@@ -1,0 +1,26 @@
+# JavadocEvaluator
+
+JavaDocEvaluator is a tool to evaluate the Javadoc  of a project.
+It can also be extended for other languages and can be used with Github Actions
+
+## Installation
+
+Use the package manager NPM to install JavadDocEvaluator
+
+```bash
+npm  install -g javadoc_evaluator
+```
+
+## Usage
+```bash
+npm run launch <path to project folder>
+```
+The project folder should contain a file called "comment_conf.json"
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
