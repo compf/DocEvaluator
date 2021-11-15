@@ -2,6 +2,7 @@ import fs from "fs"
 import path from "path";
 import jest from "jest";
 import { DirectoryTraverser } from "../../src/directory_traverser/directory_traverser";
+import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
 
 function createEmptyFile(filename:string){
     if(!fs.existsSync(filename))
@@ -40,7 +41,7 @@ createEmptyFile(path.join(basePath,subDir,"inSubDir.java"));
 });
 test("Test default configuration",()=>{
     const basePath="testDir/traverserTest/";
-    let traverser=new DirectoryTraverser(basePath,null);
+    let traverser=new DirectoryTraverser(basePath,new EvaluatorConf());
     const expectedFileCount=10;
     let files=traverser.getRelevantFiles();
     let actualCount=files.size;
@@ -48,7 +49,7 @@ test("Test default configuration",()=>{
 });
 test("test configuration with test files excluded",()=>{
     const basePath="testDir/traverserTest/";
-    const rule={exclude:["*test*","*Test*"],include:["*java"]};
+    const rule={exclude:["*test*","*Test*"],include:["*java"],metrics:[]};
     let traverser=new DirectoryTraverser(basePath,rule);
     const expectedFileCount=8;
     let actualCount=traverser.getRelevantFiles().size;
@@ -56,7 +57,7 @@ test("test configuration with test files excluded",()=>{
 });
 test("test configuration with dir excluded",()=>{
     const basePath="testDir/traverserTest/";
-    const rule={exclude:["dirC/*"],include:["*java"]};
+    const rule={exclude:["dirC/*"],include:["*java"],metrics:[]};
     let traverser=new DirectoryTraverser(basePath,rule);
     const expectedFileCount=7;
     let files=traverser.getRelevantFiles();

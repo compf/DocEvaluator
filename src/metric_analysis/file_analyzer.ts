@@ -6,12 +6,11 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class FileAnalyzer{
-    analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder):MetricResult{
+    analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder){
         // The root will not have a comment since it is a file so we will analyze all its children
         for(let rootComponent of parse_result.root.getChildren()){
             this.analyzeComponent(rootComponent,builder,analyzer); 
         }
-        return builder.getAggregatedResult();
 
     }
     private analyzeComponent(component:Component,builder:MetricResultBuilder,analyzer:DocumentationAnalysisMetric):void{

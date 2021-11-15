@@ -3,26 +3,9 @@ import path from "path"
 import minimatch, { IMinimatch, Minimatch } from "minimatch"
 import chalk from "chalk";
 import { EvaluatorConf } from "../conf/EvaluatorConf";
-
-const CONF_FILENAME = "comment_conf.json";
-
 const MiniMatchConf = { dot: true, matchBase: true };
 
-/**
-     * load the configuration from the comment_conf.json file
-     * @returns A valid DirectoryTraverserConfig that is set to default values if no config file is found
-     */
- function loadConfFromFile(basePath:string):EvaluatorConf {
-    try {
-        let jsonContent = fs.readFileSync(path.join(basePath, CONF_FILENAME)).toString();
-        let jsonObject=JSON.parse(jsonContent);
-        return  jsonObject;
-    }
-    catch (err) {
-        console.log(chalk.yellow("No config file found. Using default values "))
-    }
-    return new EvaluatorConf();
-}
+
 
 /**
  * This class will be used to find all files in a directory( and subdirectories)
@@ -38,14 +21,9 @@ export class DirectoryTraverser {
      * 
      * @param basePath The path to the directory where traversing should start
      */
-    constructor(basePath: string, jsonObject:EvaluatorConf|null = null) {
+    constructor(basePath: string, jsonObject:EvaluatorConf) {
         this.basePath = basePath;
-        if (jsonObject != null) {
-            this.conf =jsonObject
-        }
-        else {
-            this.conf = loadConfFromFile(this.basePath);
-        }
+        this.conf=jsonObject;
         // Add all include/exclude items from the conf to the array
         // which contains Minimatch objects, this will done for caching and preventing
         // to create Minimatch objects for each file

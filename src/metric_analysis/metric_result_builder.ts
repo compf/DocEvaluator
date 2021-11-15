@@ -24,9 +24,16 @@ export class MetricResultBuilder{
     /**
      * Creates the aggegrated MetricResult 
      * Should be called on last step
+     * Will reset the builder to its original state
      * @returns some kind of aggregation of all results that have been processed
      */
     getAggregatedResult():MetricResult{
-        return new MetricResult(this.sumResult/this.numberResults,this.allLogMessages);
+        //prevent numberResults from becoming 0
+        let numberResults=this.numberResults>0?this.numberResults:1;
+        let result= new MetricResult(this.sumResult/numberResults,this.allLogMessages);
+        this.sumResult=0;
+        this.numberResults=0;
+        this.allLogMessages=[];
+        return result;
     }
 }

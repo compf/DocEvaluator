@@ -14,14 +14,16 @@ function getCommentedClassRoot():HierarchicalComponent{
 test("test simple present metric on commented class",()=>{
    let root=getCommentedClassRoot();
     let analyzer=new FileAnalyzer();
-    let metricResult=analyzer.analyze({root,path},new SimpleCommentPresentMetric(),new MetricResultBuilder());
+    let resultBuilder=new MetricResultBuilder();
+    analyzer.analyze({root,path},new SimpleCommentPresentMetric(),resultBuilder);
     const expectedResult=(3/11)*100;
-    expect(metricResult.getResult()).toBeCloseTo(expectedResult,5)
+    expect(resultBuilder.getAggregatedResult().getResult()).toBeCloseTo(expectedResult,5)
 });
 test("test public only metric on commented class",()=>{
     let root=getCommentedClassRoot();
+    let resultBuilder=new MetricResultBuilder();
     let analyzer=new FileAnalyzer();
-    let metricResult=analyzer.analyze({root,path},new SimplePublicMembersOnlyMetric(),new MetricResultBuilder());
+    analyzer.analyze({root,path},new SimplePublicMembersOnlyMetric(),resultBuilder);
     const expectedResult=(2/6)*100;
-    expect(metricResult.getResult()).toBeCloseTo(expectedResult,5)
+    expect(resultBuilder.getAggregatedResult().getResult()).toBeCloseTo(expectedResult,5)
 })

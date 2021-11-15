@@ -25,7 +25,7 @@ export class JavaParser extends BaseParser {
         let tokens = this.getTokens(content);
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
-        parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
+        //parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         let visitor = new FileVisitor(filepath??"");
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as HierarchicalComponent;
