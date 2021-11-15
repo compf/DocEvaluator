@@ -16,12 +16,12 @@ const MiniMatchConf = { dot: true, matchBase: true };
  */
 export class DirectoryTraverser {
     private basePath: string;
-    private conf: EvaluatorConf;
+    private conf: {exclude:string[],include:string[]};
     /**
      * 
      * @param basePath The path to the directory where traversing should start
      */
-    constructor(basePath: string, jsonObject:EvaluatorConf) {
+    constructor(basePath: string, jsonObject:{exclude:string[],include:string[]}) {
         this.basePath = basePath;
         this.conf=jsonObject;
         // Add all include/exclude items from the conf to the array

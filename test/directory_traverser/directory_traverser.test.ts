@@ -49,7 +49,7 @@ test("Test default configuration",()=>{
 });
 test("test configuration with test files excluded",()=>{
     const basePath="testDir/traverserTest/";
-    const rule={exclude:["*test*","*Test*"],include:["*java"],metrics:[]};
+    const rule={exclude:["*test*","*Test*"],include:["*java"]};
     let traverser=new DirectoryTraverser(basePath,rule);
     const expectedFileCount=8;
     let actualCount=traverser.getRelevantFiles().size;
@@ -57,7 +57,7 @@ test("test configuration with test files excluded",()=>{
 });
 test("test configuration with dir excluded",()=>{
     const basePath="testDir/traverserTest/";
-    const rule={exclude:["dirC/*"],include:["*java"],metrics:[]};
+    const rule={exclude:["dirC/*"],include:["*java"]};
     let traverser=new DirectoryTraverser(basePath,rule);
     const expectedFileCount=7;
     let files=traverser.getRelevantFiles();
