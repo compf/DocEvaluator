@@ -36,11 +36,11 @@ compilationUnit
     ;
 
 packageDeclaration
-    : annotation* PACKAGE qualifiedName ';'
+    : comment? annotation* PACKAGE qualifiedName ';'
     ;
 
 importDeclaration
-    : IMPORT STATIC? qualifiedName ('.' '*')? ';'
+    : comment? IMPORT STATIC? qualifiedName ('.' '*')? ';'
     ;
 
 typeDeclaration
@@ -178,7 +178,7 @@ fieldDeclaration
     ;
 
 interfaceBodyDeclaration
-    : modifier* interfaceMemberDeclaration
+    : comment? modifier* interfaceMemberDeclaration
     | ';'
     ;
 
