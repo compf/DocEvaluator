@@ -21,12 +21,12 @@ import { GroupedMemberComponent } from "./parse_result/grouped_member_component"
 
 
 export class JavaParser extends BaseParser {
-    override parseString(content: string): HierarchicalComponent {
+    override parseString(content: string,filepath:string|null): HierarchicalComponent {
         let tokens = this.getTokens(content);
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
         parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
-        let visitor = new FileVisitor();
+        let visitor = new FileVisitor(filepath??"");
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as HierarchicalComponent;
         return res;
@@ -193,7 +193,13 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
     protected defaultResult(): null | Component {
         return null;
     }
-    private parent: HierarchicalComponent = new HierarchicalComponent(0, "", null, null, new DefaultComponentMetaInformation(true));
+    constructor(path:string){
+        super();
+        this.filepath=path;
+        this.parent=new HierarchicalComponent(0, this.filepath, null, null, new DefaultComponentMetaInformation(true));
+    }
+    private filepath:string;
+    private parent: HierarchicalComponent;
     visitTypeDeclaration(ctx: TypeDeclarationContext) {
 
         let visitor = new CommentComponentPairVisitor(this.parent);

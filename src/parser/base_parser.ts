@@ -15,14 +15,15 @@ export abstract class BaseParser{
      */
     public  parse(filepath:string):HierarchicalComponent{
         let input=fs.readFileSync(filepath).toString();
-        return this.parseString(input);
+        return this.parseString(input,filepath);
     }
     /**
      * Parse the string using the parser of the derived class
      * @param content the string that contains the source code to parse
+     * @param filepath the file path of the content, might be null if the content is a direct string that does not come from a file
      * @returns A object that represent the parse result
      */
-    public abstract parseString(content:string):HierarchicalComponent;
+    public abstract parseString(content:string,filepath:string|null):HierarchicalComponent;
 
     /**
      * Reads all tokens from the source code file
