@@ -13,6 +13,9 @@
     "javadoc",
     "comments"
   ],
+  "bin":{
+    "javadoc_evaluator":"./build/src/indes.js"
+  },
   "author": "Timo Schoemaker",
   "license": "MIT",
   "devDependencies": {
