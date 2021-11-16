@@ -13,9 +13,8 @@
     "javadoc",
     "comments"
   ],
-  "bin":{
-    "run_evaluator":"./build/src/index.js"
-  },
+  "bin":"./build/src/index.js",
+  
   "author": "Timo Schoemaker",
   "license": "MIT",
   "devDependencies": {

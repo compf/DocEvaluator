@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import chalk from "chalk";
 import internal from "stream";
 import {DirectoryTraverser} from "./directory_traverser/directory_traverser";
