@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+
 import chalk from "chalk";
 import internal from "stream";
 import {DirectoryTraverser} from "./directory_traverser/directory_traverser";
@@ -27,17 +27,42 @@ function main(args:Array<string>){
     let fileAnaylzer=new FileAnalyzer();
     let singleFileResultBuilder=new MetricResultBuilder();
     let allFilesResultBulder=new MetricResultBuilder
+    let singleMetricBuilder=new MetricResultBuilder();
    for(let relevantFile of relevantFiles){
     var root:ParseResult={root: parser.parse(relevantFile),path:relevantFile};
     console.log("Looking at " +root.path)
     for(let metricWeightPair of metrics){
+       
         let metric=MetricManager.getMetric(metricWeightPair.metricName);
-        fileAnaylzer.analyze(root,metric,singleFileResultBuilder);
+        console.log("Using metric", metric.getName())
+        fileAnaylzer.analyze(root,metric,singleMetricBuilder);
+        let partialResult=singleMetricBuilder.getAggregatedResult();
+        console.log("Partial result",partialResult.getResult());
+            for(let log of partialResult.getLogMessages()){
+                log.log();
+            }
+        singleFileResultBuilder.processResult(partialResult);
+        singleMetricBuilder.reset();
+        console.log();
+        
+     
     }
-    allFilesResultBulder.processResult(singleFileResultBuilder.getAggregatedResult());
+    console.log();
+    let fileResult=singleFileResultBuilder.getAggregatedResult();
+    singleFileResultBuilder.reset();
+    allFilesResultBulder.processResult(fileResult);
+    
+   
    }
    let result=allFilesResultBulder.getAggregatedResult();
-   console.log("The result was " +result.getResult())
+   for(let log of result.getLogMessages()){
+       log.log();
+   }
+   allFilesResultBulder.reset();
+   console.log("The result was " +result.getResult());
+   if(result.getResult()<conf.global_threshold){
+       throw new Error("Threshold was not reached");
+   }
    //console.log(tokens);
 }
 

@@ -9,6 +9,6 @@ export interface DocumentationAnalysisMetric{
      * that contains log messages and a numerical score of the documentation
      */
     analyze(component:Component,builder:MetricResultBuilder):void
-        
+    getName():string;
     
 }

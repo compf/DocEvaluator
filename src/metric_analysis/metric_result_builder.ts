@@ -31,9 +31,12 @@ export class MetricResultBuilder{
         //prevent numberResults from becoming 0
         let numberResults=this.numberResults>0?this.numberResults:1;
         let result= new MetricResult(this.sumResult/numberResults,this.allLogMessages);
+       
+        return result;
+    }
+    reset(){
         this.sumResult=0;
         this.numberResults=0;
         this.allLogMessages=[];
-        return result;
     }
 }

@@ -13,7 +13,7 @@ export class EvaluatorConf {
     include: string[]=["*.java"];
     exclude: string[]=[];
     metrics:{weight:number,metricName:string}[]=[];
-    
+    global_threshold:number=20.0;
     constructor(){
        for(let s of defaultMetrics){
            this.metrics.push({weight:1.0,metricName:s})
