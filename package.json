@@ -14,7 +14,7 @@
     "comments"
   ],
   "bin":{
-    "javadoc_evaluator":"./build/src/indes.js"
+    "run_evaluator":"./build/src/index.js"
   },
   "author": "Timo Schoemaker",
   "license": "MIT",
