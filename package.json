@@ -14,6 +14,7 @@
     "comments"
   ],
   "bin":"./build/src/index.js",
+  "main":"./build/src/index.js",
   
   "author": "Timo Schoemaker",
   "license": "MIT",
