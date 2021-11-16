@@ -1,12 +1,8 @@
 import { JavadocParser, JavaParser } from "../../src/parser/java_parser";
-import fs from "fs"
 import { JavaLexer } from "../../src/parser/antlr_files/java/JavaLexer";
-import exp, { WSA_E_CANCELLED } from "constants";
 import { Token } from "antlr4ts";
-import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 import { MethodComponent } from "../../src/parser/parse_result/method_component";
 import { SingleMemberComponent } from "../../src/parser/parse_result/single_member_component";
-import { Accessibility } from "../../src/parser/parse_result/component";
 import { ClassComponent } from "../../src/parser/parse_result/class_component";
 import { GroupedMemberComponent } from "../../src/parser/parse_result/grouped_member_component";
 

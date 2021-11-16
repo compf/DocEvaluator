@@ -1,6 +1,9 @@
-import { Accessibility, Component } from "./component";
+import {  Component } from "./component";
 import { ComponentMetaInformation } from "./component_data";
 import { StructuredComment } from "./structured_comment";
+/**
+ * A component that consists of other components, e.g. a class 
+ */
 export class HierarchicalComponent extends Component{
     private children:Component[];
     addChild(child:Component){

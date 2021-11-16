@@ -5,10 +5,14 @@ export const MAX_SCORE=100;
 export const MIN_SCORE=0;
 export interface DocumentationAnalysisMetric{
     /**
-     * should analyze the documentation of a single component and returns a @see{MetricResult}
-     * that contains log messages and a numerical score of the documentation
+     * should analyze the documentation of a single component and processes the result of the analysis using the given @see[MetricResultBuilder]
+     * @param component The Component to analyze
+     * @param builder The builder to process all results of the component and its children
      */
     analyze(component:Component,builder:MetricResultBuilder):void
+    /**
+     * should return a unique name for a metric
+     */
     getName():string;
     
 }

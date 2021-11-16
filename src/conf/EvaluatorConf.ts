@@ -10,9 +10,26 @@ const CONF_FILENAME = "comment_conf.json";
  * This class contains the configuration information for the tool
  */
 export class EvaluatorConf {
+    /**
+     * All file names that should be included in the analysis should be defined here.
+     * Use common Linux syntax (*) to indicate that a filename should start or end with a specific string
+     */
     include: string[]=["*.java"];
+    
+    /**
+     * Similary as include but used to exclude specific files,
+     * should be a subset of include
+     */
     exclude: string[]=[];
+
+    /**
+     * define all metrics and their respective weights here
+     */
     metrics:{weight:number,metricName:string}[]=[];
+
+    /**
+     * the global threshold that the average of all metrics should meet to pass the documentation check
+     */
     global_threshold:number=20.0;
     constructor(){
        for(let s of defaultMetrics){

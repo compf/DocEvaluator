@@ -23,8 +23,6 @@ export class MetricResultBuilder{
     }
     /**
      * Creates the aggegrated MetricResult 
-     * Should be called on last step
-     * Will reset the builder to its original state
      * @returns some kind of aggregation of all results that have been processed
      */
     getAggregatedResult():MetricResult{
@@ -34,6 +32,9 @@ export class MetricResultBuilder{
        
         return result;
     }
+    /**
+     * reset the builder  to default values
+     */
     reset(){
         this.sumResult=0;
         this.numberResults=0;

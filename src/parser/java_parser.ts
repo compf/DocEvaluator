@@ -3,7 +3,7 @@ import { ParseResult } from "./parse_result/parse_result";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStream, CharStreams, CommonTokenStream, ConsoleErrorListener, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
-import { Accessibility, Component } from "./parse_result/component";
+import {  Component } from "./parse_result/component";
 import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/structured_comment";
@@ -373,6 +373,9 @@ class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThro
         return { thrownException: this.thrownException, params: this.params }
     }
 
+}
+ enum Accessibility{
+    Public,Protected,Private
 }
 type ModifiererInformation = { accessibilty: Accessibility, isStatic: boolean, isOverride: boolean }
 class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> implements JavaParserVisitor<MethodComponent | void>{

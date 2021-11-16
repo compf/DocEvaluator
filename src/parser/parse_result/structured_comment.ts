@@ -1,3 +1,6 @@
+/**
+ * This class contains a structured comment as it is common in Javadoc and similar documentation systems
+ */
 export class StructuredComment{  
     private generalDescription:string  |null;
     private tags:StructuredCommentTag[]=[]
@@ -5,14 +8,27 @@ export class StructuredComment{
        this.generalDescription=generalDescription;
        this.tags=tags;
     }
+    /**
+     * Getter for the general description, these are usually the first lines until the  lines begin with (usually) "@"
+     * @returns the general description of the component
+     */
     getGeneralDescription():string|null{
         return this.generalDescription;
     }
+    /**
+     * Getter for the documentation tags 
+     * @returns All documentation tags of the component
+     */
     getTags():StructuredCommentTag[]{
         return this.tags;
     }
    
 }
+/**
+ * This class contains a single tag of the documentation
+ * a tag explain a specific element of the component in a more detailed way,
+* for instance the parameters of a method
+ */
 export class StructuredCommentTag{
     private kind:string|null;
     private param:string|null;
@@ -23,12 +39,25 @@ export class StructuredCommentTag{
         this.param=param;
         this.description=description;
     }
+    /**
+     * Getter for the tag kind
+     * @returns The kind of the tag with prefix (e.g. @)
+     */
     getKind():string|null{
         return this.kind;
     }
+    /**
+     * Getter for the parameter of the tag, for instance the name of a method parameter
+     * @returns the param of the tag if is exist, otherwise null
+     */
     getParam():string|null{
         return this.param;
     }
+    /**
+     * Getter for general description of the tag, it should contain the other text after tag kind and param 
+     * have been processed
+     * @returns the general description of the tag
+     */
     getDescription():string|null{
         return this.description;
     }
