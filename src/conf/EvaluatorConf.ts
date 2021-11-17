@@ -1,5 +1,4 @@
 import chalk from "chalk";
-import minimatch, { Minimatch } from "minimatch"
 import path from "path";
 import fs from "fs";
 import { MetricManager } from "../metric_analysis/metric_manager";
@@ -49,7 +48,9 @@ export class EvaluatorConf {
     try {
         let jsonContent = fs.readFileSync(path.join(basePath, CONF_FILENAME)).toString();
         let jsonObject=JSON.parse(jsonContent);
-        return  jsonObject;
+        let resultObject=new EvaluatorConf();
+        Object.assign(resultObject,jsonObject);
+        return  resultObject;
     }
     catch (err) {
         console.log(chalk.yellow("No config file found. Using default values "))
