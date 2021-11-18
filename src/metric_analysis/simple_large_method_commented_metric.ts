@@ -20,11 +20,11 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
                 let lines=method.getMethodBody().split("\n").length;
                 /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
                 S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
-                (default 0.03) and l is the number of lines of that method
+                (default 0.05) and l is the number of lines of that method
                 */
                 let S=MIN_SCORE;
                 let B0=MAX_SCORE;
-                let k=0.03;
+                let k=0.05;
                 if(params !=undefined && params!=null && params.growth!=undefined){
                     k=params.growth;
                 }
