@@ -31,11 +31,11 @@ function main(args:Array<string>){
    for(let relevantFile of relevantFiles){
     var root:ParseResult={root: parser.parse(relevantFile),path:relevantFile};
     console.log("Looking at " +root.path)
-    for(let metricWeightPair of metrics){
+    for(let metricInformation of metrics){
        
-        let metric=MetricManager.getMetric(metricWeightPair.metricName);
+        let metric=MetricManager.getMetric(metricInformation.metricName);
         console.log("Using metric", metric.getName())
-        fileAnaylzer.analyze(root,metric,singleMetricBuilder,conf);
+        fileAnaylzer.analyze(root,metric,singleMetricBuilder,metricInformation.params);
         let partialResult=singleMetricBuilder.getAggregatedResult();
         console.log("Partial result",partialResult.getResult());
             for(let log of partialResult.getLogMessages()){

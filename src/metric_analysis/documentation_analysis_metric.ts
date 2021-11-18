@@ -10,7 +10,7 @@ export interface DocumentationAnalysisMetric{
      * @param component The Component to analyze
      * @param builder The builder to process all results of the component and its children
      */
-    analyze(component:Component,builder:MetricResultBuilder,conf:EvaluatorConf):void
+    analyze(component:Component,builder:MetricResultBuilder,params:any|undefined):void
     /**
      * should return a unique name for a metric
      */

@@ -7,7 +7,7 @@ import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
     
-    analyze(component: Component,builder:MetricResultBuilder,conf:EvaluatorConf): void {
+    analyze(component: Component,builder:MetricResultBuilder,params:any|undefined): void {
         let score=0;
         let logMessages:LogMessage[]=[]
         if(component.getComment()!=null){

@@ -5,9 +5,9 @@ import { MetricResultBuilder } from "./metric_result_builder";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 export class SimplePublicMembersOnlyMetric implements DocumentationAnalysisMetric{
-    analyze(component: Component, builder: MetricResultBuilder,conf:EvaluatorConf): void {
+    analyze(component: Component, builder: MetricResultBuilder,params:any|undefined): void {
         if(component.getComponentMetaInformation().isPublic()){
-            return new SimpleCommentPresentMetric().analyze(component,builder,conf);
+            return new SimpleCommentPresentMetric().analyze(component,builder,params);
         }
     }
     getName(){

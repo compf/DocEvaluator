@@ -12,10 +12,10 @@ export class FileAnalyzer{
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder,conf:EvaluatorConf){
+    analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder,params:any|undefined){
         // The root will not have a comment since it is a file so we will analyze all its children
         for(let rootComponent of parse_result.root.getChildren()){
-            this.analyzeComponent(rootComponent,builder,analyzer,conf); 
+            this.analyzeComponent(rootComponent,builder,analyzer,params); 
         }
 
     }
@@ -25,12 +25,12 @@ export class FileAnalyzer{
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    private analyzeComponent(component:Component,builder:MetricResultBuilder,analyzer:DocumentationAnalysisMetric,conf:EvaluatorConf):void{
-        analyzer.analyze(component,builder,conf);
+    private analyzeComponent(component:Component,builder:MetricResultBuilder,analyzer:DocumentationAnalysisMetric,params:any|undefined):void{
+        analyzer.analyze(component,builder,params);
         if(component instanceof HierarchicalComponent ){
             let hierarchical=component as HierarchicalComponent;
             for(let c of hierarchical.getChildren()){
-                this.analyzeComponent(c,builder,analyzer,conf);
+                this.analyzeComponent(c,builder,analyzer,params);
             }
         }
        
