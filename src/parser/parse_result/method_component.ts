@@ -7,9 +7,11 @@ import { StructuredComment } from "./structured_comment";
  */
 export class MethodComponent  extends SingleMemberComponent{
     private params: { type: string; name: string; }[];
-    constructor(lineNumber:number,name:string,type:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation,params:{type:string,name:string}[]){
+    private methodBody:string="";
+    constructor(lineNumber:number,name:string,type:string,parent:Component|null,comment:StructuredComment|null,meta:ComponentMetaInformation,params:{type:string,name:string}[],methodBody:string){
         super(lineNumber,name,type,parent,comment,meta);
         this.params=params;
+        this.methodBody=methodBody;
     }
     /**
      * Getter for the method parameters. A parameter is a simply a pair of name and type both as string

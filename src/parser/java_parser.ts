@@ -4,7 +4,7 @@ var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStream, CharStreams, CommonTokenStream, ConsoleErrorListener, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import {  Component } from "./parse_result/component";
-import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext, MethodBodyContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/structured_comment";
 import { HierarchicalComponent } from "./parse_result/hierarchical_component";
@@ -14,6 +14,7 @@ import { ClassComponent } from "./parse_result/class_component";
 import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./parse_result/component_data";
 import { JavaMethodData } from "./parse_result/java/JavaMethodData";
 import { GroupedMemberComponent } from "./parse_result/grouped_member_component";
+import { Interval } from "antlr4ts/misc/Interval";
 
 //import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
 //import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
@@ -378,6 +379,15 @@ class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThro
     Public,Protected,Private
 }
 type ModifiererInformation = { accessibilty: Accessibility, isStatic: boolean, isOverride: boolean }
+class MethodBodyTextVisitor  extends AbstractParseTreeVisitor<string>{
+    protected defaultResult(): string {
+        return "";
+    }
+    visitMethodBody(ctx:MethodBodyContext){
+        return ctx.start.inputStream?.getText(Interval.of(ctx.start.startIndex,ctx.stop?.stopIndex ?? 0));
+    }
+    
+}
 class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> implements JavaParserVisitor<MethodComponent | void>{
     private isOverriding: boolean;
 
@@ -400,13 +410,14 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     private parent: Component | null;
     private methodParams: { type: string, name: string }[] = [];
     private thrownException: string[] = [];
-
+    private methodBody:string="";
 
 
     visitMethodDeclaration(ctx: MethodDeclarationContext) {
         this.lineNumber = ctx.start.line;
         this.visitMethod(ctx);
     }
+    
     visitInterfaceMethodDeclaration(ctx:InterfaceMethodDeclarationContext){
         this.lineNumber = ctx.start.line;
         this.visitMethod(ctx);
@@ -419,6 +430,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
+       
     }
     private visitMethod(ctx:RuleContext){
         this.returnType = ctx.getChild(0).text
@@ -427,11 +439,11 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
-    }
+        this.methodBody=new MethodBodyTextVisitor().visit(ctx)    }
 
     visit(ctx: RuleContext): MethodComponent {
         super.visit(ctx);
-        return new MethodComponent(this.lineNumber, this.methodName, this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic, this.isOverriding, this.thrownException), this.methodParams)
+        return new MethodComponent(this.lineNumber, this.methodName, this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic, this.isOverriding, this.thrownException), this.methodParams,this.methodBody)
     }
 
 }
