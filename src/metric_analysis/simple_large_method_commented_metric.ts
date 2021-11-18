@@ -12,21 +12,31 @@ import { MetricResultBuilder } from "./metric_result_builder";
 export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMetric{
     
     analyze(component: Component,builder:MetricResultBuilder,params:any|undefined): void {
-        let method=component as MethodComponent;
-        if(method.getMethodBody!=undefined && method.getComment()==null){
-            let lines=method.getMethodBody().split("\n").length;
-            /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
-            S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
-            (default 0.1) and l is the number of lines of that method
-            */
-            let S=MIN_SCORE;
-            let B0=MAX_SCORE;
-            let k=0.1;
-            if(params !=undefined && params!=null && params.growth!=undefined){
-                k=params.growth;
+        if(component instanceof MethodComponent  ){
+            let logMessages:LogMessage[]=[];
+            let result=0;
+            if(component.getComment()==null){
+                let method=component as MethodComponent;
+                let lines=method.getMethodBody().split("\n").length;
+                /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
+                S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
+                (default 0.03) and l is the number of lines of that method
+                */
+                let S=MIN_SCORE;
+                let B0=MAX_SCORE;
+                let k=0.03;
+                if(params !=undefined && params!=null && params.growth!=undefined){
+                    k=params.growth;
+                }
+                result=S-(S-B0)*Math.exp(-k*lines);
+                if(result<50){
+                    logMessages.push(new LogMessage(component.getName()+" is relatively long and has no documentation" ));
+                }
             }
-            let result=S-(S-B0)*Math.exp(-k*lines)
-            let metricResult=new MetricResult(result,[]);
+            else{
+                result=MAX_SCORE;
+            }
+            let metricResult=new MetricResult(result,logMessages);
             builder.processResult(metricResult );
             
         }
