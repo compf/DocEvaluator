@@ -4,7 +4,12 @@ In diesen Kapitel soll die Problemstellung der mangelhaften Softwaredokumentatio
 \section{Definition der Softwaredokumentation}
 Um den Begriff \enquote{Softwaredokumentation} zu definieren, sollte zunächst der Begriff \enquote{Dokumentation} definiert werden. Das IEEE  definiert diesen Begriff als jede textliche oder bildliche Information, welche Aktivitäten, Anforderungen, Abläufe oder Ergebnisse beschreibt, definiert, spezifiziert, berichtet oder zertifiziert \cite[S. 28]{IEEEStandardGlossaryofSoftwareEngineeringTerminology}. Kurz zusammengefasst beschreibt eine Dokumentation also wie sich eine Komponente aufgebaut ist oder wie sie sich verhält. 
 
-Diese abstrakte Definition lässt sich so auf Softwareentwicklung übertragen. In \cite[S. 125]{Softwaredocumentationandstandards} wird Softwaredokumentation als eine Sammlung von technischen Informationen beschrieben, die für Menschen lesbar sind und die die Funktionen, Benutzung oder das Design eines Softwaresystems beschreiben . Dazu gehören beispielsweise Quellcodekommentare, UML-Diagramme oder auch Handbücher.
+Diese abstrakte Definition lässt sich so auf Softwareentwicklung übertragen. In \cite[S. 125]{Softwaredocumentationandstandards} wird Softwaredokumentation als eine Sammlung von technischen Informationen beschrieben, die für Menschen lesbar sind und die die Funktionen, Benutzung oder das Design eines Softwaresystems beschreiben. So beschreibt der Autor in [], dass die Hauptaufgabe beim Programmieren nicht sein sollte, einen Computer zu erklären, was er machen sollte, sondern anderen Menschen zu erklären, was der Computer machen sollte.
+
+Im Kontext dieser Bachelorarbeit sollen allerdings nur bestimmte Arten der Softwaredokumentation betrachtet werden, da eine umfassende Betrachtung innerhalb der vorgegebenen Zeit nicht möglich ist. Die wichtigste Kategorie im Kontext der Bachelorarbeit sind bestimmte Kommentare im Quelltext eines Programms, die zu den sogenannten Inline-Kommentare gehören. Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Nichtsdestotrotz haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichte Verarbeitung durch Computerprogramme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. In vielen Fällen werden diese Kommentare einer bestimmten Komponente zugeordnet, wobei dies oft dadurch geschieht, dass der Kommentar direkt vor dieser Komponente steht. 
+
+Andere Möglichkeiten zur Dokumentation, die nur hier kurz erwähnt werden sollen, sind UML-Diagramme, Handbücher, und  Readme-Dateien.
+
 
 \section{Statistiken zu Softwarequalität}
 Dass in vielen Fällen die Softwaredokumentation vernachlässigt wird, ist durch viele Studien belegt. Eine Umfrage aus dem Jahr 2002 mit 48 Teilnehmern belegt beispielsweise, dass Anforderungs- oder Spezifikationsdokumente nur selten bei Änderungen am Quellcode angepasst werden. Außerdem verwenden viele Entwickler häufig Programme, die nicht für Dokumentationszwecke entwickelt wurden (z. B Microsoft Word etc.) \cite[S. 28-29]{TheRelevanceofSoftwareDocumentationToolsandTechnologies:ASurvey}. Diese Programme sind leicht zu bedienen und sehr flexibel, verwenden jedoch teilweise proprietäre Dateiformate und sind daher nicht unbedingt effizient.
@@ -44,7 +49,21 @@ Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine  \enquote{gelungen
 			{figures/ternary.java}
 		\end{figure}
 
+Auf der offiziellen Oracle-Webseite werden weitere empfehlenswerte Tipps für gute Javadoc-Kommentare gegeben, die hier auszugsweise und ohne besondere Reihenfolge wiedergegeben werden\cite{HowtoWriteDocCommentsfortheJavadocTool}:
+\begin{itemize}
+    \item Nicht in jeden Fall vollständige Sätze verwenden, aber klar formulieren, was die Aufgabe einer Komponente ist
+    \item In der dritten und nicht in der zweiten Person schreiben
+    \item Nicht repetitiv sein. Ein Kommentar, der im Wesentlichen nur den Namen einer Komponente wiedergibt, hat keinen Mehrwert
+    \item  Beschreibungen von Methoden sollten mit einem Verb beginnen
+    \item bei einem Verweis auf das aktuelle Objekt sollte das spezifische \textit{this} statt des allgemeineren \textit{the} verwendet werden
+    \item Bezeichner sollten in mit \textit{<code></code>} umschlossen werden, um deutlich zu machen, dass dies eine andere Komponente ist
+    \item Der Kommentar sollte eventuelle Unterschiede unter verschiedene Plattformen erläutern
+    \item Die Dokumentation sollte erläutern, wie sich die Komponente in Randfällen verhält
+    
+\end{itemize}
 Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann.
+
+Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist ein Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. \todo{Check if correct}
 
 Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche Funktionen anbieten und bei denen die Dokumentationen mit einer relativ ähnlichen Syntax erstellt werden. Dazu gehören beispielsweise Doxygen für C++-Programme oder der PHP-Documentor für PHP-Programme. 
 \section{Tools zur Bewertung von Javadoc}
@@ -55,3 +74,9 @@ Eines der bekanntesten Programme ist Checkstyle. Mit Checkstyle lässt sich beis
 Des Weiteren gibt es das Programm PMD, das ebenfalls einige Metriken für Javadoc mitliefert. Dazu gehört, ob jede öffentliche Methode dokumentiert wurde oder die Kommentare generell zu lang sind. Interessanterweise gibt es auch die Möglichkeit, bestimmte Wörter, die als anstößig empfunden werden, aus Kommentaren und Dokumentationen auszuschließen, damit Kommentare neutral bleiben. 
 
 Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit beim Generieren der HTML-Datei die Qualität des Javadocs zu prüfen. Dabei werden vor allem fehlende Tags für Paramater etc. bemängelt. Zudem erkennt Javadoc auch Tabellen mit fehlender Überschrift und andere Designmängel, die in der HTML-Seite später auffallen. Auch fehlerhaftes HTML kann erkannt werden. 
+
+\section{Theoretische Arbeiten im Bereich der Bewertung von Softwaredokumentation}
+
+Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. 
+
+Die wichtigste Arbeit, die eine Grundlage dieser Bachelorarbeit ist, ist der \enquote{JavaDocMiner} \cite[S. 68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In dieser Arbeit wird ein Programm beschrieben, welches mittels einfachen \ac{NLP}-Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Dabei beschränkt sich der JavaDocMiner nur auf Java-Programme, während das hier zu entwickelnde Tool  auch mit anderen Programmiersprachen zurechtkommen soll. 
