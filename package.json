@@ -1,6 +1,6 @@
 {
   "name": "javadoc_evaluator",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A tool to evaluate the documentation of source code",
   "type": "commonjs",
   "scripts": {
@@ -12,9 +12,8 @@
     "javadoc",
     "comments"
   ],
-  "bin":"./build/src/index.js",
-  "main":"./build/src/index.js",
-  
+  "bin": "./build/src/index.js",
+  "main": "./build/src/index.js",
   "author": "Timo Schoemaker",
   "license": "MIT",
   "devDependencies": {
