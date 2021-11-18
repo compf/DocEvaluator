@@ -20,5 +20,8 @@ export class MethodComponent  extends SingleMemberComponent{
     getParams():{type:string,name:string}[]{
         return this.params;
     }
+    getMethodBody():string{
+        return this.methodBody;
+    }
 
 }
