@@ -24,6 +24,9 @@ export namespace MetricManager{
     export function getMetricNames():string[]{
         return Array.from(allMetrics.keys());
     }
+    export function getDefaultMetricParam(metricName:string):any{
+        return {};
+    }
     init();
 
 }

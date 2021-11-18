@@ -1,3 +1,4 @@
+import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { LogMessage } from "./log_message";
@@ -6,7 +7,7 @@ import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
     
-    analyze(component: Component,builder:MetricResultBuilder): void {
+    analyze(component: Component,builder:MetricResultBuilder,conf:EvaluatorConf): void {
         let score=0;
         let logMessages:LogMessage[]=[]
         if(component.getComment()!=null){

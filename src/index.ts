@@ -35,7 +35,7 @@ function main(args:Array<string>){
        
         let metric=MetricManager.getMetric(metricWeightPair.metricName);
         console.log("Using metric", metric.getName())
-        fileAnaylzer.analyze(root,metric,singleMetricBuilder);
+        fileAnaylzer.analyze(root,metric,singleMetricBuilder,conf);
         let partialResult=singleMetricBuilder.getAggregatedResult();
         console.log("Partial result",partialResult.getResult());
             for(let log of partialResult.getLogMessages()){

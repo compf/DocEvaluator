@@ -1,3 +1,4 @@
+import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
 import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
@@ -9,7 +10,7 @@ export interface DocumentationAnalysisMetric{
      * @param component The Component to analyze
      * @param builder The builder to process all results of the component and its children
      */
-    analyze(component:Component,builder:MetricResultBuilder):void
+    analyze(component:Component,builder:MetricResultBuilder,conf:EvaluatorConf):void
     /**
      * should return a unique name for a metric
      */

@@ -1,3 +1,4 @@
+import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { SimpleCommentPresentMetric } from "../../src/metric_analysis/simple_comment_present_metric";
@@ -14,8 +15,10 @@ function getCommentedClassRoot():HierarchicalComponent{
 test("test simple present metric on commented class",()=>{
    let root=getCommentedClassRoot();
     let analyzer=new FileAnalyzer();
+    const conf=new EvaluatorConf();
+
     let resultBuilder=new MetricResultBuilder();
-    analyzer.analyze({root,path},new SimpleCommentPresentMetric(),resultBuilder);
+    analyzer.analyze({root,path},new SimpleCommentPresentMetric(),resultBuilder,conf);
     const expectedResult=(3/11)*100;
     expect(resultBuilder.getAggregatedResult().getResult()).toBeCloseTo(expectedResult,5)
 });
@@ -23,7 +26,8 @@ test("test public only metric on commented class",()=>{
     let root=getCommentedClassRoot();
     let resultBuilder=new MetricResultBuilder();
     let analyzer=new FileAnalyzer();
-    analyzer.analyze({root,path},new SimplePublicMembersOnlyMetric(),resultBuilder);
+    const conf=new EvaluatorConf();
+    analyzer.analyze({root,path},new SimplePublicMembersOnlyMetric(),resultBuilder,conf);
     const expectedResult=(2/6)*100;
     expect(resultBuilder.getAggregatedResult().getResult()).toBeCloseTo(expectedResult,5)
 })

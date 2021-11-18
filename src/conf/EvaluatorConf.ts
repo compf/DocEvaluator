@@ -24,7 +24,7 @@ export class EvaluatorConf {
     /**
      * define all metrics and their respective weights here
      */
-    metrics:{weight:number,metricName:string}[]=[];
+    metrics:{weight:number,metricName:string,params:any}[]=[];
 
     /**
      * the global threshold that the average of all metrics should meet to pass the documentation check
@@ -32,7 +32,7 @@ export class EvaluatorConf {
     global_threshold:number=20.0;
     constructor(){
        for(let s of defaultMetrics){
-           this.metrics.push({weight:1.0,metricName:s})
+           this.metrics.push({weight:1.0,metricName:s,params:MetricManager.getDefaultMetricParam(s)})
        }
     }
 

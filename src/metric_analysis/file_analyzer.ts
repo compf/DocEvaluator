@@ -1,3 +1,4 @@
+import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
 import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
 import { ParseResult } from "../parser/parse_result/parse_result";
@@ -11,10 +12,10 @@ export class FileAnalyzer{
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder){
+    analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder,conf:EvaluatorConf){
         // The root will not have a comment since it is a file so we will analyze all its children
         for(let rootComponent of parse_result.root.getChildren()){
-            this.analyzeComponent(rootComponent,builder,analyzer); 
+            this.analyzeComponent(rootComponent,builder,analyzer,conf); 
         }
 
     }
@@ -24,12 +25,12 @@ export class FileAnalyzer{
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    private analyzeComponent(component:Component,builder:MetricResultBuilder,analyzer:DocumentationAnalysisMetric):void{
-        analyzer.analyze(component,builder);
+    private analyzeComponent(component:Component,builder:MetricResultBuilder,analyzer:DocumentationAnalysisMetric,conf:EvaluatorConf):void{
+        analyzer.analyze(component,builder,conf);
         if(component instanceof HierarchicalComponent ){
             let hierarchical=component as HierarchicalComponent;
             for(let c of hierarchical.getChildren()){
-                this.analyzeComponent(c,builder,analyzer);
+                this.analyzeComponent(c,builder,analyzer,conf);
             }
         }
        
