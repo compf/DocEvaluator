@@ -244,6 +244,7 @@ export class JavadocParser{
         let splitted: string[] = []
         if (this.hasParam(line)) {
             splitted = this.splitWithRemainder(line," ",3);
+          
             let tag = this.getElementOrDefault(splitted, 0)!!
             let param = this.getElementOrDefault(splitted, 1)
             let descr = this.getElementOrDefault(splitted, 2)
@@ -266,6 +267,7 @@ export class JavadocParser{
         let toReplace = ["/**", "*/", "*"]
         for (let i = 0; i < lines.length; i++) {
             for (let replace of toReplace) {
+                lines[i]=lines[i].trim();
                 if (lines[i].startsWith(replace)) {
                     lines[i] = lines[i].substring(replace.length);
                     lines[i] = lines[i].trim();

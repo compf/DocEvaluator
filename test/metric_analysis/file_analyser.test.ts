@@ -3,9 +3,11 @@ import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { SimpleCommentPresentMetric } from "../../src/metric_analysis/simple_comment_present_metric";
 import { SimpleLargeMethodCommentedMetric } from "../../src/metric_analysis/simple_large_method_commented_metric";
+import { SimpleMethodDocumentationMetric } from "../../src/metric_analysis/simple_method_documentation_metric";
 import { SimplePublicMembersOnlyMetric } from "../../src/metric_analysis/simple_public_members_only_metric";
 import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
+import { MethodComponent } from "../../src/parser/parse_result/method_component";
 const path="testDir/commented_class.java";
 function getCommentedClassRoot():HierarchicalComponent{
     let parser=new JavaParser();
@@ -41,7 +43,6 @@ test("test longer uncommented method",()=>{
 
 
 
-    //expect(result.getLogMessages).toHaveLength(2);
     const shortCommentedMethodResult=100;
     const shortUncommentedResult=97.0445533548508;
     const longCommentedMethodResult=100;
@@ -53,4 +54,21 @@ test("test longer uncommented method",()=>{
     expect(result.getResult()).toBeCloseTo(expectedResult);
 
 
-})
+});
+test("test method documentation compatible",()=>{
+    let parser=new JavaParser();
+    const path="testDir/CommentClass.java";
+    let root=parser.parse(path);
+    
+    let builder=new MetricResultBuilder();
+    let analyzer=new FileAnalyzer();
+    let conf=undefined;
+    analyzer.analyze({root,path},new SimpleMethodDocumentationMetric(),builder,conf);
+    let result=builder.getAggregatedResult();
+    for(let msg of result.getLogMessages()){
+        console.log(msg.toString())
+    }
+    const expected=63.8888888;
+    expect(result.getResult()).toBeCloseTo(expected);
+   
+});
