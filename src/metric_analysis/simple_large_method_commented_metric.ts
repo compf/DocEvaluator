@@ -47,8 +47,6 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
         
         
     }
-    getName(){
-        return "simple_large_method_commented_metric"
-    }
+    
 
 }

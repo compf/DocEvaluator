@@ -11,9 +11,5 @@ export interface DocumentationAnalysisMetric{
      * @param builder The builder to process all results of the component and its children
      */
     analyze(component:Component,builder:MetricResultBuilder,params:any|undefined):void
-    /**
-     * should return a unique name for a metric
-     */
-    getName():string;
     
 }

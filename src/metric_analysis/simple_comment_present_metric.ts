@@ -19,8 +19,6 @@ export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
         }
         builder.processResult(new MetricResult(score,logMessages));
     }
-    getName(){
-        return "Simple_comment_present";
-    }
+   
 
 }

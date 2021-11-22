@@ -34,7 +34,7 @@ function main(args:Array<string>){
     for(let metricInformation of metrics){
        
         let metric=MetricManager.getMetric(metricInformation.metricName);
-        console.log("Using metric", metric.getName())
+        console.log("Using metric", metricInformation.metricName)
         fileAnaylzer.analyze(root,metric,singleMetricBuilder,metricInformation.params);
         let partialResult=singleMetricBuilder.getAggregatedResult();
         console.log("Partial result",partialResult.getResult());

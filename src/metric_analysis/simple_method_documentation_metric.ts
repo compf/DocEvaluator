@@ -18,7 +18,6 @@ export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMet
                 let nonExistingParamResult=this.checkNonExistingDocumentedParameters(method,logMessages);
                 let returnExisting=method.getName()=="constructor" || method.getReturnType()=="void" || comment.getTags().some((t)=>t.getKind()==StructuredCommentTagKind.RETURN);
                 let returnExistingResult=returnExisting ? MAX_SCORE:MIN_SCORE;
-                console.log(method.getName(),paramsResult,nonExistingParamResult,returnExistingResult)
                 score=(paramsResult+nonExistingParamResult+returnExistingResult)/3;
             }
             builder.processResult(new MetricResult(score,logMessages));
@@ -60,8 +59,6 @@ export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMet
         }
         return matchingParamsCount/method.getParams().length*100;
     }
-    getName(): string {
-        return "SimpleMethodDocumentationMetric"
-    }
+    
 
 }

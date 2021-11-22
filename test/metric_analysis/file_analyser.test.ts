@@ -65,9 +65,7 @@ test("test method documentation compatible",()=>{
     let conf=undefined;
     analyzer.analyze({root,path},new SimpleMethodDocumentationMetric(),builder,conf);
     let result=builder.getAggregatedResult();
-    for(let msg of result.getLogMessages()){
-        console.log(msg.toString())
-    }
+   
     const expected=63.8888888;
     expect(result.getResult()).toBeCloseTo(expected);
    

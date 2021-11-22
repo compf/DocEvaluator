@@ -10,8 +10,6 @@ export class SimplePublicMembersOnlyMetric implements DocumentationAnalysisMetri
             return new SimpleCommentPresentMetric().analyze(component,builder,params);
         }
     }
-    getName(){
-        return "Simple_Public_Members_Only_Comment_present";
-    }
+    
     
 }
