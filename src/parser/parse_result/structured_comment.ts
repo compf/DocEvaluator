@@ -24,26 +24,30 @@ export class StructuredComment{
     }
    
 }
+export enum StructuredCommentTagKind{
+    PARAM="@param",
+    RETURN="@return",
+}
 /**
  * This class contains a single tag of the documentation
  * a tag explain a specific element of the component in a more detailed way,
 * for instance the parameters of a method
  */
 export class StructuredCommentTag{
-    private kind:string|null;
+    private kind:StructuredCommentTagKind|string;
     private param:string|null;
     private description:string|null;
 
-    constructor(kind:string|null,param:string|null,description:string|null){
+    constructor(kind:StructuredCommentTagKind|string,param:string|null,description:string|null){
         this.kind=kind;
         this.param=param;
         this.description=description;
     }
     /**
      * Getter for the tag kind
-     * @returns The kind of the tag with prefix (e.g. @)
+     * @returns The kind of the tag with prefix "@" You can find default tags more many programming languages at "StructuredCommentTagKind"
      */
-    getKind():string|null{
+    getKind():StructuredCommentTagKind|string{
         return this.kind;
     }
     /**

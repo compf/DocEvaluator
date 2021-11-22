@@ -244,14 +244,14 @@ export class JavadocParser{
         let splitted: string[] = []
         if (this.hasParam(line)) {
             splitted = this.splitWithRemainder(line," ",3);
-            let tag = this.getElementOrDefault(splitted, 0)
+            let tag = this.getElementOrDefault(splitted, 0)!!
             let param = this.getElementOrDefault(splitted, 1)
             let descr = this.getElementOrDefault(splitted, 2)
             return new StructuredCommentTag(tag, param, descr);
         }
         else {
             splitted = this.splitWithRemainder(line," ",2);
-            let tag = this.getElementOrDefault(splitted, 0)
+            let tag = this.getElementOrDefault(splitted, 0)!!
             let descr = this.getElementOrDefault(splitted, 1)
             return new StructuredCommentTag(tag, null, descr);
         }
