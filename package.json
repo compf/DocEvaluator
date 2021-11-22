@@ -1,6 +1,6 @@
 {
   "name": "javadoc_evaluator",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "A tool to evaluate the documentation of source code",
   "type": "commonjs",
   "scripts": {
