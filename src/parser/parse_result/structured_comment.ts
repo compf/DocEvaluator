@@ -45,7 +45,7 @@ export class StructuredCommentTag{
     }
     /**
      * Getter for the tag kind
-     * @returns The kind of the tag with prefix "@" You can find default tags more many programming languages at "StructuredCommentTagKind"
+     * @returns The kind of the tag with prefix "@" You can find default tags for many programming languages at "StructuredCommentTagKind"
      */
     getKind():StructuredCommentTagKind|string{
         return this.kind;
