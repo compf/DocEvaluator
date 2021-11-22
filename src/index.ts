@@ -63,6 +63,7 @@ function main(args:Array<string>){
    if(result.getResult()<conf.global_threshold){
        throw new Error("Threshold was not reached");
    }
+   
    //console.log(tokens);
 }
 
