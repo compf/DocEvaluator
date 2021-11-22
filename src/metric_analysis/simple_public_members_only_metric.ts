@@ -1,13 +1,22 @@
 import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
-import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
+import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
+import { LogMessage } from "./log_message";
+import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 export class SimplePublicMembersOnlyMetric implements DocumentationAnalysisMetric{
     analyze(component: Component, builder: MetricResultBuilder,params:any|undefined): void {
         if(component.getComponentMetaInformation().isPublic()){
-            return new SimpleCommentPresentMetric().analyze(component,builder,params);
+            if(component.getComment()!=null){
+                builder.processResult(new MetricResult(MAX_SCORE,[],this))
+            }
+            else{
+                let logMessage=new LogMessage("Public component " + component.getQualifiedName()+" is not documented");
+                builder.processResult(new MetricResult(MIN_SCORE,[logMessage],this))
+            }
+
         }
     }
     

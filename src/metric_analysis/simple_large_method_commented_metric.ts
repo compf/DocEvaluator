@@ -40,7 +40,7 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
             else{
                 result=MAX_SCORE;
             }
-            let metricResult=new MetricResult(result,logMessages);
+            let metricResult=new MetricResult(result,logMessages,this);
             builder.processResult(metricResult );
             
         }

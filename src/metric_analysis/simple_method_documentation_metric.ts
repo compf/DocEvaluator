@@ -20,7 +20,7 @@ export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMet
                 let returnExistingResult=returnExisting ? MAX_SCORE:MIN_SCORE;
                 score=(paramsResult+nonExistingParamResult+returnExistingResult)/3;
             }
-            builder.processResult(new MetricResult(score,logMessages));
+            builder.processResult(new MetricResult(score,logMessages,this));
         }
     }
     private checkNonExistingDocumentedParameters(method:MethodComponent,logMessages:LogMessage[]):number{

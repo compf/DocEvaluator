@@ -33,6 +33,9 @@ export namespace MetricManager{
     export function getMetric(metricName:string):DocumentationAnalysisMetric{
         return allMetrics.getByKey(metricName)!!;
     }
+    export function getMetricName(metric:DocumentationAnalysisMetric):string{
+        return allMetrics.getByValue(metric)
+    }
     const allMetrics:BiMap<string,DocumentationAnalysisMetric>=new BiMap<string,DocumentationAnalysisMetric>();
     function init(){
         allMetrics.add("simple_comment",new SimpleCommentPresentMetric());

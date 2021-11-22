@@ -1,3 +1,4 @@
+import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
 import { LogMessage } from "./log_message";
 import { MetricResult } from "./metric_result";
 /**
@@ -6,9 +7,10 @@ import { MetricResult } from "./metric_result";
  * the final average result can be obtained by getAggregatedResult 
  */
 export class MetricResultBuilder{
-    private sumResult=0
-    private numberResults=0;
-    private allLogMessages:LogMessage[]=[]
+    protected sumResult=0
+    protected numberResults=0;
+    protected creator:DocumentationAnalysisMetric | MetricResultBuilder|null=null;
+    protected allLogMessages:LogMessage[]=[]
     /**
      * Process a MetricResult in order to  aggregate them
      * The log message of the result will be included in the new result
@@ -17,7 +19,17 @@ export class MetricResultBuilder{
     processResult(result:MetricResult){
         this.sumResult+=result.getResult();
         this.numberResults++;
-        for(let s of result.getLogMessages()){
+        if(this.creator==null){
+            this.creator=result.getCreator();
+        }
+        else if(this.creator!=result.getCreator()){
+            this.creator=this;
+        }
+        this.pushAllLogMessages(result.getLogMessages());
+      
+    }
+    protected pushAllLogMessages(msgs:LogMessage[]){
+        for(let s of msgs){
             this.allLogMessages.push(s);
         }
     }
@@ -28,7 +40,7 @@ export class MetricResultBuilder{
     getAggregatedResult():MetricResult{
         //prevent numberResults from becoming 0
         let numberResults=this.numberResults>0?this.numberResults:1;
-        let result= new MetricResult(this.sumResult/numberResults,this.allLogMessages);
+        let result= new MetricResult(this.sumResult/numberResults,this.allLogMessages,this.creator!!);
        
         return result;
     }

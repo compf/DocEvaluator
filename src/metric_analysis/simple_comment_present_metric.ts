@@ -17,7 +17,7 @@ export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
             score=MIN_SCORE;
             logMessages.push(new LogMessage(`Component ${component.getQualifiedName()} has no documentation`))
         }
-        builder.processResult(new MetricResult(score,logMessages));
+        builder.processResult(new MetricResult(score,logMessages,this));
     }
    
 
