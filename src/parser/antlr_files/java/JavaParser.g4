@@ -102,7 +102,7 @@ enumConstants
     ;
 
 enumConstant
-    : annotation* IDENTIFIER arguments? classBody?
+    : comment? annotation* IDENTIFIER arguments? classBody?
     ;
 
 enumBodyDeclarations
