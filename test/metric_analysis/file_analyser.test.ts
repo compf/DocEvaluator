@@ -48,9 +48,9 @@ test("test longer uncommented method",()=>{
 
 
     const shortCommentedMethodResult=100;
-    const shortUncommentedResult=97.0445533548508;
+    const shortUncommentedResult=98.1873075307798;
     const longCommentedMethodResult=100;
-    const longUncommentedResult=53.2591801006897
+    const longUncommentedResult=9.97228425261005;
     ;
 
     const expectedResult=(shortCommentedMethodResult+shortUncommentedResult+longCommentedMethodResult+longUncommentedResult)/4;
