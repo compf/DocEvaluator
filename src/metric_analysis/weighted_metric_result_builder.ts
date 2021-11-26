@@ -4,7 +4,7 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class WeightedMetricResultBuilder extends MetricResultBuilder{
-    private weightLambda:{(creator:DocumentationAnalysisMetric|MetricResultBuilder):number};
+    protected weightLambda:{(creator:DocumentationAnalysisMetric|MetricResultBuilder):number};
     constructor(weightLambda:{(creator:DocumentationAnalysisMetric|MetricResultBuilder):number}){
         super();
         this.weightLambda=weightLambda;

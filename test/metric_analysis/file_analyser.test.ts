@@ -1,13 +1,17 @@
+import exp from "constants";
 import { stringify } from "querystring";
 import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
 import { DocumentationAnalysisMetric } from "../../src/metric_analysis/documentation_analysis_metric";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
+import { MedianResultBuilder } from "../../src/metric_analysis/median_result_builder";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
+import { MetricResult } from "../../src/metric_analysis/metric_result";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { SimpleCommentPresentMetric } from "../../src/metric_analysis/simple_comment_present_metric";
 import { SimpleLargeMethodCommentedMetric } from "../../src/metric_analysis/simple_large_method_commented_metric";
 import { SimpleMethodDocumentationMetric } from "../../src/metric_analysis/simple_method_documentation_metric";
 import { SimplePublicMembersOnlyMetric } from "../../src/metric_analysis/simple_public_members_only_metric";
+import { WeightedMedianResultBuilder } from "../../src/metric_analysis/weighted_median_result_builder";
 import { WeightedMetricResultBuilder } from "../../src/metric_analysis/weighted_metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
@@ -59,6 +63,61 @@ test("test longer uncommented method",()=>{
 
 
 });
+test("test median builder",()=>{
+    let oddCountArray=[7,3,6,2,1,4,2,8,10,15,19]
+    let evenCountArray=[4,80,14,12,98,36,23,101,0,-1,17,5]
+
+    expect(oddCountArray.length %2==1 ).toBeTruthy();
+    expect(evenCountArray.length%2==0).toBeTruthy();
+    let simple_metric=new SimpleCommentPresentMetric();
+    let public_members=new SimplePublicMembersOnlyMetric();
+    let medianBuilder=new MedianResultBuilder();
+    for(let odd of oddCountArray){
+        medianBuilder.processResult(new MetricResult(odd,[],simple_metric))
+    }
+    let result=medianBuilder.getAggregatedResult();
+    let expectedResult=6;
+    expect(result.getResult()).toBe(expectedResult)
+
+
+    medianBuilder=new MedianResultBuilder();
+    for(let even of evenCountArray){
+        medianBuilder.processResult(new MetricResult(even,[],simple_metric))
+    }
+    result=medianBuilder.getAggregatedResult();
+    expectedResult=15.5;
+    expect(result.getResult()).toBe(expectedResult)
+
+
+
+});
+test("weighted median builder",()=>{
+    let oddCountArray=[7,3,6,2,1,4,2,8,10,15,19]
+    let evenCountArray=[4,80,14,12,98,36,23,101,0,-1,17,5]
+
+    expect(oddCountArray.length %2==1 ).toBeTruthy();
+    expect(evenCountArray.length%2==0).toBeTruthy();
+    let simple_metric=new SimpleCommentPresentMetric();
+    let public_members=new SimplePublicMembersOnlyMetric();
+    let func=(item:DocumentationAnalysisMetric|MetricResultBuilder)=>{
+        let metric =item as DocumentationAnalysisMetric;
+        if(metric!=null){
+            if(metric instanceof SimpleCommentPresentMetric)return 2;
+            else if(metric instanceof SimplePublicMembersOnlyMetric)return 5;
+        }
+        return 1;
+    };
+    let medianBuilder=new WeightedMedianResultBuilder(func)
+    for(let number of oddCountArray){
+        medianBuilder.processResult(new MetricResult(number,[],number%2==0?simple_metric:public_members))
+    }
+    let result=medianBuilder.getAggregatedResult();
+    let expectedResult=3;
+    expect(result.getResult()).toBe(expectedResult)
+
+
+    
+})
 test("test method documentation compatible",()=>{
     let parser=new JavaParser();
     const path="testDir/CommentClass.java";
