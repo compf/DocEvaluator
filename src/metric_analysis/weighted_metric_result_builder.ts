@@ -8,11 +8,20 @@ export class WeightedMetricResultBuilder extends MetricResultBuilder{
         super();
         this.weightLambda=weightLambda;
     }
-    override processResult(result:MetricResult){
-        let weight=this.weightLambda(result.getCreator())
-        this.sumResult+=(result.getResult()*weight);
-        this.numberResults+=weight;
-        this.pushAllLogMessages(result.getLogMessages());
-        
+    override getAggregatedResult():MetricResult{
+        let resultSum=0;
+        let weightSum=0;
+        let allLogMessages=[];
+       for(let partialResult of this.resultList){
+            let weight=this.weightLambda(partialResult.getCreator());
+            resultSum+=(partialResult.getResult()*weight);
+            weightSum+=weight;
+            for(let log of partialResult.getLogMessages()){
+                allLogMessages.push(log);
+            }
+            
+       }
+       if(weightSum==0)weightSum=1;
+       return new MetricResult(resultSum/weightSum,allLogMessages,this.creator!!); 
     }
 }

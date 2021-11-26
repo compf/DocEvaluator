@@ -7,31 +7,22 @@ import { MetricResult } from "./metric_result";
  * the final average result can be obtained by getAggregatedResult 
  */
 export class MetricResultBuilder{
-    protected sumResult=0
-    protected numberResults=0;
     protected creator:DocumentationAnalysisMetric | MetricResultBuilder|null=null;
-    protected allLogMessages:LogMessage[]=[]
+    protected resultList:MetricResult[]=[]
     /**
      * Process a MetricResult in order to  aggregate them
      * The log message of the result will be included in the new result
      * @param result  
      */
     processResult(result:MetricResult){
-        this.sumResult+=result.getResult();
-        this.numberResults++;
+        this.resultList.push(result)
         if(this.creator==null){
             this.creator=result.getCreator();
         }
         else if(this.creator!=result.getCreator()){
             this.creator=this;
         }
-        this.pushAllLogMessages(result.getLogMessages());
       
-    }
-    protected pushAllLogMessages(msgs:LogMessage[]){
-        for(let s of msgs){
-            this.allLogMessages.push(s);
-        }
     }
     /**
      * Creates the aggegrated MetricResult 
@@ -39,17 +30,23 @@ export class MetricResultBuilder{
      */
     getAggregatedResult():MetricResult{
         //prevent numberResults from becoming 0
-        let numberResults=this.numberResults>0?this.numberResults:1;
-        let result= new MetricResult(this.sumResult/numberResults,this.allLogMessages,this.creator!!);
-       
+        let numberResults=this.resultList.length;
+        if(numberResults==0)numberResults=1;
+        let sum=0;
+        let allLogMessages:LogMessage[]=[]
+        for(let partialResult of this.resultList){
+            sum+=partialResult.getResult();
+            for(let log of partialResult.getLogMessages()){
+                allLogMessages.push(log);
+            }
+        }
+        let result= new MetricResult(sum/numberResults,allLogMessages,this.creator!!);
         return result;
     }
     /**
      * reset the builder  to default values
      */
     reset(){
-        this.sumResult=0;
-        this.numberResults=0;
-        this.allLogMessages=[];
+        this.resultList=[];
     }
 }
