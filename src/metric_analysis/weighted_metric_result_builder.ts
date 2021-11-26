@@ -1,4 +1,5 @@
 import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
+import { LogMessage } from "./log_message";
 import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
@@ -11,14 +12,13 @@ export class WeightedMetricResultBuilder extends MetricResultBuilder{
     override getAggregatedResult():MetricResult{
         let resultSum=0;
         let weightSum=0;
-        let allLogMessages=[];
+        let allLogMessages:LogMessage[]=[];
        for(let partialResult of this.resultList){
             let weight=this.weightLambda(partialResult.getCreator());
             resultSum+=(partialResult.getResult()*weight);
             weightSum+=weight;
-            for(let log of partialResult.getLogMessages()){
-                allLogMessages.push(log);
-            }
+            this.putAllLogMessages(partialResult.getLogMessages(),allLogMessages)
+
             
        }
        if(weightSum==0)weightSum=1;

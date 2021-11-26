@@ -24,6 +24,11 @@ export class MetricResultBuilder{
         }
       
     }
+    protected putAllLogMessages(src:LogMessage[],dest:LogMessage[]){
+        for(let item of src){
+            dest.push(item)
+        }
+    }
     /**
      * Creates the aggegrated MetricResult 
      * @returns some kind of aggregation of all results that have been processed
@@ -36,9 +41,7 @@ export class MetricResultBuilder{
         let allLogMessages:LogMessage[]=[]
         for(let partialResult of this.resultList){
             sum+=partialResult.getResult();
-            for(let log of partialResult.getLogMessages()){
-                allLogMessages.push(log);
-            }
+            this.putAllLogMessages(partialResult.getLogMessages(),allLogMessages)
         }
         let result= new MetricResult(sum/numberResults,allLogMessages,this.creator!!);
         return result;
