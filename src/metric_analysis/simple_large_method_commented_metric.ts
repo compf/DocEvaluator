@@ -13,8 +13,10 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
     boundedGrowth(S:number,B0:number,k:number,l:number):number{
         return S-(S-B0)*Math.exp(-k*l);
     }
+    shallConsider(component:Component){
+        return component instanceof MethodComponent;
+    }
     analyze(component: Component,builder:MetricResultBuilder,params:any|undefined): void {
-        if(component instanceof MethodComponent  ){
             let logMessages:LogMessage[]=[];
             let result=0;
             if(component.getComment()==null){
@@ -50,10 +52,7 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
                 result=MAX_SCORE;
             }
             let metricResult=new MetricResult(result,logMessages,this);
-            builder.processResult(metricResult );
-            
-        }
-        
+            builder.processResult(metricResult );  
         
     }
     

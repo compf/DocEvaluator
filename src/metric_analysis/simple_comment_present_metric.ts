@@ -6,7 +6,9 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
-    
+    shallConsider(component:Component){
+        return true;
+    }
     analyze(component: Component,builder:MetricResultBuilder,params:any|undefined): void {
         let score=0;
         let logMessages:LogMessage[]=[]

@@ -7,9 +7,11 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMetric {
+    shallConsider(component:Component){
+        return component instanceof MethodComponent;
+    }
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {
         let logMessages:LogMessage[]=[];
-        if(component instanceof MethodComponent){
             let method=component as MethodComponent;
             let score=0;
             if(method.getComment() != null){
@@ -21,7 +23,7 @@ export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMet
                 score=(paramsResult+nonExistingParamResult+returnExistingResult)/3;
             }
             builder.processResult(new MetricResult(score,logMessages,this));
-        }
+        
     }
     private checkNonExistingDocumentedParameters(method:MethodComponent,logMessages:LogMessage[]):number{
         let comment=method.getComment()!!

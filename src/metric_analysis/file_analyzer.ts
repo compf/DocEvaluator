@@ -26,7 +26,14 @@ export class FileAnalyzer{
      * @param analyzer The metric to evaluate the file
      */
     private analyzeComponent(component:Component,builder:MetricResultBuilder,analyzer:DocumentationAnalysisMetric,params:any|undefined):void{
-        analyzer.analyze(component,builder,params);
+        // Only analyze relevant component to this metric
+        if(analyzer.shallConsider(component)){
+            analyzer.analyze(component,builder,params);
+        }
+        /* Analyze the children of the component if it is a hierarchical one
+        This will be done even if the parent was not considered because we don't want to miss
+        something
+        */
         if(component instanceof HierarchicalComponent ){
             let hierarchical=component as HierarchicalComponent;
             for(let c of hierarchical.getChildren()){

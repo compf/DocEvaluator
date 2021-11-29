@@ -11,5 +11,6 @@ export interface DocumentationAnalysisMetric{
      * @param builder The builder to process all results of the component and its children
      */
     analyze(component:Component,builder:MetricResultBuilder,params:any|undefined):void
-    
+    shallConsider(component:Component):boolean;
+
 }
