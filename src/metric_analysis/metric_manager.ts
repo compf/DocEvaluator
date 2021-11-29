@@ -1,3 +1,4 @@
+import { CommentedLinesRatioMetric } from "./commented_lines_ratio_metric";
 import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 import { SimpleLargeMethodCommentedMetric } from "./simple_large_method_commented_metric";
@@ -42,6 +43,7 @@ export namespace MetricManager{
         allMetrics.add("public_members_only",new SimplePublicMembersOnlyMetric());
         allMetrics.add("large_method_commented",new SimpleLargeMethodCommentedMetric());
     }   allMetrics.add("method_fully_documented",new SimpleMethodDocumentationMetric());
+    allMetrics.add("commented_lines_ratio_metric",new CommentedLinesRatioMetric());
 
 
     /**

@@ -23,5 +23,8 @@ export class MethodComponent  extends SingleMemberComponent{
     getMethodBody():string{
         return this.methodBody;
     }
+    getLinesOfCode(ignoreLines:string[]):number{
+        return this.getMethodBody().split("\n").filter((s)=>!ignoreLines.includes( s.trim())).length;
+    }
 
 }

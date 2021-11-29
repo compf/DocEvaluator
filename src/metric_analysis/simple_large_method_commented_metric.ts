@@ -25,7 +25,7 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
                     ignoreLines=params.ignoreLines;
                 }
                 let method=component as MethodComponent;
-                let lines=method.getMethodBody().split("\n").filter((s)=>!ignoreLines.includes( s.trim())).length;
+                let lines=method.getLinesOfCode(ignoreLines);
                 /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
                 S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
                 

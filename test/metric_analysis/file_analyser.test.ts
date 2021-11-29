@@ -1,6 +1,7 @@
 import exp from "constants";
 import { stringify } from "querystring";
 import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
+import { CommentedLinesRatioMetric } from "../../src/metric_analysis/commented_lines_ratio_metric";
 import { DocumentationAnalysisMetric } from "../../src/metric_analysis/documentation_analysis_metric";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { MedianResultBuilder } from "../../src/metric_analysis/median_result_builder";
@@ -62,6 +63,17 @@ test("test longer uncommented method",()=>{
     expect(result.getResult()).toBeCloseTo(expectedResult);
 
 
+});
+test("test commented ratio metric",()=>{
+    let parser=new JavaParser();
+    const path="testDir/LargeMethodTest.java";
+    let root=parser.parse(path);
+    let builder=new MetricResultBuilder();
+    let analyzer=new FileAnalyzer();
+    let conf={ignoreLines:["","{","}"]}
+    analyzer.analyze({root,path},new CommentedLinesRatioMetric(),builder,conf);
+    let result=builder.getAggregatedResult();
+    expect(result.getResult()).toBe(50);
 });
 test("test median builder",()=>{
     let oddCountArray=[7,3,6,2,1,4,2,8,10,15,19]
