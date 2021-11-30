@@ -1,5 +1,6 @@
 import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
+import { FileComponent } from "../parser/parse_result/file_component";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { LogMessage } from "./log_message";
 import { MetricResult } from "./metric_result";
@@ -7,7 +8,7 @@ import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
     shallConsider(component:Component){
-        return true;
+        return !(component instanceof FileComponent);
     }
     analyze(component: Component,builder:MetricResultBuilder,params:any|undefined): void {
         let score=0;

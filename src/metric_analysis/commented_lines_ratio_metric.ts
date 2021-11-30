@@ -1,5 +1,5 @@
-import { ClassComponent } from "../parser/parse_result/class_component";
 import { Component } from "../parser/parse_result/component";
+import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
 import { MethodComponent } from "../parser/parse_result/method_component";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { MetricResult } from "./metric_result";
@@ -7,7 +7,7 @@ import { MetricResultBuilder } from "./metric_result_builder";
 
 export class CommentedLinesRatioMetric implements DocumentationAnalysisMetric{
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {
-        let cls=component as ClassComponent;
+        let cls=component as HierarchicalComponent;
         let methods=cls.getChildren().filter((c)=>c instanceof MethodComponent).map((c)=>c as MethodComponent);
         let commentedLOC=0;
         let unCommentedLOC=0;
@@ -29,7 +29,7 @@ export class CommentedLinesRatioMetric implements DocumentationAnalysisMetric{
         builder.processResult( new MetricResult(result,[],this));
     }
     shallConsider(component: Component): boolean {
-       return component instanceof ClassComponent
+       return component instanceof HierarchicalComponent && (component as HierarchicalComponent).getChildren().filter((c)=>c instanceof MethodComponent).length>0
     }
     
 }

@@ -13,11 +13,7 @@ export class FileAnalyzer{
      * @param builder The result builder to process the several results
      */
     analyze(parse_result:ParseResult,analyzer:DocumentationAnalysisMetric,builder:MetricResultBuilder,params:any|undefined){
-        // The root will not have a comment since it is a file so we will analyze all its children
-        for(let rootComponent of parse_result.root.getChildren()){
-            this.analyzeComponent(rootComponent,builder,analyzer,params); 
-        }
-
+        this.analyzeComponent(parse_result.root,builder,analyzer,params); 
     }
     /**
      * 

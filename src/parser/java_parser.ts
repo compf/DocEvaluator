@@ -15,6 +15,7 @@ import { ComponentMetaInformation, DefaultComponentMetaInformation } from "./par
 import { JavaMethodData } from "./parse_result/java/JavaMethodData";
 import { GroupedMemberComponent } from "./parse_result/grouped_member_component";
 import { Interval } from "antlr4ts/misc/Interval";
+import { FileComponent } from "./parse_result/file_component";
 
 //import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
 //import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
@@ -29,7 +30,7 @@ export class JavaParser extends BaseParser {
         //parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         let visitor = new FileVisitor(filepath??"");
         let rel = parser.compilationUnit()
-        var res = visitor.visit(rel) as HierarchicalComponent;
+        var res = visitor.visit(rel) as FileComponent;
         return res;
     }
     public override getLexerType<T>(): { new(stream: CharStream): T; } {
@@ -197,7 +198,7 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
     constructor(path:string){
         super();
         this.filepath=path;
-        this.parent=new HierarchicalComponent(0, this.filepath, null, null, new DefaultComponentMetaInformation(true));
+        this.parent=new FileComponent(0, this.filepath, null, null, new DefaultComponentMetaInformation(true));
     }
     private filepath:string;
     private parent: HierarchicalComponent;
