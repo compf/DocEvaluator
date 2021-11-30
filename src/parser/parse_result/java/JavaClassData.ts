@@ -6,7 +6,7 @@ import { DefaultComponentMetaInformation } from "../component_data";
         super(isPublic)
         this.superTypes=superTypes;
     }
-   
+
     public getSuperClasses():string[]{
         return this.superTypes;
     }

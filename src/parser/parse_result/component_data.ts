@@ -4,16 +4,16 @@
  * For example whether the component is public
  * This interface should be implemented by parsers to store important information
  */
-export interface ComponentMetaInformation{
-    isPublic():boolean;
+export interface ComponentMetaInformation {
+    isPublic(): boolean;
 }
-export class DefaultComponentMetaInformation implements ComponentMetaInformation{
-    private _isPublic:boolean
-   
-    constructor(isPublic:boolean){
-        this._isPublic=isPublic;
+export class DefaultComponentMetaInformation implements ComponentMetaInformation {
+    private _isPublic: boolean
+
+    constructor(isPublic: boolean) {
+        this._isPublic = isPublic;
     }
-     isPublic():boolean{
+    isPublic(): boolean {
         return this._isPublic;
     }
 }

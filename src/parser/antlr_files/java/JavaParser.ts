@@ -251,69 +251,69 @@ export class JavaParser extends Parser {
 	public static readonly RULE_arguments = 109;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"compilationUnit", "packageDeclaration", "importDeclaration", "typeDeclaration", 
-		"modifier", "classOrInterfaceModifier", "variableModifier", "classDeclaration", 
-		"extendClass", "implementInterfaces", "typeParameters", "typeParameter", 
-		"typeBound", "enumDeclaration", "enumConstants", "enumConstant", "enumBodyDeclarations", 
-		"interfaceDeclaration", "extendInterface", "comment", "classBody", "interfaceBody", 
-		"classBodyDeclaration", "memberDeclaration", "methodDeclaration", "throwList", 
-		"methodBody", "typeTypeOrVoid", "genericMethodDeclaration", "genericConstructorDeclaration", 
-		"constructorDeclaration", "fieldDeclaration", "interfaceBodyDeclaration", 
-		"interfaceMemberDeclaration", "constDeclaration", "constantDeclarator", 
-		"interfaceMethodDeclaration", "interfaceMethodModifier", "genericInterfaceMethodDeclaration", 
-		"variableDeclarators", "variableDeclarator", "variableDeclaratorId", "variableInitializer", 
-		"arrayInitializer", "classOrInterfaceType", "typeArgument", "qualifiedNameList", 
-		"formalParameters", "formalParameterList", "formalParameter", "lastFormalParameter", 
-		"qualifiedName", "literal", "integerLiteral", "floatLiteral", "altAnnotationQualifiedName", 
-		"annotation", "elementValuePairs", "elementValuePair", "elementValue", 
-		"elementValueArrayInitializer", "annotationTypeDeclaration", "annotationTypeBody", 
-		"annotationTypeElementDeclaration", "annotationTypeElementRest", "annotationMethodOrConstantRest", 
-		"annotationMethodRest", "annotationConstantRest", "defaultValue", "block", 
-		"blockStatement", "localVariableDeclaration", "localTypeDeclaration", 
-		"statement", "catchClause", "catchType", "finallyBlock", "resourceSpecification", 
-		"resources", "resource", "switchBlockStatementGroup", "switchLabel", "forControl", 
-		"forInit", "enhancedForControl", "parExpression", "expressionList", "methodCall", 
-		"expression", "lambdaExpression", "lambdaParameters", "lambdaBody", "primary", 
-		"classType", "creator", "createdName", "innerCreator", "arrayCreatorRest", 
-		"classCreatorRest", "explicitGenericInvocation", "typeArgumentsOrDiamond", 
-		"nonWildcardTypeArgumentsOrDiamond", "nonWildcardTypeArguments", "typeList", 
-		"typeType", "primitiveType", "typeArguments", "superSuffix", "explicitGenericInvocationSuffix", 
+		"compilationUnit", "packageDeclaration", "importDeclaration", "typeDeclaration",
+		"modifier", "classOrInterfaceModifier", "variableModifier", "classDeclaration",
+		"extendClass", "implementInterfaces", "typeParameters", "typeParameter",
+		"typeBound", "enumDeclaration", "enumConstants", "enumConstant", "enumBodyDeclarations",
+		"interfaceDeclaration", "extendInterface", "comment", "classBody", "interfaceBody",
+		"classBodyDeclaration", "memberDeclaration", "methodDeclaration", "throwList",
+		"methodBody", "typeTypeOrVoid", "genericMethodDeclaration", "genericConstructorDeclaration",
+		"constructorDeclaration", "fieldDeclaration", "interfaceBodyDeclaration",
+		"interfaceMemberDeclaration", "constDeclaration", "constantDeclarator",
+		"interfaceMethodDeclaration", "interfaceMethodModifier", "genericInterfaceMethodDeclaration",
+		"variableDeclarators", "variableDeclarator", "variableDeclaratorId", "variableInitializer",
+		"arrayInitializer", "classOrInterfaceType", "typeArgument", "qualifiedNameList",
+		"formalParameters", "formalParameterList", "formalParameter", "lastFormalParameter",
+		"qualifiedName", "literal", "integerLiteral", "floatLiteral", "altAnnotationQualifiedName",
+		"annotation", "elementValuePairs", "elementValuePair", "elementValue",
+		"elementValueArrayInitializer", "annotationTypeDeclaration", "annotationTypeBody",
+		"annotationTypeElementDeclaration", "annotationTypeElementRest", "annotationMethodOrConstantRest",
+		"annotationMethodRest", "annotationConstantRest", "defaultValue", "block",
+		"blockStatement", "localVariableDeclaration", "localTypeDeclaration",
+		"statement", "catchClause", "catchType", "finallyBlock", "resourceSpecification",
+		"resources", "resource", "switchBlockStatementGroup", "switchLabel", "forControl",
+		"forInit", "enhancedForControl", "parExpression", "expressionList", "methodCall",
+		"expression", "lambdaExpression", "lambdaParameters", "lambdaBody", "primary",
+		"classType", "creator", "createdName", "innerCreator", "arrayCreatorRest",
+		"classCreatorRest", "explicitGenericInvocation", "typeArgumentsOrDiamond",
+		"nonWildcardTypeArgumentsOrDiamond", "nonWildcardTypeArguments", "typeList",
+		"typeType", "primitiveType", "typeArguments", "superSuffix", "explicitGenericInvocationSuffix",
 		"arguments",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, "'abstract'", "'assert'", "'boolean'", "'break'", "'byte'", 
-		"'case'", "'catch'", "'char'", "'class'", "'const'", "'continue'", "'default'", 
-		"'do'", "'double'", "'else'", "'enum'", "'extends'", "'final'", "'finally'", 
-		"'float'", "'for'", "'if'", "'goto'", "'implements'", "'import'", "'instanceof'", 
-		"'int'", "'interface'", "'long'", "'native'", "'new'", "'package'", "'private'", 
-		"'protected'", "'public'", "'return'", "'short'", "'static'", "'strictfp'", 
-		"'super'", "'switch'", "'synchronized'", "'this'", "'throw'", "'throws'", 
-		"'transient'", "'try'", "'void'", "'volatile'", "'while'", undefined, 
-		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
-		undefined, "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'", 
-		"','", "'.'", "'='", "'>'", "'<'", "'!'", "'~'", "'?'", "':'", "'=='", 
-		"'<='", "'>='", "'!='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'", 
-		"'*'", "'/'", "'&'", "'|'", "'^'", "'%'", "'+='", "'-='", "'*='", "'/='", 
-		"'&='", "'|='", "'^='", "'%='", "'<<='", "'>>='", "'>>>='", "'->'", "'::'", 
+		undefined, "'abstract'", "'assert'", "'boolean'", "'break'", "'byte'",
+		"'case'", "'catch'", "'char'", "'class'", "'const'", "'continue'", "'default'",
+		"'do'", "'double'", "'else'", "'enum'", "'extends'", "'final'", "'finally'",
+		"'float'", "'for'", "'if'", "'goto'", "'implements'", "'import'", "'instanceof'",
+		"'int'", "'interface'", "'long'", "'native'", "'new'", "'package'", "'private'",
+		"'protected'", "'public'", "'return'", "'short'", "'static'", "'strictfp'",
+		"'super'", "'switch'", "'synchronized'", "'this'", "'throw'", "'throws'",
+		"'transient'", "'try'", "'void'", "'volatile'", "'while'", undefined,
+		undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+		undefined, "'null'", "'('", "')'", "'{'", "'}'", "'['", "']'", "';'",
+		"','", "'.'", "'='", "'>'", "'<'", "'!'", "'~'", "'?'", "':'", "'=='",
+		"'<='", "'>='", "'!='", "'&&'", "'||'", "'++'", "'--'", "'+'", "'-'",
+		"'*'", "'/'", "'&'", "'|'", "'^'", "'%'", "'+='", "'-='", "'*='", "'/='",
+		"'&='", "'|='", "'^='", "'%='", "'<<='", "'>>='", "'>>>='", "'->'", "'::'",
 		"'@'", "'...'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
-		undefined, "ABSTRACT", "ASSERT", "BOOLEAN", "BREAK", "BYTE", "CASE", "CATCH", 
-		"CHAR", "CLASS", "CONST", "CONTINUE", "DEFAULT", "DO", "DOUBLE", "ELSE", 
-		"ENUM", "EXTENDS", "FINAL", "FINALLY", "FLOAT", "FOR", "IF", "GOTO", "IMPLEMENTS", 
-		"IMPORT", "INSTANCEOF", "INT", "INTERFACE", "LONG", "NATIVE", "NEW", "PACKAGE", 
-		"PRIVATE", "PROTECTED", "PUBLIC", "RETURN", "SHORT", "STATIC", "STRICTFP", 
-		"SUPER", "SWITCH", "SYNCHRONIZED", "THIS", "THROW", "THROWS", "TRANSIENT", 
-		"TRY", "VOID", "VOLATILE", "WHILE", "DECIMAL_LITERAL", "HEX_LITERAL", 
-		"OCT_LITERAL", "BINARY_LITERAL", "FLOAT_LITERAL", "HEX_FLOAT_LITERAL", 
-		"BOOL_LITERAL", "CHAR_LITERAL", "STRING_LITERAL", "NULL_LITERAL", "LPAREN", 
-		"RPAREN", "LBRACE", "RBRACE", "LBRACK", "RBRACK", "SEMI", "COMMA", "DOT", 
-		"ASSIGN", "GT", "LT", "BANG", "TILDE", "QUESTION", "COLON", "EQUAL", "LE", 
-		"GE", "NOTEQUAL", "AND", "OR", "INC", "DEC", "ADD", "SUB", "MUL", "DIV", 
-		"BITAND", "BITOR", "CARET", "MOD", "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN", 
-		"DIV_ASSIGN", "AND_ASSIGN", "OR_ASSIGN", "XOR_ASSIGN", "MOD_ASSIGN", "LSHIFT_ASSIGN", 
-		"RSHIFT_ASSIGN", "URSHIFT_ASSIGN", "ARROW", "COLONCOLON", "AT", "ELLIPSIS", 
+		undefined, "ABSTRACT", "ASSERT", "BOOLEAN", "BREAK", "BYTE", "CASE", "CATCH",
+		"CHAR", "CLASS", "CONST", "CONTINUE", "DEFAULT", "DO", "DOUBLE", "ELSE",
+		"ENUM", "EXTENDS", "FINAL", "FINALLY", "FLOAT", "FOR", "IF", "GOTO", "IMPLEMENTS",
+		"IMPORT", "INSTANCEOF", "INT", "INTERFACE", "LONG", "NATIVE", "NEW", "PACKAGE",
+		"PRIVATE", "PROTECTED", "PUBLIC", "RETURN", "SHORT", "STATIC", "STRICTFP",
+		"SUPER", "SWITCH", "SYNCHRONIZED", "THIS", "THROW", "THROWS", "TRANSIENT",
+		"TRY", "VOID", "VOLATILE", "WHILE", "DECIMAL_LITERAL", "HEX_LITERAL",
+		"OCT_LITERAL", "BINARY_LITERAL", "FLOAT_LITERAL", "HEX_FLOAT_LITERAL",
+		"BOOL_LITERAL", "CHAR_LITERAL", "STRING_LITERAL", "NULL_LITERAL", "LPAREN",
+		"RPAREN", "LBRACE", "RBRACE", "LBRACK", "RBRACK", "SEMI", "COMMA", "DOT",
+		"ASSIGN", "GT", "LT", "BANG", "TILDE", "QUESTION", "COLON", "EQUAL", "LE",
+		"GE", "NOTEQUAL", "AND", "OR", "INC", "DEC", "ADD", "SUB", "MUL", "DIV",
+		"BITAND", "BITOR", "CARET", "MOD", "ADD_ASSIGN", "SUB_ASSIGN", "MUL_ASSIGN",
+		"DIV_ASSIGN", "AND_ASSIGN", "OR_ASSIGN", "XOR_ASSIGN", "MOD_ASSIGN", "LSHIFT_ASSIGN",
+		"RSHIFT_ASSIGN", "URSHIFT_ASSIGN", "ARROW", "COLONCOLON", "AT", "ELLIPSIS",
 		"WS", "JCOMMENT", "COMMENT", "LINE_COMMENT", "IDENTIFIER",
 	];
 	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(JavaParser._LITERAL_NAMES, JavaParser._SYMBOLIC_NAMES, []);
@@ -351,48 +351,48 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 221;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 0, this._ctx) ) {
-			case 1:
-				{
-				this.state = 220;
-				this.packageDeclaration();
+				this.state = 221;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 0, this._ctx)) {
+					case 1:
+						{
+							this.state = 220;
+							this.packageDeclaration();
+						}
+						break;
 				}
-				break;
-			}
-			this.state = 226;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 1, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 223;
-					this.importDeclaration();
-					}
-					}
-				}
-				this.state = 228;
+				this.state = 226;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 1, this._ctx);
-			}
-			this.state = 232;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.CLASS) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.INTERFACE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)))) !== 0) || _la === JavaParser.SEMI || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
-				{
-				{
-				this.state = 229;
-				this.typeDeclaration();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 223;
+								this.importDeclaration();
+							}
+						}
+					}
+					this.state = 228;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 1, this._ctx);
 				}
-				}
-				this.state = 234;
+				this.state = 232;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 235;
-			this.match(JavaParser.EOF);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.CLASS) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.INTERFACE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)))) !== 0) || _la === JavaParser.SEMI || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
+					{
+						{
+							this.state = 229;
+							this.typeDeclaration();
+						}
+					}
+					this.state = 234;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 235;
+				this.match(JavaParser.EOF);
 			}
 		}
 		catch (re) {
@@ -417,36 +417,36 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 238;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.JCOMMENT) {
-				{
-				this.state = 237;
-				this.comment();
-				}
-			}
-
-			this.state = 243;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				{
-				this.state = 240;
-				this.annotation();
-				}
-				}
-				this.state = 245;
+				this.state = 238;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 246;
-			this.match(JavaParser.PACKAGE);
-			this.state = 247;
-			this.qualifiedName();
-			this.state = 248;
-			this.match(JavaParser.SEMI);
+				if (_la === JavaParser.JCOMMENT) {
+					{
+						this.state = 237;
+						this.comment();
+					}
+				}
+
+				this.state = 243;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+					{
+						{
+							this.state = 240;
+							this.annotation();
+						}
+					}
+					this.state = 245;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 246;
+				this.match(JavaParser.PACKAGE);
+				this.state = 247;
+				this.qualifiedName();
+				this.state = 248;
+				this.match(JavaParser.SEMI);
 			}
 		}
 		catch (re) {
@@ -471,44 +471,44 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 251;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.JCOMMENT) {
-				{
-				this.state = 250;
-				this.comment();
+				this.state = 251;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.JCOMMENT) {
+					{
+						this.state = 250;
+						this.comment();
+					}
 				}
-			}
 
-			this.state = 253;
-			this.match(JavaParser.IMPORT);
-			this.state = 255;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.STATIC) {
-				{
-				this.state = 254;
-				this.match(JavaParser.STATIC);
+				this.state = 253;
+				this.match(JavaParser.IMPORT);
+				this.state = 255;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.STATIC) {
+					{
+						this.state = 254;
+						this.match(JavaParser.STATIC);
+					}
 				}
-			}
 
-			this.state = 257;
-			this.qualifiedName();
-			this.state = 260;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.DOT) {
-				{
-				this.state = 258;
-				this.match(JavaParser.DOT);
-				this.state = 259;
-				this.match(JavaParser.MUL);
+				this.state = 257;
+				this.qualifiedName();
+				this.state = 260;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.DOT) {
+					{
+						this.state = 258;
+						this.match(JavaParser.DOT);
+						this.state = 259;
+						this.match(JavaParser.MUL);
+					}
 				}
-			}
 
-			this.state = 262;
-			this.match(JavaParser.SEMI);
+				this.state = 262;
+				this.match(JavaParser.SEMI);
 			}
 		}
 		catch (re) {
@@ -535,88 +535,88 @@ export class JavaParser extends Parser {
 			this.state = 280;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.ABSTRACT:
-			case JavaParser.CLASS:
-			case JavaParser.ENUM:
-			case JavaParser.FINAL:
-			case JavaParser.INTERFACE:
-			case JavaParser.PRIVATE:
-			case JavaParser.PROTECTED:
-			case JavaParser.PUBLIC:
-			case JavaParser.STATIC:
-			case JavaParser.STRICTFP:
-			case JavaParser.AT:
-			case JavaParser.JCOMMENT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 265;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.JCOMMENT) {
-					{
-					this.state = 264;
-					this.comment();
-					}
-				}
-
-				this.state = 270;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 9, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 267;
-						this.classOrInterfaceModifier();
-						}
-						}
-					}
-					this.state = 272;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 9, this._ctx);
-				}
-				this.state = 277;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
+				case JavaParser.ABSTRACT:
 				case JavaParser.CLASS:
-					{
-					this.state = 273;
-					this.classDeclaration();
-					}
-					break;
 				case JavaParser.ENUM:
-					{
-					this.state = 274;
-					this.enumDeclaration();
-					}
-					break;
+				case JavaParser.FINAL:
 				case JavaParser.INTERFACE:
+				case JavaParser.PRIVATE:
+				case JavaParser.PROTECTED:
+				case JavaParser.PUBLIC:
+				case JavaParser.STATIC:
+				case JavaParser.STRICTFP:
+				case JavaParser.AT:
+				case JavaParser.JCOMMENT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 275;
-					this.interfaceDeclaration();
+						this.state = 265;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.JCOMMENT) {
+							{
+								this.state = 264;
+								this.comment();
+							}
+						}
+
+						this.state = 270;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 9, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 267;
+										this.classOrInterfaceModifier();
+									}
+								}
+							}
+							this.state = 272;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 9, this._ctx);
+						}
+						this.state = 277;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+							case JavaParser.CLASS:
+								{
+									this.state = 273;
+									this.classDeclaration();
+								}
+								break;
+							case JavaParser.ENUM:
+								{
+									this.state = 274;
+									this.enumDeclaration();
+								}
+								break;
+							case JavaParser.INTERFACE:
+								{
+									this.state = 275;
+									this.interfaceDeclaration();
+								}
+								break;
+							case JavaParser.AT:
+								{
+									this.state = 276;
+									this.annotationTypeDeclaration();
+								}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
 					}
 					break;
-				case JavaParser.AT:
+				case JavaParser.SEMI:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 276;
-					this.annotationTypeDeclaration();
+						this.state = 279;
+						this.match(JavaParser.SEMI);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
-				}
-				}
-				break;
-			case JavaParser.SEMI:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 279;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -641,51 +641,51 @@ export class JavaParser extends Parser {
 			this.state = 287;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.ABSTRACT:
-			case JavaParser.FINAL:
-			case JavaParser.PRIVATE:
-			case JavaParser.PROTECTED:
-			case JavaParser.PUBLIC:
-			case JavaParser.STATIC:
-			case JavaParser.STRICTFP:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 282;
-				this.classOrInterfaceModifier();
-				}
-				break;
-			case JavaParser.NATIVE:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 283;
-				this.match(JavaParser.NATIVE);
-				}
-				break;
-			case JavaParser.SYNCHRONIZED:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 284;
-				this.match(JavaParser.SYNCHRONIZED);
-				}
-				break;
-			case JavaParser.TRANSIENT:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 285;
-				this.match(JavaParser.TRANSIENT);
-				}
-				break;
-			case JavaParser.VOLATILE:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 286;
-				this.match(JavaParser.VOLATILE);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.ABSTRACT:
+				case JavaParser.FINAL:
+				case JavaParser.PRIVATE:
+				case JavaParser.PROTECTED:
+				case JavaParser.PUBLIC:
+				case JavaParser.STATIC:
+				case JavaParser.STRICTFP:
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 282;
+						this.classOrInterfaceModifier();
+					}
+					break;
+				case JavaParser.NATIVE:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 283;
+						this.match(JavaParser.NATIVE);
+					}
+					break;
+				case JavaParser.SYNCHRONIZED:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 284;
+						this.match(JavaParser.SYNCHRONIZED);
+					}
+					break;
+				case JavaParser.TRANSIENT:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 285;
+						this.match(JavaParser.TRANSIENT);
+					}
+					break;
+				case JavaParser.VOLATILE:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 286;
+						this.match(JavaParser.VOLATILE);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -710,65 +710,65 @@ export class JavaParser extends Parser {
 			this.state = 297;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 289;
-				this.annotation();
-				}
-				break;
-			case JavaParser.PUBLIC:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 290;
-				this.match(JavaParser.PUBLIC);
-				}
-				break;
-			case JavaParser.PROTECTED:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 291;
-				this.match(JavaParser.PROTECTED);
-				}
-				break;
-			case JavaParser.PRIVATE:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 292;
-				this.match(JavaParser.PRIVATE);
-				}
-				break;
-			case JavaParser.STATIC:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 293;
-				this.match(JavaParser.STATIC);
-				}
-				break;
-			case JavaParser.ABSTRACT:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 294;
-				this.match(JavaParser.ABSTRACT);
-				}
-				break;
-			case JavaParser.FINAL:
-				this.enterOuterAlt(_localctx, 7);
-				{
-				this.state = 295;
-				this.match(JavaParser.FINAL);
-				}
-				break;
-			case JavaParser.STRICTFP:
-				this.enterOuterAlt(_localctx, 8);
-				{
-				this.state = 296;
-				this.match(JavaParser.STRICTFP);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 289;
+						this.annotation();
+					}
+					break;
+				case JavaParser.PUBLIC:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 290;
+						this.match(JavaParser.PUBLIC);
+					}
+					break;
+				case JavaParser.PROTECTED:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 291;
+						this.match(JavaParser.PROTECTED);
+					}
+					break;
+				case JavaParser.PRIVATE:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 292;
+						this.match(JavaParser.PRIVATE);
+					}
+					break;
+				case JavaParser.STATIC:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 293;
+						this.match(JavaParser.STATIC);
+					}
+					break;
+				case JavaParser.ABSTRACT:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 294;
+						this.match(JavaParser.ABSTRACT);
+					}
+					break;
+				case JavaParser.FINAL:
+					this.enterOuterAlt(_localctx, 7);
+					{
+						this.state = 295;
+						this.match(JavaParser.FINAL);
+					}
+					break;
+				case JavaParser.STRICTFP:
+					this.enterOuterAlt(_localctx, 8);
+					{
+						this.state = 296;
+						this.match(JavaParser.STRICTFP);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -793,23 +793,23 @@ export class JavaParser extends Parser {
 			this.state = 301;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.FINAL:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 299;
-				this.match(JavaParser.FINAL);
-				}
-				break;
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 300;
-				this.annotation();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.FINAL:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 299;
+						this.match(JavaParser.FINAL);
+					}
+					break;
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 300;
+						this.annotation();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -834,42 +834,42 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 303;
-			this.match(JavaParser.CLASS);
-			this.state = 304;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 306;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LT) {
-				{
-				this.state = 305;
-				this.typeParameters();
+				this.state = 303;
+				this.match(JavaParser.CLASS);
+				this.state = 304;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 306;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LT) {
+					{
+						this.state = 305;
+						this.typeParameters();
+					}
 				}
-			}
 
-			this.state = 309;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.EXTENDS) {
-				{
-				this.state = 308;
-				this.extendClass();
+				this.state = 309;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.EXTENDS) {
+					{
+						this.state = 308;
+						this.extendClass();
+					}
 				}
-			}
 
-			this.state = 312;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.IMPLEMENTS) {
-				{
-				this.state = 311;
-				this.implementInterfaces();
+				this.state = 312;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.IMPLEMENTS) {
+					{
+						this.state = 311;
+						this.implementInterfaces();
+					}
 				}
-			}
 
-			this.state = 314;
-			this.classBody();
+				this.state = 314;
+				this.classBody();
 			}
 		}
 		catch (re) {
@@ -893,10 +893,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 316;
-			this.match(JavaParser.EXTENDS);
-			this.state = 317;
-			this.typeType();
+				this.state = 316;
+				this.match(JavaParser.EXTENDS);
+				this.state = 317;
+				this.typeType();
 			}
 		}
 		catch (re) {
@@ -920,12 +920,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			{
-			this.state = 319;
-			this.match(JavaParser.IMPLEMENTS);
-			this.state = 320;
-			this.typeList();
-			}
+				{
+					this.state = 319;
+					this.match(JavaParser.IMPLEMENTS);
+					this.state = 320;
+					this.typeList();
+				}
 			}
 		}
 		catch (re) {
@@ -950,28 +950,28 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 322;
-			this.match(JavaParser.LT);
-			this.state = 323;
-			this.typeParameter();
-			this.state = 328;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 324;
-				this.match(JavaParser.COMMA);
-				this.state = 325;
+				this.state = 322;
+				this.match(JavaParser.LT);
+				this.state = 323;
 				this.typeParameter();
-				}
-				}
-				this.state = 330;
+				this.state = 328;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 331;
-			this.match(JavaParser.GT);
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 324;
+							this.match(JavaParser.COMMA);
+							this.state = 325;
+							this.typeParameter();
+						}
+					}
+					this.state = 330;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 331;
+				this.match(JavaParser.GT);
 			}
 		}
 		catch (re) {
@@ -997,51 +997,51 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 336;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 333;
-					this.annotation();
-					}
-					}
-				}
-				this.state = 338;
+				this.state = 336;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
-			}
-			this.state = 339;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 348;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.EXTENDS) {
-				{
-				this.state = 340;
-				this.match(JavaParser.EXTENDS);
-				this.state = 344;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 20, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
-						{
-						this.state = 341;
-						this.annotation();
-						}
+							{
+								this.state = 333;
+								this.annotation();
+							}
 						}
 					}
-					this.state = 346;
+					this.state = 338;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 20, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 19, this._ctx);
 				}
-				this.state = 347;
-				this.typeBound();
+				this.state = 339;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 348;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.EXTENDS) {
+					{
+						this.state = 340;
+						this.match(JavaParser.EXTENDS);
+						this.state = 344;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 20, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 341;
+										this.annotation();
+									}
+								}
+							}
+							this.state = 346;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 20, this._ctx);
+						}
+						this.state = 347;
+						this.typeBound();
+					}
 				}
-			}
 
 			}
 		}
@@ -1067,24 +1067,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 350;
-			this.typeType();
-			this.state = 355;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.BITAND) {
-				{
-				{
-				this.state = 351;
-				this.match(JavaParser.BITAND);
-				this.state = 352;
+				this.state = 350;
 				this.typeType();
-				}
-				}
-				this.state = 357;
+				this.state = 355;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.BITAND) {
+					{
+						{
+							this.state = 351;
+							this.match(JavaParser.BITAND);
+							this.state = 352;
+							this.typeType();
+						}
+					}
+					this.state = 357;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -1109,56 +1109,56 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 358;
-			this.match(JavaParser.ENUM);
-			this.state = 359;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 362;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.IMPLEMENTS) {
-				{
-				this.state = 360;
-				this.match(JavaParser.IMPLEMENTS);
-				this.state = 361;
-				this.typeList();
+				this.state = 358;
+				this.match(JavaParser.ENUM);
+				this.state = 359;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 362;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.IMPLEMENTS) {
+					{
+						this.state = 360;
+						this.match(JavaParser.IMPLEMENTS);
+						this.state = 361;
+						this.typeList();
+					}
 				}
-			}
 
-			this.state = 364;
-			this.match(JavaParser.LBRACE);
-			this.state = 366;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
-				{
-				this.state = 365;
-				this.enumConstants();
+				this.state = 364;
+				this.match(JavaParser.LBRACE);
+				this.state = 366;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
+					{
+						this.state = 365;
+						this.enumConstants();
+					}
 				}
-			}
 
-			this.state = 369;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.COMMA) {
-				{
-				this.state = 368;
-				this.match(JavaParser.COMMA);
+				this.state = 369;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.COMMA) {
+					{
+						this.state = 368;
+						this.match(JavaParser.COMMA);
+					}
 				}
-			}
 
-			this.state = 372;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.SEMI) {
-				{
-				this.state = 371;
-				this.enumBodyDeclarations();
+				this.state = 372;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.SEMI) {
+					{
+						this.state = 371;
+						this.enumBodyDeclarations();
+					}
 				}
-			}
 
-			this.state = 374;
-			this.match(JavaParser.RBRACE);
+				this.state = 374;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -1183,26 +1183,26 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 376;
-			this.enumConstant();
-			this.state = 381;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 27, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 377;
-					this.match(JavaParser.COMMA);
-					this.state = 378;
-					this.enumConstant();
-					}
-					}
-				}
-				this.state = 383;
+				this.state = 376;
+				this.enumConstant();
+				this.state = 381;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 27, this._ctx);
-			}
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 377;
+								this.match(JavaParser.COMMA);
+								this.state = 378;
+								this.enumConstant();
+							}
+						}
+					}
+					this.state = 383;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 27, this._ctx);
+				}
 			}
 		}
 		catch (re) {
@@ -1228,53 +1228,53 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 385;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.JCOMMENT) {
-				{
-				this.state = 384;
-				this.comment();
+				this.state = 385;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.JCOMMENT) {
+					{
+						this.state = 384;
+						this.comment();
+					}
 				}
-			}
 
-			this.state = 390;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 29, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 387;
-					this.annotation();
-					}
-					}
-				}
-				this.state = 392;
+				this.state = 390;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 29, this._ctx);
-			}
-			this.state = 393;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 395;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LPAREN) {
-				{
-				this.state = 394;
-				this.arguments();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 387;
+								this.annotation();
+							}
+						}
+					}
+					this.state = 392;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 29, this._ctx);
 				}
-			}
+				this.state = 393;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 395;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LPAREN) {
+					{
+						this.state = 394;
+						this.arguments();
+					}
+				}
 
-			this.state = 398;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LBRACE) {
-				{
-				this.state = 397;
-				this.classBody();
+				this.state = 398;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LBRACE) {
+					{
+						this.state = 397;
+						this.classBody();
+					}
 				}
-			}
 
 			}
 		}
@@ -1300,22 +1300,22 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 400;
-			this.match(JavaParser.SEMI);
-			this.state = 404;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.VOLATILE - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.LT || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
-				{
-				{
-				this.state = 401;
-				this.classBodyDeclaration();
-				}
-				}
-				this.state = 406;
+				this.state = 400;
+				this.match(JavaParser.SEMI);
+				this.state = 404;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.VOLATILE - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.LT || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
+					{
+						{
+							this.state = 401;
+							this.classBodyDeclaration();
+						}
+					}
+					this.state = 406;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -1340,32 +1340,32 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 407;
-			this.match(JavaParser.INTERFACE);
-			this.state = 408;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 410;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LT) {
-				{
-				this.state = 409;
-				this.typeParameters();
+				this.state = 407;
+				this.match(JavaParser.INTERFACE);
+				this.state = 408;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 410;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LT) {
+					{
+						this.state = 409;
+						this.typeParameters();
+					}
 				}
-			}
 
-			this.state = 413;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.EXTENDS) {
-				{
-				this.state = 412;
-				this.extendInterface();
+				this.state = 413;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.EXTENDS) {
+					{
+						this.state = 412;
+						this.extendInterface();
+					}
 				}
-			}
 
-			this.state = 415;
-			this.interfaceBody();
+				this.state = 415;
+				this.interfaceBody();
 			}
 		}
 		catch (re) {
@@ -1389,10 +1389,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 417;
-			this.match(JavaParser.EXTENDS);
-			this.state = 418;
-			this.typeList();
+				this.state = 417;
+				this.match(JavaParser.EXTENDS);
+				this.state = 418;
+				this.typeList();
 			}
 		}
 		catch (re) {
@@ -1416,8 +1416,8 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 420;
-			this.match(JavaParser.JCOMMENT);
+				this.state = 420;
+				this.match(JavaParser.JCOMMENT);
 			}
 		}
 		catch (re) {
@@ -1442,24 +1442,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 422;
-			this.match(JavaParser.LBRACE);
-			this.state = 426;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.VOLATILE - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.LT || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
-				{
-				{
-				this.state = 423;
-				this.classBodyDeclaration();
-				}
-				}
-				this.state = 428;
+				this.state = 422;
+				this.match(JavaParser.LBRACE);
+				this.state = 426;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 429;
-			this.match(JavaParser.RBRACE);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.VOLATILE - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.LT || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
+					{
+						{
+							this.state = 423;
+							this.classBodyDeclaration();
+						}
+					}
+					this.state = 428;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 429;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -1484,24 +1484,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 431;
-			this.match(JavaParser.LBRACE);
-			this.state = 435;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DEFAULT) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.VOLATILE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.LT || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
-				{
-				{
-				this.state = 432;
-				this.interfaceBodyDeclaration();
-				}
-				}
-				this.state = 437;
+				this.state = 431;
+				this.match(JavaParser.LBRACE);
+				this.state = 435;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 438;
-			this.match(JavaParser.RBRACE);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DEFAULT) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.VOLATILE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.LT || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
+					{
+						{
+							this.state = 432;
+							this.interfaceBodyDeclaration();
+						}
+					}
+					this.state = 437;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 438;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -1527,66 +1527,66 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.state = 455;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 40, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 440;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 442;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.STATIC) {
+			switch (this.interpreter.adaptivePredict(this._input, 40, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 441;
-					this.match(JavaParser.STATIC);
+						this.state = 440;
+						this.match(JavaParser.SEMI);
 					}
-				}
+					break;
 
-				this.state = 444;
-				this.block();
-				}
-				break;
-
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 446;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.JCOMMENT) {
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 445;
-					this.comment();
-					}
-				}
+						this.state = 442;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.STATIC) {
+							{
+								this.state = 441;
+								this.match(JavaParser.STATIC);
+							}
+						}
 
-				this.state = 451;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 39, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 448;
-						this.modifier();
-						}
-						}
+						this.state = 444;
+						this.block();
 					}
-					this.state = 453;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 39, this._ctx);
-				}
-				this.state = 454;
-				this.memberDeclaration();
-				}
-				break;
+					break;
+
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 446;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.JCOMMENT) {
+							{
+								this.state = 445;
+								this.comment();
+							}
+						}
+
+						this.state = 451;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 39, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 448;
+										this.modifier();
+									}
+								}
+							}
+							this.state = 453;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 39, this._ctx);
+						}
+						this.state = 454;
+						this.memberDeclaration();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -1610,78 +1610,78 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 466;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 41, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 457;
-				this.methodDeclaration();
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 41, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 457;
+						this.methodDeclaration();
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 458;
-				this.genericMethodDeclaration();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 458;
+						this.genericMethodDeclaration();
+					}
+					break;
 
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 459;
-				this.fieldDeclaration();
-				}
-				break;
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 459;
+						this.fieldDeclaration();
+					}
+					break;
 
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 460;
-				this.constructorDeclaration();
-				}
-				break;
+				case 4:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 460;
+						this.constructorDeclaration();
+					}
+					break;
 
-			case 5:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 461;
-				this.genericConstructorDeclaration();
-				}
-				break;
+				case 5:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 461;
+						this.genericConstructorDeclaration();
+					}
+					break;
 
-			case 6:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 462;
-				this.interfaceDeclaration();
-				}
-				break;
+				case 6:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 462;
+						this.interfaceDeclaration();
+					}
+					break;
 
-			case 7:
-				this.enterOuterAlt(_localctx, 7);
-				{
-				this.state = 463;
-				this.annotationTypeDeclaration();
-				}
-				break;
+				case 7:
+					this.enterOuterAlt(_localctx, 7);
+					{
+						this.state = 463;
+						this.annotationTypeDeclaration();
+					}
+					break;
 
-			case 8:
-				this.enterOuterAlt(_localctx, 8);
-				{
-				this.state = 464;
-				this.classDeclaration();
-				}
-				break;
+				case 8:
+					this.enterOuterAlt(_localctx, 8);
+					{
+						this.state = 464;
+						this.classDeclaration();
+					}
+					break;
 
-			case 9:
-				this.enterOuterAlt(_localctx, 9);
-				{
-				this.state = 465;
-				this.enumDeclaration();
-				}
-				break;
+				case 9:
+					this.enterOuterAlt(_localctx, 9);
+					{
+						this.state = 465;
+						this.enumDeclaration();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -1706,40 +1706,40 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 468;
-			this.typeTypeOrVoid();
-			this.state = 469;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 470;
-			this.formalParameters();
-			this.state = 475;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.LBRACK) {
-				{
-				{
-				this.state = 471;
-				this.match(JavaParser.LBRACK);
-				this.state = 472;
-				this.match(JavaParser.RBRACK);
-				}
-				}
-				this.state = 477;
+				this.state = 468;
+				this.typeTypeOrVoid();
+				this.state = 469;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 470;
+				this.formalParameters();
+				this.state = 475;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 479;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.THROWS) {
-				{
-				this.state = 478;
-				this.throwList();
+				while (_la === JavaParser.LBRACK) {
+					{
+						{
+							this.state = 471;
+							this.match(JavaParser.LBRACK);
+							this.state = 472;
+							this.match(JavaParser.RBRACK);
+						}
+					}
+					this.state = 477;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
 				}
-			}
+				this.state = 479;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.THROWS) {
+					{
+						this.state = 478;
+						this.throwList();
+					}
+				}
 
-			this.state = 481;
-			this.methodBody();
+				this.state = 481;
+				this.methodBody();
 			}
 		}
 		catch (re) {
@@ -1763,12 +1763,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			{
-			this.state = 483;
-			this.match(JavaParser.THROWS);
-			this.state = 484;
-			this.qualifiedNameList();
-			}
+				{
+					this.state = 483;
+					this.match(JavaParser.THROWS);
+					this.state = 484;
+					this.qualifiedNameList();
+				}
 			}
 		}
 		catch (re) {
@@ -1793,22 +1793,22 @@ export class JavaParser extends Parser {
 			this.state = 488;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.LBRACE:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 486;
-				this.block();
-				}
-				break;
-			case JavaParser.SEMI:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 487;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.LBRACE:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 486;
+						this.block();
+					}
+					break;
+				case JavaParser.SEMI:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 487;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -1833,31 +1833,31 @@ export class JavaParser extends Parser {
 			this.state = 492;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.SHORT:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 490;
-				this.typeType();
-				}
-				break;
-			case JavaParser.VOID:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 491;
-				this.match(JavaParser.VOID);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.DOUBLE:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.LONG:
+				case JavaParser.SHORT:
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 490;
+						this.typeType();
+					}
+					break;
+				case JavaParser.VOID:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 491;
+						this.match(JavaParser.VOID);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -1881,10 +1881,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 494;
-			this.typeParameters();
-			this.state = 495;
-			this.methodDeclaration();
+				this.state = 494;
+				this.typeParameters();
+				this.state = 495;
+				this.methodDeclaration();
 			}
 		}
 		catch (re) {
@@ -1908,10 +1908,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 497;
-			this.typeParameters();
-			this.state = 498;
-			this.constructorDeclaration();
+				this.state = 497;
+				this.typeParameters();
+				this.state = 498;
+				this.constructorDeclaration();
 			}
 		}
 		catch (re) {
@@ -1936,24 +1936,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 500;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 501;
-			this.formalParameters();
-			this.state = 504;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.THROWS) {
-				{
-				this.state = 502;
-				this.match(JavaParser.THROWS);
-				this.state = 503;
-				this.qualifiedNameList();
+				this.state = 500;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 501;
+				this.formalParameters();
+				this.state = 504;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.THROWS) {
+					{
+						this.state = 502;
+						this.match(JavaParser.THROWS);
+						this.state = 503;
+						this.qualifiedNameList();
+					}
 				}
-			}
 
-			this.state = 506;
-			_localctx._constructorBody = this.block();
+				this.state = 506;
+				_localctx._constructorBody = this.block();
 			}
 		}
 		catch (re) {
@@ -1977,12 +1977,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 508;
-			this.typeType();
-			this.state = 509;
-			this.variableDeclarators();
-			this.state = 510;
-			this.match(JavaParser.SEMI);
+				this.state = 508;
+				this.typeType();
+				this.state = 509;
+				this.variableDeclarators();
+				this.state = 510;
+				this.match(JavaParser.SEMI);
 			}
 		}
 		catch (re) {
@@ -2009,75 +2009,75 @@ export class JavaParser extends Parser {
 			this.state = 523;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.ABSTRACT:
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.CLASS:
-			case JavaParser.DEFAULT:
-			case JavaParser.DOUBLE:
-			case JavaParser.ENUM:
-			case JavaParser.FINAL:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.INTERFACE:
-			case JavaParser.LONG:
-			case JavaParser.NATIVE:
-			case JavaParser.PRIVATE:
-			case JavaParser.PROTECTED:
-			case JavaParser.PUBLIC:
-			case JavaParser.SHORT:
-			case JavaParser.STATIC:
-			case JavaParser.STRICTFP:
-			case JavaParser.SYNCHRONIZED:
-			case JavaParser.TRANSIENT:
-			case JavaParser.VOID:
-			case JavaParser.VOLATILE:
-			case JavaParser.LT:
-			case JavaParser.AT:
-			case JavaParser.JCOMMENT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 513;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.JCOMMENT) {
+				case JavaParser.ABSTRACT:
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.CLASS:
+				case JavaParser.DEFAULT:
+				case JavaParser.DOUBLE:
+				case JavaParser.ENUM:
+				case JavaParser.FINAL:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.INTERFACE:
+				case JavaParser.LONG:
+				case JavaParser.NATIVE:
+				case JavaParser.PRIVATE:
+				case JavaParser.PROTECTED:
+				case JavaParser.PUBLIC:
+				case JavaParser.SHORT:
+				case JavaParser.STATIC:
+				case JavaParser.STRICTFP:
+				case JavaParser.SYNCHRONIZED:
+				case JavaParser.TRANSIENT:
+				case JavaParser.VOID:
+				case JavaParser.VOLATILE:
+				case JavaParser.LT:
+				case JavaParser.AT:
+				case JavaParser.JCOMMENT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 512;
-					this.comment();
-					}
-				}
+						this.state = 513;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.JCOMMENT) {
+							{
+								this.state = 512;
+								this.comment();
+							}
+						}
 
-				this.state = 518;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 515;
-						this.modifier();
+						this.state = 518;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 515;
+										this.modifier();
+									}
+								}
+							}
+							this.state = 520;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
 						}
-						}
+						this.state = 521;
+						this.interfaceMemberDeclaration();
 					}
-					this.state = 520;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 48, this._ctx);
-				}
-				this.state = 521;
-				this.interfaceMemberDeclaration();
-				}
-				break;
-			case JavaParser.SEMI:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 522;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+					break;
+				case JavaParser.SEMI:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 522;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -2101,62 +2101,62 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 532;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 50, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 525;
-				this.constDeclaration();
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 50, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 525;
+						this.constDeclaration();
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 526;
-				this.interfaceMethodDeclaration();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 526;
+						this.interfaceMethodDeclaration();
+					}
+					break;
 
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 527;
-				this.genericInterfaceMethodDeclaration();
-				}
-				break;
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 527;
+						this.genericInterfaceMethodDeclaration();
+					}
+					break;
 
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 528;
-				this.interfaceDeclaration();
-				}
-				break;
+				case 4:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 528;
+						this.interfaceDeclaration();
+					}
+					break;
 
-			case 5:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 529;
-				this.annotationTypeDeclaration();
-				}
-				break;
+				case 5:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 529;
+						this.annotationTypeDeclaration();
+					}
+					break;
 
-			case 6:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 530;
-				this.classDeclaration();
-				}
-				break;
+				case 6:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 530;
+						this.classDeclaration();
+					}
+					break;
 
-			case 7:
-				this.enterOuterAlt(_localctx, 7);
-				{
-				this.state = 531;
-				this.enumDeclaration();
-				}
-				break;
+				case 7:
+					this.enterOuterAlt(_localctx, 7);
+					{
+						this.state = 531;
+						this.enumDeclaration();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -2181,28 +2181,28 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 534;
-			this.typeType();
-			this.state = 535;
-			this.constantDeclarator();
-			this.state = 540;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 536;
-				this.match(JavaParser.COMMA);
-				this.state = 537;
+				this.state = 534;
+				this.typeType();
+				this.state = 535;
 				this.constantDeclarator();
-				}
-				}
-				this.state = 542;
+				this.state = 540;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 543;
-			this.match(JavaParser.SEMI);
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 536;
+							this.match(JavaParser.COMMA);
+							this.state = 537;
+							this.constantDeclarator();
+						}
+					}
+					this.state = 542;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 543;
+				this.match(JavaParser.SEMI);
 			}
 		}
 		catch (re) {
@@ -2227,28 +2227,28 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 545;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 550;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.LBRACK) {
-				{
-				{
-				this.state = 546;
-				this.match(JavaParser.LBRACK);
-				this.state = 547;
-				this.match(JavaParser.RBRACK);
-				}
-				}
-				this.state = 552;
+				this.state = 545;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 550;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 553;
-			this.match(JavaParser.ASSIGN);
-			this.state = 554;
-			this.variableInitializer();
+				while (_la === JavaParser.LBRACK) {
+					{
+						{
+							this.state = 546;
+							this.match(JavaParser.LBRACK);
+							this.state = 547;
+							this.match(JavaParser.RBRACK);
+						}
+					}
+					this.state = 552;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 553;
+				this.match(JavaParser.ASSIGN);
+				this.state = 554;
+				this.variableInitializer();
 			}
 		}
 		catch (re) {
@@ -2274,100 +2274,100 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 559;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 53, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 556;
-					this.interfaceMethodModifier();
-					}
-					}
-				}
-				this.state = 561;
+				this.state = 559;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 53, this._ctx);
-			}
-			this.state = 572;
-			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.SHORT:
-			case JavaParser.VOID:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				{
-				this.state = 562;
-				this.typeTypeOrVoid();
-				}
-				break;
-			case JavaParser.LT:
-				{
-				this.state = 563;
-				this.typeParameters();
-				this.state = 567;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
-						{
-						this.state = 564;
-						this.annotation();
-						}
+							{
+								this.state = 556;
+								this.interfaceMethodModifier();
+							}
 						}
 					}
-					this.state = 569;
+					this.state = 561;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 53, this._ctx);
 				}
-				this.state = 570;
-				this.typeTypeOrVoid();
+				this.state = 572;
+				this._errHandler.sync(this);
+				switch (this._input.LA(1)) {
+					case JavaParser.BOOLEAN:
+					case JavaParser.BYTE:
+					case JavaParser.CHAR:
+					case JavaParser.DOUBLE:
+					case JavaParser.FLOAT:
+					case JavaParser.INT:
+					case JavaParser.LONG:
+					case JavaParser.SHORT:
+					case JavaParser.VOID:
+					case JavaParser.AT:
+					case JavaParser.IDENTIFIER:
+						{
+							this.state = 562;
+							this.typeTypeOrVoid();
+						}
+						break;
+					case JavaParser.LT:
+						{
+							this.state = 563;
+							this.typeParameters();
+							this.state = 567;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+							while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+								if (_alt === 1) {
+									{
+										{
+											this.state = 564;
+											this.annotation();
+										}
+									}
+								}
+								this.state = 569;
+								this._errHandler.sync(this);
+								_alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+							}
+							this.state = 570;
+							this.typeTypeOrVoid();
+						}
+						break;
+					default:
+						throw new NoViableAltException(this);
 				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			this.state = 574;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 575;
-			this.formalParameters();
-			this.state = 580;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.LBRACK) {
-				{
-				{
-				this.state = 576;
-				this.match(JavaParser.LBRACK);
-				this.state = 577;
-				this.match(JavaParser.RBRACK);
-				}
-				}
-				this.state = 582;
+				this.state = 574;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 575;
+				this.formalParameters();
+				this.state = 580;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 584;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.THROWS) {
-				{
-				this.state = 583;
-				this.throwList();
+				while (_la === JavaParser.LBRACK) {
+					{
+						{
+							this.state = 576;
+							this.match(JavaParser.LBRACK);
+							this.state = 577;
+							this.match(JavaParser.RBRACK);
+						}
+					}
+					this.state = 582;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
 				}
-			}
+				this.state = 584;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.THROWS) {
+					{
+						this.state = 583;
+						this.throwList();
+					}
+				}
 
-			this.state = 586;
-			this.methodBody();
+				this.state = 586;
+				this.methodBody();
 			}
 		}
 		catch (re) {
@@ -2392,51 +2392,51 @@ export class JavaParser extends Parser {
 			this.state = 594;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 588;
-				this.annotation();
-				}
-				break;
-			case JavaParser.PUBLIC:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 589;
-				this.match(JavaParser.PUBLIC);
-				}
-				break;
-			case JavaParser.ABSTRACT:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 590;
-				this.match(JavaParser.ABSTRACT);
-				}
-				break;
-			case JavaParser.DEFAULT:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 591;
-				this.match(JavaParser.DEFAULT);
-				}
-				break;
-			case JavaParser.STATIC:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 592;
-				this.match(JavaParser.STATIC);
-				}
-				break;
-			case JavaParser.STRICTFP:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 593;
-				this.match(JavaParser.STRICTFP);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 588;
+						this.annotation();
+					}
+					break;
+				case JavaParser.PUBLIC:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 589;
+						this.match(JavaParser.PUBLIC);
+					}
+					break;
+				case JavaParser.ABSTRACT:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 590;
+						this.match(JavaParser.ABSTRACT);
+					}
+					break;
+				case JavaParser.DEFAULT:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 591;
+						this.match(JavaParser.DEFAULT);
+					}
+					break;
+				case JavaParser.STATIC:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 592;
+						this.match(JavaParser.STATIC);
+					}
+					break;
+				case JavaParser.STRICTFP:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 593;
+						this.match(JavaParser.STRICTFP);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -2460,10 +2460,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 596;
-			this.typeParameters();
-			this.state = 597;
-			this.interfaceMethodDeclaration();
+				this.state = 596;
+				this.typeParameters();
+				this.state = 597;
+				this.interfaceMethodDeclaration();
 			}
 		}
 		catch (re) {
@@ -2488,24 +2488,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 599;
-			this.variableDeclarator();
-			this.state = 604;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 600;
-				this.match(JavaParser.COMMA);
-				this.state = 601;
+				this.state = 599;
 				this.variableDeclarator();
-				}
-				}
-				this.state = 606;
+				this.state = 604;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 600;
+							this.match(JavaParser.COMMA);
+							this.state = 601;
+							this.variableDeclarator();
+						}
+					}
+					this.state = 606;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -2530,19 +2530,19 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 607;
-			this.variableDeclaratorId();
-			this.state = 610;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.ASSIGN) {
-				{
-				this.state = 608;
-				this.match(JavaParser.ASSIGN);
-				this.state = 609;
-				this.variableInitializer();
+				this.state = 607;
+				this.variableDeclaratorId();
+				this.state = 610;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.ASSIGN) {
+					{
+						this.state = 608;
+						this.match(JavaParser.ASSIGN);
+						this.state = 609;
+						this.variableInitializer();
+					}
 				}
-			}
 
 			}
 		}
@@ -2568,24 +2568,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 612;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 617;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.LBRACK) {
-				{
-				{
-				this.state = 613;
-				this.match(JavaParser.LBRACK);
-				this.state = 614;
-				this.match(JavaParser.RBRACK);
-				}
-				}
-				this.state = 619;
+				this.state = 612;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 617;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.LBRACK) {
+					{
+						{
+							this.state = 613;
+							this.match(JavaParser.LBRACK);
+							this.state = 614;
+							this.match(JavaParser.RBRACK);
+						}
+					}
+					this.state = 619;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -2610,53 +2610,53 @@ export class JavaParser extends Parser {
 			this.state = 622;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.LBRACE:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 620;
-				this.arrayInitializer();
-				}
-				break;
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.NEW:
-			case JavaParser.SHORT:
-			case JavaParser.SUPER:
-			case JavaParser.THIS:
-			case JavaParser.VOID:
-			case JavaParser.DECIMAL_LITERAL:
-			case JavaParser.HEX_LITERAL:
-			case JavaParser.OCT_LITERAL:
-			case JavaParser.BINARY_LITERAL:
-			case JavaParser.FLOAT_LITERAL:
-			case JavaParser.HEX_FLOAT_LITERAL:
-			case JavaParser.BOOL_LITERAL:
-			case JavaParser.CHAR_LITERAL:
-			case JavaParser.STRING_LITERAL:
-			case JavaParser.NULL_LITERAL:
-			case JavaParser.LPAREN:
-			case JavaParser.LT:
-			case JavaParser.BANG:
-			case JavaParser.TILDE:
-			case JavaParser.INC:
-			case JavaParser.DEC:
-			case JavaParser.ADD:
-			case JavaParser.SUB:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 621;
-				this.expression(0);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.LBRACE:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 620;
+						this.arrayInitializer();
+					}
+					break;
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.DOUBLE:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.LONG:
+				case JavaParser.NEW:
+				case JavaParser.SHORT:
+				case JavaParser.SUPER:
+				case JavaParser.THIS:
+				case JavaParser.VOID:
+				case JavaParser.DECIMAL_LITERAL:
+				case JavaParser.HEX_LITERAL:
+				case JavaParser.OCT_LITERAL:
+				case JavaParser.BINARY_LITERAL:
+				case JavaParser.FLOAT_LITERAL:
+				case JavaParser.HEX_FLOAT_LITERAL:
+				case JavaParser.BOOL_LITERAL:
+				case JavaParser.CHAR_LITERAL:
+				case JavaParser.STRING_LITERAL:
+				case JavaParser.NULL_LITERAL:
+				case JavaParser.LPAREN:
+				case JavaParser.LT:
+				case JavaParser.BANG:
+				case JavaParser.TILDE:
+				case JavaParser.INC:
+				case JavaParser.DEC:
+				case JavaParser.ADD:
+				case JavaParser.SUB:
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 621;
+						this.expression(0);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -2682,48 +2682,48 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 624;
-			this.match(JavaParser.LBRACE);
-			this.state = 636;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)) | (1 << (JavaParser.LBRACE - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				this.state = 625;
-				this.variableInitializer();
-				this.state = 630;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 626;
-						this.match(JavaParser.COMMA);
-						this.state = 627;
-						this.variableInitializer();
-						}
-						}
-					}
-					this.state = 632;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
-				}
-				this.state = 634;
+				this.state = 624;
+				this.match(JavaParser.LBRACE);
+				this.state = 636;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-				if (_la === JavaParser.COMMA) {
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)) | (1 << (JavaParser.LBRACE - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
 					{
-					this.state = 633;
-					this.match(JavaParser.COMMA);
+						this.state = 625;
+						this.variableInitializer();
+						this.state = 630;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 626;
+										this.match(JavaParser.COMMA);
+										this.state = 627;
+										this.variableInitializer();
+									}
+								}
+							}
+							this.state = 632;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
+						}
+						this.state = 634;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.COMMA) {
+							{
+								this.state = 633;
+								this.match(JavaParser.COMMA);
+							}
+						}
+
 					}
 				}
 
-				}
-			}
-
-			this.state = 638;
-			this.match(JavaParser.RBRACE);
+				this.state = 638;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -2748,46 +2748,46 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 640;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 642;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 66, this._ctx) ) {
-			case 1:
-				{
-				this.state = 641;
-				this.typeArguments();
-				}
-				break;
-			}
-			this.state = 651;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 644;
-					this.match(JavaParser.DOT);
-					this.state = 645;
-					this.match(JavaParser.IDENTIFIER);
-					this.state = 647;
-					this._errHandler.sync(this);
-					switch ( this.interpreter.adaptivePredict(this._input, 67, this._ctx) ) {
+				this.state = 640;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 642;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 66, this._ctx)) {
 					case 1:
 						{
-						this.state = 646;
-						this.typeArguments();
+							this.state = 641;
+							this.typeArguments();
 						}
 						break;
-					}
-					}
-					}
 				}
-				this.state = 653;
+				this.state = 651;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
-			}
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 644;
+								this.match(JavaParser.DOT);
+								this.state = 645;
+								this.match(JavaParser.IDENTIFIER);
+								this.state = 647;
+								this._errHandler.sync(this);
+								switch (this.interpreter.adaptivePredict(this._input, 67, this._ctx)) {
+									case 1:
+										{
+											this.state = 646;
+											this.typeArguments();
+										}
+										break;
+								}
+							}
+						}
+					}
+					this.state = 653;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
+				}
 			}
 		}
 		catch (re) {
@@ -2812,58 +2812,58 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 666;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 71, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 654;
-				this.typeType();
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 71, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 654;
+						this.typeType();
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 658;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					{
-					this.state = 655;
-					this.annotation();
-					}
-					}
-					this.state = 660;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 661;
-				this.match(JavaParser.QUESTION);
-				this.state = 664;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.EXTENDS || _la === JavaParser.SUPER) {
-					{
-					this.state = 662;
-					_la = this._input.LA(1);
-					if (!(_la === JavaParser.EXTENDS || _la === JavaParser.SUPER)) {
-					this._errHandler.recoverInline(this);
-					} else {
-						if (this._input.LA(1) === Token.EOF) {
-							this.matchedEOF = true;
+						this.state = 658;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								{
+									this.state = 655;
+									this.annotation();
+								}
+							}
+							this.state = 660;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+						}
+						this.state = 661;
+						this.match(JavaParser.QUESTION);
+						this.state = 664;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.EXTENDS || _la === JavaParser.SUPER) {
+							{
+								this.state = 662;
+								_la = this._input.LA(1);
+								if (!(_la === JavaParser.EXTENDS || _la === JavaParser.SUPER)) {
+									this._errHandler.recoverInline(this);
+								} else {
+									if (this._input.LA(1) === Token.EOF) {
+										this.matchedEOF = true;
+									}
+
+									this._errHandler.reportMatch(this);
+									this.consume();
+								}
+								this.state = 663;
+								this.typeType();
+							}
 						}
 
-						this._errHandler.reportMatch(this);
-						this.consume();
 					}
-					this.state = 663;
-					this.typeType();
-					}
-				}
-
-				}
-				break;
+					break;
 			}
 		}
 		catch (re) {
@@ -2888,24 +2888,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 668;
-			this.qualifiedName();
-			this.state = 673;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 669;
-				this.match(JavaParser.COMMA);
-				this.state = 670;
+				this.state = 668;
 				this.qualifiedName();
-				}
-				}
-				this.state = 675;
+				this.state = 673;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 669;
+							this.match(JavaParser.COMMA);
+							this.state = 670;
+							this.qualifiedName();
+						}
+					}
+					this.state = 675;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -2930,20 +2930,20 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 676;
-			this.match(JavaParser.LPAREN);
-			this.state = 678;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG))) !== 0) || _la === JavaParser.SHORT || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				this.state = 677;
-				this.formalParameterList();
+				this.state = 676;
+				this.match(JavaParser.LPAREN);
+				this.state = 678;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG))) !== 0) || _la === JavaParser.SHORT || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+					{
+						this.state = 677;
+						this.formalParameterList();
+					}
 				}
-			}
 
-			this.state = 680;
-			this.match(JavaParser.RPAREN);
+				this.state = 680;
+				this.match(JavaParser.RPAREN);
 			}
 		}
 		catch (re) {
@@ -2969,52 +2969,52 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.state = 695;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 76, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 682;
-				this.formalParameter();
-				this.state = 687;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 683;
-						this.match(JavaParser.COMMA);
-						this.state = 684;
-						this.formalParameter();
-						}
-						}
-					}
-					this.state = 689;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
-				}
-				this.state = 692;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.COMMA) {
+			switch (this.interpreter.adaptivePredict(this._input, 76, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 690;
-					this.match(JavaParser.COMMA);
-					this.state = 691;
-					this.lastFormalParameter();
+						this.state = 682;
+						this.formalParameter();
+						this.state = 687;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 683;
+										this.match(JavaParser.COMMA);
+										this.state = 684;
+										this.formalParameter();
+									}
+								}
+							}
+							this.state = 689;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
+						}
+						this.state = 692;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.COMMA) {
+							{
+								this.state = 690;
+								this.match(JavaParser.COMMA);
+								this.state = 691;
+								this.lastFormalParameter();
+							}
+						}
+
 					}
-				}
+					break;
 
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 694;
-				this.lastFormalParameter();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 694;
+						this.lastFormalParameter();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -3039,26 +3039,26 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 700;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 77, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 697;
-					this.variableModifier();
-					}
-					}
-				}
-				this.state = 702;
+				this.state = 700;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 77, this._ctx);
-			}
-			this.state = 703;
-			this.typeType();
-			this.state = 704;
-			this.variableDeclaratorId();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 697;
+								this.variableModifier();
+							}
+						}
+					}
+					this.state = 702;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 77, this._ctx);
+				}
+				this.state = 703;
+				this.typeType();
+				this.state = 704;
+				this.variableDeclaratorId();
 			}
 		}
 		catch (re) {
@@ -3084,42 +3084,42 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 709;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 78, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 706;
-					this.variableModifier();
-					}
-					}
-				}
-				this.state = 711;
+				this.state = 709;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 78, this._ctx);
-			}
-			this.state = 712;
-			this.typeType();
-			this.state = 716;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				{
-				this.state = 713;
-				this.annotation();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 706;
+								this.variableModifier();
+							}
+						}
+					}
+					this.state = 711;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 78, this._ctx);
 				}
-				}
-				this.state = 718;
+				this.state = 712;
+				this.typeType();
+				this.state = 716;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 719;
-			this.match(JavaParser.ELLIPSIS);
-			this.state = 720;
-			this.variableDeclaratorId();
+				while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+					{
+						{
+							this.state = 713;
+							this.annotation();
+						}
+					}
+					this.state = 718;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 719;
+				this.match(JavaParser.ELLIPSIS);
+				this.state = 720;
+				this.variableDeclaratorId();
 			}
 		}
 		catch (re) {
@@ -3144,26 +3144,26 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 722;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 727;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 80, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 723;
-					this.match(JavaParser.DOT);
-					this.state = 724;
-					this.match(JavaParser.IDENTIFIER);
-					}
-					}
-				}
-				this.state = 729;
+				this.state = 722;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 727;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 80, this._ctx);
-			}
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 723;
+								this.match(JavaParser.DOT);
+								this.state = 724;
+								this.match(JavaParser.IDENTIFIER);
+							}
+						}
+					}
+					this.state = 729;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 80, this._ctx);
+				}
 			}
 		}
 		catch (re) {
@@ -3188,54 +3188,54 @@ export class JavaParser extends Parser {
 			this.state = 736;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.DECIMAL_LITERAL:
-			case JavaParser.HEX_LITERAL:
-			case JavaParser.OCT_LITERAL:
-			case JavaParser.BINARY_LITERAL:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 730;
-				this.integerLiteral();
-				}
-				break;
-			case JavaParser.FLOAT_LITERAL:
-			case JavaParser.HEX_FLOAT_LITERAL:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 731;
-				this.floatLiteral();
-				}
-				break;
-			case JavaParser.CHAR_LITERAL:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 732;
-				this.match(JavaParser.CHAR_LITERAL);
-				}
-				break;
-			case JavaParser.STRING_LITERAL:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 733;
-				this.match(JavaParser.STRING_LITERAL);
-				}
-				break;
-			case JavaParser.BOOL_LITERAL:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 734;
-				this.match(JavaParser.BOOL_LITERAL);
-				}
-				break;
-			case JavaParser.NULL_LITERAL:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 735;
-				this.match(JavaParser.NULL_LITERAL);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.DECIMAL_LITERAL:
+				case JavaParser.HEX_LITERAL:
+				case JavaParser.OCT_LITERAL:
+				case JavaParser.BINARY_LITERAL:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 730;
+						this.integerLiteral();
+					}
+					break;
+				case JavaParser.FLOAT_LITERAL:
+				case JavaParser.HEX_FLOAT_LITERAL:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 731;
+						this.floatLiteral();
+					}
+					break;
+				case JavaParser.CHAR_LITERAL:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 732;
+						this.match(JavaParser.CHAR_LITERAL);
+					}
+					break;
+				case JavaParser.STRING_LITERAL:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 733;
+						this.match(JavaParser.STRING_LITERAL);
+					}
+					break;
+				case JavaParser.BOOL_LITERAL:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 734;
+						this.match(JavaParser.BOOL_LITERAL);
+					}
+					break;
+				case JavaParser.NULL_LITERAL:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 735;
+						this.match(JavaParser.NULL_LITERAL);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -3260,18 +3260,18 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 738;
-			_la = this._input.LA(1);
-			if (!(((((_la - 51)) & ~0x1F) === 0 && ((1 << (_la - 51)) & ((1 << (JavaParser.DECIMAL_LITERAL - 51)) | (1 << (JavaParser.HEX_LITERAL - 51)) | (1 << (JavaParser.OCT_LITERAL - 51)) | (1 << (JavaParser.BINARY_LITERAL - 51)))) !== 0))) {
-			this._errHandler.recoverInline(this);
-			} else {
-				if (this._input.LA(1) === Token.EOF) {
-					this.matchedEOF = true;
-				}
+				this.state = 738;
+				_la = this._input.LA(1);
+				if (!(((((_la - 51)) & ~0x1F) === 0 && ((1 << (_la - 51)) & ((1 << (JavaParser.DECIMAL_LITERAL - 51)) | (1 << (JavaParser.HEX_LITERAL - 51)) | (1 << (JavaParser.OCT_LITERAL - 51)) | (1 << (JavaParser.BINARY_LITERAL - 51)))) !== 0))) {
+					this._errHandler.recoverInline(this);
+				} else {
+					if (this._input.LA(1) === Token.EOF) {
+						this.matchedEOF = true;
+					}
 
-				this._errHandler.reportMatch(this);
-				this.consume();
-			}
+					this._errHandler.reportMatch(this);
+					this.consume();
+				}
 			}
 		}
 		catch (re) {
@@ -3296,18 +3296,18 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 740;
-			_la = this._input.LA(1);
-			if (!(_la === JavaParser.FLOAT_LITERAL || _la === JavaParser.HEX_FLOAT_LITERAL)) {
-			this._errHandler.recoverInline(this);
-			} else {
-				if (this._input.LA(1) === Token.EOF) {
-					this.matchedEOF = true;
-				}
+				this.state = 740;
+				_la = this._input.LA(1);
+				if (!(_la === JavaParser.FLOAT_LITERAL || _la === JavaParser.HEX_FLOAT_LITERAL)) {
+					this._errHandler.recoverInline(this);
+				} else {
+					if (this._input.LA(1) === Token.EOF) {
+						this.matchedEOF = true;
+					}
 
-				this._errHandler.reportMatch(this);
-				this.consume();
-			}
+					this._errHandler.reportMatch(this);
+					this.consume();
+				}
 			}
 		}
 		catch (re) {
@@ -3332,26 +3332,26 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 746;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.IDENTIFIER) {
-				{
-				{
-				this.state = 742;
-				this.match(JavaParser.IDENTIFIER);
-				this.state = 743;
-				this.match(JavaParser.DOT);
-				}
-				}
-				this.state = 748;
+				this.state = 746;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 749;
-			this.match(JavaParser.AT);
-			this.state = 750;
-			this.match(JavaParser.IDENTIFIER);
+				while (_la === JavaParser.IDENTIFIER) {
+					{
+						{
+							this.state = 742;
+							this.match(JavaParser.IDENTIFIER);
+							this.state = 743;
+							this.match(JavaParser.DOT);
+						}
+					}
+					this.state = 748;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 749;
+				this.match(JavaParser.AT);
+				this.state = 750;
+				this.match(JavaParser.IDENTIFIER);
 			}
 		}
 		catch (re) {
@@ -3376,53 +3376,53 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 755;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 83, this._ctx) ) {
-			case 1:
-				{
-				this.state = 752;
-				this.match(JavaParser.AT);
-				this.state = 753;
-				this.qualifiedName();
-				}
-				break;
-
-			case 2:
-				{
-				this.state = 754;
-				this.altAnnotationQualifiedName();
-				}
-				break;
-			}
-			this.state = 763;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LPAREN) {
-				{
-				this.state = 757;
-				this.match(JavaParser.LPAREN);
-				this.state = 760;
+				this.state = 755;
 				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 84, this._ctx) ) {
-				case 1:
-					{
-					this.state = 758;
-					this.elementValuePairs();
-					}
-					break;
+				switch (this.interpreter.adaptivePredict(this._input, 83, this._ctx)) {
+					case 1:
+						{
+							this.state = 752;
+							this.match(JavaParser.AT);
+							this.state = 753;
+							this.qualifiedName();
+						}
+						break;
 
-				case 2:
+					case 2:
+						{
+							this.state = 754;
+							this.altAnnotationQualifiedName();
+						}
+						break;
+				}
+				this.state = 763;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LPAREN) {
 					{
-					this.state = 759;
-					this.elementValue();
+						this.state = 757;
+						this.match(JavaParser.LPAREN);
+						this.state = 760;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 84, this._ctx)) {
+							case 1:
+								{
+									this.state = 758;
+									this.elementValuePairs();
+								}
+								break;
+
+							case 2:
+								{
+									this.state = 759;
+									this.elementValue();
+								}
+								break;
+						}
+						this.state = 762;
+						this.match(JavaParser.RPAREN);
 					}
-					break;
 				}
-				this.state = 762;
-				this.match(JavaParser.RPAREN);
-				}
-			}
 
 			}
 		}
@@ -3448,24 +3448,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 765;
-			this.elementValuePair();
-			this.state = 770;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 766;
-				this.match(JavaParser.COMMA);
-				this.state = 767;
+				this.state = 765;
 				this.elementValuePair();
-				}
-				}
-				this.state = 772;
+				this.state = 770;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 766;
+							this.match(JavaParser.COMMA);
+							this.state = 767;
+							this.elementValuePair();
+						}
+					}
+					this.state = 772;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -3489,12 +3489,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 773;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 774;
-			this.match(JavaParser.ASSIGN);
-			this.state = 775;
-			this.elementValue();
+				this.state = 773;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 774;
+				this.match(JavaParser.ASSIGN);
+				this.state = 775;
+				this.elementValue();
 			}
 		}
 		catch (re) {
@@ -3518,30 +3518,30 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 780;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 87, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 777;
-				this.expression(0);
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 87, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 777;
+						this.expression(0);
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 778;
-				this.annotation();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 778;
+						this.annotation();
+					}
+					break;
 
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 779;
-				this.elementValueArrayInitializer();
-				}
-				break;
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 779;
+						this.elementValueArrayInitializer();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -3567,48 +3567,48 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 782;
-			this.match(JavaParser.LBRACE);
-			this.state = 791;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)) | (1 << (JavaParser.LBRACE - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				this.state = 783;
-				this.elementValue();
-				this.state = 788;
+				this.state = 782;
+				this.match(JavaParser.LBRACE);
+				this.state = 791;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 88, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 784;
-						this.match(JavaParser.COMMA);
-						this.state = 785;
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)) | (1 << (JavaParser.LBRACE - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+					{
+						this.state = 783;
 						this.elementValue();
-						}
+						this.state = 788;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 88, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 784;
+										this.match(JavaParser.COMMA);
+										this.state = 785;
+										this.elementValue();
+									}
+								}
+							}
+							this.state = 790;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 88, this._ctx);
 						}
 					}
-					this.state = 790;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 88, this._ctx);
 				}
-				}
-			}
 
-			this.state = 794;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.COMMA) {
-				{
-				this.state = 793;
-				this.match(JavaParser.COMMA);
+				this.state = 794;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.COMMA) {
+					{
+						this.state = 793;
+						this.match(JavaParser.COMMA);
+					}
 				}
-			}
 
-			this.state = 796;
-			this.match(JavaParser.RBRACE);
+				this.state = 796;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -3632,14 +3632,14 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 798;
-			this.match(JavaParser.AT);
-			this.state = 799;
-			this.match(JavaParser.INTERFACE);
-			this.state = 800;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 801;
-			this.annotationTypeBody();
+				this.state = 798;
+				this.match(JavaParser.AT);
+				this.state = 799;
+				this.match(JavaParser.INTERFACE);
+				this.state = 800;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 801;
+				this.annotationTypeBody();
 			}
 		}
 		catch (re) {
@@ -3664,24 +3664,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 803;
-			this.match(JavaParser.LBRACE);
-			this.state = 807;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOLATILE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				{
-				this.state = 804;
-				this.annotationTypeElementDeclaration();
-				}
-				}
-				this.state = 809;
+				this.state = 803;
+				this.match(JavaParser.LBRACE);
+				this.state = 807;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 810;
-			this.match(JavaParser.RBRACE);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.ENUM) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NATIVE))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.TRANSIENT - 33)) | (1 << (JavaParser.VOLATILE - 33)))) !== 0) || _la === JavaParser.SEMI || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+					{
+						{
+							this.state = 804;
+							this.annotationTypeElementDeclaration();
+						}
+					}
+					this.state = 809;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 810;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -3707,61 +3707,61 @@ export class JavaParser extends Parser {
 			this.state = 820;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.ABSTRACT:
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.CLASS:
-			case JavaParser.DOUBLE:
-			case JavaParser.ENUM:
-			case JavaParser.FINAL:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.INTERFACE:
-			case JavaParser.LONG:
-			case JavaParser.NATIVE:
-			case JavaParser.PRIVATE:
-			case JavaParser.PROTECTED:
-			case JavaParser.PUBLIC:
-			case JavaParser.SHORT:
-			case JavaParser.STATIC:
-			case JavaParser.STRICTFP:
-			case JavaParser.SYNCHRONIZED:
-			case JavaParser.TRANSIENT:
-			case JavaParser.VOLATILE:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 815;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 92, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 812;
-						this.modifier();
+				case JavaParser.ABSTRACT:
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.CLASS:
+				case JavaParser.DOUBLE:
+				case JavaParser.ENUM:
+				case JavaParser.FINAL:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.INTERFACE:
+				case JavaParser.LONG:
+				case JavaParser.NATIVE:
+				case JavaParser.PRIVATE:
+				case JavaParser.PROTECTED:
+				case JavaParser.PUBLIC:
+				case JavaParser.SHORT:
+				case JavaParser.STATIC:
+				case JavaParser.STRICTFP:
+				case JavaParser.SYNCHRONIZED:
+				case JavaParser.TRANSIENT:
+				case JavaParser.VOLATILE:
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 815;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 92, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 812;
+										this.modifier();
+									}
+								}
+							}
+							this.state = 817;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 92, this._ctx);
 						}
-						}
+						this.state = 818;
+						this.annotationTypeElementRest();
 					}
-					this.state = 817;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 92, this._ctx);
-				}
-				this.state = 818;
-				this.annotationTypeElementRest();
-				}
-				break;
-			case JavaParser.SEMI:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 819;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+					break;
+				case JavaParser.SEMI:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 819;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -3785,90 +3785,90 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 842;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 98, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 822;
-				this.typeType();
-				this.state = 823;
-				this.annotationMethodOrConstantRest();
-				this.state = 824;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 826;
-				this.classDeclaration();
-				this.state = 828;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 94, this._ctx) ) {
+			switch (this.interpreter.adaptivePredict(this._input, 98, this._ctx)) {
 				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 827;
-					this.match(JavaParser.SEMI);
+						this.state = 822;
+						this.typeType();
+						this.state = 823;
+						this.annotationMethodOrConstantRest();
+						this.state = 824;
+						this.match(JavaParser.SEMI);
 					}
 					break;
-				}
-				}
-				break;
 
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 830;
-				this.interfaceDeclaration();
-				this.state = 832;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 95, this._ctx) ) {
-				case 1:
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 831;
-					this.match(JavaParser.SEMI);
+						this.state = 826;
+						this.classDeclaration();
+						this.state = 828;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 94, this._ctx)) {
+							case 1:
+								{
+									this.state = 827;
+									this.match(JavaParser.SEMI);
+								}
+								break;
+						}
 					}
 					break;
-				}
-				}
-				break;
 
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 834;
-				this.enumDeclaration();
-				this.state = 836;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 96, this._ctx) ) {
-				case 1:
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
 					{
-					this.state = 835;
-					this.match(JavaParser.SEMI);
+						this.state = 830;
+						this.interfaceDeclaration();
+						this.state = 832;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 95, this._ctx)) {
+							case 1:
+								{
+									this.state = 831;
+									this.match(JavaParser.SEMI);
+								}
+								break;
+						}
 					}
 					break;
-				}
-				}
-				break;
 
-			case 5:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 838;
-				this.annotationTypeDeclaration();
-				this.state = 840;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 97, this._ctx) ) {
-				case 1:
+				case 4:
+					this.enterOuterAlt(_localctx, 4);
 					{
-					this.state = 839;
-					this.match(JavaParser.SEMI);
+						this.state = 834;
+						this.enumDeclaration();
+						this.state = 836;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 96, this._ctx)) {
+							case 1:
+								{
+									this.state = 835;
+									this.match(JavaParser.SEMI);
+								}
+								break;
+						}
 					}
 					break;
-				}
-				}
-				break;
+
+				case 5:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 838;
+						this.annotationTypeDeclaration();
+						this.state = 840;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 97, this._ctx)) {
+							case 1:
+								{
+									this.state = 839;
+									this.match(JavaParser.SEMI);
+								}
+								break;
+						}
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -3892,22 +3892,22 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 846;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 99, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 844;
-				this.annotationMethodRest();
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 99, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 844;
+						this.annotationMethodRest();
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 845;
-				this.annotationConstantRest();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 845;
+						this.annotationConstantRest();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -3932,21 +3932,21 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 848;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 849;
-			this.match(JavaParser.LPAREN);
-			this.state = 850;
-			this.match(JavaParser.RPAREN);
-			this.state = 852;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.DEFAULT) {
-				{
-				this.state = 851;
-				this.defaultValue();
+				this.state = 848;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 849;
+				this.match(JavaParser.LPAREN);
+				this.state = 850;
+				this.match(JavaParser.RPAREN);
+				this.state = 852;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.DEFAULT) {
+					{
+						this.state = 851;
+						this.defaultValue();
+					}
 				}
-			}
 
 			}
 		}
@@ -3971,8 +3971,8 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 854;
-			this.variableDeclarators();
+				this.state = 854;
+				this.variableDeclarators();
 			}
 		}
 		catch (re) {
@@ -3996,10 +3996,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 856;
-			this.match(JavaParser.DEFAULT);
-			this.state = 857;
-			this.elementValue();
+				this.state = 856;
+				this.match(JavaParser.DEFAULT);
+				this.state = 857;
+				this.elementValue();
 			}
 		}
 		catch (re) {
@@ -4024,24 +4024,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 859;
-			this.match(JavaParser.LBRACE);
-			this.state = 863;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.ASSERT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BREAK) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.CONTINUE) | (1 << JavaParser.DO) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.FOR) | (1 << JavaParser.IF) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.RETURN - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SUPER - 33)) | (1 << (JavaParser.SWITCH - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.THIS - 33)) | (1 << (JavaParser.THROW - 33)) | (1 << (JavaParser.TRY - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.WHILE - 33)) | (1 << (JavaParser.DECIMAL_LITERAL - 33)) | (1 << (JavaParser.HEX_LITERAL - 33)) | (1 << (JavaParser.OCT_LITERAL - 33)) | (1 << (JavaParser.BINARY_LITERAL - 33)) | (1 << (JavaParser.FLOAT_LITERAL - 33)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 33)) | (1 << (JavaParser.BOOL_LITERAL - 33)) | (1 << (JavaParser.CHAR_LITERAL - 33)) | (1 << (JavaParser.STRING_LITERAL - 33)) | (1 << (JavaParser.NULL_LITERAL - 33)) | (1 << (JavaParser.LPAREN - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || ((((_la - 67)) & ~0x1F) === 0 && ((1 << (_la - 67)) & ((1 << (JavaParser.SEMI - 67)) | (1 << (JavaParser.LT - 67)) | (1 << (JavaParser.BANG - 67)) | (1 << (JavaParser.TILDE - 67)) | (1 << (JavaParser.INC - 67)) | (1 << (JavaParser.DEC - 67)) | (1 << (JavaParser.ADD - 67)) | (1 << (JavaParser.SUB - 67)))) !== 0) || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
-				{
-				{
-				this.state = 860;
-				this.blockStatement();
-				}
-				}
-				this.state = 865;
+				this.state = 859;
+				this.match(JavaParser.LBRACE);
+				this.state = 863;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 866;
-			this.match(JavaParser.RBRACE);
+				while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.ASSERT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BREAK) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.CONTINUE) | (1 << JavaParser.DO) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.FOR) | (1 << JavaParser.IF) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.RETURN - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SUPER - 33)) | (1 << (JavaParser.SWITCH - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.THIS - 33)) | (1 << (JavaParser.THROW - 33)) | (1 << (JavaParser.TRY - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.WHILE - 33)) | (1 << (JavaParser.DECIMAL_LITERAL - 33)) | (1 << (JavaParser.HEX_LITERAL - 33)) | (1 << (JavaParser.OCT_LITERAL - 33)) | (1 << (JavaParser.BINARY_LITERAL - 33)) | (1 << (JavaParser.FLOAT_LITERAL - 33)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 33)) | (1 << (JavaParser.BOOL_LITERAL - 33)) | (1 << (JavaParser.CHAR_LITERAL - 33)) | (1 << (JavaParser.STRING_LITERAL - 33)) | (1 << (JavaParser.NULL_LITERAL - 33)) | (1 << (JavaParser.LPAREN - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || ((((_la - 67)) & ~0x1F) === 0 && ((1 << (_la - 67)) & ((1 << (JavaParser.SEMI - 67)) | (1 << (JavaParser.LT - 67)) | (1 << (JavaParser.BANG - 67)) | (1 << (JavaParser.TILDE - 67)) | (1 << (JavaParser.INC - 67)) | (1 << (JavaParser.DEC - 67)) | (1 << (JavaParser.ADD - 67)) | (1 << (JavaParser.SUB - 67)))) !== 0) || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0)) {
+					{
+						{
+							this.state = 860;
+							this.blockStatement();
+						}
+					}
+					this.state = 865;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 866;
+				this.match(JavaParser.RBRACE);
 			}
 		}
 		catch (re) {
@@ -4065,32 +4065,32 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 873;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 102, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 868;
-				this.localVariableDeclaration();
-				this.state = 869;
-				this.match(JavaParser.SEMI);
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 102, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 868;
+						this.localVariableDeclaration();
+						this.state = 869;
+						this.match(JavaParser.SEMI);
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 871;
-				this.statement();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 871;
+						this.statement();
+					}
+					break;
 
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 872;
-				this.localTypeDeclaration();
-				}
-				break;
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 872;
+						this.localTypeDeclaration();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -4115,26 +4115,26 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 878;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 103, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 875;
-					this.variableModifier();
-					}
-					}
-				}
-				this.state = 880;
+				this.state = 878;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 103, this._ctx);
-			}
-			this.state = 881;
-			this.typeType();
-			this.state = 882;
-			this.variableDeclarators();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 875;
+								this.variableModifier();
+							}
+						}
+					}
+					this.state = 880;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 103, this._ctx);
+				}
+				this.state = 881;
+				this.typeType();
+				this.state = 882;
+				this.variableDeclarators();
 			}
 		}
 		catch (re) {
@@ -4160,62 +4160,62 @@ export class JavaParser extends Parser {
 			this.state = 895;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.ABSTRACT:
-			case JavaParser.CLASS:
-			case JavaParser.FINAL:
-			case JavaParser.INTERFACE:
-			case JavaParser.PRIVATE:
-			case JavaParser.PROTECTED:
-			case JavaParser.PUBLIC:
-			case JavaParser.STATIC:
-			case JavaParser.STRICTFP:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 887;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.ABSTRACT || _la === JavaParser.FINAL || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-					{
-					{
-					this.state = 884;
-					this.classOrInterfaceModifier();
-					}
-					}
-					this.state = 889;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 892;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
+				case JavaParser.ABSTRACT:
 				case JavaParser.CLASS:
+				case JavaParser.FINAL:
+				case JavaParser.INTERFACE:
+				case JavaParser.PRIVATE:
+				case JavaParser.PROTECTED:
+				case JavaParser.PUBLIC:
+				case JavaParser.STATIC:
+				case JavaParser.STRICTFP:
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 890;
-					this.classDeclaration();
+						this.state = 887;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						while (_la === JavaParser.ABSTRACT || _la === JavaParser.FINAL || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								{
+									this.state = 884;
+									this.classOrInterfaceModifier();
+								}
+							}
+							this.state = 889;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+						}
+						this.state = 892;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+							case JavaParser.CLASS:
+								{
+									this.state = 890;
+									this.classDeclaration();
+								}
+								break;
+							case JavaParser.INTERFACE:
+								{
+									this.state = 891;
+									this.interfaceDeclaration();
+								}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
 					}
 					break;
-				case JavaParser.INTERFACE:
+				case JavaParser.SEMI:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 891;
-					this.interfaceDeclaration();
+						this.state = 894;
+						this.match(JavaParser.SEMI);
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
-				}
-				}
-				break;
-			case JavaParser.SEMI:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 894;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -4241,358 +4241,358 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.state = 1002;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 119, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 897;
-				_localctx._blockLabel = this.block();
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 898;
-				this.match(JavaParser.ASSERT);
-				this.state = 899;
-				this.expression(0);
-				this.state = 902;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.COLON) {
-					{
-					this.state = 900;
-					this.match(JavaParser.COLON);
-					this.state = 901;
-					this.expression(0);
-					}
-				}
-
-				this.state = 904;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 906;
-				this.match(JavaParser.IF);
-				this.state = 907;
-				this.parExpression();
-				this.state = 908;
-				this.statement();
-				this.state = 911;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 108, this._ctx) ) {
+			switch (this.interpreter.adaptivePredict(this._input, 119, this._ctx)) {
 				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 909;
-					this.match(JavaParser.ELSE);
-					this.state = 910;
-					this.statement();
+						this.state = 897;
+						_localctx._blockLabel = this.block();
 					}
 					break;
-				}
-				}
-				break;
 
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 913;
-				this.match(JavaParser.FOR);
-				this.state = 914;
-				this.match(JavaParser.LPAREN);
-				this.state = 915;
-				this.forControl();
-				this.state = 916;
-				this.match(JavaParser.RPAREN);
-				this.state = 917;
-				this.statement();
-				}
-				break;
-
-			case 5:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 919;
-				this.match(JavaParser.WHILE);
-				this.state = 920;
-				this.parExpression();
-				this.state = 921;
-				this.statement();
-				}
-				break;
-
-			case 6:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 923;
-				this.match(JavaParser.DO);
-				this.state = 924;
-				this.statement();
-				this.state = 925;
-				this.match(JavaParser.WHILE);
-				this.state = 926;
-				this.parExpression();
-				this.state = 927;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 7:
-				this.enterOuterAlt(_localctx, 7);
-				{
-				this.state = 929;
-				this.match(JavaParser.TRY);
-				this.state = 930;
-				this.block();
-				this.state = 940;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case JavaParser.CATCH:
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 932;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					do {
-						{
-						{
-						this.state = 931;
-						this.catchClause();
-						}
-						}
-						this.state = 934;
+						this.state = 898;
+						this.match(JavaParser.ASSERT);
+						this.state = 899;
+						this.expression(0);
+						this.state = 902;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
-					} while (_la === JavaParser.CATCH);
-					this.state = 937;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					if (_la === JavaParser.FINALLY) {
-						{
-						this.state = 936;
-						this.finallyBlock();
+						if (_la === JavaParser.COLON) {
+							{
+								this.state = 900;
+								this.match(JavaParser.COLON);
+								this.state = 901;
+								this.expression(0);
+							}
+						}
+
+						this.state = 904;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 906;
+						this.match(JavaParser.IF);
+						this.state = 907;
+						this.parExpression();
+						this.state = 908;
+						this.statement();
+						this.state = 911;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 108, this._ctx)) {
+							case 1:
+								{
+									this.state = 909;
+									this.match(JavaParser.ELSE);
+									this.state = 910;
+									this.statement();
+								}
+								break;
 						}
 					}
+					break;
+
+				case 4:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 913;
+						this.match(JavaParser.FOR);
+						this.state = 914;
+						this.match(JavaParser.LPAREN);
+						this.state = 915;
+						this.forControl();
+						this.state = 916;
+						this.match(JavaParser.RPAREN);
+						this.state = 917;
+						this.statement();
+					}
+					break;
+
+				case 5:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 919;
+						this.match(JavaParser.WHILE);
+						this.state = 920;
+						this.parExpression();
+						this.state = 921;
+						this.statement();
+					}
+					break;
+
+				case 6:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 923;
+						this.match(JavaParser.DO);
+						this.state = 924;
+						this.statement();
+						this.state = 925;
+						this.match(JavaParser.WHILE);
+						this.state = 926;
+						this.parExpression();
+						this.state = 927;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+
+				case 7:
+					this.enterOuterAlt(_localctx, 7);
+					{
+						this.state = 929;
+						this.match(JavaParser.TRY);
+						this.state = 930;
+						this.block();
+						this.state = 940;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+							case JavaParser.CATCH:
+								{
+									this.state = 932;
+									this._errHandler.sync(this);
+									_la = this._input.LA(1);
+									do {
+										{
+											{
+												this.state = 931;
+												this.catchClause();
+											}
+										}
+										this.state = 934;
+										this._errHandler.sync(this);
+										_la = this._input.LA(1);
+									} while (_la === JavaParser.CATCH);
+									this.state = 937;
+									this._errHandler.sync(this);
+									_la = this._input.LA(1);
+									if (_la === JavaParser.FINALLY) {
+										{
+											this.state = 936;
+											this.finallyBlock();
+										}
+									}
+
+								}
+								break;
+							case JavaParser.FINALLY:
+								{
+									this.state = 939;
+									this.finallyBlock();
+								}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
+					}
+					break;
+
+				case 8:
+					this.enterOuterAlt(_localctx, 8);
+					{
+						this.state = 942;
+						this.match(JavaParser.TRY);
+						this.state = 943;
+						this.resourceSpecification();
+						this.state = 944;
+						this.block();
+						this.state = 948;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						while (_la === JavaParser.CATCH) {
+							{
+								{
+									this.state = 945;
+									this.catchClause();
+								}
+							}
+							this.state = 950;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+						}
+						this.state = 952;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.FINALLY) {
+							{
+								this.state = 951;
+								this.finallyBlock();
+							}
+						}
 
 					}
 					break;
-				case JavaParser.FINALLY:
+
+				case 9:
+					this.enterOuterAlt(_localctx, 9);
 					{
-					this.state = 939;
-					this.finallyBlock();
+						this.state = 954;
+						this.match(JavaParser.SWITCH);
+						this.state = 955;
+						this.parExpression();
+						this.state = 956;
+						this.match(JavaParser.LBRACE);
+						this.state = 960;
+						this._errHandler.sync(this);
+						_alt = this.interpreter.adaptivePredict(this._input, 114, this._ctx);
+						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+							if (_alt === 1) {
+								{
+									{
+										this.state = 957;
+										this.switchBlockStatementGroup();
+									}
+								}
+							}
+							this.state = 962;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 114, this._ctx);
+						}
+						this.state = 966;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						while (_la === JavaParser.CASE || _la === JavaParser.DEFAULT) {
+							{
+								{
+									this.state = 963;
+									this.switchLabel();
+								}
+							}
+							this.state = 968;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+						}
+						this.state = 969;
+						this.match(JavaParser.RBRACE);
 					}
 					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				break;
 
-			case 8:
-				this.enterOuterAlt(_localctx, 8);
-				{
-				this.state = 942;
-				this.match(JavaParser.TRY);
-				this.state = 943;
-				this.resourceSpecification();
-				this.state = 944;
-				this.block();
-				this.state = 948;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.CATCH) {
+				case 10:
+					this.enterOuterAlt(_localctx, 10);
 					{
-					{
-					this.state = 945;
-					this.catchClause();
+						this.state = 971;
+						this.match(JavaParser.SYNCHRONIZED);
+						this.state = 972;
+						this.parExpression();
+						this.state = 973;
+						this.block();
 					}
-					}
-					this.state = 950;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 952;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.FINALLY) {
-					{
-					this.state = 951;
-					this.finallyBlock();
-					}
-				}
+					break;
 
-				}
-				break;
-
-			case 9:
-				this.enterOuterAlt(_localctx, 9);
-				{
-				this.state = 954;
-				this.match(JavaParser.SWITCH);
-				this.state = 955;
-				this.parExpression();
-				this.state = 956;
-				this.match(JavaParser.LBRACE);
-				this.state = 960;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 114, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 957;
-						this.switchBlockStatementGroup();
+				case 11:
+					this.enterOuterAlt(_localctx, 11);
+					{
+						this.state = 975;
+						this.match(JavaParser.RETURN);
+						this.state = 977;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 976;
+								this.expression(0);
+							}
 						}
+
+						this.state = 979;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+
+				case 12:
+					this.enterOuterAlt(_localctx, 12);
+					{
+						this.state = 980;
+						this.match(JavaParser.THROW);
+						this.state = 981;
+						this.expression(0);
+						this.state = 982;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+
+				case 13:
+					this.enterOuterAlt(_localctx, 13);
+					{
+						this.state = 984;
+						this.match(JavaParser.BREAK);
+						this.state = 986;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 985;
+								this.match(JavaParser.IDENTIFIER);
+							}
 						}
+
+						this.state = 988;
+						this.match(JavaParser.SEMI);
 					}
-					this.state = 962;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 114, this._ctx);
-				}
-				this.state = 966;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.CASE || _la === JavaParser.DEFAULT) {
+					break;
+
+				case 14:
+					this.enterOuterAlt(_localctx, 14);
 					{
+						this.state = 989;
+						this.match(JavaParser.CONTINUE);
+						this.state = 991;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 990;
+								this.match(JavaParser.IDENTIFIER);
+							}
+						}
+
+						this.state = 993;
+						this.match(JavaParser.SEMI);
+					}
+					break;
+
+				case 15:
+					this.enterOuterAlt(_localctx, 15);
 					{
-					this.state = 963;
-					this.switchLabel();
+						this.state = 994;
+						this.match(JavaParser.SEMI);
 					}
-					}
-					this.state = 968;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 969;
-				this.match(JavaParser.RBRACE);
-				}
-				break;
+					break;
 
-			case 10:
-				this.enterOuterAlt(_localctx, 10);
-				{
-				this.state = 971;
-				this.match(JavaParser.SYNCHRONIZED);
-				this.state = 972;
-				this.parExpression();
-				this.state = 973;
-				this.block();
-				}
-				break;
-
-			case 11:
-				this.enterOuterAlt(_localctx, 11);
-				{
-				this.state = 975;
-				this.match(JavaParser.RETURN);
-				this.state = 977;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+				case 16:
+					this.enterOuterAlt(_localctx, 16);
 					{
-					this.state = 976;
-					this.expression(0);
+						this.state = 995;
+						this.comment();
 					}
-				}
+					break;
 
-				this.state = 979;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 12:
-				this.enterOuterAlt(_localctx, 12);
-				{
-				this.state = 980;
-				this.match(JavaParser.THROW);
-				this.state = 981;
-				this.expression(0);
-				this.state = 982;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 13:
-				this.enterOuterAlt(_localctx, 13);
-				{
-				this.state = 984;
-				this.match(JavaParser.BREAK);
-				this.state = 986;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.IDENTIFIER) {
+				case 17:
+					this.enterOuterAlt(_localctx, 17);
 					{
-					this.state = 985;
-					this.match(JavaParser.IDENTIFIER);
+						this.state = 996;
+						_localctx._statementExpression = this.expression(0);
+						this.state = 997;
+						this.match(JavaParser.SEMI);
 					}
-				}
+					break;
 
-				this.state = 988;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 14:
-				this.enterOuterAlt(_localctx, 14);
-				{
-				this.state = 989;
-				this.match(JavaParser.CONTINUE);
-				this.state = 991;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.IDENTIFIER) {
+				case 18:
+					this.enterOuterAlt(_localctx, 18);
 					{
-					this.state = 990;
-					this.match(JavaParser.IDENTIFIER);
+						this.state = 999;
+						_localctx._identifierLabel = this.match(JavaParser.IDENTIFIER);
+						this.state = 1000;
+						this.match(JavaParser.COLON);
+						this.state = 1001;
+						this.statement();
 					}
-				}
-
-				this.state = 993;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 15:
-				this.enterOuterAlt(_localctx, 15);
-				{
-				this.state = 994;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 16:
-				this.enterOuterAlt(_localctx, 16);
-				{
-				this.state = 995;
-				this.comment();
-				}
-				break;
-
-			case 17:
-				this.enterOuterAlt(_localctx, 17);
-				{
-				this.state = 996;
-				_localctx._statementExpression = this.expression(0);
-				this.state = 997;
-				this.match(JavaParser.SEMI);
-				}
-				break;
-
-			case 18:
-				this.enterOuterAlt(_localctx, 18);
-				{
-				this.state = 999;
-				_localctx._identifierLabel = this.match(JavaParser.IDENTIFIER);
-				this.state = 1000;
-				this.match(JavaParser.COLON);
-				this.state = 1001;
-				this.statement();
-				}
-				break;
+					break;
 			}
 		}
 		catch (re) {
@@ -4617,34 +4617,34 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1004;
-			this.match(JavaParser.CATCH);
-			this.state = 1005;
-			this.match(JavaParser.LPAREN);
-			this.state = 1009;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 120, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1006;
-					this.variableModifier();
-					}
-					}
-				}
-				this.state = 1011;
+				this.state = 1004;
+				this.match(JavaParser.CATCH);
+				this.state = 1005;
+				this.match(JavaParser.LPAREN);
+				this.state = 1009;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 120, this._ctx);
-			}
-			this.state = 1012;
-			this.catchType();
-			this.state = 1013;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 1014;
-			this.match(JavaParser.RPAREN);
-			this.state = 1015;
-			this.block();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1006;
+								this.variableModifier();
+							}
+						}
+					}
+					this.state = 1011;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 120, this._ctx);
+				}
+				this.state = 1012;
+				this.catchType();
+				this.state = 1013;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 1014;
+				this.match(JavaParser.RPAREN);
+				this.state = 1015;
+				this.block();
 			}
 		}
 		catch (re) {
@@ -4669,24 +4669,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1017;
-			this.qualifiedName();
-			this.state = 1022;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.BITOR) {
-				{
-				{
-				this.state = 1018;
-				this.match(JavaParser.BITOR);
-				this.state = 1019;
+				this.state = 1017;
 				this.qualifiedName();
-				}
-				}
-				this.state = 1024;
+				this.state = 1022;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.BITOR) {
+					{
+						{
+							this.state = 1018;
+							this.match(JavaParser.BITOR);
+							this.state = 1019;
+							this.qualifiedName();
+						}
+					}
+					this.state = 1024;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -4710,10 +4710,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1025;
-			this.match(JavaParser.FINALLY);
-			this.state = 1026;
-			this.block();
+				this.state = 1025;
+				this.match(JavaParser.FINALLY);
+				this.state = 1026;
+				this.block();
 			}
 		}
 		catch (re) {
@@ -4738,22 +4738,22 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1028;
-			this.match(JavaParser.LPAREN);
-			this.state = 1029;
-			this.resources();
-			this.state = 1031;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.SEMI) {
-				{
-				this.state = 1030;
-				this.match(JavaParser.SEMI);
+				this.state = 1028;
+				this.match(JavaParser.LPAREN);
+				this.state = 1029;
+				this.resources();
+				this.state = 1031;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.SEMI) {
+					{
+						this.state = 1030;
+						this.match(JavaParser.SEMI);
+					}
 				}
-			}
 
-			this.state = 1033;
-			this.match(JavaParser.RPAREN);
+				this.state = 1033;
+				this.match(JavaParser.RPAREN);
 			}
 		}
 		catch (re) {
@@ -4778,26 +4778,26 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1035;
-			this.resource();
-			this.state = 1040;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 123, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1036;
-					this.match(JavaParser.SEMI);
-					this.state = 1037;
-					this.resource();
-					}
-					}
-				}
-				this.state = 1042;
+				this.state = 1035;
+				this.resource();
+				this.state = 1040;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 123, this._ctx);
-			}
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1036;
+								this.match(JavaParser.SEMI);
+								this.state = 1037;
+								this.resource();
+							}
+						}
+					}
+					this.state = 1042;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 123, this._ctx);
+				}
 			}
 		}
 		catch (re) {
@@ -4822,30 +4822,30 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1046;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 124, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1043;
-					this.variableModifier();
-					}
-					}
-				}
-				this.state = 1048;
+				this.state = 1046;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 124, this._ctx);
-			}
-			this.state = 1049;
-			this.classOrInterfaceType();
-			this.state = 1050;
-			this.variableDeclaratorId();
-			this.state = 1051;
-			this.match(JavaParser.ASSIGN);
-			this.state = 1052;
-			this.expression(0);
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1043;
+								this.variableModifier();
+							}
+						}
+					}
+					this.state = 1048;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 124, this._ctx);
+				}
+				this.state = 1049;
+				this.classOrInterfaceType();
+				this.state = 1050;
+				this.variableDeclaratorId();
+				this.state = 1051;
+				this.match(JavaParser.ASSIGN);
+				this.state = 1052;
+				this.expression(0);
 			}
 		}
 		catch (re) {
@@ -4870,34 +4870,34 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1055;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			do {
-				{
-				{
-				this.state = 1054;
-				this.switchLabel();
-				}
-				}
-				this.state = 1057;
+				this.state = 1055;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			} while (_la === JavaParser.CASE || _la === JavaParser.DEFAULT);
-			this.state = 1060;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			do {
-				{
-				{
-				this.state = 1059;
-				this.blockStatement();
-				}
-				}
-				this.state = 1062;
+				do {
+					{
+						{
+							this.state = 1054;
+							this.switchLabel();
+						}
+					}
+					this.state = 1057;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				} while (_la === JavaParser.CASE || _la === JavaParser.DEFAULT);
+				this.state = 1060;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.ASSERT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BREAK) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.CONTINUE) | (1 << JavaParser.DO) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.FOR) | (1 << JavaParser.IF) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.RETURN - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SUPER - 33)) | (1 << (JavaParser.SWITCH - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.THIS - 33)) | (1 << (JavaParser.THROW - 33)) | (1 << (JavaParser.TRY - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.WHILE - 33)) | (1 << (JavaParser.DECIMAL_LITERAL - 33)) | (1 << (JavaParser.HEX_LITERAL - 33)) | (1 << (JavaParser.OCT_LITERAL - 33)) | (1 << (JavaParser.BINARY_LITERAL - 33)) | (1 << (JavaParser.FLOAT_LITERAL - 33)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 33)) | (1 << (JavaParser.BOOL_LITERAL - 33)) | (1 << (JavaParser.CHAR_LITERAL - 33)) | (1 << (JavaParser.STRING_LITERAL - 33)) | (1 << (JavaParser.NULL_LITERAL - 33)) | (1 << (JavaParser.LPAREN - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || ((((_la - 67)) & ~0x1F) === 0 && ((1 << (_la - 67)) & ((1 << (JavaParser.SEMI - 67)) | (1 << (JavaParser.LT - 67)) | (1 << (JavaParser.BANG - 67)) | (1 << (JavaParser.TILDE - 67)) | (1 << (JavaParser.INC - 67)) | (1 << (JavaParser.DEC - 67)) | (1 << (JavaParser.ADD - 67)) | (1 << (JavaParser.SUB - 67)))) !== 0) || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0));
+				do {
+					{
+						{
+							this.state = 1059;
+							this.blockStatement();
+						}
+					}
+					this.state = 1062;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				} while ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.ABSTRACT) | (1 << JavaParser.ASSERT) | (1 << JavaParser.BOOLEAN) | (1 << JavaParser.BREAK) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.CLASS) | (1 << JavaParser.CONTINUE) | (1 << JavaParser.DO) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.FOR) | (1 << JavaParser.IF) | (1 << JavaParser.INT) | (1 << JavaParser.INTERFACE) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & ((1 << (JavaParser.PRIVATE - 33)) | (1 << (JavaParser.PROTECTED - 33)) | (1 << (JavaParser.PUBLIC - 33)) | (1 << (JavaParser.RETURN - 33)) | (1 << (JavaParser.SHORT - 33)) | (1 << (JavaParser.STATIC - 33)) | (1 << (JavaParser.STRICTFP - 33)) | (1 << (JavaParser.SUPER - 33)) | (1 << (JavaParser.SWITCH - 33)) | (1 << (JavaParser.SYNCHRONIZED - 33)) | (1 << (JavaParser.THIS - 33)) | (1 << (JavaParser.THROW - 33)) | (1 << (JavaParser.TRY - 33)) | (1 << (JavaParser.VOID - 33)) | (1 << (JavaParser.WHILE - 33)) | (1 << (JavaParser.DECIMAL_LITERAL - 33)) | (1 << (JavaParser.HEX_LITERAL - 33)) | (1 << (JavaParser.OCT_LITERAL - 33)) | (1 << (JavaParser.BINARY_LITERAL - 33)) | (1 << (JavaParser.FLOAT_LITERAL - 33)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 33)) | (1 << (JavaParser.BOOL_LITERAL - 33)) | (1 << (JavaParser.CHAR_LITERAL - 33)) | (1 << (JavaParser.STRING_LITERAL - 33)) | (1 << (JavaParser.NULL_LITERAL - 33)) | (1 << (JavaParser.LPAREN - 33)) | (1 << (JavaParser.LBRACE - 33)))) !== 0) || ((((_la - 67)) & ~0x1F) === 0 && ((1 << (_la - 67)) & ((1 << (JavaParser.SEMI - 67)) | (1 << (JavaParser.LT - 67)) | (1 << (JavaParser.BANG - 67)) | (1 << (JavaParser.TILDE - 67)) | (1 << (JavaParser.INC - 67)) | (1 << (JavaParser.DEC - 67)) | (1 << (JavaParser.ADD - 67)) | (1 << (JavaParser.SUB - 67)))) !== 0) || ((((_la - 106)) & ~0x1F) === 0 && ((1 << (_la - 106)) & ((1 << (JavaParser.AT - 106)) | (1 << (JavaParser.JCOMMENT - 106)) | (1 << (JavaParser.IDENTIFIER - 106)))) !== 0));
 			}
 		}
 		catch (re) {
@@ -4922,43 +4922,43 @@ export class JavaParser extends Parser {
 			this.state = 1072;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.CASE:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1064;
-				this.match(JavaParser.CASE);
-				this.state = 1067;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 127, this._ctx) ) {
-				case 1:
+				case JavaParser.CASE:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1065;
-					_localctx._constantExpression = this.expression(0);
-					}
-					break;
+						this.state = 1064;
+						this.match(JavaParser.CASE);
+						this.state = 1067;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 127, this._ctx)) {
+							case 1:
+								{
+									this.state = 1065;
+									_localctx._constantExpression = this.expression(0);
+								}
+								break;
 
-				case 2:
-					{
-					this.state = 1066;
-					_localctx._enumConstantName = this.match(JavaParser.IDENTIFIER);
+							case 2:
+								{
+									this.state = 1066;
+									_localctx._enumConstantName = this.match(JavaParser.IDENTIFIER);
+								}
+								break;
+						}
+						this.state = 1069;
+						this.match(JavaParser.COLON);
 					}
 					break;
-				}
-				this.state = 1069;
-				this.match(JavaParser.COLON);
-				}
-				break;
-			case JavaParser.DEFAULT:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1070;
-				this.match(JavaParser.DEFAULT);
-				this.state = 1071;
-				this.match(JavaParser.COLON);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.DEFAULT:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1070;
+						this.match(JavaParser.DEFAULT);
+						this.state = 1071;
+						this.match(JavaParser.COLON);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -4983,54 +4983,54 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 1086;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 132, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1074;
-				this.enhancedForControl();
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1076;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+			switch (this.interpreter.adaptivePredict(this._input, 132, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1075;
-					this.forInit();
+						this.state = 1074;
+						this.enhancedForControl();
 					}
-				}
+					break;
 
-				this.state = 1078;
-				this.match(JavaParser.SEMI);
-				this.state = 1080;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 1079;
-					this.expression(0);
-					}
-				}
+						this.state = 1076;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1075;
+								this.forInit();
+							}
+						}
 
-				this.state = 1082;
-				this.match(JavaParser.SEMI);
-				this.state = 1084;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-					{
-					this.state = 1083;
-					_localctx._forUpdate = this.expressionList();
-					}
-				}
+						this.state = 1078;
+						this.match(JavaParser.SEMI);
+						this.state = 1080;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1079;
+								this.expression(0);
+							}
+						}
 
-				}
-				break;
+						this.state = 1082;
+						this.match(JavaParser.SEMI);
+						this.state = 1084;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1083;
+								_localctx._forUpdate = this.expressionList();
+							}
+						}
+
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -5054,22 +5054,22 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 1090;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 133, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1088;
-				this.localVariableDeclaration();
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 133, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 1088;
+						this.localVariableDeclaration();
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1089;
-				this.expressionList();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1089;
+						this.expressionList();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -5094,30 +5094,30 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1095;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 134, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1092;
-					this.variableModifier();
-					}
-					}
-				}
-				this.state = 1097;
+				this.state = 1095;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 134, this._ctx);
-			}
-			this.state = 1098;
-			this.typeType();
-			this.state = 1099;
-			this.variableDeclaratorId();
-			this.state = 1100;
-			this.match(JavaParser.COLON);
-			this.state = 1101;
-			this.expression(0);
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1092;
+								this.variableModifier();
+							}
+						}
+					}
+					this.state = 1097;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 134, this._ctx);
+				}
+				this.state = 1098;
+				this.typeType();
+				this.state = 1099;
+				this.variableDeclaratorId();
+				this.state = 1100;
+				this.match(JavaParser.COLON);
+				this.state = 1101;
+				this.expression(0);
 			}
 		}
 		catch (re) {
@@ -5141,12 +5141,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1103;
-			this.match(JavaParser.LPAREN);
-			this.state = 1104;
-			this.expression(0);
-			this.state = 1105;
-			this.match(JavaParser.RPAREN);
+				this.state = 1103;
+				this.match(JavaParser.LPAREN);
+				this.state = 1104;
+				this.expression(0);
+				this.state = 1105;
+				this.match(JavaParser.RPAREN);
 			}
 		}
 		catch (re) {
@@ -5171,24 +5171,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1107;
-			this.expression(0);
-			this.state = 1112;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 1108;
-				this.match(JavaParser.COMMA);
-				this.state = 1109;
+				this.state = 1107;
 				this.expression(0);
-				}
-				}
-				this.state = 1114;
+				this.state = 1112;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 1108;
+							this.match(JavaParser.COMMA);
+							this.state = 1109;
+							this.expression(0);
+						}
+					}
+					this.state = 1114;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -5214,71 +5214,71 @@ export class JavaParser extends Parser {
 			this.state = 1133;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1115;
-				this.match(JavaParser.IDENTIFIER);
-				this.state = 1116;
-				this.match(JavaParser.LPAREN);
-				this.state = 1118;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1117;
-					this.expressionList();
-					}
-				}
+						this.state = 1115;
+						this.match(JavaParser.IDENTIFIER);
+						this.state = 1116;
+						this.match(JavaParser.LPAREN);
+						this.state = 1118;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1117;
+								this.expressionList();
+							}
+						}
 
-				this.state = 1120;
-				this.match(JavaParser.RPAREN);
-				}
-				break;
-			case JavaParser.THIS:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1121;
-				this.match(JavaParser.THIS);
-				this.state = 1122;
-				this.match(JavaParser.LPAREN);
-				this.state = 1124;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+						this.state = 1120;
+						this.match(JavaParser.RPAREN);
+					}
+					break;
+				case JavaParser.THIS:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 1123;
-					this.expressionList();
-					}
-				}
+						this.state = 1121;
+						this.match(JavaParser.THIS);
+						this.state = 1122;
+						this.match(JavaParser.LPAREN);
+						this.state = 1124;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1123;
+								this.expressionList();
+							}
+						}
 
-				this.state = 1126;
-				this.match(JavaParser.RPAREN);
-				}
-				break;
-			case JavaParser.SUPER:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 1127;
-				this.match(JavaParser.SUPER);
-				this.state = 1128;
-				this.match(JavaParser.LPAREN);
-				this.state = 1130;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+						this.state = 1126;
+						this.match(JavaParser.RPAREN);
+					}
+					break;
+				case JavaParser.SUPER:
+					this.enterOuterAlt(_localctx, 3);
 					{
-					this.state = 1129;
-					this.expressionList();
-					}
-				}
+						this.state = 1127;
+						this.match(JavaParser.SUPER);
+						this.state = 1128;
+						this.match(JavaParser.LPAREN);
+						this.state = 1130;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1129;
+								this.expressionList();
+							}
+						}
 
-				this.state = 1132;
-				this.match(JavaParser.RPAREN);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+						this.state = 1132;
+						this.match(JavaParser.RPAREN);
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -5315,625 +5315,625 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1179;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 145, this._ctx) ) {
-			case 1:
-				{
-				this.state = 1136;
-				this.primary();
-				}
-				break;
-
-			case 2:
-				{
-				this.state = 1137;
-				this.methodCall();
-				}
-				break;
-
-			case 3:
-				{
-				this.state = 1138;
-				this.match(JavaParser.NEW);
-				this.state = 1139;
-				this.creator();
-				}
-				break;
-
-			case 4:
-				{
-				this.state = 1140;
-				this.match(JavaParser.LPAREN);
-				this.state = 1144;
+				this.state = 1179;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 140, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 1141;
-						this.annotation();
-						}
-						}
-					}
-					this.state = 1146;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 140, this._ctx);
-				}
-				this.state = 1147;
-				this.typeType();
-				this.state = 1152;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.BITAND) {
-					{
-					{
-					this.state = 1148;
-					this.match(JavaParser.BITAND);
-					this.state = 1149;
-					this.typeType();
-					}
-					}
-					this.state = 1154;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 1155;
-				this.match(JavaParser.RPAREN);
-				this.state = 1156;
-				this.expression(21);
-				}
-				break;
-
-			case 5:
-				{
-				this.state = 1158;
-				_localctx._prefix = this._input.LT(1);
-				_la = this._input.LA(1);
-				if (!(((((_la - 83)) & ~0x1F) === 0 && ((1 << (_la - 83)) & ((1 << (JavaParser.INC - 83)) | (1 << (JavaParser.DEC - 83)) | (1 << (JavaParser.ADD - 83)) | (1 << (JavaParser.SUB - 83)))) !== 0))) {
-					_localctx._prefix = this._errHandler.recoverInline(this);
-				} else {
-					if (this._input.LA(1) === Token.EOF) {
-						this.matchedEOF = true;
-					}
-
-					this._errHandler.reportMatch(this);
-					this.consume();
-				}
-				this.state = 1159;
-				this.expression(19);
-				}
-				break;
-
-			case 6:
-				{
-				this.state = 1160;
-				_localctx._prefix = this._input.LT(1);
-				_la = this._input.LA(1);
-				if (!(_la === JavaParser.BANG || _la === JavaParser.TILDE)) {
-					_localctx._prefix = this._errHandler.recoverInline(this);
-				} else {
-					if (this._input.LA(1) === Token.EOF) {
-						this.matchedEOF = true;
-					}
-
-					this._errHandler.reportMatch(this);
-					this.consume();
-				}
-				this.state = 1161;
-				this.expression(18);
-				}
-				break;
-
-			case 7:
-				{
-				this.state = 1162;
-				this.lambdaExpression();
-				}
-				break;
-
-			case 8:
-				{
-				this.state = 1163;
-				this.typeType();
-				this.state = 1164;
-				this.match(JavaParser.COLONCOLON);
-				this.state = 1170;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case JavaParser.LT:
-				case JavaParser.IDENTIFIER:
-					{
-					this.state = 1166;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					if (_la === JavaParser.LT) {
-						{
-						this.state = 1165;
-						this.typeArguments();
-						}
-					}
-
-					this.state = 1168;
-					this.match(JavaParser.IDENTIFIER);
-					}
-					break;
-				case JavaParser.NEW:
-					{
-					this.state = 1169;
-					this.match(JavaParser.NEW);
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				break;
-
-			case 9:
-				{
-				this.state = 1172;
-				this.classType();
-				this.state = 1173;
-				this.match(JavaParser.COLONCOLON);
-				this.state = 1175;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.LT) {
-					{
-					this.state = 1174;
-					this.typeArguments();
-					}
-				}
-
-				this.state = 1177;
-				this.match(JavaParser.NEW);
-				}
-				break;
-			}
-			this._ctx._stop = this._input.tryLT(-1);
-			this.state = 1261;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 151, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					if (this._parseListeners != null) {
-						this.triggerExitRuleEvent();
-					}
-					_prevctx = _localctx;
-					{
-					this.state = 1259;
-					this._errHandler.sync(this);
-					switch ( this.interpreter.adaptivePredict(this._input, 150, this._ctx) ) {
+				switch (this.interpreter.adaptivePredict(this._input, 145, this._ctx)) {
 					case 1:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1181;
-						if (!(this.precpred(this._ctx, 17))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 17)");
-						}
-						this.state = 1182;
-						_localctx._bop = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(((((_la - 87)) & ~0x1F) === 0 && ((1 << (_la - 87)) & ((1 << (JavaParser.MUL - 87)) | (1 << (JavaParser.DIV - 87)) | (1 << (JavaParser.MOD - 87)))) !== 0))) {
-							_localctx._bop = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						this.state = 1183;
-						this.expression(18);
+							this.state = 1136;
+							this.primary();
 						}
 						break;
 
 					case 2:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1184;
-						if (!(this.precpred(this._ctx, 16))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 16)");
-						}
-						this.state = 1185;
-						_localctx._bop = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(_la === JavaParser.ADD || _la === JavaParser.SUB)) {
-							_localctx._bop = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						this.state = 1186;
-						this.expression(17);
+							this.state = 1137;
+							this.methodCall();
 						}
 						break;
 
 					case 3:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1187;
-						if (!(this.precpred(this._ctx, 15))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 15)");
-						}
-						this.state = 1195;
-						this._errHandler.sync(this);
-						switch ( this.interpreter.adaptivePredict(this._input, 146, this._ctx) ) {
-						case 1:
-							{
-							this.state = 1188;
-							this.match(JavaParser.LT);
-							this.state = 1189;
-							this.match(JavaParser.LT);
-							}
-							break;
-
-						case 2:
-							{
-							this.state = 1190;
-							this.match(JavaParser.GT);
-							this.state = 1191;
-							this.match(JavaParser.GT);
-							this.state = 1192;
-							this.match(JavaParser.GT);
-							}
-							break;
-
-						case 3:
-							{
-							this.state = 1193;
-							this.match(JavaParser.GT);
-							this.state = 1194;
-							this.match(JavaParser.GT);
-							}
-							break;
-						}
-						this.state = 1197;
-						this.expression(16);
+							this.state = 1138;
+							this.match(JavaParser.NEW);
+							this.state = 1139;
+							this.creator();
 						}
 						break;
 
 					case 4:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1198;
-						if (!(this.precpred(this._ctx, 14))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 14)");
-						}
-						this.state = 1199;
-						_localctx._bop = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(((((_la - 71)) & ~0x1F) === 0 && ((1 << (_la - 71)) & ((1 << (JavaParser.GT - 71)) | (1 << (JavaParser.LT - 71)) | (1 << (JavaParser.LE - 71)) | (1 << (JavaParser.GE - 71)))) !== 0))) {
-							_localctx._bop = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
+							this.state = 1140;
+							this.match(JavaParser.LPAREN);
+							this.state = 1144;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 140, this._ctx);
+							while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+								if (_alt === 1) {
+									{
+										{
+											this.state = 1141;
+											this.annotation();
+										}
+									}
+								}
+								this.state = 1146;
+								this._errHandler.sync(this);
+								_alt = this.interpreter.adaptivePredict(this._input, 140, this._ctx);
 							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						this.state = 1200;
-						this.expression(15);
+							this.state = 1147;
+							this.typeType();
+							this.state = 1152;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+							while (_la === JavaParser.BITAND) {
+								{
+									{
+										this.state = 1148;
+										this.match(JavaParser.BITAND);
+										this.state = 1149;
+										this.typeType();
+									}
+								}
+								this.state = 1154;
+								this._errHandler.sync(this);
+								_la = this._input.LA(1);
+							}
+							this.state = 1155;
+							this.match(JavaParser.RPAREN);
+							this.state = 1156;
+							this.expression(21);
 						}
 						break;
 
 					case 5:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1201;
-						if (!(this.precpred(this._ctx, 12))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 12)");
-						}
-						this.state = 1202;
-						_localctx._bop = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(_la === JavaParser.EQUAL || _la === JavaParser.NOTEQUAL)) {
-							_localctx._bop = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
+							this.state = 1158;
+							_localctx._prefix = this._input.LT(1);
+							_la = this._input.LA(1);
+							if (!(((((_la - 83)) & ~0x1F) === 0 && ((1 << (_la - 83)) & ((1 << (JavaParser.INC - 83)) | (1 << (JavaParser.DEC - 83)) | (1 << (JavaParser.ADD - 83)) | (1 << (JavaParser.SUB - 83)))) !== 0))) {
+								_localctx._prefix = this._errHandler.recoverInline(this);
+							} else {
+								if (this._input.LA(1) === Token.EOF) {
+									this.matchedEOF = true;
+								}
 
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						this.state = 1203;
-						this.expression(13);
+								this._errHandler.reportMatch(this);
+								this.consume();
+							}
+							this.state = 1159;
+							this.expression(19);
 						}
 						break;
 
 					case 6:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1204;
-						if (!(this.precpred(this._ctx, 11))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 11)");
-						}
-						this.state = 1205;
-						_localctx._bop = this.match(JavaParser.BITAND);
-						this.state = 1206;
-						this.expression(12);
+							this.state = 1160;
+							_localctx._prefix = this._input.LT(1);
+							_la = this._input.LA(1);
+							if (!(_la === JavaParser.BANG || _la === JavaParser.TILDE)) {
+								_localctx._prefix = this._errHandler.recoverInline(this);
+							} else {
+								if (this._input.LA(1) === Token.EOF) {
+									this.matchedEOF = true;
+								}
+
+								this._errHandler.reportMatch(this);
+								this.consume();
+							}
+							this.state = 1161;
+							this.expression(18);
 						}
 						break;
 
 					case 7:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1207;
-						if (!(this.precpred(this._ctx, 10))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 10)");
-						}
-						this.state = 1208;
-						_localctx._bop = this.match(JavaParser.CARET);
-						this.state = 1209;
-						this.expression(11);
+							this.state = 1162;
+							this.lambdaExpression();
 						}
 						break;
 
 					case 8:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1210;
-						if (!(this.precpred(this._ctx, 9))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 9)");
-						}
-						this.state = 1211;
-						_localctx._bop = this.match(JavaParser.BITOR);
-						this.state = 1212;
-						this.expression(10);
+							this.state = 1163;
+							this.typeType();
+							this.state = 1164;
+							this.match(JavaParser.COLONCOLON);
+							this.state = 1170;
+							this._errHandler.sync(this);
+							switch (this._input.LA(1)) {
+								case JavaParser.LT:
+								case JavaParser.IDENTIFIER:
+									{
+										this.state = 1166;
+										this._errHandler.sync(this);
+										_la = this._input.LA(1);
+										if (_la === JavaParser.LT) {
+											{
+												this.state = 1165;
+												this.typeArguments();
+											}
+										}
+
+										this.state = 1168;
+										this.match(JavaParser.IDENTIFIER);
+									}
+									break;
+								case JavaParser.NEW:
+									{
+										this.state = 1169;
+										this.match(JavaParser.NEW);
+									}
+									break;
+								default:
+									throw new NoViableAltException(this);
+							}
 						}
 						break;
 
 					case 9:
 						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1213;
-						if (!(this.precpred(this._ctx, 8))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 8)");
-						}
-						this.state = 1214;
-						_localctx._bop = this.match(JavaParser.AND);
-						this.state = 1215;
-						this.expression(9);
-						}
-						break;
-
-					case 10:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1216;
-						if (!(this.precpred(this._ctx, 7))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 7)");
-						}
-						this.state = 1217;
-						_localctx._bop = this.match(JavaParser.OR);
-						this.state = 1218;
-						this.expression(8);
-						}
-						break;
-
-					case 11:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1219;
-						if (!(this.precpred(this._ctx, 6))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 6)");
-						}
-						this.state = 1220;
-						_localctx._bop = this.match(JavaParser.QUESTION);
-						this.state = 1221;
-						this.expression(0);
-						this.state = 1222;
-						this.match(JavaParser.COLON);
-						this.state = 1223;
-						this.expression(6);
-						}
-						break;
-
-					case 12:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1225;
-						if (!(this.precpred(this._ctx, 5))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
-						}
-						this.state = 1226;
-						_localctx._bop = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(((((_la - 70)) & ~0x1F) === 0 && ((1 << (_la - 70)) & ((1 << (JavaParser.ASSIGN - 70)) | (1 << (JavaParser.ADD_ASSIGN - 70)) | (1 << (JavaParser.SUB_ASSIGN - 70)) | (1 << (JavaParser.MUL_ASSIGN - 70)) | (1 << (JavaParser.DIV_ASSIGN - 70)) | (1 << (JavaParser.AND_ASSIGN - 70)) | (1 << (JavaParser.OR_ASSIGN - 70)) | (1 << (JavaParser.XOR_ASSIGN - 70)) | (1 << (JavaParser.MOD_ASSIGN - 70)) | (1 << (JavaParser.LSHIFT_ASSIGN - 70)))) !== 0) || _la === JavaParser.RSHIFT_ASSIGN || _la === JavaParser.URSHIFT_ASSIGN)) {
-							_localctx._bop = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						this.state = 1227;
-						this.expression(5);
-						}
-						break;
-
-					case 13:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1228;
-						if (!(this.precpred(this._ctx, 25))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 25)");
-						}
-						this.state = 1229;
-						_localctx._bop = this.match(JavaParser.DOT);
-						this.state = 1241;
-						this._errHandler.sync(this);
-						switch ( this.interpreter.adaptivePredict(this._input, 148, this._ctx) ) {
-						case 1:
-							{
-							this.state = 1230;
-							this.match(JavaParser.IDENTIFIER);
-							}
-							break;
-
-						case 2:
-							{
-							this.state = 1231;
-							this.methodCall();
-							}
-							break;
-
-						case 3:
-							{
-							this.state = 1232;
-							this.match(JavaParser.THIS);
-							}
-							break;
-
-						case 4:
-							{
-							this.state = 1233;
-							this.match(JavaParser.NEW);
-							this.state = 1235;
+							this.state = 1172;
+							this.classType();
+							this.state = 1173;
+							this.match(JavaParser.COLONCOLON);
+							this.state = 1175;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							if (_la === JavaParser.LT) {
 								{
-								this.state = 1234;
-								this.nonWildcardTypeArguments();
+									this.state = 1174;
+									this.typeArguments();
 								}
 							}
 
-							this.state = 1237;
-							this.innerCreator();
-							}
-							break;
-
-						case 5:
-							{
-							this.state = 1238;
-							this.match(JavaParser.SUPER);
-							this.state = 1239;
-							this.superSuffix();
-							}
-							break;
-
-						case 6:
-							{
-							this.state = 1240;
-							this.explicitGenericInvocation();
-							}
-							break;
-						}
+							this.state = 1177;
+							this.match(JavaParser.NEW);
 						}
 						break;
-
-					case 14:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1243;
-						if (!(this.precpred(this._ctx, 24))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 24)");
-						}
-						this.state = 1244;
-						this.match(JavaParser.LBRACK);
-						this.state = 1245;
-						this.expression(0);
-						this.state = 1246;
-						this.match(JavaParser.RBRACK);
-						}
-						break;
-
-					case 15:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1248;
-						if (!(this.precpred(this._ctx, 20))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 20)");
-						}
-						this.state = 1249;
-						_localctx._postfix = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(_la === JavaParser.INC || _la === JavaParser.DEC)) {
-							_localctx._postfix = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						}
-						break;
-
-					case 16:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1250;
-						if (!(this.precpred(this._ctx, 13))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 13)");
-						}
-						this.state = 1251;
-						_localctx._bop = this.match(JavaParser.INSTANCEOF);
-						this.state = 1252;
-						this.typeType();
-						}
-						break;
-
-					case 17:
-						{
-						_localctx = new ExpressionContext(_parentctx, _parentState);
-						this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
-						this.state = 1253;
-						if (!(this.precpred(this._ctx, 3))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
-						}
-						this.state = 1254;
-						this.match(JavaParser.COLONCOLON);
-						this.state = 1256;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-						if (_la === JavaParser.LT) {
-							{
-							this.state = 1255;
-							this.typeArguments();
-							}
-						}
-
-						this.state = 1258;
-						this.match(JavaParser.IDENTIFIER);
-						}
-						break;
-					}
-					}
 				}
-				this.state = 1263;
+				this._ctx._stop = this._input.tryLT(-1);
+				this.state = 1261;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 151, this._ctx);
-			}
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						if (this._parseListeners != null) {
+							this.triggerExitRuleEvent();
+						}
+						_prevctx = _localctx;
+						{
+							this.state = 1259;
+							this._errHandler.sync(this);
+							switch (this.interpreter.adaptivePredict(this._input, 150, this._ctx)) {
+								case 1:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1181;
+										if (!(this.precpred(this._ctx, 17))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 17)");
+										}
+										this.state = 1182;
+										_localctx._bop = this._input.LT(1);
+										_la = this._input.LA(1);
+										if (!(((((_la - 87)) & ~0x1F) === 0 && ((1 << (_la - 87)) & ((1 << (JavaParser.MUL - 87)) | (1 << (JavaParser.DIV - 87)) | (1 << (JavaParser.MOD - 87)))) !== 0))) {
+											_localctx._bop = this._errHandler.recoverInline(this);
+										} else {
+											if (this._input.LA(1) === Token.EOF) {
+												this.matchedEOF = true;
+											}
+
+											this._errHandler.reportMatch(this);
+											this.consume();
+										}
+										this.state = 1183;
+										this.expression(18);
+									}
+									break;
+
+								case 2:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1184;
+										if (!(this.precpred(this._ctx, 16))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 16)");
+										}
+										this.state = 1185;
+										_localctx._bop = this._input.LT(1);
+										_la = this._input.LA(1);
+										if (!(_la === JavaParser.ADD || _la === JavaParser.SUB)) {
+											_localctx._bop = this._errHandler.recoverInline(this);
+										} else {
+											if (this._input.LA(1) === Token.EOF) {
+												this.matchedEOF = true;
+											}
+
+											this._errHandler.reportMatch(this);
+											this.consume();
+										}
+										this.state = 1186;
+										this.expression(17);
+									}
+									break;
+
+								case 3:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1187;
+										if (!(this.precpred(this._ctx, 15))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 15)");
+										}
+										this.state = 1195;
+										this._errHandler.sync(this);
+										switch (this.interpreter.adaptivePredict(this._input, 146, this._ctx)) {
+											case 1:
+												{
+													this.state = 1188;
+													this.match(JavaParser.LT);
+													this.state = 1189;
+													this.match(JavaParser.LT);
+												}
+												break;
+
+											case 2:
+												{
+													this.state = 1190;
+													this.match(JavaParser.GT);
+													this.state = 1191;
+													this.match(JavaParser.GT);
+													this.state = 1192;
+													this.match(JavaParser.GT);
+												}
+												break;
+
+											case 3:
+												{
+													this.state = 1193;
+													this.match(JavaParser.GT);
+													this.state = 1194;
+													this.match(JavaParser.GT);
+												}
+												break;
+										}
+										this.state = 1197;
+										this.expression(16);
+									}
+									break;
+
+								case 4:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1198;
+										if (!(this.precpred(this._ctx, 14))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 14)");
+										}
+										this.state = 1199;
+										_localctx._bop = this._input.LT(1);
+										_la = this._input.LA(1);
+										if (!(((((_la - 71)) & ~0x1F) === 0 && ((1 << (_la - 71)) & ((1 << (JavaParser.GT - 71)) | (1 << (JavaParser.LT - 71)) | (1 << (JavaParser.LE - 71)) | (1 << (JavaParser.GE - 71)))) !== 0))) {
+											_localctx._bop = this._errHandler.recoverInline(this);
+										} else {
+											if (this._input.LA(1) === Token.EOF) {
+												this.matchedEOF = true;
+											}
+
+											this._errHandler.reportMatch(this);
+											this.consume();
+										}
+										this.state = 1200;
+										this.expression(15);
+									}
+									break;
+
+								case 5:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1201;
+										if (!(this.precpred(this._ctx, 12))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 12)");
+										}
+										this.state = 1202;
+										_localctx._bop = this._input.LT(1);
+										_la = this._input.LA(1);
+										if (!(_la === JavaParser.EQUAL || _la === JavaParser.NOTEQUAL)) {
+											_localctx._bop = this._errHandler.recoverInline(this);
+										} else {
+											if (this._input.LA(1) === Token.EOF) {
+												this.matchedEOF = true;
+											}
+
+											this._errHandler.reportMatch(this);
+											this.consume();
+										}
+										this.state = 1203;
+										this.expression(13);
+									}
+									break;
+
+								case 6:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1204;
+										if (!(this.precpred(this._ctx, 11))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 11)");
+										}
+										this.state = 1205;
+										_localctx._bop = this.match(JavaParser.BITAND);
+										this.state = 1206;
+										this.expression(12);
+									}
+									break;
+
+								case 7:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1207;
+										if (!(this.precpred(this._ctx, 10))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 10)");
+										}
+										this.state = 1208;
+										_localctx._bop = this.match(JavaParser.CARET);
+										this.state = 1209;
+										this.expression(11);
+									}
+									break;
+
+								case 8:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1210;
+										if (!(this.precpred(this._ctx, 9))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 9)");
+										}
+										this.state = 1211;
+										_localctx._bop = this.match(JavaParser.BITOR);
+										this.state = 1212;
+										this.expression(10);
+									}
+									break;
+
+								case 9:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1213;
+										if (!(this.precpred(this._ctx, 8))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 8)");
+										}
+										this.state = 1214;
+										_localctx._bop = this.match(JavaParser.AND);
+										this.state = 1215;
+										this.expression(9);
+									}
+									break;
+
+								case 10:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1216;
+										if (!(this.precpred(this._ctx, 7))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 7)");
+										}
+										this.state = 1217;
+										_localctx._bop = this.match(JavaParser.OR);
+										this.state = 1218;
+										this.expression(8);
+									}
+									break;
+
+								case 11:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1219;
+										if (!(this.precpred(this._ctx, 6))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 6)");
+										}
+										this.state = 1220;
+										_localctx._bop = this.match(JavaParser.QUESTION);
+										this.state = 1221;
+										this.expression(0);
+										this.state = 1222;
+										this.match(JavaParser.COLON);
+										this.state = 1223;
+										this.expression(6);
+									}
+									break;
+
+								case 12:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1225;
+										if (!(this.precpred(this._ctx, 5))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
+										}
+										this.state = 1226;
+										_localctx._bop = this._input.LT(1);
+										_la = this._input.LA(1);
+										if (!(((((_la - 70)) & ~0x1F) === 0 && ((1 << (_la - 70)) & ((1 << (JavaParser.ASSIGN - 70)) | (1 << (JavaParser.ADD_ASSIGN - 70)) | (1 << (JavaParser.SUB_ASSIGN - 70)) | (1 << (JavaParser.MUL_ASSIGN - 70)) | (1 << (JavaParser.DIV_ASSIGN - 70)) | (1 << (JavaParser.AND_ASSIGN - 70)) | (1 << (JavaParser.OR_ASSIGN - 70)) | (1 << (JavaParser.XOR_ASSIGN - 70)) | (1 << (JavaParser.MOD_ASSIGN - 70)) | (1 << (JavaParser.LSHIFT_ASSIGN - 70)))) !== 0) || _la === JavaParser.RSHIFT_ASSIGN || _la === JavaParser.URSHIFT_ASSIGN)) {
+											_localctx._bop = this._errHandler.recoverInline(this);
+										} else {
+											if (this._input.LA(1) === Token.EOF) {
+												this.matchedEOF = true;
+											}
+
+											this._errHandler.reportMatch(this);
+											this.consume();
+										}
+										this.state = 1227;
+										this.expression(5);
+									}
+									break;
+
+								case 13:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1228;
+										if (!(this.precpred(this._ctx, 25))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 25)");
+										}
+										this.state = 1229;
+										_localctx._bop = this.match(JavaParser.DOT);
+										this.state = 1241;
+										this._errHandler.sync(this);
+										switch (this.interpreter.adaptivePredict(this._input, 148, this._ctx)) {
+											case 1:
+												{
+													this.state = 1230;
+													this.match(JavaParser.IDENTIFIER);
+												}
+												break;
+
+											case 2:
+												{
+													this.state = 1231;
+													this.methodCall();
+												}
+												break;
+
+											case 3:
+												{
+													this.state = 1232;
+													this.match(JavaParser.THIS);
+												}
+												break;
+
+											case 4:
+												{
+													this.state = 1233;
+													this.match(JavaParser.NEW);
+													this.state = 1235;
+													this._errHandler.sync(this);
+													_la = this._input.LA(1);
+													if (_la === JavaParser.LT) {
+														{
+															this.state = 1234;
+															this.nonWildcardTypeArguments();
+														}
+													}
+
+													this.state = 1237;
+													this.innerCreator();
+												}
+												break;
+
+											case 5:
+												{
+													this.state = 1238;
+													this.match(JavaParser.SUPER);
+													this.state = 1239;
+													this.superSuffix();
+												}
+												break;
+
+											case 6:
+												{
+													this.state = 1240;
+													this.explicitGenericInvocation();
+												}
+												break;
+										}
+									}
+									break;
+
+								case 14:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1243;
+										if (!(this.precpred(this._ctx, 24))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 24)");
+										}
+										this.state = 1244;
+										this.match(JavaParser.LBRACK);
+										this.state = 1245;
+										this.expression(0);
+										this.state = 1246;
+										this.match(JavaParser.RBRACK);
+									}
+									break;
+
+								case 15:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1248;
+										if (!(this.precpred(this._ctx, 20))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 20)");
+										}
+										this.state = 1249;
+										_localctx._postfix = this._input.LT(1);
+										_la = this._input.LA(1);
+										if (!(_la === JavaParser.INC || _la === JavaParser.DEC)) {
+											_localctx._postfix = this._errHandler.recoverInline(this);
+										} else {
+											if (this._input.LA(1) === Token.EOF) {
+												this.matchedEOF = true;
+											}
+
+											this._errHandler.reportMatch(this);
+											this.consume();
+										}
+									}
+									break;
+
+								case 16:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1250;
+										if (!(this.precpred(this._ctx, 13))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 13)");
+										}
+										this.state = 1251;
+										_localctx._bop = this.match(JavaParser.INSTANCEOF);
+										this.state = 1252;
+										this.typeType();
+									}
+									break;
+
+								case 17:
+									{
+										_localctx = new ExpressionContext(_parentctx, _parentState);
+										this.pushNewRecursionContext(_localctx, _startState, JavaParser.RULE_expression);
+										this.state = 1253;
+										if (!(this.precpred(this._ctx, 3))) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
+										}
+										this.state = 1254;
+										this.match(JavaParser.COLONCOLON);
+										this.state = 1256;
+										this._errHandler.sync(this);
+										_la = this._input.LA(1);
+										if (_la === JavaParser.LT) {
+											{
+												this.state = 1255;
+												this.typeArguments();
+											}
+										}
+
+										this.state = 1258;
+										this.match(JavaParser.IDENTIFIER);
+									}
+									break;
+							}
+						}
+					}
+					this.state = 1263;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 151, this._ctx);
+				}
 			}
 		}
 		catch (re) {
@@ -5957,12 +5957,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1264;
-			this.lambdaParameters();
-			this.state = 1265;
-			this.match(JavaParser.ARROW);
-			this.state = 1266;
-			this.lambdaBody();
+				this.state = 1264;
+				this.lambdaParameters();
+				this.state = 1265;
+				this.match(JavaParser.ARROW);
+				this.state = 1266;
+				this.lambdaBody();
 			}
 		}
 		catch (re) {
@@ -5987,62 +5987,62 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 1284;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 154, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1268;
-				this.match(JavaParser.IDENTIFIER);
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1269;
-				this.match(JavaParser.LPAREN);
-				this.state = 1271;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG))) !== 0) || _la === JavaParser.SHORT || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+			switch (this.interpreter.adaptivePredict(this._input, 154, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1270;
-					this.formalParameterList();
+						this.state = 1268;
+						this.match(JavaParser.IDENTIFIER);
 					}
-				}
+					break;
 
-				this.state = 1273;
-				this.match(JavaParser.RPAREN);
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1269;
+						this.match(JavaParser.LPAREN);
+						this.state = 1271;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FINAL) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG))) !== 0) || _la === JavaParser.SHORT || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+							{
+								this.state = 1270;
+								this.formalParameterList();
+							}
+						}
 
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 1274;
-				this.match(JavaParser.LPAREN);
-				this.state = 1275;
-				this.match(JavaParser.IDENTIFIER);
-				this.state = 1280;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.COMMA) {
-					{
-					{
-					this.state = 1276;
-					this.match(JavaParser.COMMA);
-					this.state = 1277;
-					this.match(JavaParser.IDENTIFIER);
+						this.state = 1273;
+						this.match(JavaParser.RPAREN);
 					}
+					break;
+
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 1274;
+						this.match(JavaParser.LPAREN);
+						this.state = 1275;
+						this.match(JavaParser.IDENTIFIER);
+						this.state = 1280;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						while (_la === JavaParser.COMMA) {
+							{
+								{
+									this.state = 1276;
+									this.match(JavaParser.COMMA);
+									this.state = 1277;
+									this.match(JavaParser.IDENTIFIER);
+								}
+							}
+							this.state = 1282;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+						}
+						this.state = 1283;
+						this.match(JavaParser.RPAREN);
 					}
-					this.state = 1282;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 1283;
-				this.match(JavaParser.RPAREN);
-				}
-				break;
+					break;
 			}
 		}
 		catch (re) {
@@ -6067,53 +6067,53 @@ export class JavaParser extends Parser {
 			this.state = 1288;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.NEW:
-			case JavaParser.SHORT:
-			case JavaParser.SUPER:
-			case JavaParser.THIS:
-			case JavaParser.VOID:
-			case JavaParser.DECIMAL_LITERAL:
-			case JavaParser.HEX_LITERAL:
-			case JavaParser.OCT_LITERAL:
-			case JavaParser.BINARY_LITERAL:
-			case JavaParser.FLOAT_LITERAL:
-			case JavaParser.HEX_FLOAT_LITERAL:
-			case JavaParser.BOOL_LITERAL:
-			case JavaParser.CHAR_LITERAL:
-			case JavaParser.STRING_LITERAL:
-			case JavaParser.NULL_LITERAL:
-			case JavaParser.LPAREN:
-			case JavaParser.LT:
-			case JavaParser.BANG:
-			case JavaParser.TILDE:
-			case JavaParser.INC:
-			case JavaParser.DEC:
-			case JavaParser.ADD:
-			case JavaParser.SUB:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1286;
-				this.expression(0);
-				}
-				break;
-			case JavaParser.LBRACE:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1287;
-				this.block();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.DOUBLE:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.LONG:
+				case JavaParser.NEW:
+				case JavaParser.SHORT:
+				case JavaParser.SUPER:
+				case JavaParser.THIS:
+				case JavaParser.VOID:
+				case JavaParser.DECIMAL_LITERAL:
+				case JavaParser.HEX_LITERAL:
+				case JavaParser.OCT_LITERAL:
+				case JavaParser.BINARY_LITERAL:
+				case JavaParser.FLOAT_LITERAL:
+				case JavaParser.HEX_FLOAT_LITERAL:
+				case JavaParser.BOOL_LITERAL:
+				case JavaParser.CHAR_LITERAL:
+				case JavaParser.STRING_LITERAL:
+				case JavaParser.NULL_LITERAL:
+				case JavaParser.LPAREN:
+				case JavaParser.LT:
+				case JavaParser.BANG:
+				case JavaParser.TILDE:
+				case JavaParser.INC:
+				case JavaParser.DEC:
+				case JavaParser.ADD:
+				case JavaParser.SUB:
+				case JavaParser.AT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 1286;
+						this.expression(0);
+					}
+					break;
+				case JavaParser.LBRACE:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1287;
+						this.block();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -6137,91 +6137,91 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 1308;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 157, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1290;
-				this.match(JavaParser.LPAREN);
-				this.state = 1291;
-				this.expression(0);
-				this.state = 1292;
-				this.match(JavaParser.RPAREN);
-				}
-				break;
-
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1294;
-				this.match(JavaParser.THIS);
-				}
-				break;
-
-			case 3:
-				this.enterOuterAlt(_localctx, 3);
-				{
-				this.state = 1295;
-				this.match(JavaParser.SUPER);
-				}
-				break;
-
-			case 4:
-				this.enterOuterAlt(_localctx, 4);
-				{
-				this.state = 1296;
-				this.literal();
-				}
-				break;
-
-			case 5:
-				this.enterOuterAlt(_localctx, 5);
-				{
-				this.state = 1297;
-				this.match(JavaParser.IDENTIFIER);
-				}
-				break;
-
-			case 6:
-				this.enterOuterAlt(_localctx, 6);
-				{
-				this.state = 1298;
-				this.typeTypeOrVoid();
-				this.state = 1299;
-				this.match(JavaParser.DOT);
-				this.state = 1300;
-				this.match(JavaParser.CLASS);
-				}
-				break;
-
-			case 7:
-				this.enterOuterAlt(_localctx, 7);
-				{
-				this.state = 1302;
-				this.nonWildcardTypeArguments();
-				this.state = 1306;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case JavaParser.SUPER:
-				case JavaParser.IDENTIFIER:
+			switch (this.interpreter.adaptivePredict(this._input, 157, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1303;
-					this.explicitGenericInvocationSuffix();
+						this.state = 1290;
+						this.match(JavaParser.LPAREN);
+						this.state = 1291;
+						this.expression(0);
+						this.state = 1292;
+						this.match(JavaParser.RPAREN);
 					}
 					break;
-				case JavaParser.THIS:
+
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 1304;
-					this.match(JavaParser.THIS);
-					this.state = 1305;
-					this.arguments();
+						this.state = 1294;
+						this.match(JavaParser.THIS);
 					}
 					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				break;
+
+				case 3:
+					this.enterOuterAlt(_localctx, 3);
+					{
+						this.state = 1295;
+						this.match(JavaParser.SUPER);
+					}
+					break;
+
+				case 4:
+					this.enterOuterAlt(_localctx, 4);
+					{
+						this.state = 1296;
+						this.literal();
+					}
+					break;
+
+				case 5:
+					this.enterOuterAlt(_localctx, 5);
+					{
+						this.state = 1297;
+						this.match(JavaParser.IDENTIFIER);
+					}
+					break;
+
+				case 6:
+					this.enterOuterAlt(_localctx, 6);
+					{
+						this.state = 1298;
+						this.typeTypeOrVoid();
+						this.state = 1299;
+						this.match(JavaParser.DOT);
+						this.state = 1300;
+						this.match(JavaParser.CLASS);
+					}
+					break;
+
+				case 7:
+					this.enterOuterAlt(_localctx, 7);
+					{
+						this.state = 1302;
+						this.nonWildcardTypeArguments();
+						this.state = 1306;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+							case JavaParser.SUPER:
+							case JavaParser.IDENTIFIER:
+								{
+									this.state = 1303;
+									this.explicitGenericInvocationSuffix();
+								}
+								break;
+							case JavaParser.THIS:
+								{
+									this.state = 1304;
+									this.match(JavaParser.THIS);
+									this.state = 1305;
+									this.arguments();
+								}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -6247,45 +6247,45 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1313;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 158, this._ctx) ) {
-			case 1:
-				{
-				this.state = 1310;
-				this.classOrInterfaceType();
-				this.state = 1311;
-				this.match(JavaParser.DOT);
+				this.state = 1313;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 158, this._ctx)) {
+					case 1:
+						{
+							this.state = 1310;
+							this.classOrInterfaceType();
+							this.state = 1311;
+							this.match(JavaParser.DOT);
+						}
+						break;
 				}
-				break;
-			}
-			this.state = 1318;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 159, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1315;
-					this.annotation();
-					}
-					}
-				}
-				this.state = 1320;
+				this.state = 1318;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 159, this._ctx);
-			}
-			this.state = 1321;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 1323;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LT) {
-				{
-				this.state = 1322;
-				this.typeArguments();
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1315;
+								this.annotation();
+							}
+						}
+					}
+					this.state = 1320;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 159, this._ctx);
 				}
-			}
+				this.state = 1321;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 1323;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LT) {
+					{
+						this.state = 1322;
+						this.typeArguments();
+					}
+				}
 
 			}
 		}
@@ -6311,52 +6311,52 @@ export class JavaParser extends Parser {
 			this.state = 1334;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.LT:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1325;
-				this.nonWildcardTypeArguments();
-				this.state = 1326;
-				this.createdName();
-				this.state = 1327;
-				this.classCreatorRest();
-				}
-				break;
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.SHORT:
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1329;
-				this.createdName();
-				this.state = 1332;
-				this._errHandler.sync(this);
-				switch (this._input.LA(1)) {
-				case JavaParser.LBRACK:
+				case JavaParser.LT:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1330;
-					this.arrayCreatorRest();
+						this.state = 1325;
+						this.nonWildcardTypeArguments();
+						this.state = 1326;
+						this.createdName();
+						this.state = 1327;
+						this.classCreatorRest();
 					}
 					break;
-				case JavaParser.LPAREN:
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.DOUBLE:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.LONG:
+				case JavaParser.SHORT:
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 2);
 					{
-					this.state = 1331;
-					this.classCreatorRest();
+						this.state = 1329;
+						this.createdName();
+						this.state = 1332;
+						this._errHandler.sync(this);
+						switch (this._input.LA(1)) {
+							case JavaParser.LBRACK:
+								{
+									this.state = 1330;
+									this.arrayCreatorRest();
+								}
+								break;
+							case JavaParser.LPAREN:
+								{
+									this.state = 1331;
+									this.classCreatorRest();
+								}
+								break;
+							default:
+								throw new NoViableAltException(this);
+						}
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
-				}
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -6382,65 +6382,65 @@ export class JavaParser extends Parser {
 			this.state = 1351;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1336;
-				this.match(JavaParser.IDENTIFIER);
-				this.state = 1338;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				if (_la === JavaParser.LT) {
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1337;
-					this.typeArgumentsOrDiamond();
-					}
-				}
+						this.state = 1336;
+						this.match(JavaParser.IDENTIFIER);
+						this.state = 1338;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						if (_la === JavaParser.LT) {
+							{
+								this.state = 1337;
+								this.typeArgumentsOrDiamond();
+							}
+						}
 
-				this.state = 1347;
-				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.DOT) {
-					{
-					{
-					this.state = 1340;
-					this.match(JavaParser.DOT);
-					this.state = 1341;
-					this.match(JavaParser.IDENTIFIER);
-					this.state = 1343;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					if (_la === JavaParser.LT) {
-						{
-						this.state = 1342;
-						this.typeArgumentsOrDiamond();
+						this.state = 1347;
+						this._errHandler.sync(this);
+						_la = this._input.LA(1);
+						while (_la === JavaParser.DOT) {
+							{
+								{
+									this.state = 1340;
+									this.match(JavaParser.DOT);
+									this.state = 1341;
+									this.match(JavaParser.IDENTIFIER);
+									this.state = 1343;
+									this._errHandler.sync(this);
+									_la = this._input.LA(1);
+									if (_la === JavaParser.LT) {
+										{
+											this.state = 1342;
+											this.typeArgumentsOrDiamond();
+										}
+									}
+
+								}
+							}
+							this.state = 1349;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
 						}
 					}
-
+					break;
+				case JavaParser.BOOLEAN:
+				case JavaParser.BYTE:
+				case JavaParser.CHAR:
+				case JavaParser.DOUBLE:
+				case JavaParser.FLOAT:
+				case JavaParser.INT:
+				case JavaParser.LONG:
+				case JavaParser.SHORT:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1350;
+						this.primitiveType();
 					}
-					}
-					this.state = 1349;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				}
-				break;
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.SHORT:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1350;
-				this.primitiveType();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -6465,20 +6465,20 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1353;
-			this.match(JavaParser.IDENTIFIER);
-			this.state = 1355;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if (_la === JavaParser.LT) {
-				{
-				this.state = 1354;
-				this.nonWildcardTypeArgumentsOrDiamond();
+				this.state = 1353;
+				this.match(JavaParser.IDENTIFIER);
+				this.state = 1355;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === JavaParser.LT) {
+					{
+						this.state = 1354;
+						this.nonWildcardTypeArgumentsOrDiamond();
+					}
 				}
-			}
 
-			this.state = 1357;
-			this.classCreatorRest();
+				this.state = 1357;
+				this.classCreatorRest();
 			}
 		}
 		catch (re) {
@@ -6504,115 +6504,115 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1359;
-			this.match(JavaParser.LBRACK);
-			this.state = 1387;
-			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case JavaParser.RBRACK:
-				{
-				this.state = 1360;
-				this.match(JavaParser.RBRACK);
-				this.state = 1365;
+				this.state = 1359;
+				this.match(JavaParser.LBRACK);
+				this.state = 1387;
 				this._errHandler.sync(this);
-				_la = this._input.LA(1);
-				while (_la === JavaParser.LBRACK) {
-					{
-					{
-					this.state = 1361;
-					this.match(JavaParser.LBRACK);
-					this.state = 1362;
-					this.match(JavaParser.RBRACK);
-					}
-					}
-					this.state = 1367;
-					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-				}
-				this.state = 1368;
-				this.arrayInitializer();
-				}
-				break;
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.NEW:
-			case JavaParser.SHORT:
-			case JavaParser.SUPER:
-			case JavaParser.THIS:
-			case JavaParser.VOID:
-			case JavaParser.DECIMAL_LITERAL:
-			case JavaParser.HEX_LITERAL:
-			case JavaParser.OCT_LITERAL:
-			case JavaParser.BINARY_LITERAL:
-			case JavaParser.FLOAT_LITERAL:
-			case JavaParser.HEX_FLOAT_LITERAL:
-			case JavaParser.BOOL_LITERAL:
-			case JavaParser.CHAR_LITERAL:
-			case JavaParser.STRING_LITERAL:
-			case JavaParser.NULL_LITERAL:
-			case JavaParser.LPAREN:
-			case JavaParser.LT:
-			case JavaParser.BANG:
-			case JavaParser.TILDE:
-			case JavaParser.INC:
-			case JavaParser.DEC:
-			case JavaParser.ADD:
-			case JavaParser.SUB:
-			case JavaParser.AT:
-			case JavaParser.IDENTIFIER:
-				{
-				this.state = 1369;
-				this.expression(0);
-				this.state = 1370;
-				this.match(JavaParser.RBRACK);
-				this.state = 1377;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 169, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
+				switch (this._input.LA(1)) {
+					case JavaParser.RBRACK:
 						{
+							this.state = 1360;
+							this.match(JavaParser.RBRACK);
+							this.state = 1365;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+							while (_la === JavaParser.LBRACK) {
+								{
+									{
+										this.state = 1361;
+										this.match(JavaParser.LBRACK);
+										this.state = 1362;
+										this.match(JavaParser.RBRACK);
+									}
+								}
+								this.state = 1367;
+								this._errHandler.sync(this);
+								_la = this._input.LA(1);
+							}
+							this.state = 1368;
+							this.arrayInitializer();
+						}
+						break;
+					case JavaParser.BOOLEAN:
+					case JavaParser.BYTE:
+					case JavaParser.CHAR:
+					case JavaParser.DOUBLE:
+					case JavaParser.FLOAT:
+					case JavaParser.INT:
+					case JavaParser.LONG:
+					case JavaParser.NEW:
+					case JavaParser.SHORT:
+					case JavaParser.SUPER:
+					case JavaParser.THIS:
+					case JavaParser.VOID:
+					case JavaParser.DECIMAL_LITERAL:
+					case JavaParser.HEX_LITERAL:
+					case JavaParser.OCT_LITERAL:
+					case JavaParser.BINARY_LITERAL:
+					case JavaParser.FLOAT_LITERAL:
+					case JavaParser.HEX_FLOAT_LITERAL:
+					case JavaParser.BOOL_LITERAL:
+					case JavaParser.CHAR_LITERAL:
+					case JavaParser.STRING_LITERAL:
+					case JavaParser.NULL_LITERAL:
+					case JavaParser.LPAREN:
+					case JavaParser.LT:
+					case JavaParser.BANG:
+					case JavaParser.TILDE:
+					case JavaParser.INC:
+					case JavaParser.DEC:
+					case JavaParser.ADD:
+					case JavaParser.SUB:
+					case JavaParser.AT:
+					case JavaParser.IDENTIFIER:
 						{
-						this.state = 1371;
-						this.match(JavaParser.LBRACK);
-						this.state = 1372;
-						this.expression(0);
-						this.state = 1373;
-						this.match(JavaParser.RBRACK);
+							this.state = 1369;
+							this.expression(0);
+							this.state = 1370;
+							this.match(JavaParser.RBRACK);
+							this.state = 1377;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 169, this._ctx);
+							while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+								if (_alt === 1) {
+									{
+										{
+											this.state = 1371;
+											this.match(JavaParser.LBRACK);
+											this.state = 1372;
+											this.expression(0);
+											this.state = 1373;
+											this.match(JavaParser.RBRACK);
+										}
+									}
+								}
+								this.state = 1379;
+								this._errHandler.sync(this);
+								_alt = this.interpreter.adaptivePredict(this._input, 169, this._ctx);
+							}
+							this.state = 1384;
+							this._errHandler.sync(this);
+							_alt = this.interpreter.adaptivePredict(this._input, 170, this._ctx);
+							while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+								if (_alt === 1) {
+									{
+										{
+											this.state = 1380;
+											this.match(JavaParser.LBRACK);
+											this.state = 1381;
+											this.match(JavaParser.RBRACK);
+										}
+									}
+								}
+								this.state = 1386;
+								this._errHandler.sync(this);
+								_alt = this.interpreter.adaptivePredict(this._input, 170, this._ctx);
+							}
 						}
-						}
-					}
-					this.state = 1379;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 169, this._ctx);
+						break;
+					default:
+						throw new NoViableAltException(this);
 				}
-				this.state = 1384;
-				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 170, this._ctx);
-				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-					if (_alt === 1) {
-						{
-						{
-						this.state = 1380;
-						this.match(JavaParser.LBRACK);
-						this.state = 1381;
-						this.match(JavaParser.RBRACK);
-						}
-						}
-					}
-					this.state = 1386;
-					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 170, this._ctx);
-				}
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
 			}
 		}
 		catch (re) {
@@ -6636,18 +6636,18 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1389;
-			this.arguments();
-			this.state = 1391;
-			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 172, this._ctx) ) {
-			case 1:
-				{
-				this.state = 1390;
-				this.classBody();
+				this.state = 1389;
+				this.arguments();
+				this.state = 1391;
+				this._errHandler.sync(this);
+				switch (this.interpreter.adaptivePredict(this._input, 172, this._ctx)) {
+					case 1:
+						{
+							this.state = 1390;
+							this.classBody();
+						}
+						break;
 				}
-				break;
-			}
 			}
 		}
 		catch (re) {
@@ -6671,10 +6671,10 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1393;
-			this.nonWildcardTypeArguments();
-			this.state = 1394;
-			this.explicitGenericInvocationSuffix();
+				this.state = 1393;
+				this.nonWildcardTypeArguments();
+				this.state = 1394;
+				this.explicitGenericInvocationSuffix();
 			}
 		}
 		catch (re) {
@@ -6698,24 +6698,24 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 1399;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 173, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1396;
-				this.match(JavaParser.LT);
-				this.state = 1397;
-				this.match(JavaParser.GT);
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 173, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 1396;
+						this.match(JavaParser.LT);
+						this.state = 1397;
+						this.match(JavaParser.GT);
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1398;
-				this.typeArguments();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1398;
+						this.typeArguments();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -6739,24 +6739,24 @@ export class JavaParser extends Parser {
 		try {
 			this.state = 1404;
 			this._errHandler.sync(this);
-			switch ( this.interpreter.adaptivePredict(this._input, 174, this._ctx) ) {
-			case 1:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1401;
-				this.match(JavaParser.LT);
-				this.state = 1402;
-				this.match(JavaParser.GT);
-				}
-				break;
+			switch (this.interpreter.adaptivePredict(this._input, 174, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 1401;
+						this.match(JavaParser.LT);
+						this.state = 1402;
+						this.match(JavaParser.GT);
+					}
+					break;
 
-			case 2:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1403;
-				this.nonWildcardTypeArguments();
-				}
-				break;
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1403;
+						this.nonWildcardTypeArguments();
+					}
+					break;
 			}
 		}
 		catch (re) {
@@ -6780,12 +6780,12 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1406;
-			this.match(JavaParser.LT);
-			this.state = 1407;
-			this.typeList();
-			this.state = 1408;
-			this.match(JavaParser.GT);
+				this.state = 1406;
+				this.match(JavaParser.LT);
+				this.state = 1407;
+				this.typeList();
+				this.state = 1408;
+				this.match(JavaParser.GT);
 			}
 		}
 		catch (re) {
@@ -6810,24 +6810,24 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1410;
-			this.typeType();
-			this.state = 1415;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 1411;
-				this.match(JavaParser.COMMA);
-				this.state = 1412;
+				this.state = 1410;
 				this.typeType();
-				}
-				}
-				this.state = 1417;
+				this.state = 1415;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 1411;
+							this.match(JavaParser.COMMA);
+							this.state = 1412;
+							this.typeType();
+						}
+					}
+					this.state = 1417;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
 			}
 		}
 		catch (re) {
@@ -6853,79 +6853,79 @@ export class JavaParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1421;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 176, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1418;
-					this.annotation();
-					}
-					}
-				}
-				this.state = 1423;
+				this.state = 1421;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 176, this._ctx);
-			}
-			this.state = 1426;
-			this._errHandler.sync(this);
-			switch (this._input.LA(1)) {
-			case JavaParser.IDENTIFIER:
-				{
-				this.state = 1424;
-				this.classOrInterfaceType();
-				}
-				break;
-			case JavaParser.BOOLEAN:
-			case JavaParser.BYTE:
-			case JavaParser.CHAR:
-			case JavaParser.DOUBLE:
-			case JavaParser.FLOAT:
-			case JavaParser.INT:
-			case JavaParser.LONG:
-			case JavaParser.SHORT:
-				{
-				this.state = 1425;
-				this.primitiveType();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			this.state = 1438;
-			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 179, this._ctx);
-			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
-				if (_alt === 1) {
-					{
-					{
-					this.state = 1431;
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1418;
+								this.annotation();
+							}
+						}
+					}
+					this.state = 1423;
 					this._errHandler.sync(this);
-					_la = this._input.LA(1);
-					while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-						{
-						{
-						this.state = 1428;
-						this.annotation();
-						}
-						}
-						this.state = 1433;
-						this._errHandler.sync(this);
-						_la = this._input.LA(1);
-					}
-					this.state = 1434;
-					this.match(JavaParser.LBRACK);
-					this.state = 1435;
-					this.match(JavaParser.RBRACK);
-					}
-					}
+					_alt = this.interpreter.adaptivePredict(this._input, 176, this._ctx);
 				}
-				this.state = 1440;
+				this.state = 1426;
+				this._errHandler.sync(this);
+				switch (this._input.LA(1)) {
+					case JavaParser.IDENTIFIER:
+						{
+							this.state = 1424;
+							this.classOrInterfaceType();
+						}
+						break;
+					case JavaParser.BOOLEAN:
+					case JavaParser.BYTE:
+					case JavaParser.CHAR:
+					case JavaParser.DOUBLE:
+					case JavaParser.FLOAT:
+					case JavaParser.INT:
+					case JavaParser.LONG:
+					case JavaParser.SHORT:
+						{
+							this.state = 1425;
+							this.primitiveType();
+						}
+						break;
+					default:
+						throw new NoViableAltException(this);
+				}
+				this.state = 1438;
 				this._errHandler.sync(this);
 				_alt = this.interpreter.adaptivePredict(this._input, 179, this._ctx);
-			}
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						{
+							{
+								this.state = 1431;
+								this._errHandler.sync(this);
+								_la = this._input.LA(1);
+								while (_la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+									{
+										{
+											this.state = 1428;
+											this.annotation();
+										}
+									}
+									this.state = 1433;
+									this._errHandler.sync(this);
+									_la = this._input.LA(1);
+								}
+								this.state = 1434;
+								this.match(JavaParser.LBRACK);
+								this.state = 1435;
+								this.match(JavaParser.RBRACK);
+							}
+						}
+					}
+					this.state = 1440;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 179, this._ctx);
+				}
 			}
 		}
 		catch (re) {
@@ -6950,18 +6950,18 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1441;
-			_la = this._input.LA(1);
-			if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG))) !== 0) || _la === JavaParser.SHORT)) {
-			this._errHandler.recoverInline(this);
-			} else {
-				if (this._input.LA(1) === Token.EOF) {
-					this.matchedEOF = true;
-				}
+				this.state = 1441;
+				_la = this._input.LA(1);
+				if (!((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG))) !== 0) || _la === JavaParser.SHORT)) {
+					this._errHandler.recoverInline(this);
+				} else {
+					if (this._input.LA(1) === Token.EOF) {
+						this.matchedEOF = true;
+					}
 
-				this._errHandler.reportMatch(this);
-				this.consume();
-			}
+					this._errHandler.reportMatch(this);
+					this.consume();
+				}
 			}
 		}
 		catch (re) {
@@ -6986,28 +6986,28 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1443;
-			this.match(JavaParser.LT);
-			this.state = 1444;
-			this.typeArgument();
-			this.state = 1449;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			while (_la === JavaParser.COMMA) {
-				{
-				{
-				this.state = 1445;
-				this.match(JavaParser.COMMA);
-				this.state = 1446;
+				this.state = 1443;
+				this.match(JavaParser.LT);
+				this.state = 1444;
 				this.typeArgument();
-				}
-				}
-				this.state = 1451;
+				this.state = 1449;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
-			}
-			this.state = 1452;
-			this.match(JavaParser.GT);
+				while (_la === JavaParser.COMMA) {
+					{
+						{
+							this.state = 1445;
+							this.match(JavaParser.COMMA);
+							this.state = 1446;
+							this.typeArgument();
+						}
+					}
+					this.state = 1451;
+					this._errHandler.sync(this);
+					_la = this._input.LA(1);
+				}
+				this.state = 1452;
+				this.match(JavaParser.GT);
 			}
 		}
 		catch (re) {
@@ -7032,34 +7032,34 @@ export class JavaParser extends Parser {
 			this.state = 1460;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.LPAREN:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1454;
-				this.arguments();
-				}
-				break;
-			case JavaParser.DOT:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1455;
-				this.match(JavaParser.DOT);
-				this.state = 1456;
-				this.match(JavaParser.IDENTIFIER);
-				this.state = 1458;
-				this._errHandler.sync(this);
-				switch ( this.interpreter.adaptivePredict(this._input, 181, this._ctx) ) {
-				case 1:
+				case JavaParser.LPAREN:
+					this.enterOuterAlt(_localctx, 1);
 					{
-					this.state = 1457;
-					this.arguments();
+						this.state = 1454;
+						this.arguments();
 					}
 					break;
-				}
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.DOT:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1455;
+						this.match(JavaParser.DOT);
+						this.state = 1456;
+						this.match(JavaParser.IDENTIFIER);
+						this.state = 1458;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 181, this._ctx)) {
+							case 1:
+								{
+									this.state = 1457;
+									this.arguments();
+								}
+								break;
+						}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -7084,26 +7084,26 @@ export class JavaParser extends Parser {
 			this.state = 1466;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
-			case JavaParser.SUPER:
-				this.enterOuterAlt(_localctx, 1);
-				{
-				this.state = 1462;
-				this.match(JavaParser.SUPER);
-				this.state = 1463;
-				this.superSuffix();
-				}
-				break;
-			case JavaParser.IDENTIFIER:
-				this.enterOuterAlt(_localctx, 2);
-				{
-				this.state = 1464;
-				this.match(JavaParser.IDENTIFIER);
-				this.state = 1465;
-				this.arguments();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+				case JavaParser.SUPER:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 1462;
+						this.match(JavaParser.SUPER);
+						this.state = 1463;
+						this.superSuffix();
+					}
+					break;
+				case JavaParser.IDENTIFIER:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 1464;
+						this.match(JavaParser.IDENTIFIER);
+						this.state = 1465;
+						this.arguments();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 			}
 		}
 		catch (re) {
@@ -7128,20 +7128,20 @@ export class JavaParser extends Parser {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 1468;
-			this.match(JavaParser.LPAREN);
-			this.state = 1470;
-			this._errHandler.sync(this);
-			_la = this._input.LA(1);
-			if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
-				{
-				this.state = 1469;
-				this.expressionList();
+				this.state = 1468;
+				this.match(JavaParser.LPAREN);
+				this.state = 1470;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if ((((_la) & ~0x1F) === 0 && ((1 << _la) & ((1 << JavaParser.BOOLEAN) | (1 << JavaParser.BYTE) | (1 << JavaParser.CHAR) | (1 << JavaParser.DOUBLE) | (1 << JavaParser.FLOAT) | (1 << JavaParser.INT) | (1 << JavaParser.LONG) | (1 << JavaParser.NEW))) !== 0) || ((((_la - 37)) & ~0x1F) === 0 && ((1 << (_la - 37)) & ((1 << (JavaParser.SHORT - 37)) | (1 << (JavaParser.SUPER - 37)) | (1 << (JavaParser.THIS - 37)) | (1 << (JavaParser.VOID - 37)) | (1 << (JavaParser.DECIMAL_LITERAL - 37)) | (1 << (JavaParser.HEX_LITERAL - 37)) | (1 << (JavaParser.OCT_LITERAL - 37)) | (1 << (JavaParser.BINARY_LITERAL - 37)) | (1 << (JavaParser.FLOAT_LITERAL - 37)) | (1 << (JavaParser.HEX_FLOAT_LITERAL - 37)) | (1 << (JavaParser.BOOL_LITERAL - 37)) | (1 << (JavaParser.CHAR_LITERAL - 37)) | (1 << (JavaParser.STRING_LITERAL - 37)) | (1 << (JavaParser.NULL_LITERAL - 37)) | (1 << (JavaParser.LPAREN - 37)))) !== 0) || ((((_la - 72)) & ~0x1F) === 0 && ((1 << (_la - 72)) & ((1 << (JavaParser.LT - 72)) | (1 << (JavaParser.BANG - 72)) | (1 << (JavaParser.TILDE - 72)) | (1 << (JavaParser.INC - 72)) | (1 << (JavaParser.DEC - 72)) | (1 << (JavaParser.ADD - 72)) | (1 << (JavaParser.SUB - 72)))) !== 0) || _la === JavaParser.AT || _la === JavaParser.IDENTIFIER) {
+					{
+						this.state = 1469;
+						this.expressionList();
+					}
 				}
-			}
 
-			this.state = 1472;
-			this.match(JavaParser.RPAREN);
+				this.state = 1472;
+				this.match(JavaParser.RPAREN);
 			}
 		}
 		catch (re) {
@@ -7161,63 +7161,63 @@ export class JavaParser extends Parser {
 
 	public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): boolean {
 		switch (ruleIndex) {
-		case 88:
-			return this.expression_sempred(_localctx as ExpressionContext, predIndex);
+			case 88:
+				return this.expression_sempred(_localctx as ExpressionContext, predIndex);
 		}
 		return true;
 	}
 	private expression_sempred(_localctx: ExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
-		case 0:
-			return this.precpred(this._ctx, 17);
+			case 0:
+				return this.precpred(this._ctx, 17);
 
-		case 1:
-			return this.precpred(this._ctx, 16);
+			case 1:
+				return this.precpred(this._ctx, 16);
 
-		case 2:
-			return this.precpred(this._ctx, 15);
+			case 2:
+				return this.precpred(this._ctx, 15);
 
-		case 3:
-			return this.precpred(this._ctx, 14);
+			case 3:
+				return this.precpred(this._ctx, 14);
 
-		case 4:
-			return this.precpred(this._ctx, 12);
+			case 4:
+				return this.precpred(this._ctx, 12);
 
-		case 5:
-			return this.precpred(this._ctx, 11);
+			case 5:
+				return this.precpred(this._ctx, 11);
 
-		case 6:
-			return this.precpred(this._ctx, 10);
+			case 6:
+				return this.precpred(this._ctx, 10);
 
-		case 7:
-			return this.precpred(this._ctx, 9);
+			case 7:
+				return this.precpred(this._ctx, 9);
 
-		case 8:
-			return this.precpred(this._ctx, 8);
+			case 8:
+				return this.precpred(this._ctx, 8);
 
-		case 9:
-			return this.precpred(this._ctx, 7);
+			case 9:
+				return this.precpred(this._ctx, 7);
 
-		case 10:
-			return this.precpred(this._ctx, 6);
+			case 10:
+				return this.precpred(this._ctx, 6);
 
-		case 11:
-			return this.precpred(this._ctx, 5);
+			case 11:
+				return this.precpred(this._ctx, 5);
 
-		case 12:
-			return this.precpred(this._ctx, 25);
+			case 12:
+				return this.precpred(this._ctx, 25);
 
-		case 13:
-			return this.precpred(this._ctx, 24);
+			case 13:
+				return this.precpred(this._ctx, 24);
 
-		case 14:
-			return this.precpred(this._ctx, 20);
+			case 14:
+				return this.precpred(this._ctx, 20);
 
-		case 15:
-			return this.precpred(this._ctx, 13);
+			case 15:
+				return this.precpred(this._ctx, 13);
 
-		case 16:
-			return this.precpred(this._ctx, 3);
+			case 16:
+				return this.precpred(this._ctx, 3);
 		}
 		return true;
 	}

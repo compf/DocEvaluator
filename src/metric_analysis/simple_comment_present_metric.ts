@@ -6,22 +6,22 @@ import { LogMessage } from "./log_message";
 import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
-export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric{
-    shallConsider(component:Component){
+export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric {
+    shallConsider(component: Component) {
         return !(component instanceof FileComponent);
     }
-    analyze(component: Component,builder:MetricResultBuilder,params:any|undefined): void {
-        let score=0;
-        let logMessages:LogMessage[]=[]
-        if(component.getComment()!=null){
-            score=MAX_SCORE;
+    analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {
+        let score = 0;
+        let logMessages: LogMessage[] = []
+        if (component.getComment() != null) {
+            score = MAX_SCORE;
         }
-        else{
-            score=MIN_SCORE;
+        else {
+            score = MIN_SCORE;
             logMessages.push(new LogMessage(`Component ${component.getQualifiedName()} has no documentation`))
         }
-        builder.processResult(new MetricResult(score,logMessages,this));
+        builder.processResult(new MetricResult(score, logMessages, this));
     }
-   
+
 
 }

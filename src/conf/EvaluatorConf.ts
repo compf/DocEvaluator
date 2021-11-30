@@ -2,7 +2,7 @@ import chalk from "chalk";
 import path from "path";
 import fs from "fs";
 import { MetricManager } from "../metric_analysis/metric_manager";
-const defaultMetrics=MetricManager.getMetricNames();
+const defaultMetrics = MetricManager.getMetricNames();
 const CONF_FILENAME = "comment_conf.json";
 
 /**
@@ -13,30 +13,30 @@ export class EvaluatorConf {
      * All file names that should be included in the analysis should be defined here.
      * Use common Linux syntax (*) to indicate that a filename should start or end with a specific string
      */
-    include: string[]=["*.java"];
-    
+    include: string[] = ["*.java"];
+
     /**
      * Similary as include but used to exclude specific files,
      * should be a subset of include
      */
-    exclude: string[]=[];
+    exclude: string[] = [];
 
     /**
      * define all metrics and their respective weights here
      */
-    metrics:{weight:number,metricName:string,params:any}[]=[];
+    metrics: { weight: number, metricName: string, params: any }[] = [];
 
     /**
      * the global threshold that the average of all metrics should meet to pass the documentation check
      */
-    global_threshold:number=20.0;
-    constructor(){
-       for(let s of defaultMetrics){
-           this.metrics.push({weight:1.0,metricName:s,params:MetricManager.getDefaultMetricParam(s)})
-       }
+    global_threshold: number = 20.0;
+    constructor() {
+        for (let s of defaultMetrics) {
+            this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s) })
+        }
     }
 
-    
+
 }
 
 
@@ -44,13 +44,13 @@ export class EvaluatorConf {
      * load the configuration from the comment_conf.json file
      * @returns A valid DirectoryTraverserConfig that is set to default values if no config file is found
      */
- export function loadConfFromFile(basePath:string):EvaluatorConf {
+export function loadConfFromFile(basePath: string): EvaluatorConf {
     try {
         let jsonContent = fs.readFileSync(path.join(basePath, CONF_FILENAME)).toString();
-        let jsonObject=JSON.parse(jsonContent);
-        let resultObject=new EvaluatorConf();
-        Object.assign(resultObject,jsonObject);
-        return  resultObject;
+        let jsonObject = JSON.parse(jsonContent);
+        let resultObject = new EvaluatorConf();
+        Object.assign(resultObject, jsonObject);
+        return resultObject;
     }
     catch (err) {
         console.log(chalk.yellow("No config file found. Using default values "))

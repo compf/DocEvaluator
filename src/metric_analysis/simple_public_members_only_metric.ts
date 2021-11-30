@@ -7,19 +7,19 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
-export class SimplePublicMembersOnlyMetric implements DocumentationAnalysisMetric{
-    shallConsider(component:Component){
+export class SimplePublicMembersOnlyMetric implements DocumentationAnalysisMetric {
+    shallConsider(component: Component) {
         return component.getComponentMetaInformation().isPublic() && !(component instanceof FileComponent);
     }
-    analyze(component: Component, builder: MetricResultBuilder,params:any|undefined): void {
-            if(component.getComment()!=null){
-                builder.processResult(new MetricResult(MAX_SCORE,[],this))
-            }
-            else{
-                let logMessage=new LogMessage("Public component " + component.getQualifiedName()+" is not documented");
-                builder.processResult(new MetricResult(MIN_SCORE,[logMessage],this))
-            }
+    analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {
+        if (component.getComment() != null) {
+            builder.processResult(new MetricResult(MAX_SCORE, [], this))
+        }
+        else {
+            let logMessage = new LogMessage("Public component " + component.getQualifiedName() + " is not documented");
+            builder.processResult(new MetricResult(MIN_SCORE, [logMessage], this))
+        }
     }
-    
-    
+
+
 }

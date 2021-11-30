@@ -3,7 +3,7 @@ import { ParseResult } from "./parse_result/parse_result";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStream, CharStreams, CommonTokenStream, ConsoleErrorListener, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
-import {  Component } from "./parse_result/component";
+import { Component } from "./parse_result/component";
 import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext, MethodBodyContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/structured_comment";
@@ -23,12 +23,12 @@ import { FileComponent } from "./parse_result/file_component";
 
 
 export class JavaParser extends BaseParser {
-    override parseString(content: string,filepath:string|null): HierarchicalComponent {
+    override parseString(content: string, filepath: string | null): HierarchicalComponent {
         let tokens = this.getTokens(content);
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
         //parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
-        let visitor = new FileVisitor(filepath??"");
+        let visitor = new FileVisitor(filepath ?? "");
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as FileComponent;
         return res;
@@ -79,10 +79,10 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
             else {
                 //TODO find better solution in case of fields with comma separated names
                 let names = ctx.children.filter((c) => c.childCount > 0).map((c) => c.getChild(0).text);
-                let groupedField = new GroupedMemberComponent(lineNumber, /*will be ignored*/"",this.type, this.parent, this.comment, this.meta);
+                let groupedField = new GroupedMemberComponent(lineNumber, /*will be ignored*/"", this.type, this.parent, this.comment, this.meta);
                 this.field = groupedField;
                 for (let n of names) {
-                   
+
                     groupedField.addChildName(n)
                 }
             }
@@ -105,16 +105,16 @@ class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<string[]>{
         return []
     }
     visitImplementInterfaces(ctx: ImplementInterfacesContext) {
-        let splitted= ctx.getChild(1).text.split(",");
-        for(let s of splitted){
+        let splitted = ctx.getChild(1).text.split(",");
+        for (let s of splitted) {
             this.superTypes.push(s);
         }
     }
     visitExtendClass(ctx: ExtendClassContext) {
-        this.superTypes.push( ctx.getChild(1).text);
+        this.superTypes.push(ctx.getChild(1).text);
     }
     private superTypes: string[] = [];
-    
+
     visit(ctx: RuleContext) {
         super.visit(ctx);
         return this.superTypes;
@@ -125,13 +125,13 @@ class InterfaceExtendVisitor extends AbstractParseTreeVisitor<string[]>{
         return []
     }
     visitExtendInterface(ctx: ExtendInterfaceContext) {
-        let splitted= ctx.getChild(1).text.split(",");
-        for(let s of splitted){
+        let splitted = ctx.getChild(1).text.split(",");
+        for (let s of splitted) {
             this.superTypes.push(s);
         }
     }
     private superTypes: string[] = [];
-    
+
     visit(ctx: RuleContext) {
         super.visit(ctx);
         return this.superTypes;
@@ -151,14 +151,14 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         let blck = ctx.classBody().classBodyDeclaration();
         let superTypes = new ClassExtendAndImplementVisitor().visit(ctx);
         let lineNumber = ctx.start.line;
-        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new DefaultComponentMetaInformation(this.isPublic),superTypes);
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new DefaultComponentMetaInformation(this.isPublic), superTypes);
 
-        this.visitClassOrInterfaceMembers(blck,clsComponent);
+        this.visitClassOrInterfaceMembers(blck, clsComponent);
 
         return clsComponent;
 
     }
-    visitClassOrInterfaceMembers(blck:RuleContext[],clsComponent:ClassComponent){
+    visitClassOrInterfaceMembers(blck: RuleContext[], clsComponent: ClassComponent) {
 
         if (blck == undefined) return null;
         for (var child of blck) {
@@ -171,14 +171,14 @@ class ClassDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         }
     }
     //TODO reduce duplication if possible
-    visitInterfaceDeclaration(ctx:InterfaceDeclarationContext){
+    visitInterfaceDeclaration(ctx: InterfaceDeclarationContext) {
         this.className = ctx.getChild(1).text;
         let blck = ctx.interfaceBody().interfaceBodyDeclaration();
         let superTypes = new InterfaceExtendVisitor().visit(ctx);
         let lineNumber = ctx.start.line;
-        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new DefaultComponentMetaInformation(this.isPublic),superTypes);
+        let clsComponent = new ClassComponent(lineNumber, this.className, this.parent, this.comment, new DefaultComponentMetaInformation(this.isPublic), superTypes);
 
-        this.visitClassOrInterfaceMembers(blck,clsComponent);
+        this.visitClassOrInterfaceMembers(blck, clsComponent);
 
         return clsComponent;
     }
@@ -195,12 +195,12 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
     protected defaultResult(): null | Component {
         return null;
     }
-    constructor(path:string){
+    constructor(path: string) {
         super();
-        this.filepath=path;
-        this.parent=new FileComponent(0, this.filepath, null, null, new DefaultComponentMetaInformation(true));
+        this.filepath = path;
+        this.parent = new FileComponent(0, this.filepath, null, null, new DefaultComponentMetaInformation(true));
     }
-    private filepath:string;
+    private filepath: string;
     private parent: HierarchicalComponent;
     visitTypeDeclaration(ctx: TypeDeclarationContext) {
 
@@ -218,25 +218,25 @@ class FileVisitor extends AbstractParseTreeVisitor<Component | null> implements 
         return this.parent;
     }
 }
-export class JavadocParser{
+export class JavadocParser {
     private getElementOrDefault<T>(array: T[], index: number): T | null {
         if (index < array.length) {
             return array[index];
         }
         else return null;
     }
-    private splitWithRemainder(str:string,delim:string,max:number){
-        let splitted=str.split(delim);
-        let result=[]
-        let last="";
-        for(let i=0;i<splitted.length;i++){
-            if(i<max-1){
+    private splitWithRemainder(str: string, delim: string, max: number) {
+        let splitted = str.split(delim);
+        let result = []
+        let last = "";
+        for (let i = 0; i < splitted.length; i++) {
+            if (i < max - 1) {
                 result.push(splitted[i])
             }
-            else{
-                last+=splitted[i]+" ";
+            else {
+                last += splitted[i] + " ";
             }
-            
+
         }
         result.push(last.trim());
         return result;
@@ -244,15 +244,15 @@ export class JavadocParser{
     parseTag(line: string): StructuredCommentTag {
         let splitted: string[] = []
         if (this.hasParam(line)) {
-            splitted = this.splitWithRemainder(line," ",3);
-          
+            splitted = this.splitWithRemainder(line, " ", 3);
+
             let tag = this.getElementOrDefault(splitted, 0)!!
             let param = this.getElementOrDefault(splitted, 1)
             let descr = this.getElementOrDefault(splitted, 2)
             return new StructuredCommentTag(tag, param, descr);
         }
         else {
-            splitted = this.splitWithRemainder(line," ",2);
+            splitted = this.splitWithRemainder(line, " ", 2);
             let tag = this.getElementOrDefault(splitted, 0)!!
             let descr = this.getElementOrDefault(splitted, 1)
             return new StructuredCommentTag(tag, null, descr);
@@ -268,7 +268,7 @@ export class JavadocParser{
         let toReplace = ["/**", "*/", "*"]
         for (let i = 0; i < lines.length; i++) {
             for (let replace of toReplace) {
-                lines[i]=lines[i].trim();
+                lines[i] = lines[i].trim();
                 if (lines[i].startsWith(replace)) {
                     lines[i] = lines[i].substring(replace.length);
                     lines[i] = lines[i].trim();
@@ -284,7 +284,7 @@ export class JavadocParser{
                 tags.push(tag);
                 foundTag = true;
             }
-            else if(line!="") {
+            else if (line != "") {
                 descriptionLines.push(line)
             }
         }
@@ -318,7 +318,7 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
         return visitor.visit(ctx);
 
     }
-    visitConstructorDeclaration(ctx:ConstructorDeclarationContext){
+    visitConstructorDeclaration(ctx: ConstructorDeclarationContext) {
         let visitor = new MethodVisitor(this.parent, this.comment, this.modifier?.accessibilty == Accessibility.Public, this.modifier.isOverride);
         return visitor.visit(ctx);
     }
@@ -326,7 +326,7 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
         let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
         return visitor.visit(ctx);
     }
-    visitInterfaceDeclaration(ctx:InterfaceDeclarationContext){
+    visitInterfaceDeclaration(ctx: InterfaceDeclarationContext) {
         // We are treating classes and interfaces to be equivalent, this is a compromise to have good compatibility with 
         // other oop languages
         let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
@@ -334,7 +334,7 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
     }
     visitComment(ctx: CommentContext): null {
         let commentText = ctx.text;
-        let parser=new JavadocParser();
+        let parser = new JavadocParser();
         this.comment = parser.parseCommentText(commentText);
         return null;
     }
@@ -357,18 +357,18 @@ class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThro
         this.thrownException = ctx.getChild(1).text.split(",");
     }
     visitFormalParameter(ctx: FormalParameterContext) {
-     
-        let name =  ctx.variableDeclaratorId().text;
+
+        let name = ctx.variableDeclaratorId().text;
         let type = ctx.typeType().text;
         this.params.push({ type, name });
     }
-    visitLastFormalParameter(ctx:LastFormalParameterContext){
-       
-        let name =  ctx.variableDeclaratorId().text;
+    visitLastFormalParameter(ctx: LastFormalParameterContext) {
+
+        let name = ctx.variableDeclaratorId().text;
         let type = ctx.typeType().text;
         // TODO error handling in case of varags in java, might lead to bugs so better solution should be looked for
-        if(ctx.childCount==3 && ctx.getChild(1).text=="..."){
-            type+="[]";
+        if (ctx.childCount == 3 && ctx.getChild(1).text == "...") {
+            type += "[]";
         }
         this.params.push({ type, name });
     }
@@ -378,18 +378,18 @@ class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThro
     }
 
 }
- enum Accessibility{
-    Public,Protected,Private
+enum Accessibility {
+    Public, Protected, Private
 }
 type ModifiererInformation = { accessibilty: Accessibility, isStatic: boolean, isOverride: boolean }
-class MethodBodyTextVisitor  extends AbstractParseTreeVisitor<string>{
+class MethodBodyTextVisitor extends AbstractParseTreeVisitor<string>{
     protected defaultResult(): string {
         return "";
     }
-    visitMethodBody(ctx:MethodBodyContext){
-        return ctx.start.inputStream?.getText(Interval.of(ctx.start.startIndex,ctx.stop?.stopIndex ?? 0));
+    visitMethodBody(ctx: MethodBodyContext) {
+        return ctx.start.inputStream?.getText(Interval.of(ctx.start.startIndex, ctx.stop?.stopIndex ?? 0));
     }
-    
+
 }
 class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> implements JavaParserVisitor<MethodComponent | void>{
     private isOverriding: boolean;
@@ -413,40 +413,41 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     private parent: Component | null;
     private methodParams: { type: string, name: string }[] = [];
     private thrownException: string[] = [];
-    private methodBody:string="";
+    private methodBody: string = "";
 
 
     visitMethodDeclaration(ctx: MethodDeclarationContext) {
         this.lineNumber = ctx.start.line;
         this.visitMethod(ctx);
     }
-    
-    visitInterfaceMethodDeclaration(ctx:InterfaceMethodDeclarationContext){
+
+    visitInterfaceMethodDeclaration(ctx: InterfaceMethodDeclarationContext) {
         this.lineNumber = ctx.start.line;
         this.visitMethod(ctx);
     }
-    visitConstructorDeclaration(ctx:ConstructorDeclarationContext){
+    visitConstructorDeclaration(ctx: ConstructorDeclarationContext) {
         this.lineNumber = ctx.start.line;
-        this.returnType="void";
-        this.methodName="constructor";
+        this.returnType = "void";
+        this.methodName = "constructor";
         let visitor = new MethodParamsAndThrowVisitor();
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
-       
+
     }
-    private visitMethod(ctx:RuleContext){
+    private visitMethod(ctx: RuleContext) {
         this.returnType = ctx.getChild(0).text
         this.methodName = ctx.getChild(1).text;
         let visitor = new MethodParamsAndThrowVisitor();
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
-        this.methodBody=new MethodBodyTextVisitor().visit(ctx)    }
+        this.methodBody = new MethodBodyTextVisitor().visit(ctx)
+    }
 
     visit(ctx: RuleContext): MethodComponent {
         super.visit(ctx);
-        return new MethodComponent(this.lineNumber, this.methodName, this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic, this.isOverriding, this.thrownException), this.methodParams,this.methodBody)
+        return new MethodComponent(this.lineNumber, this.methodName, this.returnType, this.parent, this.comment, new JavaMethodData(this.isPublic, this.isOverriding, this.thrownException), this.methodParams, this.methodBody)
     }
 
 }

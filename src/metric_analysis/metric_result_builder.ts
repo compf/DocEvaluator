@@ -6,26 +6,26 @@ import { MetricResult } from "./metric_result";
  * For each MetricResult, processResult should be called
  * the final average result can be obtained by getAggregatedResult 
  */
-export class MetricResultBuilder{
-    protected creator:DocumentationAnalysisMetric | MetricResultBuilder|null=null;
-    protected resultList:MetricResult[]=[]
+export class MetricResultBuilder {
+    protected creator: DocumentationAnalysisMetric | MetricResultBuilder | null = null;
+    protected resultList: MetricResult[] = []
     /**
      * Process a MetricResult in order to  aggregate them
      * The log message of the result will be included in the new result
      * @param result  
      */
-    processResult(result:MetricResult){
+    processResult(result: MetricResult) {
         this.resultList.push(result)
-        if(this.creator==null){
-            this.creator=result.getCreator();
+        if (this.creator == null) {
+            this.creator = result.getCreator();
         }
-        else if(this.creator!=result.getCreator()){
-            this.creator=this;
+        else if (this.creator != result.getCreator()) {
+            this.creator = this;
         }
-      
+
     }
-    protected putAllLogMessages(src:LogMessage[],dest:LogMessage[]){
-        for(let item of src){
+    protected putAllLogMessages(src: LogMessage[], dest: LogMessage[]) {
+        for (let item of src) {
             dest.push(item)
         }
     }
@@ -33,23 +33,23 @@ export class MetricResultBuilder{
      * Creates the aggegrated MetricResult 
      * @returns some kind of aggregation of all results that have been processed
      */
-    getAggregatedResult():MetricResult{
+    getAggregatedResult(): MetricResult {
         //prevent numberResults from becoming 0
-        let numberResults=this.resultList.length;
-        if(numberResults==0)numberResults=1;
-        let sum=0;
-        let allLogMessages:LogMessage[]=[]
-        for(let partialResult of this.resultList){
-            sum+=partialResult.getResult();
-            this.putAllLogMessages(partialResult.getLogMessages(),allLogMessages)
+        let numberResults = this.resultList.length;
+        if (numberResults == 0) numberResults = 1;
+        let sum = 0;
+        let allLogMessages: LogMessage[] = []
+        for (let partialResult of this.resultList) {
+            sum += partialResult.getResult();
+            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
         }
-        let result= new MetricResult(sum/numberResults,allLogMessages,this.creator!!);
+        let result = new MetricResult(sum / numberResults, allLogMessages, this.creator!!);
         return result;
     }
     /**
      * reset the builder  to default values
      */
-    reset(){
-        this.resultList=[];
+    reset() {
+        this.resultList = [];
     }
 }

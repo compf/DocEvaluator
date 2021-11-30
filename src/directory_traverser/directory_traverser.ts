@@ -16,22 +16,22 @@ const MiniMatchConf = { dot: true, matchBase: true };
  */
 export class DirectoryTraverser {
     private basePath: string;
-    private conf: {exclude:string[],include:string[]};
+    private conf: { exclude: string[], include: string[] };
     /**
      * 
      * @param basePath The path to the directory where traversing should start
      */
-    constructor(basePath: string, jsonObject:{exclude:string[],include:string[]}) {
+    constructor(basePath: string, jsonObject: { exclude: string[], include: string[] }) {
         this.basePath = basePath;
-        this.conf=jsonObject;
+        this.conf = jsonObject;
         // Add all include/exclude items from the conf to the array
         // which contains Minimatch objects, this will done for caching and preventing
         // to create Minimatch objects for each file
-        for(let include of this.conf.include){
-            this.includeItems.push(new Minimatch(include,MiniMatchConf));
+        for (let include of this.conf.include) {
+            this.includeItems.push(new Minimatch(include, MiniMatchConf));
         }
-        for(let exclude of this.conf.exclude){
-            this.excludeItems.push(new Minimatch(exclude,MiniMatchConf));
+        for (let exclude of this.conf.exclude) {
+            this.excludeItems.push(new Minimatch(exclude, MiniMatchConf));
         }
     }
 
@@ -45,8 +45,8 @@ export class DirectoryTraverser {
         this.getRelevantFilesRec(this.basePath, resultSet);
         return resultSet;
     }
-    private excludeItems:IMinimatch[]=[]
-    private includeItems:IMinimatch[]=[]
+    private excludeItems: IMinimatch[] = []
+    private includeItems: IMinimatch[] = []
     /**
      * Determine if a file should be ignored
      * @param filename the filename to check
