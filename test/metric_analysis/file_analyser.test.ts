@@ -4,6 +4,7 @@ import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
 import { CommentedLinesRatioMetric } from "../../src/metric_analysis/commented_lines_ratio_metric";
 import { DocumentationAnalysisMetric } from "../../src/metric_analysis/documentation_analysis_metric";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
+import { IgnoreGetterSetterMetric } from "../../src/metric_analysis/ignore_getters_setter_metric";
 import { MedianResultBuilder } from "../../src/metric_analysis/median_result_builder";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResult } from "../../src/metric_analysis/metric_result";
@@ -182,5 +183,19 @@ test("weighted result builder", () => {
     builder.processResult(publicMembersOnlyResult);
     let actual = builder.getAggregatedResult().getResult();
     expect(actual).toBeCloseTo(expectedResult);
+
+});
+test("test ignore getters setter",()=>{
+let parser=new JavaParser();
+const path="testDir/GetterSetter.java"
+let root=parser.parse(path);
+let res={root,path};
+let builder=new MetricResultBuilder();
+let metric=new IgnoreGetterSetterMetric();
+let analyzer=new FileAnalyzer();
+let params={getterPattern:"(get.*)|(is.*)",setterPattern:"set.*"}
+analyzer.analyze(res,metric,builder,params)
+let result=builder.getAggregatedResult();
+expect(result.getResult()).toBe(25);
 
 });
