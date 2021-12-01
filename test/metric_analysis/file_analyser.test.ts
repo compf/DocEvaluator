@@ -47,7 +47,7 @@ test("test longer uncommented method", () => {
     let root = parser.parse(path);
     let builder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
-    let conf = { ignoreLines: ["", "{", "}"] }
+    let conf = { ignoreLines: ["", "{", "}"],k:0.2 }
     analyzer.analyze({ root, path }, new SimpleLargeMethodCommentedMetric(), builder, conf);
     let result = builder.getAggregatedResult();
 

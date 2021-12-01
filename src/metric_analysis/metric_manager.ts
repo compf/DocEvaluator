@@ -44,7 +44,7 @@ export namespace MetricManager {
         allMetrics.add("public_members_only", new SimplePublicMembersOnlyMetric());
         allMetrics.add("large_method_commented", new SimpleLargeMethodCommentedMetric());
         allMetrics.add("method_fully_documented", new SimpleMethodDocumentationMetric());
-        allMetrics.add("commented_lines_ratio_metric", new CommentedLinesRatioMetric());
+        allMetrics.add("commented_lines_ratio", new CommentedLinesRatioMetric());
         allMetrics.add("ignore_getters_setter", new IgnoreGetterSetterMetric());
     }
 
@@ -57,7 +57,17 @@ export namespace MetricManager {
         return Array.from(allMetrics.keys());
     }
     export function getDefaultMetricParam(metricName: string): any {
-        return {};
+        switch(metricName){
+            case "large_method_commented":
+                return {ignoreLines:["", "{", "}"],k:0.2}
+            case "commented_lines_ratio":
+                return {ignoreLines:["", "{", "}"]};
+            case "ignore_getters_setter":
+                return {getterPattern:"(get.*)|(is.*)",setterPattern:"set.*"};
+            default:
+                return {}
+        }
+
     }
     init();
 

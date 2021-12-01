@@ -20,10 +20,7 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
         let logMessages: LogMessage[] = [];
         let result = 0;
         if (component.getComment() == null) {
-            let ignoreLines = [""];
-            if (params != undefined && params.ignoreLines != undefined) {
-                ignoreLines = params.ignoreLines;
-            }
+            let ignoreLines = params.ignoreLines;
             let method = component as MethodComponent;
             let lines = method.getLinesOfCode(ignoreLines);
             /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
@@ -33,7 +30,7 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
             some code lines, the part above 10 lines massively punnishes large function by using a large k-Factor
             */
             let l = lines;
-            let k = 0.2;
+            let k = params.k;
             if (l < 10) {
                 result = this.boundedGrowth(0.9 * MAX_SCORE, MAX_SCORE, k, l)
             }

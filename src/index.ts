@@ -33,9 +33,12 @@ function main(args: Array<string>) {
         console.log("Looking at " + root.path)
         for (let metricInformation of metrics) {
 
+            let params=MetricManager.getDefaultMetricParam(metricInformation.metricName);
+            Object.assign(params,metricInformation.params);
+
             let metric = MetricManager.getMetric(metricInformation.metricName);
             console.log("Using metric", metricInformation.metricName)
-            fileAnaylzer.analyze(root, metric, singleMetricBuilder, metricInformation.params);
+            fileAnaylzer.analyze(root, metric, singleMetricBuilder, params);
             let partialResult = singleMetricBuilder.getAggregatedResult();
             console.log("Partial result", partialResult.getResult());
             for (let log of partialResult.getLogMessages()) {
