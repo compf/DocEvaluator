@@ -41,9 +41,19 @@ Der Vorteil des Ausschließen von Getter und Setter wurde bereits genannt. Die K
  Die Konstante $k$ kann vom Benutzer der Metrik frei ermittelt werden; ein Wert von $k=0.2$ scheint jedoch passend zu sein, da Methoden mit bis zu zehn Zeilen noch relativ gut bewertet werden und längere Methoden gut bestraft werden.
  
  Diese Metrik wird allerdings nur auf undokumentierte Methoden angewendet, sodass dokumentierte Methoden wie bei der Metrik \textit{SimpleCommentPresentMetric} mit 100 Punkten bewertet werden. Andere Komponenten wie zum Beispiel Klassen werden hier vollständig ignoriert, sodass sie keinen Einfluss auf das Gesamtergebnis haben. 
- 
+ \subsubsection{Parameter}
+ \begin{itemize}
+     \item \textit{k} Die Wachstumsrate des beschränktes Wachstum
+     \item \textit{ignoreLines} Zeilen, die bei der Berechneung der \ac{LOC} ignoriert werden sollen
+ \end{itemize}
+     
+
  \subsection{Anteil dokumentierter Methoden an allen Methoden unter Berücksichtigung der LOC}
  Diese Metrik ist relativ ähnlich zu der vorherigen Metrik. Allerdings arbeitet diese Metrik auf dem Level von hierarchischen Komponenten (z. B. Klassen) und summiert die \ac{LOC} der dokumentierten und undokumentierten Methoden und ermittelt daraus den Anteil der dokumentierten \ac{LOC} an allen \ac{LOC}. Dadurch werden längere Methoden wichtiger als kürzere, wodurch undokumentierter Getter- oder Setter-Methoden nicht so negativ bewertet werden. In Unterschied zu der vorherigen Metrik werden auch kommentierte Methoden nach ihrer Länge bewertet, anstatt wie bei der vorherigen Metrik stets mit 100 Prozent. 
  
  Dies hat den Vorteil, dass jede dokumentierte Methode anhand ihres Gewicht in puncto \ac{LOC} gewichtet wird und der Entwickler für viele dokumentierte Methoden, die in vielen Fällen mehrere Codezeilen lang sind, eher belohnt wird als bei der vorherigen Metrik. Allerdings sollte auch erwähnt werden, dass hierdurch lange Methoden, auch wenn diese kommentiert sind, positiv bewertet werden, was eindeutig gegen die Grundsätze aus \cite[S. 34]{martin2009clean} verstößt. Zudem sollte es klar sein, dass eine undokumentierte lange Methode wahrscheinlich unverständlicher ist als eine gleich lange dokumentierte Methode. Da diese beiden Methoden sich dann bei dieser Metrik ausgleichen, würde die Qualität der Softwaredokumentation nur unzureichend widergespiegelt werden. 
+  \subsubsection{Parameter}
+  \begin{itemize}
+     \item \textit{ignoreLines} Zeilen, die bei der Berechneung der \ac{LOC} ignoriert werden sollen
+ \end{itemize}
  

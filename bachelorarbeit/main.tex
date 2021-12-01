@@ -19,10 +19,10 @@
 \usepackage{siunitx}
 \usepackage[autostyle]{csquotes}
 \usepackage{todonotes}
-
+\usepackage{svg}
 \usepackage[page, title, titletoc, header]{appendix} %prettier appendix
 
-
+\svgpath{{../figures/}}
 
 \usepackage[printonlyused]{acronym}
 \usepackage{listings} 
@@ -128,6 +128,7 @@
 
 \chapter{Implementierung des Tools}
 \input{Main/main}
+\clearpage
 \input{Main/Metriken}
 \chapter{Evaluation}
 	\label{sec:evaluation}

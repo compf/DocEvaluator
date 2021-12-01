@@ -44,7 +44,7 @@ Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine  \enquote{gelungen
 		\begin{figure}
 			\lstinputlisting
 			[caption={Beispielhafter Javdoc-Block für einfache Methode},
-			label={lst:simple_javadoc},
+			label={lst:simple_javadoc}
 			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/ternary.java}
 		\end{figure}
@@ -61,7 +61,13 @@ Auf der offiziellen Oracle-Webseite werden weitere empfehlenswerte Tipps für gu
     \item Die Dokumentation sollte erläutern, wie sich die Komponente in Randfällen verhält
     
 \end{itemize}
-Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann.
+Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. Abbildung \ref{fig:javadoc_example_screenshot} zeigt, wie eine Methode mittels Javadoc in HTML beschrieben wird. 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/javadoc_screenshot.png}
+    \caption{Gerenderte HTML-Ausgabe von javadoc}
+    \label{fig:javadoc_example_screenshot}
+\end{figure}
 
 Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist ein Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt.Mit \textit{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden. 
 
