@@ -13,7 +13,7 @@ export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMe
     boundedGrowth(S: number, B0: number, k: number, l: number): number {
         return S - (S - B0) * Math.exp(-k * l);
     }
-    shallConsider(component: Component) {
+    shallConsider(component: Component,params:any) {
         return component instanceof MethodComponent;
     }
     analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {

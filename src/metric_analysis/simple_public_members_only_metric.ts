@@ -8,7 +8,7 @@ import { MetricResultBuilder } from "./metric_result_builder";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 export class SimplePublicMembersOnlyMetric implements DocumentationAnalysisMetric {
-    shallConsider(component: Component) {
+    shallConsider(component: Component,params:any) {
         return component.getComponentMetaInformation().isPublic() && !(component instanceof FileComponent);
     }
     analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {

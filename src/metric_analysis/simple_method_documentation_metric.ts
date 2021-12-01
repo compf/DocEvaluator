@@ -7,7 +7,7 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMetric {
-    shallConsider(component: Component) {
+    shallConsider(component: Component,params:any) {
         return component instanceof MethodComponent;
     }
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {

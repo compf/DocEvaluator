@@ -28,7 +28,7 @@ export class CommentedLinesRatioMetric implements DocumentationAnalysisMetric {
         let result = MIN_SCORE + (MAX_SCORE - MIN_SCORE) * perc;
         builder.processResult(new MetricResult(result, [], this));
     }
-    shallConsider(component: Component): boolean {
+    shallConsider(component: Component,params:any): boolean {
         return component instanceof HierarchicalComponent && (component as HierarchicalComponent).getChildren().filter((c) => c instanceof MethodComponent).length > 0
     }
 

@@ -7,7 +7,7 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class SimpleCommentPresentMetric implements DocumentationAnalysisMetric {
-    shallConsider(component: Component) {
+    shallConsider(component: Component,params:any) {
         return !(component instanceof FileComponent);
     }
     analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {

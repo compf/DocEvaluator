@@ -23,7 +23,7 @@ export class FileAnalyzer {
      */
     private analyzeComponent(component: Component, builder: MetricResultBuilder, analyzer: DocumentationAnalysisMetric, params: any | undefined): void {
         // Only analyze relevant component to this metric
-        if (analyzer.shallConsider(component)) {
+        if (analyzer.shallConsider(component,params)) {
             analyzer.analyze(component, builder, params);
         }
         /* Analyze the children of the component if it is a hierarchical one
