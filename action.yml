@@ -5,7 +5,7 @@ branding:
   icon: 'check-circle'
   color: 'blue'
 runs:
-  using: 'node14'
+  using: 'composite'
   steps:
     run: 'tsc'
     run: 'npm run launch $GITHUB_WORKSPACE'
