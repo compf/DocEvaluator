@@ -13,15 +13,14 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - run: yarn --no-progress --non-interactive --frozen-lockfile
+    
 
-      - run: yarn build
+      - run: npm build
 
       - uses: ActionwareIO/branch-push-action@action
         with:
           branch: action
           files: |
-            README.md
             action.yml
             ./build/index.js
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
