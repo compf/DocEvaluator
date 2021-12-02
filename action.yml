@@ -7,5 +7,5 @@ branding:
 runs:
   using: 'composite'
   steps:
-    - run: 'cd $GITHUB_ACTION_PATH && tsc && npm run launch $GITHUB_WORKSPACE'
+    - run: 'cd $GITHUB_ACTION_PATH  && npm run launch $GITHUB_WORKSPACE'
       shell: "bash"
