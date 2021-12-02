@@ -83,8 +83,8 @@ export class EnvCommentConfLoader implements ConfLoader{
     if(env.INPUT_EXCLUDE){
         conf.exclude=env.INPUT_EXCLUDE.split(",")
     }
-    if(env.global_threshold){
-    conf.global_threshold=parseFloat(env.global_threshold);
+    if(env.INPUT_GLOBAL_THRESHOLD){
+    conf.global_threshold=parseFloat(env.INPUT_GLOBAL_THRESHOLD);
     }
     if(env.INPUT_METRICS){
     conf.metrics=JSON.parse(env.INPUT_METRICS)

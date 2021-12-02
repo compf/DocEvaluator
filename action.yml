@@ -9,7 +9,7 @@ branding:
   icon: 'check-circle'
   color: 'blue'
 runs:
-  using: 'composite'
-  steps:
-    - run: 'cd $GITHUB_ACTION_PATH  && npm i && npm run launch $GITHUB_WORKSPACE'
-      shell: "bash"
+  using: 'node16'
+  pre: "tsc"
+  main: 'build/src/index.js'
+  
