@@ -6,7 +6,6 @@ branding:
   color: 'blue'
 runs:
   using: 'composite'
-    steps:
-     - run: 'cd  $GITHUB_ACTION_PATH'
-     - run: 'tsc'
-     - run: 'npm run launch $GITHUB_WORKSPACE'
+  steps:
+    - run: 'tsc && npm run launch $GITHUB_WORKSPACE'
+      shell: "bash"
