@@ -1,8 +1,8 @@
-name: "Javadoc_evaluator"
-description: "A tool to check whether the documentation is sufficient"
-author: "Timo Schoemaker"
+name: 'Javadoc_evaluator'
+description: 'A tool to check whether the documentation is sufficient'
+author: 'Timo Schoemaker'
 runs:
-  using: "node14"
+  using: 'node14'
   steps:
-    run: "tsc"
-    run: "npm run launch $GITHUB_WORKSPACE
+    run: 'tsc'
+    run: 'npm run launch $GITHUB_WORKSPACE'
