@@ -6,7 +6,7 @@
   "scripts": {
     "launch": "tsc && node build/src/index.js",
     "test": "tsc && jest",
-    "build": "ncc build index.ts -o build",
+    "build": "ncc build src/index.ts -o build",
     "prepack": "npm run build"
   },
   "keywords": [
