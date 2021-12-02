@@ -7,7 +7,7 @@
     "launch": "tsc && node build/src/index.js",
     "test": "tsc && jest",
     "build": "tsc",
-    "prepack": "npm build"
+    "prepack": "npm run build"
   },
   "keywords": [
     "documentation",
