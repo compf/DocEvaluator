@@ -1,6 +1,10 @@
 name: 'Javadoc_evaluator'
 description: 'A tool to check whether the documentation is sufficient'
 author: 'Timo Schoemaker'
+inputs:
+  global_threshold:
+    description: "The global threshold when to fail"
+    required: false
 branding:
   icon: 'check-circle'
   color: 'blue'

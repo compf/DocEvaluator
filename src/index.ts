@@ -5,11 +5,11 @@ import { DirectoryTraverser } from "./directory_traverser/directory_traverser";
 import { JavaParser } from "./parser/java_parser"
 import { BaseParser } from "./parser/base_parser";
 import { ParseResult } from "./parser/parse_result/parse_result";
-import { loadConfFromFile } from "./conf/EvaluatorConf";
 import { MetricManager } from "./metric_analysis/metric_manager";
 import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { rootCertificates } from "tls";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
+import { loadConf } from "./conf/EvaluatorConf";
 function main(args: Array<string>) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -19,7 +19,7 @@ function main(args: Array<string>) {
     else {
         workingDirectory = args[0];
     }
-    let conf = loadConfFromFile(workingDirectory);
+    let conf = loadConf(workingDirectory);
     let traverser = new DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
     let metrics = conf.metrics;
