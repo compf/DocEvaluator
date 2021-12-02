@@ -5,7 +5,9 @@
   "type": "commonjs",
   "scripts": {
     "launch": "tsc && node build/src/index.js",
-    "test": "tsc && jest"
+    "test": "tsc && jest",
+    "build": "tsc",
+    "prepack": "npm build"
   },
   "keywords": [
     "documentation",
