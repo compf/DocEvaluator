@@ -10,6 +10,5 @@ branding:
   color: 'blue'
 runs:
   using: 'node16'
-  pre: "tsc"
   main: 'build/src/index.js'
   
