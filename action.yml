@@ -1,8 +1,9 @@
 name: 'Javadoc_evaluator'
 description: 'A tool to check whether the documentation is sufficient'
 author: 'Timo Schoemaker'
-icon: 'check-circle'
-color: 'blue'
+branding:
+  icon: 'check-circle'
+  color: 'blue'
 runs:
   using: 'node14'
   steps:
