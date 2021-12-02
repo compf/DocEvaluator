@@ -14,7 +14,7 @@ jobs:
         with:
           node-version: 12.x
     
-
+      - run: npm i -g @vercel/ncc
       - run: npm build
 
       - uses: ActionwareIO/branch-push-action@action
