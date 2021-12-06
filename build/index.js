@@ -28381,6 +28381,11 @@ exports.MIN_SCORE = 0;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FileAnalyzer = void 0;
 const hierarchical_component_1 = __nccwpck_require__(5448);
+var IgnoreTags;
+(function (IgnoreTags) {
+    IgnoreTags["IGNORE_THIS"] = "%ignore_this%";
+    IgnoreTags["IGNORE_NODE"] = "%ignore_node%";
+})(IgnoreTags || (IgnoreTags = {}));
 class FileAnalyzer {
     /**
      * analyse a file that is given by the ParseResult
@@ -28398,20 +28403,41 @@ class FileAnalyzer {
      * @param analyzer The metric to evaluate the file
      */
     analyzeComponent(component, builder, analyzer, params) {
+        let ignoreTag = this.getIgnoreFlag(component);
         // Only analyze relevant component to this metric
-        if (analyzer.shallConsider(component, params)) {
+        if (analyzer.shallConsider(component, params) && ignoreTag != IgnoreTags.IGNORE_THIS && ignoreTag != IgnoreTags.IGNORE_NODE) {
             analyzer.analyze(component, builder, params);
         }
         /* Analyze the children of the component if it is a hierarchical one
         This will be done even if the parent was not considered because we don't want to miss
         something
         */
-        if (component instanceof hierarchical_component_1.HierarchicalComponent) {
+        if (component instanceof hierarchical_component_1.HierarchicalComponent && ignoreTag != IgnoreTags.IGNORE_NODE) {
             let hierarchical = component;
             for (let c of hierarchical.getChildren()) {
                 this.analyzeComponent(c, builder, analyzer, params);
             }
         }
+    }
+    /**
+     * Checks whether the component's comment contains the string "%ignore_comment%"
+     * These component's will be ignored as they are presumed to be not relevant
+     * @param component the component to check
+     * @returns null if the component can be processed, otherwise "%ignore_this%",
+     *  if only this component should be ignored, or "%ignore_node%" if also all potential children should be ignored
+     */
+    getIgnoreFlag(component) {
+        var _a;
+        let generalDescription = (_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription();
+        if (generalDescription != null && generalDescription != undefined) {
+            if (generalDescription.includes(IgnoreTags.IGNORE_THIS)) {
+                return IgnoreTags.IGNORE_THIS;
+            }
+            else if (generalDescription.includes(IgnoreTags.IGNORE_NODE)) {
+                return IgnoreTags.IGNORE_NODE;
+            }
+        }
+        return null;
     }
 }
 exports.FileAnalyzer = FileAnalyzer;
