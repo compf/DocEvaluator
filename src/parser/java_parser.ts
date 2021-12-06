@@ -284,7 +284,11 @@ export class JavadocParser {
                 tags.push(tag);
                 foundTag = true;
             }
-            else if (line != "") {
+            else if(line!="" && foundTag){
+                let oldTag=tags[tags.length-1];
+                tags[tags.length-1]=new  StructuredCommentTag(oldTag.getKind(),oldTag.getParam(),(oldTag.getDescription()??"")+"\n"+line)
+            }
+            else if (line != "" ) {
                 descriptionLines.push(line)
             }
         }

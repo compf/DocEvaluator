@@ -157,7 +157,7 @@ test("test javadoc parser", () => {
         "it has many features\n" +
         "@return a positive number\n" +
         "@param a a parameter\n" +
-        "@throws Exception an exception to be thrown\n*/";
+        "@throws Exception an exception\n" +"to be thrown\n*/";
     let parser = new JavadocParser();
     let comment = parser.parseCommentText(testComment);
     expect(comment.getGeneralDescription()).not.toBeNull();
@@ -178,5 +178,5 @@ test("test javadoc parser", () => {
     let throwTag = comment.getTags()[2];
     expect(throwTag.getKind()).toBe("@throws");
     expect(throwTag.getParam()).toBe("Exception");
-    expect(throwTag.getDescription()).toBe("an exception to be thrown");
+    expect(throwTag.getDescription()).toBe("an exception\nto be thrown");
 });
