@@ -199,3 +199,15 @@ let result=builder.getAggregatedResult();
 expect(result.getResult()).toBe(25);
 
 });
+
+test("test ignore comments",()=>{
+    const path="testDir/TestIgnoreComments.java";
+    let parser=new JavaParser();
+    let root=parser.parse(path);
+    let result={path,root};
+    let file_analyzer=new FileAnalyzer();
+    let builder=new MetricResultBuilder();
+    file_analyzer.analyze(result,new SimpleCommentPresentMetric(),builder,undefined);
+    let metricResult=builder.getAggregatedResult().getResult();
+    expect(metricResult).toBe(50);
+});
