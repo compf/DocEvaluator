@@ -41272,6 +41272,7 @@ class JavadocParser {
         return tagsWithParams.some((t) => line.startsWith(t));
     }
     parseCommentText(text) {
+        var _a;
         let lines = text.split("\n");
         let toReplace = ["/**", "*/", "*"];
         for (let i = 0; i < lines.length; i++) {
@@ -41291,6 +41292,10 @@ class JavadocParser {
                 let tag = this.parseTag(line);
                 tags.push(tag);
                 foundTag = true;
+            }
+            else if (line != "" && foundTag) {
+                let oldTag = tags[tags.length - 1];
+                tags[tags.length - 1] = new structured_comment_1.StructuredCommentTag(oldTag.getKind(), oldTag.getParam(), ((_a = oldTag.getDescription()) !== null && _a !== void 0 ? _a : "") + "\n" + line);
             }
             else if (line != "") {
                 descriptionLines.push(line);
