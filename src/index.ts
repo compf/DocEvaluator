@@ -1,15 +1,14 @@
 
 import chalk from "chalk";
-import internal from "stream";
 import { DirectoryTraverser } from "./directory_traverser/directory_traverser";
 import { JavaParser } from "./parser/java_parser"
 import { BaseParser } from "./parser/base_parser";
 import { ParseResult } from "./parser/parse_result/parse_result";
 import { MetricManager } from "./metric_analysis/metric_manager";
 import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
-import { rootCertificates } from "tls";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { loadConf } from "./conf/EvaluatorConf";
+
 function main(args: Array<string>) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -27,47 +26,43 @@ function main(args: Array<string>) {
     let fileAnaylzer = new FileAnalyzer();
     let singleFileResultBuilder = new MetricResultBuilder();
     let allFilesResultBulder = new MetricResultBuilder
-    let singleMetricBuilder = new MetricResultBuilder();
-    for (let relevantFile of relevantFiles) {
-        var root: ParseResult = { root: parser.parse(relevantFile), path: relevantFile };
-        console.log("Looking at " + root.path)
-        for (let metricInformation of metrics) {
+    let metricBuilder = new MetricResultBuilder();
 
-            let params=MetricManager.getDefaultMetricParam(metricInformation.metricName);
-            Object.assign(params,metricInformation.params);
+    for (let metricInformation of metrics) {
+        let params=MetricManager.getDefaultMetricParam(metricInformation.metricName);
+        Object.assign(params,metricInformation.params);
 
-            let metric = MetricManager.getMetric(metricInformation.metricName);
-            console.log("Using metric", metricInformation.metricName)
-            fileAnaylzer.analyze(root, metric, singleMetricBuilder, params);
-            let partialResult = singleMetricBuilder.getAggregatedResult();
+        let metric = MetricManager.getMetric(metricInformation.metricName);
+        console.log("Using metric", metricInformation.metricName)
+        
+        for (let relevantFile of relevantFiles) {
+            var root: ParseResult = { root: parser.parse(relevantFile), path: relevantFile };
+            console.log("Looking at " + root.path)
+            fileAnaylzer.analyze(root, metric, singleFileResultBuilder, params);
+            let partialResult = singleFileResultBuilder.getAggregatedResult();
             console.log("Partial result", partialResult.getResult());
-            for (let log of partialResult.getLogMessages()) {
-                log.log();
-            }
-            singleFileResultBuilder.processResult(partialResult);
-            singleMetricBuilder.reset();
+    
+            allFilesResultBulder.processResult(partialResult);
+            singleFileResultBuilder.reset();
             console.log();
-
 
         }
         console.log();
-        let fileResult = singleFileResultBuilder.getAggregatedResult();
-        singleFileResultBuilder.reset();
-        allFilesResultBulder.processResult(fileResult);
+        let fileResult = allFilesResultBulder.getAggregatedResult();
+        allFilesResultBulder.reset();
+        metricBuilder.processResult(fileResult);
 
 
     }
-    let result = allFilesResultBulder.getAggregatedResult();
+    let result = metricBuilder.getAggregatedResult();
     for (let log of result.getLogMessages()) {
         log.log();
     }
-    allFilesResultBulder.reset();
+    metricBuilder.reset();
     console.log("The result was " + result.getResult());
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
-
-    //console.log(tokens);
 }
 
 main(process.argv.slice(2))
