@@ -28347,6 +28347,9 @@ class CommentedLinesRatioMetric {
                 commentedLOC += loc;
             }
         }
+        if (commentedLOC + unCommentedLOC == 0) {
+            unCommentedLOC = 1; // prevent divison by zero
+        }
         let perc = commentedLOC / (commentedLOC + unCommentedLOC);
         let result = documentation_analysis_metric_1.MIN_SCORE + (documentation_analysis_metric_1.MAX_SCORE - documentation_analysis_metric_1.MIN_SCORE) * perc;
         builder.processResult(new metric_result_1.MetricResult(result, [], this));
