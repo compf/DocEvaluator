@@ -28277,40 +28277,36 @@ function main(args) {
     let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = new metric_result_builder_1.MetricResultBuilder();
     let allFilesResultBulder = new metric_result_builder_1.MetricResultBuilder;
-    let singleMetricBuilder = new metric_result_builder_1.MetricResultBuilder();
-    for (let relevantFile of relevantFiles) {
-        var root = { root: parser.parse(relevantFile), path: relevantFile };
-        console.log("Looking at " + root.path);
-        for (let metricInformation of metrics) {
-            let params = metric_manager_1.MetricManager.getDefaultMetricParam(metricInformation.metricName);
-            Object.assign(params, metricInformation.params);
-            let metric = metric_manager_1.MetricManager.getMetric(metricInformation.metricName);
-            console.log("Using metric", metricInformation.metricName);
-            fileAnaylzer.analyze(root, metric, singleMetricBuilder, params);
-            let partialResult = singleMetricBuilder.getAggregatedResult();
+    let metricBuilder = new metric_result_builder_1.MetricResultBuilder();
+    for (let metricInformation of metrics) {
+        let params = metric_manager_1.MetricManager.getDefaultMetricParam(metricInformation.metricName);
+        Object.assign(params, metricInformation.params);
+        let metric = metric_manager_1.MetricManager.getMetric(metricInformation.metricName);
+        console.log("Using metric", metricInformation.metricName);
+        for (let relevantFile of relevantFiles) {
+            var root = { root: parser.parse(relevantFile), path: relevantFile };
+            console.log("Looking at " + root.path);
+            fileAnaylzer.analyze(root, metric, singleFileResultBuilder, params);
+            let partialResult = singleFileResultBuilder.getAggregatedResult();
             console.log("Partial result", partialResult.getResult());
-            for (let log of partialResult.getLogMessages()) {
-                log.log();
-            }
-            singleFileResultBuilder.processResult(partialResult);
-            singleMetricBuilder.reset();
+            allFilesResultBulder.processResult(partialResult);
+            singleFileResultBuilder.reset();
             console.log();
         }
         console.log();
-        let fileResult = singleFileResultBuilder.getAggregatedResult();
-        singleFileResultBuilder.reset();
-        allFilesResultBulder.processResult(fileResult);
+        let fileResult = allFilesResultBulder.getAggregatedResult();
+        allFilesResultBulder.reset();
+        metricBuilder.processResult(fileResult);
     }
-    let result = allFilesResultBulder.getAggregatedResult();
+    let result = metricBuilder.getAggregatedResult();
     for (let log of result.getLogMessages()) {
         log.log();
     }
-    allFilesResultBulder.reset();
+    metricBuilder.reset();
     console.log("The result was " + result.getResult());
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
-    //console.log(tokens);
 }
 main(process.argv.slice(2));
 
