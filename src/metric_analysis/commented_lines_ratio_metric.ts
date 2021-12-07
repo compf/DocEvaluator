@@ -24,6 +24,9 @@ export class CommentedLinesRatioMetric implements DocumentationAnalysisMetric {
                 commentedLOC += loc;
             }
         }
+        if(commentedLOC+ unCommentedLOC==0){
+            unCommentedLOC=1; // prevent divison by zero
+        }
         let perc = commentedLOC / (commentedLOC + unCommentedLOC);
         let result = MIN_SCORE + (MAX_SCORE - MIN_SCORE) * perc;
         builder.processResult(new MetricResult(result, [], this));
