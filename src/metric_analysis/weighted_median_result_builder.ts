@@ -8,7 +8,7 @@ export class WeightedMedianResultBuilder extends WeightedMetricResultBuilder {
         let weightSum = 0;
         let allLogMessages: LogMessage[] = []
         for (let partialResult of this.resultList) {
-            let weight = this.weightLambda(partialResult.getCreator());
+            let weight = this.weightMap.get(partialResult.getCreator())!;
             weightResultList.push({ weight: weight, result: partialResult.getResult() })
             weightSum += weight;
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);

@@ -112,15 +112,11 @@ test("weighted median builder", () => {
     expect(evenCountArray.length % 2 == 0).toBeTruthy();
     let simple_metric = new SimpleCommentPresentMetric();
     let public_members = new SimplePublicMembersOnlyMetric();
-    let func = (item: DocumentationAnalysisMetric | MetricResultBuilder) => {
-        let metric = item as DocumentationAnalysisMetric;
-        if (metric != null) {
-            if (metric instanceof SimpleCommentPresentMetric) return 2;
-            else if (metric instanceof SimplePublicMembersOnlyMetric) return 5;
-        }
-        return 1;
-    };
-    let medianBuilder = new WeightedMedianResultBuilder(func)
+    let map=new Map<any,number>();
+    map.set(simple_metric,2);
+    map.set(public_members,5);
+    
+    let medianBuilder = new WeightedMedianResultBuilder(map)
     for (let number of oddCountArray) {
         medianBuilder.processResult(new MetricResult(number, [], number % 2 == 0 ? simple_metric : public_members))
     }
@@ -147,22 +143,15 @@ test("test method documentation compatible", () => {
 
 });
 test("weighted result builder", () => {
-    let weightMap: Map<string, number> = new Map<string, number>();
-    weightMap.set("simple_comment", 1);
-    weightMap.set("public_members_only", 3);
+    let weightMap: Map<any, number> = new Map<any, number>();
+    weightMap.set(MetricManager.getMetric("simple_comment"), 1);
+    weightMap.set(MetricManager.getMetric("public_members_only"), 3);
 
     let parser = new JavaParser();
     const path = "testDir/commented_class.java";
     let root = parser.parse(path);
-    let fn = (creator: DocumentationAnalysisMetric | MetricResultBuilder) => {
-        let metric = creator as DocumentationAnalysisMetric;
-        if (metric != null) {
-            return weightMap.get(MetricManager.getMetricName(metric))!!;
-        }
-        console.log("null metric")
-        return 1;
-    }
-    let builder = new WeightedMetricResultBuilder(fn);
+   
+    let builder = new WeightedMetricResultBuilder(weightMap);
 
     let firstBuilder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
@@ -176,8 +165,8 @@ test("weighted result builder", () => {
     let publicMembersOnlyResult = secondBuilder.getAggregatedResult();
 
     const publicMembersExpectedOnlyResult = (2 / 6) * 100;
-    let simple_comment_weight = weightMap.get("simple_comment")!!;
-    let public_members_weight = weightMap.get("public_members_only")!!;
+    let simple_comment_weight = weightMap.get(MetricManager.getMetric("simple_comment"))!;
+    let public_members_weight = weightMap.get(MetricManager.getMetric("public_members_only"))!;
     let expectedResult = (simpleCommentExpectedResult * simple_comment_weight + publicMembersExpectedOnlyResult * public_members_weight) / (simple_comment_weight + public_members_weight);
     builder.processResult(simpleCommentResult);
     builder.processResult(publicMembersOnlyResult);

@@ -3,7 +3,7 @@ import { MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class MedianResultBuilder extends MetricResultBuilder {
-    override getAggregatedResult(): MetricResult {
+     getAggregatedResult(): MetricResult {
         this.resultList.sort((a, b) => a.getResult() - b.getResult());
         let median = 0;
         if (this.resultList.length % 2 == 0) {
