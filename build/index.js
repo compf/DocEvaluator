@@ -28561,7 +28561,7 @@ var MetricManager;
      * @throws An error if key not present
      */
     function getMetric(metricName) {
-        return allMetrics.getByKey(metricName);
+        return allMetrics.getByKey(resolveMetricName(metricName));
     }
     MetricManager.getMetric = getMetric;
     function getMetricName(metric) {
@@ -28575,8 +28575,24 @@ var MetricManager;
         allMetrics.add("large_method_commented", new simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric());
         allMetrics.add("method_fully_documented", new simple_method_documentation_metric_1.SimpleMethodDocumentationMetric());
         allMetrics.add("commented_lines_ratio", new commented_lines_ratio_metric_1.CommentedLinesRatioMetric());
-        allMetrics.add("ignore_getters_setter", new ignore_getters_setter_metric_1.IgnoreGetterSetterMetric());
+        allMetrics.add("ignore_getters_setters", new ignore_getters_setter_metric_1.IgnoreGetterSetterMetric());
     }
+    function resolveMetricName(metricName) {
+        for (let metric of Object.entries(aliases)) {
+            if (metric[0] == metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())) {
+                return metric[0];
+            }
+        }
+        throw new Error("Could not identify metric");
+    }
+    const aliases = {
+        "simple_comment": ["comment_present", "all_members", "all_components", "simple_documentation_present", "documentation_present", "sc"],
+        "public_members_only": ["public_members", "public_components", "only_public", "pmo"],
+        "large_method_commented": ["punish_large_uncommented", "punish_large_undocumented", "lmc"],
+        "method_fully_documented": ["method_fully_commented", "fully_documented", "params_return_documented", "params_return_commented", "mfd"],
+        "commented_lines_ratio": ["ratio_commented_uncommented", "ratio_documented_undocumented", "clr"],
+        "ignore_getters_setters": ["getters_setters", "ignore_properties", "ignore_getter_setter", "igs"]
+    };
     /**
      *
      * @returns All metric names that are declared
@@ -28586,6 +28602,7 @@ var MetricManager;
     }
     MetricManager.getMetricNames = getMetricNames;
     function getDefaultMetricParam(metricName) {
+        metricName = resolveMetricName(metricName);
         switch (metricName) {
             case "large_method_commented":
                 return { ignoreLines: ["", "{", "}"], k: 0.2 };
