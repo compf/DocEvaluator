@@ -28101,6 +28101,7 @@ class EvaluatorConf {
          * the global threshold that the average of all metrics should meet to pass the documentation check
          */
         this.global_threshold = 20.0;
+        this.result_builder = "default_builder";
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s) });
         }
@@ -28272,12 +28273,16 @@ function main(args) {
     let conf = (0, EvaluatorConf_1.loadConf)(workingDirectory);
     let traverser = new directory_traverser_1.DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
+    let weightMap = new Map();
     let metrics = conf.metrics;
+    for (let m of metrics) {
+        weightMap.set(metric_manager_1.MetricManager.getMetric(m.metricName), m.weight);
+    }
     let parser = new java_parser_1.JavaParser();
     let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = new metric_result_builder_1.MetricResultBuilder();
     let allFilesResultBulder = new metric_result_builder_1.MetricResultBuilder;
-    let metricBuilder = new metric_result_builder_1.MetricResultBuilder();
+    let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.result_builder, weightMap);
     for (let metricInformation of metrics) {
         let params = metric_manager_1.MetricManager.getDefaultMetricParam(metricInformation.metricName);
         Object.assign(params, metricInformation.params);
@@ -28517,6 +28522,39 @@ exports.LogMessage = LogMessage;
 
 /***/ }),
 
+/***/ 3697:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.MedianResultBuilder = void 0;
+const metric_result_1 = __nccwpck_require__(3073);
+const metric_result_builder_1 = __nccwpck_require__(5361);
+class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
+    getAggregatedResult() {
+        this.resultList.sort((a, b) => a.getResult() - b.getResult());
+        let median = 0;
+        if (this.resultList.length % 2 == 0) {
+            let middleIndex = Math.floor((this.resultList.length - 1) / 2);
+            median = (this.resultList[middleIndex].getResult() + this.resultList[middleIndex + 1].getResult()) / 2;
+        }
+        else {
+            let middleIndex = Math.floor(this.resultList.length / 2);
+            median = this.resultList[middleIndex].getResult();
+        }
+        let allLogMessages = [];
+        for (let partialResult of this.resultList) {
+            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+        }
+        return new metric_result_1.MetricResult(median, allLogMessages, this.creator);
+    }
+}
+exports.MedianResultBuilder = MedianResultBuilder;
+
+
+/***/ }),
+
 /***/ 2215:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -28526,10 +28564,14 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MetricManager = void 0;
 const commented_lines_ratio_metric_1 = __nccwpck_require__(7427);
 const ignore_getters_setter_metric_1 = __nccwpck_require__(3201);
+const median_result_builder_1 = __nccwpck_require__(3697);
+const metric_result_builder_1 = __nccwpck_require__(5361);
 const simple_comment_present_metric_1 = __nccwpck_require__(6439);
 const simple_large_method_commented_metric_1 = __nccwpck_require__(3751);
 const simple_method_documentation_metric_1 = __nccwpck_require__(4287);
 const simple_public_members_only_metric_1 = __nccwpck_require__(2519);
+const weighted_median_result_builder_1 = __nccwpck_require__(8809);
+const weighted_metric_result_builder_1 = __nccwpck_require__(7245);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -28577,6 +28619,27 @@ var MetricManager;
         allMetrics.add("commented_lines_ratio", new commented_lines_ratio_metric_1.CommentedLinesRatioMetric());
         allMetrics.add("ignore_getters_setters", new ignore_getters_setter_metric_1.IgnoreGetterSetterMetric());
     }
+    function getNewMetricResultBuilder(builderName, weightMap) {
+        switch (builderName) {
+            case "mean_builder":
+            case "metric_result_builder":
+            case "default_builder":
+            case "default_result_builder":
+                return new metric_result_builder_1.MetricResultBuilder();
+            case "median_builder":
+            case "median_result_builder":
+                return new median_result_builder_1.MedianResultBuilder();
+            case "weighted_mean_builder":
+            case "weighted_metric_result_builder":
+            case "weighted_mean_result_builder":
+                return new weighted_metric_result_builder_1.WeightedMetricResultBuilder(weightMap);
+            case "weighted_median_result_builder":
+            case "weighted_median_builder":
+                return new weighted_median_result_builder_1.WeightedMedianResultBuilder(weightMap);
+        }
+        throw new Error("Could not identify ResultBuilder");
+    }
+    MetricManager.getNewMetricResultBuilder = getNewMetricResultBuilder;
     function resolveMetricName(metricName) {
         for (let metric of Object.entries(aliases)) {
             if (metric[0] == metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())) {
@@ -28922,6 +28985,76 @@ class SimplePublicMembersOnlyMetric {
     }
 }
 exports.SimplePublicMembersOnlyMetric = SimplePublicMembersOnlyMetric;
+
+
+/***/ }),
+
+/***/ 8809:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WeightedMedianResultBuilder = void 0;
+const metric_result_1 = __nccwpck_require__(3073);
+const weighted_metric_result_builder_1 = __nccwpck_require__(7245);
+class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.WeightedMetricResultBuilder {
+    getAggregatedResult() {
+        let weightResultList = [];
+        let weightSum = 0;
+        let allLogMessages = [];
+        for (let partialResult of this.resultList) {
+            let weight = this.weightMap.get(partialResult.getCreator());
+            weightResultList.push({ weight: weight, result: partialResult.getResult() });
+            weightSum += weight;
+            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+        }
+        weightResultList.sort((a, b) => a.weight - b.weight);
+        let sum = 0;
+        for (let weight_result of weightResultList) {
+            sum += weight_result.weight;
+            if (sum > weightSum / 2) { // might not be totally correct
+                return new metric_result_1.MetricResult(weight_result.result, allLogMessages, this.creator);
+            }
+        }
+        return new metric_result_1.MetricResult(weightResultList[weightResultList.length - 1].result, allLogMessages, this.creator);
+    }
+}
+exports.WeightedMedianResultBuilder = WeightedMedianResultBuilder;
+
+
+/***/ }),
+
+/***/ 7245:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.WeightedMetricResultBuilder = void 0;
+const metric_result_1 = __nccwpck_require__(3073);
+const metric_result_builder_1 = __nccwpck_require__(5361);
+class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBuilder {
+    constructor(weightMap) {
+        super();
+        this.weightMap = weightMap;
+    }
+    getAggregatedResult() {
+        let resultSum = 0;
+        let weightSum = 0;
+        let allLogMessages = [];
+        for (let partialResult of this.resultList) {
+            let weight = this.weightMap.get(partialResult.getCreator());
+            resultSum += (partialResult.getResult() * weight);
+            weightSum += weight;
+            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+        }
+        if (weightSum == 0)
+            weightSum = 1;
+        return new metric_result_1.MetricResult(resultSum / weightSum, allLogMessages, this.creator);
+    }
+}
+exports.WeightedMetricResultBuilder = WeightedMetricResultBuilder;
 
 
 /***/ }),
