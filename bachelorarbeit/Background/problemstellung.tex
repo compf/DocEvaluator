@@ -44,7 +44,7 @@ Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine  \enquote{gelungen
 		\begin{figure}
 			\lstinputlisting
 			[caption={Beispielhafter Javdoc-Block für einfache Methode},
-			label={lst:simple_javadoc}
+			label={lst:simple_javadoc},
 			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/ternary.java}
 		\end{figure}
@@ -86,3 +86,94 @@ Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generier
 Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. 
 
 Die wichtigste Arbeit, die eine Grundlage dieser Bachelorarbeit ist, ist der \enquote{JavaDocMiner} \cite[S. 68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In dieser Arbeit wird ein Programm beschrieben, welches mittels einfachen \ac{NLP}-Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Dabei beschränkt sich der JavaDocMiner nur auf Java-Programme, während das hier zu entwickelnde Tool  auch mit anderen Programmiersprachen zurechtkommen soll. 
+\section{GitHub Actions}
+\subsection{Einführung}
+Github Action \cite{GithubActions} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  Github Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird, oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann auf einem von GitHub vorbereiteten System ausgeführt werden; es ist aber auch möglich sein eigenes System dafür zur konfigurieren. Schlägt der Programmcode fehl, weil zum Beispiel ein Fehlercode ungleich null zurückgegeben wird oder ein anderer Systemfehler vorliegt, kann der Nutzer sich leicht über den Fehler informieren, indem auf die \enquote{Actions}-Registerkarte klickt. Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden. Die folgende nummerierte Liste beschreibt grob, wie Programmcode in Github Actions ausgeführt werden kann:
+\begin{enumerate}
+    \item Ein Ereignis tritt ein, indem beispielsweise neuer Programmcode mittels Push hochgeladen wird 
+    \item Github wählt ein geeignetes System aus (z. B. eine virtuelle Maschine oder ein vom Programmierer hierfür konfiguriertes System
+    \item Auf dem System wird der aktuelle Programmcode des Repositorys geklont (die Branch kann frei bestimmt werden) 
+    \item Der Programmcode ausgeführt, dabei steht der Pfad zum geklonten Repository über die Umgebungsvariable \textit{\$GITHUB\_WORKSPACE} bereit
+    \item Abhängig vom Erfolg der Ausführung des Programmcodes:
+    \begin{enumerate}
+        \item Bei einem Erfolg wird der Programmierer mittels eines grünen Häkchens informiert
+        \item Bei einer Fehlermeldung wird der Programmierer mittels eines roten Kreuzes über den Fehlschlag informiert und hat auch Zugriff auf die Fehlermeldungen. Je nach Einstellung des Repositorys können bestimmte Aktivitäten dann auch gestoppt werden, damit fehlerhafter Programmcode nicht weiter verbreitet wird. 
+    \end{enumerate}
+\end{enumerate}
+
+Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-Ereignis kann der aktuelle Programmcode mit einer geeigneten Testbibliothek getestet werden, sodass im Falle eines fehlgeschlagenen Tests der Programmierer informiert wird und die notwendigen Änderungen veranlassen kann. 
+
+\subsection{Wichtige Begriffe im Zusammenhang mit Github Action}
+In der folgenden Auflistung werden einige wichtige Begriffe erläutert, die im Zusammenhang mit GitHub Actions verwendet werden und deren Kenntnis zum Verständnis wichtig ist. 
+\begin{description}
+    \item[Workflow] Ein Workflow(Ablauf) ist eine automatisierter Prozess, der verschiedene Jobs ausführt, wenn ein Ereignis eintritt. Der Worklflow wird durch eine YAML-Datei definiert
+    \item[Job] Ein Job ist eine Ansammlung von sogenannten \enquote{Steps}, die man als Befehle interpretieren kann. Alle Befehle in einem Job werden auf der gleichen Maschine ausgeführt. Alle Jobs in einem Workflow werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird.
+    \item[Step] Ein Step(Schritt) ist ein Shell-Befehl oder ein Verweis auf eine andere GitHub Action, die von einem Job ausgeführt werden soll. Innerhalb eines Jobs werden die Steps in der definierten Reihenfolge ausgeführt. 
+    \item[Action] Eine Action ist ein Programm, das in Workflows eingebunden werden kann und häufig vorkommende Aufgaben erledigt. Dies hat den Vorteil, dass Redundanz vermieden wird. Im offiziellen Marketplace von GitHub lassen sich zu vielen verschiedenen Aufgaben bereits Actions finden. Es können aber auch eigene Actions definiert werden, was weiter unten beschrieben wird. 
+    \item[Runner] Als Runner wird das System bezeichnet, auf dem die Jobs ausgeführt werden. Dies ist standardmäßig ein Linux-Betriebssystem; es können aber auch Windows oder macOS zur Ausführung des Codes verwendet werden. Bei besonderen Anforderungen kann der Runner auch auf einem System laufen, auf dem der Programmierer selbst Zugriff hat.
+\end{description}
+\subsection{Erstellung eines Workflows}
+Ein Workflow kann über die registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird. Der Code wird in Tabelle \ref{tab:descr_example_workflow} genauer erklärt.
+\clearpage
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{c|m{10cm}}
+        Zeile(n) &  Beschreibung \\\hline
+         1 & Der Name des Workflows\\\hline
+         2-6 & Hier werden die verschiedenen Ereignisse beschrieben, die den Workflow auslösen. Außerdem werden die Branches spezifiert, die auf das Ereignis überwacht werden sollenö\\\hline
+         7 &  Dies erlaubt, dass ein Workflow auch manuell angestoßen wird, etwa zu Debugging-Zwecken\\\hline
+         8-9 & Erstellt einen Job mit den Namen \enquote{Build}\\\hline
+         10 & Bestimmt auf welchen System der Workflow läuft\\\hline
+         11 & Beginnd er einzelnen Steps\\\hline
+         12 & Bestimmt, das der Quellcode des Repositorys geklont wird und dessen Pfad über eine Umgebungsvariable zugängig gemacht wird\\\hline
+         13-14 & Gibt hier als Beispiel \enquote{Hello World} aus\\\hline
+         16-19 &Beispiel um mehrere Befehle sequentiell auszuführen\\\hline
+         
+    \end{tabular}
+    \caption{Caption}
+    \label{tab:descr_example_workflow}
+\end{table}
+		\begin{figure}[h!]
+			\lstinputlisting
+			[caption={Beispielhafter Workflow-Datei},
+			label={lst:simple_workflow},
+			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			{figures/workflow_example.yaml}
+		\end{figure}
+	\clearpage
+	\subsection{Ausführung von Workflows}
+	Wenn ein Workflow durch ein Ereignis ausgeführt wird, lässt sich die Ausgabe des Workflows über die Registerkarte \enquote{Actions} anzeigen. Dabei erhält der Programmierer auch Informationen darüber, ob der Workflow erfolgreich war oder fehlgeschlagen ist. Abbildung \ref{fig:workflow_overview} zeigt die Übersicht der ausgeführten Workflows. Wie der Abbildung zu entnehmen ist, sieht der Programmierer den Commit, auf dem der Workflow ausgeführt wurde. Auf der rechten Seite befindet sich auch eine Angabe, wann dieser Workflow ausgeführt wurde. Zudem enthält die Übersicht die Information, wie lange der Prozess gedauert hat. 
+	\begin{figure}[h]
+	    \centering
+	    
+	    \includegraphics[width=\columnwidth]{figures/workflow_overview.png}
+	    \caption{Übersicht über die ausgeführten Workflows}
+	    \label{fig:workflow_overview}
+	\end{figure}
+	
+	Durch einen Klick auf den Titel des Commits, wechselt Github auf eine weitere Seite, die grundsätzlich die gleichen Informationen wie zuvor enthält. Es ist jedoch hier möglich direkt zu der YAML-Datei zu gelangen, die diesen Workflow beschreibt. Ein weiterer Klick auf den Button mit dem Namen von dem definierten Jobs, wechselt auf eine weitere Seite, die die einzelnen Steps des Jobs auflistet und es ermöglicht, die Konsolenausgabe jedes Steps anzuzeigen. Auch eine Aufsplittung der Zeitdauer der einzelnen Steps wird angezeigt, sodass der Programmierer weiß, wie viel Zeit jeder Step benötigt. Abbildung \ref{fig:workflow_output} zeigt, wie eine solche Ausgabe auf der Konsole aussieht:
+	\begin{figure}[h]
+	    \centering
+	    
+	    \includegraphics[width=\columnwidth]{figures/workflow_output.png}
+	    \caption{Übersicht über die ausgeführten Workflows}
+	    \label{fig:workflow_output}
+	\end{figure}
+\subsection{Erstellung einer eigenen Action}
+Um eine eigene Github Action zu erstellen, muss in dem Hautpverzeichnis des Repositorys, in dem der Programmcode der Action liegt, eine Datei namens \enquote{action.yaml} oder \enquote{action.yml} erstellt werden. Abbildung \ref{lst:create_action_example} zeigt eine beispielshafte \enquote{action.yaml}
+	\begin{figure}[h!]
+			\lstinputlisting
+			[caption={Beispielhafte Action-Konfigurationsdatei},
+			label={lst:create_action_example},
+			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			{figures/create_action_example.yaml}
+		\end{figure}
+Zunächst wird der Name der Action und eine Beschreibung definiert. Anschließend können Eingabeparameter definiert werden, die später im Programm verwendet werden können. Zu jedem Parameter kann auch festgelegt werden, ob er zwingend erforderlich ist und den Standardwert des Parameters. Außerdem können Ausgabeparameter festgelegt werden, die spätere Actions als Eingabe nutzen können. Danach wird festgelegt, wie diese Action ausgeführt wird. Eine Action kann in einer Javascript-Umgebung, in einem einem Docker-Container, oder als Liste von verschiedenen Steps ausgeführt werden. Dies wird in den folgenden Unterabschnitten kurz beschrieben.
+\subsubsection{Docker-Umgebung}
+In einer Docker-Umgebung kann die Action ausgeführt werden, ohne dass der Nutzer der Action sich darüber Gedanken machen muss, welche Abhängigkeiten oder Voraussetzungen diese Action benötigt. Dies ermöglicht eine fehlertolerante Ausführung des Programmscodes. Das System kann dabei sehr frei konfiguriert werden. Allerdings laufen Actions in einer Docker-Umgebung langsamer als in einer Javascript-Umgebung. Außerdem kann zurzeit ein Action in einer Docker-Umgebung nur mittels eines Runners in Linux ausgeführt werden.
+
+\subsubsection{Javascript-Umgebung}
+Da viele GitHub Actions in Javascript programmiert werden, ist diese Umgebung als Option vorhanden. Es kann direkt eine geeignete Node-Umgebung installiert werden und eine Javascript-Datei mittels \textit{main} ausgeführt werden. 
+
+\subsubsection{Composite-Action}
+Eine sogenannte Composite-Action ermöglicht es mehrere Actions in eine Action zu vereinen und so wieder Code-Redundanz zu vermeiden. Die Syntax ist dabei ähnlich wie ein normaler Workflow. 
