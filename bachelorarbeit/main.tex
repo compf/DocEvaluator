@@ -18,11 +18,11 @@
 \usepackage{algorithm}
 \usepackage{siunitx}
 \usepackage[autostyle]{csquotes}
-
-
+\usepackage{todonotes}
+\usepackage{svg}
 \usepackage[page, title, titletoc, header]{appendix} %prettier appendix
 
-
+\svgpath{{../figures/}}
 
 \usepackage[printonlyused]{acronym}
 \usepackage{listings} 
@@ -80,13 +80,13 @@
 	   	Institute of Computer Science, Software Engineering Group
 	\end{center}
 	}
-	\subject{Bachelorarbeit, Masterarbeit}
-	\title{Titel der Abschlussarbeit }
-	\author{Vorname Nachname\\ Immatrikulationsnummer: 95XXXX} %engl. Matriculation Number
+	\subject{Bachelorarbeit}
+	\title{Entwicklung eines Tools zur Analyse von Javadoc mit Einbindung in Github Actions }
+	\author{Timo Schoemaker\\ Immatrikulationsnummer: 978621} %engl. Matriculation Number
 
 	\date{18.10.2018 \\
-	Advisor: Prof. Dr.-Ing. Elke Pulvermüller \\ %Deutsch: Erstebetreuer
-	Co-Advisor: Dennis Ziegenhagen, M.Sc.} %Deutsch: Zweitbetreuer
+	Erstbetreuer: Prof. Dr.-Ing. Elke Pulvermüller \\ %Deutsch: Erstebetreuer
+	Zweitbetreuer: Nils Baumgartner, M.Sc.} %Deutsch: Zweitbetreuer
 	
 	\maketitle
 	
@@ -108,7 +108,7 @@
 
 
 \mainmatter %switch roman auf arabic page numbers
-\chapter{Introduction}
+\chapter{Einführung}
 \setcounter{page}{1} %Seitenzahlen hier mit 1 anfangen
 
 	%Include text from other files into the document --> great for structuring
@@ -126,9 +126,10 @@
 
 
 
-\chapter{Main Part}
-	
-
+\chapter{Implementierung des Tools}
+\input{Main/main}
+\clearpage
+\input{Main/Metriken}
 \chapter{Evaluation}
 	\label{sec:evaluation}
 	\input{Evaluation/eval.tex}
