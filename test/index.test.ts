@@ -1,6 +1,8 @@
 import { MetricManager } from "../src/metric_analysis/metric_manager";
+import { MetricResultBuilder } from "../src/metric_analysis/metric_result_builder";
 import { SimpleCommentPresentMetric } from "../src/metric_analysis/simple_comment_present_metric";
 import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/simple_method_documentation_metric";
+import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_median_result_builder";
 class BaseClass {
 
 }
@@ -22,6 +24,17 @@ test("Test MetricManager instancing works", () => {
     expect(simple_comment_name).toBe("simple_comment");
     let second_instance = MetricManager.getMetric(simple_comment_name);
     expect(second_instance).toBe(simple_comment);
+
+});
+test("Test  get new result builder",()=>{
+    expect(MetricManager.getNewMetricResultBuilder("default_builder",null) instanceof MetricResultBuilder).toBeTruthy();
+    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder",new Map()) instanceof WeightedMedianResultBuilder).toBeTruthy();
+    try {
+        expect(MetricManager.getNewMetricResultBuilder("weighted_mean_builder",null) instanceof WeightedMedianResultBuilder).toBeTruthy();
+        fail();
+    } catch (error) {
+        
+    }
 
 });
 test("Test MetricManager aliasing works",()=>{

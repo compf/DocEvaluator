@@ -21,12 +21,17 @@ function main(args: Array<string>) {
     let conf = loadConf(workingDirectory);
     let traverser = new DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
+
+    let weightMap=new Map<any,number>();
     let metrics = conf.metrics;
+    for(let m of metrics){
+        weightMap.set(MetricManager.getMetric(m.metricName),m.weight);
+    }
     let parser: BaseParser = new JavaParser();
     let fileAnaylzer = new FileAnalyzer();
     let singleFileResultBuilder = new MetricResultBuilder();
     let allFilesResultBulder = new MetricResultBuilder
-    let metricBuilder = new MetricResultBuilder();
+    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.result_builder,weightMap)
 
     for (let metricInformation of metrics) {
         let params=MetricManager.getDefaultMetricParam(metricInformation.metricName);

@@ -1,10 +1,14 @@
 import { CommentedLinesRatioMetric } from "./commented_lines_ratio_metric";
 import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
 import { IgnoreGetterSetterMetric } from "./ignore_getters_setter_metric";
+import { MedianResultBuilder } from "./median_result_builder";
+import { MetricResultBuilder } from "./metric_result_builder";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 import { SimpleLargeMethodCommentedMetric } from "./simple_large_method_commented_metric";
 import { SimpleMethodDocumentationMetric } from "./simple_method_documentation_metric";
 import { SimplePublicMembersOnlyMetric } from "./simple_public_members_only_metric";
+import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
+import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -46,6 +50,26 @@ export namespace MetricManager {
         allMetrics.add("method_fully_documented", new SimpleMethodDocumentationMetric());
         allMetrics.add("commented_lines_ratio", new CommentedLinesRatioMetric());
         allMetrics.add("ignore_getters_setters", new IgnoreGetterSetterMetric());
+    }
+    export function getNewMetricResultBuilder(builderName:string, weightMap:Map<any,number>|null):MetricResultBuilder{
+        switch(builderName){
+            case "mean_builder":
+            case "metric_result_builder":
+            case "default_builder":
+            case "default_result_builder":
+                return new MetricResultBuilder();
+            case "median_builder":
+            case "median_result_builder":
+                return new MedianResultBuilder();
+            case "weighted_mean_builder":
+            case "weighted_metric_result_builder":
+            case "weighted_mean_result_builder":
+                return new WeightedMetricResultBuilder(weightMap!);
+            case "weighted_median_result_builder":
+            case "weighted_median_builder":
+                return new WeightedMedianResultBuilder(weightMap!);
+        }
+        throw new Error("Could not identify ResultBuilder");
     }
     function resolveMetricName(metricName:string):string{
         for(let metric of Object.entries(aliases)){
