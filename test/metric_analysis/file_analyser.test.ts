@@ -174,7 +174,7 @@ test("weighted result builder", () => {
     expect(actual).toBeCloseTo(expectedResult);
 
 });
-test("test ignore getters setter",()=>{
+test("test ignore getters setters",()=>{
 let parser=new JavaParser();
 const path="testDir/GetterSetter.java"
 let root=parser.parse(path);

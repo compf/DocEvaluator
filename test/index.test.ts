@@ -1,4 +1,6 @@
 import { MetricManager } from "../src/metric_analysis/metric_manager";
+import { SimpleCommentPresentMetric } from "../src/metric_analysis/simple_comment_present_metric";
+import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/simple_method_documentation_metric";
 class BaseClass {
 
 }
@@ -22,3 +24,17 @@ test("Test MetricManager instancing works", () => {
     expect(second_instance).toBe(simple_comment);
 
 });
+test("Test MetricManager aliasing works",()=>{
+    const alias_simple_comment="all_components";
+    const alias_method_fully_commented="params_return_documented";
+
+    expect(MetricManager.getMetric(alias_method_fully_commented )instanceof SimpleMethodDocumentationMetric).toBeTruthy();
+    try {
+        expect(MetricManager.getMetric(alias_simple_comment+"1"));
+        fail();
+    } catch (error) {
+        
+    }
+   
+});
+

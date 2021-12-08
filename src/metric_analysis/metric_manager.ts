@@ -33,7 +33,7 @@ export namespace MetricManager {
      * @throws An error if key not present
      */
     export function getMetric(metricName: string): DocumentationAnalysisMetric {
-        return allMetrics.getByKey(metricName)!!;
+        return allMetrics.getByKey(resolveMetricName(metricName))!!;
     }
     export function getMetricName(metric: DocumentationAnalysisMetric): string {
         return allMetrics.getByValue(metric)
@@ -45,9 +45,24 @@ export namespace MetricManager {
         allMetrics.add("large_method_commented", new SimpleLargeMethodCommentedMetric());
         allMetrics.add("method_fully_documented", new SimpleMethodDocumentationMetric());
         allMetrics.add("commented_lines_ratio", new CommentedLinesRatioMetric());
-        allMetrics.add("ignore_getters_setter", new IgnoreGetterSetterMetric());
+        allMetrics.add("ignore_getters_setters", new IgnoreGetterSetterMetric());
     }
-
+    function resolveMetricName(metricName:string):string{
+        for(let metric of Object.entries(aliases)){
+            if(metric[0]==metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())){
+                return metric[0];
+            }
+        }
+        throw new Error("Could not identify metric");
+    }
+    const aliases={
+        "simple_comment":["comment_present","all_members","all_components","simple_documentation_present","documentation_present","sc"],
+        "public_members_only":["public_members","public_components","only_public","pmo"],
+        "large_method_commented":["punish_large_uncommented","punish_large_undocumented","lmc"],
+        "method_fully_documented":["method_fully_commented","fully_documented","params_return_documented","params_return_commented","mfd"],
+        "commented_lines_ratio":["ratio_commented_uncommented","ratio_documented_undocumented","clr"],
+        "ignore_getters_setters":["getters_setters","ignore_properties","ignore_getter_setter","igs"]
+    }
 
     /**
      * 
@@ -57,6 +72,7 @@ export namespace MetricManager {
         return Array.from(allMetrics.keys());
     }
     export function getDefaultMetricParam(metricName: string): any {
+        metricName=resolveMetricName(metricName);
         switch(metricName){
             case "large_method_commented":
                 return {ignoreLines:["", "{", "}"],k:0.2}
