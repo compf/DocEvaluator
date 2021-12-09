@@ -911,4 +911,26 @@ facilitating its maintenance.},
   urldate = {2021-12-01},
 }
 
+@Misc{gholba2012measures,
+  author = {Gholba, MJ},
+  title  = {Measures of Central Tendency},
+  year   = {2012},
+  file   = {:Measures of Central Tendency.pdf:PDF},
+}
+
+@Article{YAGER199835,
+  author   = {Ronald R. Yager},
+  title    = {Fusion of ordinal information using weighted median aggregation},
+  journal  = {International Journal of Approximate Reasoning},
+  year     = {1998},
+  volume   = {18},
+  number   = {1},
+  pages    = {35-52},
+  issn     = {0888-613X},
+  doi      = {https://doi.org/10.1016/S0888-613X(97)10003-2},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0888613X97100032},
+  abstract = {The weighted median is introduced as a fusion operation which can be used in situations in which, while having numeric values for the weights associated with the objects to be fused, the actual objects being fused only satisfy an ordering property. After introducing the concept of weighted median we compare it with the weighted average and show that they have many properties in common. We then provide an algorithm for learning the weights associated with a median aggregation. We then show how we can use this technique to extend the applicability of the Ordered Weighted Averaging (OWA) operator to situations in which the arguments are nonnumeric. Finally we show how we can use the weighted median as an alternative to the expected value in the evaluation of probabilistic lotteries.},
+  file     = {:/home/compf/1-s2.0-S0888613X97100032-main.pdf:PDF},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
