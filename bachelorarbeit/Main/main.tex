@@ -73,7 +73,7 @@ Für die Programmiersprache Java steht bereits eine Grammatik, die auf Github un
 Deshalb wurde entschieden, Komponenten, die zwar mit mehrzeiligen Kommentare aber nicht mit Javadoc dokumentiert sind, wie undokumentierte Komponenten zu betrachten. Für einen Entwickler sollte es so schnell möglich sein, solche nicht korrekt dokumentierten Komponenten zu identifizieren und deren mehrzeilige Kommentare in gültige Javadoc-Kommentare umzuwandeln und so die Qualität der Dokumentation zu erhöhen. Für andere Programmiersprachen können jedoch normale mehrzeilige wie strukturierte Kommentare betrachtet werden, wenn dies für sinnvollerer erachtet wird.
 
 Mehr Änderungen mussten an der entsprechenden Parser-Datei \textit{JavaParser.g4} durchgeführt werden.  Tabelle \ref{tab:parser_changes} listet alle Änderungen an der Parserdatei auf;
-\begin{table}[h]
+\begin{table}[h!]
     \centering
     \begin{tabular}{m{0.75cm}|m{4cm}|m{10cm}}
         Zeile & Änderung & Begründung \\
@@ -102,24 +102,52 @@ Als nächster Schritt müssen auf die Informationen bezüglich der Dokumentation
 
 Zudem können Metriken Warn- oder Fehlermeldungen werfen, um den Anwender des Programms auf schlechte Dokumentation aufmerksam zu machen. Diese Fehlermeldung enthalten auch den Komponentennamen und die Zeilennummern, damit der Programmierer schnell auf die verwendete Komponente zugreifen kann.\bigskip
 \subsection{Resultate der Metriken anwenden}
-Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es sie in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein einfacher arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus auswählen kann. In den folgenden Unterabschnitten wird jeder Algorithmus kurz erläutert und dabei kurz auf die Vor- und Nachteile eingegangen. 
+Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es sie in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein einfacher arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus auswählen kann. In den folgenden Unterabschnitten wird jeder Algorithmus kurz erläutert und dabei kurz auf die Vor- und Nachteile eingegangen. Auch werden die möglichen Aliasnamen angegeben, mit der der Algorithmus in der Konfigurationsdatei angesprochen werden kann. 
 
 \subsubsection{Einfacher Mittelwert}
 Der einfache arithmetische Mittelwert wird bereits durch die Klasse \textit{MetricResultBuilder} implementiert. Er summiert die Ergebnisse auf und teilt diese durch die Anzahl der Einzelresultate. Dieser Algorithmus ist einfach zu verstehen und berücksichtigt jedes Ergebnis gleichermaßen. Dies ist insbesondere für die Aggregierung der Ergebnisse der einzelnen Dateien sinnvoll, da jede Datei gleichbehandelt werden sollte und eine Gewichtung von möglicherweise Tausenden von Dateien nur schwer umsetzbar ist. Es sollte allerdings auch beachtet werden, dass der Mittelwert extreme Ausreißer berücksichtigt. Dies ist hier manchmal sinnvoll, da sehr schlechte oder sehr gute Dokumentation besser berücksichtigt wird und so ein verlässliches Gesamtergebnis geliefert wird.
+
+Zulässige Namen für diesen Algorithmus:
+\begin{itemize}
+\item mean\_builder
+\item metric\_result\_builder
+\item default\_builder
+\item default\_result\_builder
+\end{itemize}
 
 \subsubsection{Median}
 Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultat nach ihrem Gewicht sortiert und dann das Resultat genommen, das in der sortierten Liste in der Mitte liegt. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnissen gebildet. 
 
 Der Median berücksichtigt extreme Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität gemacht werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der mindestens eine Komplexität von $O(n*log(n)$ hat. Bei der überschaubaren Anzahl an Metriken wird dies nicht so relevant sein, bei einer Anwendung des Medians auf vielen Dateien durchaus wohl.
 
+Zulässige Namen für diesen Algorithmus:
+\begin{itemize}
+\item median\_builder
+\item median\_result\_builder
+\end{itemize}
+
 \subsubsection{Gewichteter Mittelwert}
 Der gewichtete Mittelwert ist in der Klasse \textit{WeightedMetricResultBuilder} implementiert. Dabei wird dem Konstrucktor dieser Klasse eine assoziative Liste übergeben, die einem Metrikobjekt ein Gewicht zuordnet.  Es wird dabei davon ausgegangen, dass jede Metrik nur von einer Instanz repräsentiert wird. Dies ist nur möglich, da die Metriken keinen inneren Zustand haben und nur mittels lokale Variablen und Parameter arbeiten. Jedes Einzelresultat speichert zudem den Erzeuger des Ergebnisses, sodass für jede Metrik ein Gewicht abgerufen werden kann. Die Gewichte müssen nicht normiert werden, da dies während der Berechnung implizit gemacht wird. Die Resultate jeder Metrik werden multipliziert mit dessen Gewicht aufsummiert und dann durch die Summe aller Gewichte geteilt. 
+
+Zulässige Namen für diesen Algorithmus:
+\begin{itemize}
+\item weighted\_mean\_builder
+\item weighted\_metric\_result\_builder
+\item weighted\_mean\_result\_builder
+\end{itemize}
 
 Dieser Algorithmus ermöglicht es, bestimmte Metriken zu bevorzugen bzw. zu benachteiligen. Dies ist sinnvoll, da nicht jede Metrik immer ein aussagekräftiges liefert und bestimmte Metriken je nach Situation ein besseres Bild über die Dokumentationsqualität liefert. Allerdings ist auch zu beachten, dass die Wahl der Gewichte nicht trivial ist und ein Vergleich von Ergebnissen, die verschiedene Gewichte verwenden, nur selten sinnvoll ist.
 
 \subsubsection{Gewichteter Median}
 Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} implementiert. Dabei wird zunächst die Summe der Gewichte berechnet und die Resultate nach ihrem Gewicht sortiert. Anschließend werden die sortierten Resultate und ihre Gewichte so lange aufsummiert, bis diese temporäre Summe die Hälfte der Gesamtsumme überschreitet. Das Metrikergebnis, bei der diese Bedingung zutrifft, ist das gesuchte Gesamtergebnis. Die Vor- und Nachteile dieses Algorithmus entsprechen in etwa den Vor- und Nachteilen des gewichteten Mittelwerts und des Medians. So muss auch hier eine Sortierung durchgeführt werden und die Wahl der richtigen Gewichte ist nicht trivial. 
-\section{Konfiguration des Tools}
+
+Zulässige Namen für diesen Algorithmus:
+\begin{itemize}
+\item weighted\_median\_result\_builder
+\item weighted\_median\_builder
+\end{itemize}
+\section{Konfiguration und Nutzung des Tools}
+Das Tool benötigt einen Parameter, der das Verzeichnis angibt, das analysiert werden soll. Fehlt dieser Parameter wird eine Warnmeldung ausgegeben und das Tool nutzt das aktuelle Arbeitsverzeichnis. Die Konfigurationsdatei muss den Namen \enquote{comment\_conf.json} tragen. Als Alternative können auch Umgebungsvariablen über Github Actions gesetzt werden, deren Namen den der Konfigurationsdatei entsprechen müssen. Ist sowohl in der Konfigurationsdatei als auch in der Umgebungsvariable eine Einstellung definiert, hat die Umgebungsvariable Vorrang, da das Tool für primär für Github Actions programmiert wurde.
 \begin{table}[h]
     \centering
     \begin{tabular}{m{4cm}|m{11cm}}
@@ -130,7 +158,10 @@ Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} imp
         \hline
         Exclude & Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen\\
         \hline
-        global\_threshold & Mindestwert der Bewertung ,der erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert
+        metrics & Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Strukur \enquote{(name,weight,params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist( Bei ALgorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name (oder Aliasname) der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik\\\hline
+        global\_threshold & Mindestwert der Bewertung ,der erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert\\\hline
+        result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse der Metriken verarbeitet und so das Gesamtergebnis berechnet.
+        
     \end{tabular}
     \caption{Parameter zur Konfiguration des Tools}
     \label{tab:tool_javadoc_conf}
