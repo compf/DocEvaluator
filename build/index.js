@@ -28593,6 +28593,9 @@ class BiMap {
     values() {
         this.v_to_k.keys();
     }
+    containsKey(key) {
+        return this.k_to_v.has(key);
+    }
 }
 var MetricManager;
 (function (MetricManager) {
@@ -28612,6 +28615,7 @@ var MetricManager;
     MetricManager.getMetricName = getMetricName;
     const allMetrics = new BiMap();
     function init() {
+        // metric names must be lower case
         allMetrics.add("simple_comment", new simple_comment_present_metric_1.SimpleCommentPresentMetric());
         allMetrics.add("public_members_only", new simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric());
         allMetrics.add("large_method_commented", new simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric());
@@ -28641,6 +28645,8 @@ var MetricManager;
     }
     MetricManager.getNewMetricResultBuilder = getNewMetricResultBuilder;
     function resolveMetricName(metricName) {
+        if (allMetrics.containsKey(metricName.toLowerCase()))
+            return metricName.toLowerCase();
         for (let metric of Object.entries(aliases)) {
             if (metric[0] == metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())) {
                 return metric[0];
