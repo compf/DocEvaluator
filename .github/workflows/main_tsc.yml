@@ -15,8 +15,8 @@ jobs:
           node-version: 12.x
     
       - run: npm i -g @vercel/ncc
-      - run: npm run deploy && git stash
-
+      - run: npm run deploy 
+        #based on https://dev.to/krzkaczor/fixing-github-actions-development-using-github-actions-33mk
       - uses: ActionwareIO/branch-push-action@action
         with:
           branch: action
