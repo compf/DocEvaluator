@@ -28,6 +28,9 @@ class BiMap<K, V>{
     public values() {
         this.v_to_k.keys();
     }
+    public containsKey(key:K){
+        return this.k_to_v.has(key);
+    }
 }
 export namespace MetricManager {
     /**
@@ -44,6 +47,7 @@ export namespace MetricManager {
     }
     const allMetrics: BiMap<string, DocumentationAnalysisMetric> = new BiMap<string, DocumentationAnalysisMetric>();
     function init() {
+        // metric names must be lower case
         allMetrics.add("simple_comment", new SimpleCommentPresentMetric());
         allMetrics.add("public_members_only", new SimplePublicMembersOnlyMetric());
         allMetrics.add("large_method_commented", new SimpleLargeMethodCommentedMetric());
@@ -72,6 +76,7 @@ export namespace MetricManager {
         throw new Error("Could not identify ResultBuilder");
     }
     function resolveMetricName(metricName:string):string{
+        if(allMetrics.containsKey(metricName.toLowerCase()))return metricName.toLowerCase();
         for(let metric of Object.entries(aliases)){
             if(metric[0]==metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())){
                 return metric[0];
