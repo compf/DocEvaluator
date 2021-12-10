@@ -23,4 +23,6 @@ jobs:
           files: |
             action.yml
             ./build/index.js
+            ./package-lock.json
+            ./package.json
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
