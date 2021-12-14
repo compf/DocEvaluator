@@ -4,6 +4,18 @@ Ein wichtiger Bestandteil der Softwareentwicklung von heute ist die Softwaredoku
 
 Die mangelhafte Dokumentation führt dazu, dass nicht nur nachfolgende Entwickler Probleme mit dem Codeverständnis haben, sondern auch der Entwickler eines Moduls nach einer längeren Pause Zeit aufbringen muss, um den Code wieder zu verstehen. Auch für Kunden/Auftraggeber ist eine gute Dokumentation wichtig, da gut dokumentierte Software tendenziell besser wartbar ist und somit mehr Nutzen bringt \cite[S. 83]{Qualityanalysisofsourcecodecomments}\cite[S. 1]{SoftwareDocumentationManagementIssuesandPractices:ASurvey}.
 
+Aus diesen Gründen ist regelmäßiger Feedback über die Dokumentation wichtig. Eine Möglichkeit, dieses Feedback zu geben, sind spezielle Metriken, welche eine numerische Auskunft über die Qualität der Softwaredokumentation liefern. Diese Metriken liefern dem Programmierer eine gute Einschätzung, ob die Softwaredokumentation so ausreichend ist oder eine Verbesserung sinnvoll wäre. Da es im Bereich der Softwaredokumentation, verschiedene Metriken gibt, ist es sinnvoll mehrere Metriken zu verwenden. Die Ergebnisse aller Metriken können dann kombiniert werden. Dabei ist es auch ratsam, die Metriken zu gewichten, weil nicht jede Metrik die gleiche Zuverlässigkeit besitzt.
 
+Damit das Feedback über die Softwaredokumentation auch regelmäßig wahrgenommen wird, sollte die Qualität regelmäßig automatisiert überprüft werden. Dies kann sehr gut in dem \ac{CI/CD}-Prozess eingebunden werden, bei dem Software kontinuierlich getestet und für den Release vorbereitet werden. 
+
+Dir Plattform GitHub bietet dafür den Service \enquote{GitHub Actions} \cite{GithubActions} an, bei denen eigene Programme (oder Programme aus einer großen Auswahl von anderen Programmierern) auf den Quelltext ausgeführt werden können. Diese Programme können dann Fehlermeldungen werfen, wenn es irgendwelche Probleme mit dem Quelltext gibt, sodass der Entwickler darauf aufmerksam wird und die Probleme lösen kann. Mit dieser Plattform und Service ist damit möglich, die Qualität der Softwaredokumentation regelmäßig zu prüfen und bei einer deutlichen Unterschreitung den Entwickler durch Fehlermeldungen zu warnen. 
+
+
+\section{Zielsetzung}
+Ziel dieser Bachelorarbeit ist es, ein Tool zu entwickeln, dass die Qualität von Javadoc bewertet. Dabei sollen verschiedene Metriken angewandt werden können und die Ergebnisse der Metriken sollen auf geeignete Art und Weise verknüpft werden. Das Tool soll primär für Javadoc geschrieben werden, allerdings soll während der Entwicklung auch darauf geachtet werden, dass eine Portierung auf andere Programmiersprache möglichst einfach wird und die Bewertung der Dokumentation unabhängig von der Programmiersprache funktioniert. 
+
+Dieses Tool soll dann in GitHub Actions eingebunden werden, sodass die Softwaredokumentation regelmäßig getestet wird.  Dies soll dem Softwareentwickler bei der Einschätzung helfen, ob die Softwaredokumentation ausreichend ist. 
+
+Anschließend soll das Tool mit anderen Programmen verglichen werden, die ebenfalls die Möglichkeit haben ,die Qualität von Javadoc zu berurteilen. Dazu sollen verschiedene Open-Source-Projekte aus GitHub als Datenquelle dienen. 
 
 
