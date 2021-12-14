@@ -28101,7 +28101,13 @@ class EvaluatorConf {
          * the global threshold that the average of all metrics should meet to pass the documentation check
          */
         this.global_threshold = 20.0;
+        /**
+         * The result builder for the emtrics
+         */
         this.result_builder = "default_builder";
+        /**
+         * the parser to be used/ the programming languages to be analyzed
+         */
         this.parser = "java";
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s) });
