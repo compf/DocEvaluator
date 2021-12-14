@@ -28102,6 +28102,7 @@ class EvaluatorConf {
          */
         this.global_threshold = 20.0;
         this.result_builder = "default_builder";
+        this.parser = "java";
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s) });
         }
@@ -28139,6 +28140,7 @@ class JSONCommentConfLoader {
 exports.JSONCommentConfLoader = JSONCommentConfLoader;
 class EnvCommentConfLoader {
     updateConf(conf) {
+        //TODO make this automatic
         if (process_1.env.INPUT_INCLUDE) {
             conf.include = process_1.env.INPUT_INCLUDE.split(",");
         }
@@ -28150,6 +28152,9 @@ class EnvCommentConfLoader {
         }
         if (process_1.env.INPUT_METRICS) {
             conf.metrics = JSON.parse(process_1.env.INPUT_METRICS);
+        }
+        if (process_1.env.INPUT_PARSER) {
+            conf.parser = JSON.parse(process_1.env.INPUT_PARSER);
         }
     }
 }
@@ -28256,11 +28261,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const chalk_1 = __importDefault(__nccwpck_require__(3199));
 const directory_traverser_1 = __nccwpck_require__(5426);
-const java_parser_1 = __nccwpck_require__(3581);
 const metric_manager_1 = __nccwpck_require__(2215);
 const metric_result_builder_1 = __nccwpck_require__(5361);
 const file_analyzer_1 = __nccwpck_require__(5826);
 const EvaluatorConf_1 = __nccwpck_require__(3265);
+const parser_factory_1 = __nccwpck_require__(6195);
+const factory = new parser_factory_1.ParserFactory();
 function main(args) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -28278,7 +28284,7 @@ function main(args) {
     for (let m of metrics) {
         weightMap.set(metric_manager_1.MetricManager.getMetric(m.metricName), m.weight);
     }
-    let parser = new java_parser_1.JavaParser();
+    let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = new metric_result_builder_1.MetricResultBuilder();
     let allFilesResultBulder = new metric_result_builder_1.MetricResultBuilder;
@@ -42020,6 +42026,29 @@ class StructuredCommentTag {
     }
 }
 exports.StructuredCommentTag = StructuredCommentTag;
+
+
+/***/ }),
+
+/***/ 6195:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ParserFactory = void 0;
+const java_parser_1 = __nccwpck_require__(3581);
+class ParserFactory {
+    createParser(parserName) {
+        switch (parserName.toLowerCase()) {
+            case "java":
+                return new java_parser_1.JavaParser();
+            default:
+                throw new Error("Could not find parser " + parserName);
+        }
+    }
+}
+exports.ParserFactory = ParserFactory;
 
 
 /***/ }),
