@@ -1,10 +1,10 @@
-import { EvaluatorConf } from "../conf/EvaluatorConf";
-import { Component } from "../parser/parse_result/component";
-import { MethodComponent } from "../parser/parse_result/method_component";
+import { Component } from "../../parser/parse_result/component";
+import { MethodComponent } from "../../parser/parse_result/method_component";
+import { LogMessage } from "../log_message";
+import { MetricResult } from "../metric_result";
+import { MetricResultBuilder } from "../metric_result_builder";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-import { LogMessage } from "./log_message";
-import { MetricResult } from "./metric_result";
-import { MetricResultBuilder } from "./metric_result_builder";
+
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer

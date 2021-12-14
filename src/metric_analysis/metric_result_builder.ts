@@ -1,4 +1,4 @@
-import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
+import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { LogMessage } from "./log_message";
 import { MetricResult } from "./metric_result";
 /**

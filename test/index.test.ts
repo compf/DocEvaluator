@@ -1,7 +1,7 @@
 import { MetricManager } from "../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../src/metric_analysis/metric_result_builder";
-import { SimpleCommentPresentMetric } from "../src/metric_analysis/simple_comment_present_metric";
-import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/simple_method_documentation_metric";
+import { SimpleCommentPresentMetric } from "../src/metric_analysis/metrics/simple_comment_present_metric";
+import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/metrics/simple_method_documentation_metric";
 import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_median_result_builder";
 class BaseClass {
 

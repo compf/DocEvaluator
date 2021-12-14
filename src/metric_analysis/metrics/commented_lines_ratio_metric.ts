@@ -1,9 +1,10 @@
-import { Component } from "../parser/parse_result/component";
-import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
-import { MethodComponent } from "../parser/parse_result/method_component";
+import { Component } from "../../parser/parse_result/component";
+import { HierarchicalComponent } from "../../parser/parse_result/hierarchical_component";
+import { MethodComponent } from "../../parser/parse_result/method_component";
+import { MetricResult } from "../metric_result";
+import { MetricResultBuilder } from "../metric_result_builder";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-import { MetricResult } from "./metric_result";
-import { MetricResultBuilder } from "./metric_result_builder";
+
 
 export class CommentedLinesRatioMetric implements DocumentationAnalysisMetric {
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {

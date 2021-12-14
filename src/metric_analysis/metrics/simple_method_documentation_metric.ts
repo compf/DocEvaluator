@@ -1,10 +1,11 @@
-import { Component } from "../parser/parse_result/component";
-import { MethodComponent } from "../parser/parse_result/method_component";
-import { StructuredComment, StructuredCommentTagKind } from "../parser/parse_result/structured_comment";
+import { Component } from "../../parser/parse_result/component";
+import { MethodComponent } from "../../parser/parse_result/method_component";
+import { StructuredCommentTagKind } from "../../parser/parse_result/structured_comment";
+import { LogMessage } from "../log_message";
+import { MetricResult } from "../metric_result";
+import { MetricResultBuilder } from "../metric_result_builder";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-import { LogMessage } from "./log_message";
-import { MetricResult } from "./metric_result";
-import { MetricResultBuilder } from "./metric_result_builder";
+
 
 export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMetric {
     shallConsider(component: Component,params:any) {

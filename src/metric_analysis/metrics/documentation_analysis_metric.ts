@@ -1,7 +1,6 @@
-import { EvaluatorConf } from "../conf/EvaluatorConf";
-import { Component } from "../parser/parse_result/component";
-import { MetricResult } from "./metric_result";
-import { MetricResultBuilder } from "./metric_result_builder";
+import { Component } from "../../parser/parse_result/component";
+import { MetricResultBuilder } from "../metric_result_builder";
+
 export const MAX_SCORE = 100;
 export const MIN_SCORE = 0;
 export interface DocumentationAnalysisMetric {

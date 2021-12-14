@@ -1,12 +1,12 @@
-import { CommentedLinesRatioMetric } from "./commented_lines_ratio_metric";
-import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
-import { IgnoreGetterSetterMetric } from "./ignore_getters_setter_metric";
+import { CommentedLinesRatioMetric } from "./metrics/commented_lines_ratio_metric";
+import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
+import { IgnoreGetterSetterMetric } from "./metrics/ignore_getters_setter_metric";
 import { MedianResultBuilder } from "./median_result_builder";
 import { MetricResultBuilder } from "./metric_result_builder";
-import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
-import { SimpleLargeMethodCommentedMetric } from "./simple_large_method_commented_metric";
-import { SimpleMethodDocumentationMetric } from "./simple_method_documentation_metric";
-import { SimplePublicMembersOnlyMetric } from "./simple_public_members_only_metric";
+import { SimpleCommentPresentMetric } from "./metrics/simple_comment_present_metric";
+import { SimpleLargeMethodCommentedMetric } from "./metrics/simple_large_method_commented_metric";
+import { SimpleMethodDocumentationMetric } from "./metrics/simple_method_documentation_metric";
+import { SimplePublicMembersOnlyMetric } from "./metrics/simple_public_members_only_metric";
 import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
 import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
 class BiMap<K, V>{

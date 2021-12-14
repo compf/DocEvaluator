@@ -2,7 +2,7 @@ import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
 import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
 import { ParseResult } from "../parser/parse_result/parse_result";
-import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
+import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 enum IgnoreTags{IGNORE_THIS="%ignore_this%",IGNORE_NODE="%ignore_node%"}

@@ -1,7 +1,8 @@
 
-import { Component } from "../parser/parse_result/component";
-import { FileComponent } from "../parser/parse_result/file_component";
-import { MethodComponent } from "../parser/parse_result/method_component";
+
+import { Component } from "../../parser/parse_result/component";
+import { FileComponent } from "../../parser/parse_result/file_component";
+import { MethodComponent } from "../../parser/parse_result/method_component";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 export class IgnoreGetterSetterMetric extends  SimpleCommentPresentMetric{
