@@ -47,7 +47,7 @@ export namespace MetricManager {
     }
     const allMetrics: BiMap<string, DocumentationAnalysisMetric> = new BiMap<string, DocumentationAnalysisMetric>();
     function init() {
-        // metric names must be lower case
+        // main metric names must be lower case
         allMetrics.add("simple_comment", new SimpleCommentPresentMetric());
         allMetrics.add("public_members_only", new SimplePublicMembersOnlyMetric());
         allMetrics.add("large_method_commented", new SimpleLargeMethodCommentedMetric());
@@ -85,12 +85,12 @@ export namespace MetricManager {
         throw new Error("Could not identify metric");
     }
     const aliases={
-        "simple_comment":["comment_present","all_members","all_components","simple_documentation_present","documentation_present","sc"],
-        "public_members_only":["public_members","public_components","only_public","pmo"],
-        "large_method_commented":["punish_large_uncommented","punish_large_undocumented","lmc"],
-        "method_fully_documented":["method_fully_commented","fully_documented","params_return_documented","params_return_commented","mfd"],
-        "commented_lines_ratio":["ratio_commented_uncommented","ratio_documented_undocumented","clr"],
-        "ignore_getters_setters":["getters_setters","ignore_properties","ignore_getter_setter","igs"]
+        "simple_comment":["comment_present","all_members","all_components","simple_documentation_present","documentation_present","sc",SimpleCommentPresentMetric.name],
+        "public_members_only":["public_members","public_components","only_public","pmo",SimplePublicMembersOnlyMetric.name],
+        "large_method_commented":["punish_large_uncommented","punish_large_undocumented","lmc",SimpleLargeMethodCommentedMetric.name],
+        "method_fully_documented":["method_fully_commented","fully_documented","params_return_documented","params_return_commented","mfd",SimpleMethodDocumentationMetric.name],
+        "commented_lines_ratio":["ratio_commented_uncommented","ratio_documented_undocumented","clr",CommentedLinesRatioMetric.name],
+        "ignore_getters_setters":["getters_setters","ignore_properties","ignore_getter_setter","igs",IgnoreGetterSetterMetric.name]
     }
 
     /**
