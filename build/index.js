@@ -28708,6 +28708,24 @@ exports.MetricResultBuilder = MetricResultBuilder;
 
 /***/ }),
 
+/***/ 2960:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ChildrenBasedMetric = void 0;
+const hierarchical_component_1 = __nccwpck_require__(5448);
+class ChildrenBasedMetric {
+    shallConsider(component, params) {
+        return component instanceof hierarchical_component_1.HierarchicalComponent;
+    }
+}
+exports.ChildrenBasedMetric = ChildrenBasedMetric;
+
+
+/***/ }),
+
 /***/ 4535:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -28715,11 +28733,11 @@ exports.MetricResultBuilder = MetricResultBuilder;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommentedLinesRatioMetric = void 0;
-const hierarchical_component_1 = __nccwpck_require__(5448);
 const method_component_1 = __nccwpck_require__(6932);
 const metric_result_1 = __nccwpck_require__(3073);
+const children_based_metric_1 = __nccwpck_require__(2960);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
-class CommentedLinesRatioMetric {
+class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMetric {
     analyze(component, builder, params) {
         let cls = component;
         let methods = cls.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).map((c) => c);
@@ -28746,10 +28764,28 @@ class CommentedLinesRatioMetric {
         builder.processResult(new metric_result_1.MetricResult(result, [], this));
     }
     shallConsider(component, params) {
-        return component instanceof hierarchical_component_1.HierarchicalComponent && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
+        return super.shallConsider(component, params) && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
     }
 }
 exports.CommentedLinesRatioMetric = CommentedLinesRatioMetric;
+
+
+/***/ }),
+
+/***/ 7040:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ComponentBasedMetric = void 0;
+const file_component_1 = __nccwpck_require__(6712);
+class ComponentBasedMetric {
+    shallConsider(component, params) {
+        return !(component instanceof file_component_1.FileComponent);
+    }
+}
+exports.ComponentBasedMetric = ComponentBasedMetric;
 
 
 /***/ }),
@@ -28774,12 +28810,11 @@ exports.MIN_SCORE = 0;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IgnoreGetterSetterMetric = void 0;
-const file_component_1 = __nccwpck_require__(6712);
 const method_component_1 = __nccwpck_require__(6932);
 const simple_comment_present_metric_1 = __nccwpck_require__(4086);
 class IgnoreGetterSetterMetric extends simple_comment_present_metric_1.SimpleCommentPresentMetric {
     shallConsider(component, params) {
-        if ((component instanceof file_component_1.FileComponent)) {
+        if ((!super.shallConsider(component, params))) {
             return false;
         }
         else if (component instanceof method_component_1.MethodComponent) {
@@ -28817,14 +28852,11 @@ exports.IgnoreGetterSetterMetric = IgnoreGetterSetterMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimpleCommentPresentMetric = void 0;
-const file_component_1 = __nccwpck_require__(6712);
 const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
+const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
-class SimpleCommentPresentMetric {
-    shallConsider(component, params) {
-        return !(component instanceof file_component_1.FileComponent);
-    }
+class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, params) {
         let score = 0;
         let logMessages = [];
@@ -28853,17 +28885,18 @@ exports.SimpleLargeMethodCommentedMetric = void 0;
 const method_component_1 = __nccwpck_require__(6932);
 const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
+const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer
  */
-class SimpleLargeMethodCommentedMetric {
+class SimpleLargeMethodCommentedMetric extends component_based__metric_1.ComponentBasedMetric {
     boundedGrowth(S, B0, k, l) {
         return S - (S - B0) * Math.exp(-k * l);
     }
     shallConsider(component, params) {
-        return component instanceof method_component_1.MethodComponent;
+        return super.shallConsider(component, params) && component instanceof method_component_1.MethodComponent;
     }
     analyze(component, builder, params) {
         let logMessages = [];
@@ -28916,10 +28949,11 @@ const method_component_1 = __nccwpck_require__(6932);
 const structured_comment_1 = __nccwpck_require__(1825);
 const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
+const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
-class SimpleMethodDocumentationMetric {
+class SimpleMethodDocumentationMetric extends component_based__metric_1.ComponentBasedMetric {
     shallConsider(component, params) {
-        return component instanceof method_component_1.MethodComponent;
+        return super.shallConsider(component, params) && component instanceof method_component_1.MethodComponent;
     }
     analyze(component, builder, params) {
         let logMessages = [];
@@ -28984,13 +29018,13 @@ exports.SimpleMethodDocumentationMetric = SimpleMethodDocumentationMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimplePublicMembersOnlyMetric = void 0;
-const file_component_1 = __nccwpck_require__(6712);
 const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
+const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
-class SimplePublicMembersOnlyMetric {
+class SimplePublicMembersOnlyMetric extends component_based__metric_1.ComponentBasedMetric {
     shallConsider(component, params) {
-        return component.getComponentMetaInformation().isPublic() && !(component instanceof file_component_1.FileComponent);
+        return component.getComponentMetaInformation().isPublic() && super.shallConsider(component, params);
     }
     analyze(component, builder, params) {
         if (component.getComment() != null) {
