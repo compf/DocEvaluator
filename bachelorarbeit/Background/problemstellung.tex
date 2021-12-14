@@ -85,8 +85,27 @@ Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generier
 
 Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. 
 
+
+\subsection{Quasoledo}
+In \cite[S. 4-10]{HowDocumentationEvolvesoverTime} geben die Autoren einige Metriken an, die sie für die Bewertung der Softwaredokumentation als nützlich erachten. Dazu gehören:
+\begin{description}
+    \item[ANYJ] Anteil der dokumentierten Deklarationen an allen Deklarationen
+    \item[DIR] Anteil dokumentierter Items(Methodenparameter, Rückgabewerte von Methoden und Deklarationen) an allen Items
+    \item[ANYC\textsubscript{method}] Anteil der Methoden mit irgendwelchen Kommentaren als Header (z.B. reine mehrzeilige) an allen Methoden
+    \item[KINCAID] Lesbarkeitsformel nach \cite[S. 50]{ThePrinciplesofReadability}
+\end{description}
+Die Arbeit wertet anschließend die Javadoc-Dokumentation von Eclipse aus und findet heraus, dass öffentliche Methoden häufiger dokumentiert sind und ihre Dokumentation oft lesbarer ist. Außerdem wenden die Autoren das Tool, das \textit{Quasoledo} genannt wird, auf die gesamte Versionshistorie von Eclipse bis zum 8. April 2006 an und plotten den Verlauf der Dokumentationsqualität über diesem Zeitraum. Dabei wird sichtbar, dass die Qualität am Anfang des Projektes noch sehr stark schwankt, aber nach einiger Zeit recht konstant bleibt. 
 \subsubsection{JavaDocMiner}
-Die wichtigste Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der \enquote{JavaDocMiner} \cite[S. 68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In dieser Arbeit wird ein Programm beschrieben, welches mittels einfachen Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Dabei beschränkt sich der JavaDocMiner nur auf Java-Programme, während das hier zu entwickelnde Tool  auch mit anderen Programmiersprachen zurechtkommen soll.
+Eine weitere Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der \enquote{JavaDocMiner} \cite[S. 68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In dieser Arbeit wird ein Programm beschrieben, welches mittels einfachen Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Das Tool extrahiert aus XML-Dateien, die mittels eines selbst geschriebene Doclet aus Javadoc erstellt wurden, die notwendigen Informationen und wendet dann auf diese XML-Struktur die Metriken an. 
+
+Insgesamt verwendeten die Autoren die folgenden Metriken. Metriken wie \textit{ANYJ} oder \textit{DIR} wurden dabei auch verwendet, werden aber hier ausgelassen:
+\begin{description}
+    \item[WPJC] Durchschnittliche Anzahl an Wörtern pro Javadoc-Kommentar
+    \item[ABB] Zählt die Anzahl von Abkürzungen, da diese laut der Arbeit vermieden werden soll
+    \item[Fog-Index] Formel, die die Anzahl der schulischen Ausbildungsjahren angibt, um einen Text zu verstehen 
+\end{description}
+
+Anschließend wendeten die Autoren das Tool auf den Quellcode an und prüften, ob es eine Korrelation zwischen der Anzahl an Bugs und der Qualität der Dokumentation nach den benannten Metriken und fanden dabei heraus, dass die Flesch-Metrik nur wenig mit der Anzahl der Bugs korreliert, während andere Metriken wie z. B. \textit{ANYJ} eine starke negative Korrelation gab. 
 
 \subsubsection{Doc2Spec}
 Die Autoren in \cite[S. 307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
