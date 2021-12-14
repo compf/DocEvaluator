@@ -32,7 +32,15 @@ export class EvaluatorConf {
      * the global threshold that the average of all metrics should meet to pass the documentation check
      */
     global_threshold: number = 20.0;
+
+    /**
+     * The result builder for the emtrics
+     */
     result_builder: string = "default_builder";
+
+    /**
+     * the parser to be used/ the programming languages to be analyzed
+     */
     parser: string = "java";
 
     constructor() {
