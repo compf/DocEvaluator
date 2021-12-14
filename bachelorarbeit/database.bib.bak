@@ -603,7 +603,7 @@ facilitating its maintenance.},
   file   = {:/home/compf/data/uni/sem7/bachelor/sources/The_Role_of_Documentation_in_Programmer_Training_-.pdf:PDF},
 }
 
-@InProceedings{10.1145/65293.71211,
+@InProceedings{TeachingPracticalSoftwareMaintenanceSkillsinaSoftwareEngineeringCourse,
   author    = {Collofello, J. S.},
   title     = {Teaching Practical Software Maintenance Skills in a Software Engineering Course},
   booktitle = {Proceedings of the Twentieth SIGCSE Technical Symposium on Computer Science Education},
@@ -972,7 +972,7 @@ facilitating its maintenance.},
   journal = {ASE2009 - 24th IEEE/ACM International Conference on Automated Software Engineering},
 }
 
-@Article{article,
+@Article{ThePrinciplesofReadability,
   author  = {Dubay, William},
   title   = {The Principles of Readability},
   journal = {CA},
@@ -981,6 +981,18 @@ facilitating its maintenance.},
   month   = {01},
   pages   = {631-3309},
   file    = {:/home/compf/data/uni/sem7/bachelor/sources/The_Principles_of_Readability.pdf:PDF},
+}
+
+@WWW{ncc,
+  title = {NCC},
+  date  = {2021-12-14},
+  url   = {https://github.com/vercel/ncc},
+}
+
+@WWW{Branch-Push,
+  title = {Branch-Push},
+  date  = {2021-12-14},
+  url   = {https://github.com/ActionwareIO/branch-push-action},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

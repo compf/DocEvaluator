@@ -983,4 +983,16 @@ facilitating its maintenance.},
   file    = {:/home/compf/data/uni/sem7/bachelor/sources/The_Principles_of_Readability.pdf:PDF},
 }
 
+@WWW{ncc,
+  title = {NCC},
+  date  = {2021-12-14},
+  url   = {https://github.com/vercel/ncc},
+}
+
+@WWW{Branch-Push,
+  title = {Branch-Push},
+  date  = {2021-12-14},
+  url   = {https://github.com/ActionwareIO/branch-push-action},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}

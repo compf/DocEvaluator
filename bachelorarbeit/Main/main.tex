@@ -30,7 +30,7 @@ Zuvor wurde bereits versucht, die Java-Dateien mittels der NPM-Bibliothek \enquo
 
 Eine Grammatik besteht immer aus einer Lexer-Grammatik und eine Parser-Grammatik, die jeweils vom Lexer bzw. Parser in dieser Reihenfolge verarbeitet werden, um so eine Baumstruktur einer Quellcodedatei zu erhalten. Der Lexer erstellt aus einer Quellcodedatei eine Liste von Tokens. Dabei ist ein Token eine Gruppierung von einem oder mehreren Zeichen, die eine weitergehende Bedeutung haben. Beispielsweise können Schlüsselwörter einer Programmiersprache oder Operatoren als Token klassifiziert werden. Diese Tokens sind grundsätzlich kontextunabhängig, das heißt für die gleiche Zeichenkette wird das gleiche Token verwendet. Jeder Token wird durch seine Zeichenkette und den Tokentyp klassifiziert
 
-Listening \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
+Quelltext \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
 		\begin{figure} [htbp]
 			\lstinputlisting
 			[caption={Beispielhafte Syntax vom Lexer},
@@ -43,7 +43,7 @@ Eine Zeile in der Lexer-Grammatik beginnt mit den Namen eines Tokens, gefolgt vo
 
 Der nächste Schritt ist das eigentliche Parsen. Dabei werden die im vorherigen Schritt generierten Tokens, die als Liste vorliegen, genommen und in eine hierarchische Baumstruktur umgewandelt, wobei hier der Kontext die entscheidende Rolle spielt. ANTLR4 lädt ein Token nach dem anderen und prüft ob es, basierend auf der aktuellen Position in der Baumstruktur, eine Regel gibt, die durch diesen Token erfüllt wird. Wenn es mehrere mögliche Pfade gibt, lädt ANTLR4 so viele Tokens bis die nächste Regel eindeutig feststeht. Gibt es dennoch Uneindeutigkeiten, so wird die Regel genommen, die als erstes in Parser-Datei geschrieben wurde.
 
-So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren, der eine generelle Methode beschreibt. Eine Methode besteht nämlich aus Rückgabetyp, Bezeichner und Parameterliste. Die Parameterliste kann dann als eine Liste von Datentyp-Bezeichner-Paare aufgelöst werden. Der Rückgabetyp einer Methode ist allerdings anders zu verstehen als der Datentyp eines Parameters, da jeder Datentyp eines Parameters auch ein gültiger Rückgabetyp ist, was jedoch nicht umgekehrt der Fall ist; so ist \textit{}{void} ein gültiger Rückgabetyp, aber kein Datentyp. Listening \ref{lst:parser_example} zeigt ein typischer Ausschnitt aus einer Parser-Grammatik, wobei zur Überssichtlichkeit nicht alle Regeln und Tokens aufgelistet sind:
+So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren, der eine generelle Methode beschreibt. Eine Methode besteht nämlich aus Rückgabetyp, Bezeichner und Parameterliste. Die Parameterliste kann dann als eine Liste von Datentyp-Bezeichner-Paare aufgelöst werden. Der Rückgabetyp einer Methode ist allerdings anders zu verstehen als der Datentyp eines Parameters, da jeder Datentyp eines Parameters auch ein gültiger Rückgabetyp ist, was jedoch nicht umgekehrt der Fall ist; so ist \textit{}{void} ein gültiger Rückgabetyp, aber kein Datentyp. Quelltext \ref{lst:parser_example} zeigt ein typischer Ausschnitt aus einer Parser-Grammatik, wobei zur Überssichtlichkeit nicht alle Regeln und Tokens aufgelistet sind:
 		\begin{figure} [htbp]
 			\lstinputlisting
 			[caption={Beispielhafte Syntax vom Parser},
@@ -58,7 +58,7 @@ Die Parser-Grammatik ist ähnlich wie die der Lexer-Grammatik aufgebaut. Auch hi
 
 
 Basierend auf diese Baumstruktur des Parsers kann eine Quellcodedatei analysiert werden und so alle relevanten Informationen gesammelt werden. 
-Dies lässt sich relativ leicht mit dem Visitor-Pattern erledigen, da so nur die relevanten  Komponenten genauer betrachtet werden müsse und alle uninteressanten Komponenten automatisiert durchlaufen werden, bis eine relevante Komponente gefunden wird. Listening \ref{lst:visit_method_example} zeigt einen Ausschnitt aus dem Java-Parser um das Visitor-Pattern genauer zu erläutern.
+Dies lässt sich relativ leicht mit dem Visitor-Pattern erledigen, da so nur die relevanten  Komponenten genauer betrachtet werden müsse und alle uninteressanten Komponenten automatisiert durchlaufen werden, bis eine relevante Komponente gefunden wird. Quelltext \ref{lst:visit_method_example} zeigt einen Ausschnitt aus dem Java-Parser um das Visitor-Pattern genauer zu erläutern.
 
 		\begin{figure} [htbp]
 			\lstinputlisting
@@ -167,5 +167,37 @@ Das Tool benötigt einen Parameter, der das Verzeichnis angibt, das analysiert w
     \caption{Parameter zur Konfiguration des Tools}
     \label{tab:tool_javadoc_conf}
 \end{table}
-\todo{Add more if tool is more developed}
+
 \subsection{Einbindung in GitHub Actions}
+Um das Tool in GitHub Actions einzubinden, mussten einige Schritte erfolgen. Zunächst musste eine \enquote{action.yaml} geschrieben werden, die das GitHub-Repository als Aktion markiert und die notwendige Befehle für die Ausführung enthält. Quelltext  \ref{lst:action} zeigt den kompletten Code der Aktion:
+\begin{figure} [htbp]
+\lstinputlisting
+[caption={Action-Datei für das Tool},
+label={lst:action},
+captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+{figures/action.yml}
+\end{figure}
+
+In den ersten beiden Zeilen werden triviale Attribute wie der Name und eine Beschreibung gesetzt. Danach wird der Eingabeparameter für die minimal erlaubte Bewertung für die Dokumentationsqualität definiert, damit dieser von den Nutzern der Aktion verändert werden kann.  Außerdem wird noch ein Icon und eine Farbe gesetzt, was aber hier nicht von Interesse ist. Die letzten Zeilen sind allerdings wichtig. Hier wird die Aktion als JavaScript-Aktion mit der Node-Version 16 festgelegt. Zudem enthält die letzte Zeile auch den Pfad zur Quellcodedatei, mit dem das Programm gestartet werden soll. 
+
+Da das Programm in TypeScript programmiert wurde, eine JavaScript-Aktion aber reines JavaScript benötigt, sind weitere Schritte nötig. Es wurde ein weiterer Worklfow erstellt, der bei jedem Push in dem Main-Zweig folgende Schritte ausführt:
+\begin{enumerate}
+    \item Klonen der Main-Branch des Repositories(wie bei den meisten anderen Workflows)
+    \item Aufruf von TSC, Konvertierung des TypeScript-Codes in JavaScript
+    \item Aufruf und Benutzung von NCC\cite{ncc}. Packen aller JavaScript-Dateien in eine einzige Datei
+    \item Kopieren der generierten Datei, die den gesamten Quellcode enthält und der \enquote{action.yml}, in eine (neue) Branch \textit{action}. Dies wird mittels der Aktion \textit{Branch-Push}\cite{Branch-Push} durchgeführt
+\end{enumerate}
+Durch diese Schritte wird eine neue Branch erstellt, die nur die notwendige JavaScript-Datei und die \textit{action.yml} enthält. Dadurch können Nutzer der Aktion diese schneller herunterladen und nutzen. Es wäre auch möglich, kein \enquote{NCC} zu verwenden, also alle Javascript-Dateien in die neue Branch zu kopieren, allerdings ist die hier gewählte Methode praktikabler,da dann nur ein Lesezugriff beim Starten des Programms erforderlich ist und so ein Geschwindigkeitsvorteil existiert. 
+
+\subsubsection{Nutzung der Aktion}
+
+Die oben erstellte Aktion kann nun von jedem GitHub-Repository verwendet werden. dazu kann der folgende Quelltext \ref{lst:action_using} als zusätzlicher Schritt in einem Workflow eingebunden werden. 
+\begin{figure} [htbp]
+\lstinputlisting
+[caption={Verwendung der Aktion in einem Workflow},
+label={lst:action_using},
+captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+{figures/action_using.yml}
+\end{figure}
+
+Hier wird die aktuelle Version des JavadocEvaluators aus der Branch \textit{action} heruntergeladen und automatisch ausgeführt. Als Parameter wird beispielsweise ein Grenzwert von 20 übergeben, der jedoch nach Belieben angepasst werden kann. Wenn das entsprechende Ereignis des Workflow eintritt (z. B. ein Push-Ereignis), wird der JavadocEvaluator mit dem Parameter aufgerufen und zeigt unter der Registerkarte \textit{Actions} eine Fehlermeldung an, wenn die Dokumentationsqualität den Grenzwert unterschreitet und somit nicht ausreichend ist. 
