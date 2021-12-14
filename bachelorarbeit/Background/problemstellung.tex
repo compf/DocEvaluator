@@ -88,6 +88,22 @@ Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der So
 \subsubsection{JavaDocMiner}
 Die wichtigste Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der \enquote{JavaDocMiner} \cite[S. 68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In dieser Arbeit wird ein Programm beschrieben, welches mittels einfachen Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Dabei beschränkt sich der JavaDocMiner nur auf Java-Programme, während das hier zu entwickelnde Tool  auch mit anderen Programmiersprachen zurechtkommen soll.
 
+\subsubsection{Doc2Spec}
+Die Autoren in \cite[S. 307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
+
+Für jede dokumentierte Methode der API wird ein Aktion-Ressource-Paar erstellt. Diese beschreibt welche Aktion auf welche Ressource ausgeführt. Bei einer Methode namens \textit{close}, die mit dem englischen Text \enquote{Initiates close of the connection handle at the
+application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern, dass das Aktion-Ressource-Paar \textit{(close,connection)} sein kann; denn die Aktion \textit{close} bezieht sich auf die Ressource \textit{connection}. Dabei sind aber manchmal mehrere Aktion-Ressource-Paare möglich\cite[S. 308]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}.
+
+Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet, die in der die meisten Java-Methoden passen\cite[S. 311]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}:
+\begin{description}
+    \item[Creation] Methoden, die eine Ressource/Objekt erstellen
+    \item[Lock] Methoden, die eine Ressource sperren
+    \item[Manipulation] Methoden, die irgendwie eine Ressource verändert oder auch nur lesen, und jede andere Aktion, die nicht in den anderen Schemata passt
+    \item[Unlock] Methoden, die eine gesperrte Ressource wieder freigeben
+    \item[Closure] Methoden, die eine Ressource endgültig freigeben oder schließen
+\end{description}
+
+Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da eine fehlendes Freigeben von Ressourcen z.B. im Ausnahmefall ein häufiger Fehler sein kann. 
 
 \subsubsection{iComment}
 \enquote{\/\*iComment} \cite[S. 145ff.]{icomment} wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
@@ -120,7 +136,7 @@ Github Action \cite{GithubActions} ist eine von GitHub angebotene Plattform zur 
     \end{enumerate}
 \end{enumerate}
 
-Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-Ereignis kann der aktuelle Programmcode mit einer geeigneten Testbibliothek getestet werden, sodass im Falle eines fehlgeschlagenen Tests der Programmierer informiert wird und die notwendigen Änderungen veranlassen kann. 
+Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-Ereignis kann der aktuelle Programmcode mit einer geeigneten Testbibliothek getestet werden, sodass im Falle eines fehlgeschlagenen Tests der Programmierer informiert wird und die notwendigen Änderungen veranlassen kann: 
 
 \subsection{Wichtige Begriffe im Zusammenhang mit Github Action}
 In der folgenden Auflistung werden einige wichtige Begriffe erläutert, die im Zusammenhang mit GitHub Actions verwendet werden und deren Kenntnis zum Verständnis wichtig ist. 
@@ -149,7 +165,7 @@ Ein Workflow kann über die registerkarte \enquote{Actions} erstellt werden und 
          16-19 &Beispiel um mehrere Befehle sequentiell auszuführen\\\hline
          
     \end{tabular}
-    \caption{Caption}
+    \caption{Beispielhafter Workflow}
     \label{tab:descr_example_workflow}
 \end{table}
 		\begin{figure}[h!]
