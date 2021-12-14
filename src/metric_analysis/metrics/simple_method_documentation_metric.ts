@@ -4,12 +4,13 @@ import { StructuredCommentTagKind } from "../../parser/parse_result/structured_c
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
+import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 
 
-export class SimpleMethodDocumentationMetric implements DocumentationAnalysisMetric {
+export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
     shallConsider(component: Component,params:any) {
-        return component instanceof MethodComponent;
+        return super.shallConsider(component,params) &&  component instanceof MethodComponent;
     }
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {
         let logMessages: LogMessage[] = [];

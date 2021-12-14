@@ -3,18 +3,19 @@ import { MethodComponent } from "../../parser/parse_result/method_component";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
+import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer
  */
-export class SimpleLargeMethodCommentedMetric implements DocumentationAnalysisMetric {
+export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
     boundedGrowth(S: number, B0: number, k: number, l: number): number {
         return S - (S - B0) * Math.exp(-k * l);
     }
     shallConsider(component: Component,params:any) {
-        return component instanceof MethodComponent;
+        return  super.shallConsider(component,params) && component instanceof MethodComponent;
     }
     analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {
         let logMessages: LogMessage[] = [];

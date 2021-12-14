@@ -7,7 +7,7 @@ import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 export class IgnoreGetterSetterMetric extends  SimpleCommentPresentMetric{
     override shallConsider(component:Component,params:any):boolean{
-        if((component instanceof FileComponent)){
+        if((!super.shallConsider(component,params))){
             return false;
         }
         else if(component instanceof MethodComponent){
