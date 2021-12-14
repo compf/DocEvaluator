@@ -1,14 +1,14 @@
 
 import chalk from "chalk";
 import { DirectoryTraverser } from "./directory_traverser/directory_traverser";
-import { JavaParser } from "./parser/java_parser"
 import { BaseParser } from "./parser/base_parser";
 import { ParseResult } from "./parser/parse_result/parse_result";
 import { MetricManager } from "./metric_analysis/metric_manager";
 import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { loadConf } from "./conf/EvaluatorConf";
-
+import { ParserFactory } from "./parser/parser_factory";
+const factory=new ParserFactory();
 function main(args: Array<string>) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -27,7 +27,7 @@ function main(args: Array<string>) {
     for(let m of metrics){
         weightMap.set(MetricManager.getMetric(m.metricName),m.weight);
     }
-    let parser: BaseParser = new JavaParser();
+    let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new FileAnalyzer();
     let singleFileResultBuilder = new MetricResultBuilder();
     let allFilesResultBulder = new MetricResultBuilder

@@ -32,7 +32,9 @@ export class EvaluatorConf {
      * the global threshold that the average of all metrics should meet to pass the documentation check
      */
     global_threshold: number = 20.0;
-    result_builder:string="default_builder";
+    result_builder: string = "default_builder";
+    parser: string = "java";
+
     constructor() {
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s) })
@@ -48,10 +50,10 @@ export class EvaluatorConf {
      * @returns A valid DirectoryTraverserConfig that is set to default values if no config file is found
      */
 export function loadConf(basePath: string): EvaluatorConf {
-    let conf=new EvaluatorConf();
-    let loaders=[new JSONCommentConfLoader(basePath),new EnvCommentConfLoader()];
-    for(let loader of loaders){
-    loader.updateConf(conf);
+    let conf = new EvaluatorConf();
+    let loaders = [new JSONCommentConfLoader(basePath), new EnvCommentConfLoader()];
+    for (let loader of loaders) {
+        loader.updateConf(conf);
     }
     return conf;
 }
@@ -59,9 +61,9 @@ export interface ConfLoader {
     updateConf(conf: EvaluatorConf): void;
 }
 export class JSONCommentConfLoader implements ConfLoader {
-    private basePath:string;
+    private basePath: string;
     constructor(basePath: string) {
-        this.basePath=basePath;
+        this.basePath = basePath;
 
     }
     updateConf(conf: EvaluatorConf): void {
@@ -76,22 +78,26 @@ export class JSONCommentConfLoader implements ConfLoader {
         }
     }
 }
-export class EnvCommentConfLoader implements ConfLoader{
+export class EnvCommentConfLoader implements ConfLoader {
     updateConf(conf: EvaluatorConf): void {
-    if(env.INPUT_INCLUDE){
-        conf.include=env.INPUT_INCLUDE.split(",")
-    }
-    if(env.INPUT_EXCLUDE){
-        conf.exclude=env.INPUT_EXCLUDE.split(",")
-    }
-    if(env.INPUT_GLOBAL_THRESHOLD){
-    conf.global_threshold=parseFloat(env.INPUT_GLOBAL_THRESHOLD);
-    }
-    if(env.INPUT_METRICS){
-    conf.metrics=JSON.parse(env.INPUT_METRICS)
-    }
-        
-       
+        //TODO make this automatic
+        if (env.INPUT_INCLUDE) {
+            conf.include = env.INPUT_INCLUDE.split(",")
+        }
+        if (env.INPUT_EXCLUDE) {
+            conf.exclude = env.INPUT_EXCLUDE.split(",")
+        }
+        if (env.INPUT_GLOBAL_THRESHOLD) {
+            conf.global_threshold = parseFloat(env.INPUT_GLOBAL_THRESHOLD);
+        }
+        if (env.INPUT_METRICS) {
+            conf.metrics = JSON.parse(env.INPUT_METRICS)
+        }
+        if (env.INPUT_PARSER) {
+            conf.parser = JSON.parse(env.INPUT_PARSER)
+        }
+
+
     }
 
 }
