@@ -29059,7 +29059,7 @@ const simple_method_documentation_metric_1 = __nccwpck_require__(4498);
 const simple_public_members_only_metric_1 = __nccwpck_require__(993);
 const weighted_median_result_builder_1 = __nccwpck_require__(8809);
 const weighted_metric_result_builder_1 = __nccwpck_require__(7245);
-const flesh_metric_1 = __nccwpck_require__(4530);
+const flesch_metric_1 = __nccwpck_require__(6713);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -29110,7 +29110,7 @@ var MetricManager;
         allMetrics.add("method_fully_documented", new simple_method_documentation_metric_1.SimpleMethodDocumentationMetric());
         allMetrics.add("commented_lines_ratio", new commented_lines_ratio_metric_1.CommentedLinesRatioMetric());
         allMetrics.add("ignore_getters_setters", new ignore_getters_setter_metric_1.IgnoreGetterSetterMetric());
-        allMetrics.add("flesh", new flesh_metric_1.FleshMetric());
+        allMetrics.add("flesch", new flesch_metric_1.FleschMetric());
     }
     function getNewMetricResultBuilder(builderName, weightMap) {
         switch (builderName) {
@@ -29168,7 +29168,7 @@ var MetricManager;
                 return { ignoreLines: ["", "{", "}"] };
             case "ignore_getters_setter":
                 return { getterPattern: "(get.*)|(is.*)", setterPattern: "set.*" };
-            case "flesh":
+            case "flesch":
                 return { considerTags: false };
             default:
                 return {};
@@ -29395,13 +29395,13 @@ exports.MIN_SCORE = 0;
 
 /***/ }),
 
-/***/ 4530:
+/***/ 6713:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FleshMetric = void 0;
+exports.FleschMetric = void 0;
 const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
 const NLP_Helper_1 = __nccwpck_require__(1890);
@@ -29410,7 +29410,7 @@ const documentation_analysis_metric_1 = __nccwpck_require__(9504);
 /**
  * This metric calculate the flesh score which describes the readability of a text
  */
-class FleshMetric extends component_based__metric_1.ComponentBasedMetric {
+class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, params) {
         let textsToConsider = this.getTextToConsider(component, params);
         let logMessages = [];
@@ -29468,7 +29468,7 @@ class FleshMetric extends component_based__metric_1.ComponentBasedMetric {
         return result;
     }
 }
-exports.FleshMetric = FleshMetric;
+exports.FleschMetric = FleschMetric;
 
 
 /***/ }),
