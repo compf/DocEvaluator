@@ -995,4 +995,14 @@ facilitating its maintenance.},
   url   = {https://github.com/ActionwareIO/branch-push-action},
 }
 
+@Book{gamma2015design,
+  author    = {Gamma, E. and Helm, R. and Johnson, R. and Vlissides, J.},
+  title     = {Design Patterns: Entwurfsmuster als Elemente wiederverwendbarer objektorientierter Software},
+  year      = {2015},
+  series    = {mitp Professional},
+  publisher = {MITP-Verlags GmbH \& Co. KG},
+  isbn      = {9783826699047},
+  url       = {https://books.google.de/books?id=lYyXBgAAQBAJ},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}

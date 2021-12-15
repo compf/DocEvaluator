@@ -37,6 +37,10 @@ Aus diesen Grund wurde eine mathematische Funktion ermittelt, die für einen Fle
 Für einen Flesch-Score unter 70 wird eine quadratische Funktion verwendet, die einen Flesch-Score von 60 noch sehr fair behandelt, aber kleinere Flesch-Scores, die auf einen komplizierten hindeuten, deutlich schlechter bewertet werden. Damit sollen Entwickler dazu ermuntert werden, ihre Texte nicht allzu kompliziert zu gestalten. Dies hilft nachfolgenden Entwicklern, aber auch dem Erzeuger der Dokumentation, beim Verständnis des Quellcodes und verhindert so potentielle Bugs.
 
 Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung von Flesch bei kurzen Texten, zum Beispiel aus nur einem Satz, stark fluktuiert.
+\subsubsection{Parameter}
+\begin{itemize}
+    \item \textit{considerTags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
+\end{itemize}
 
  \section{Eigene Metriken}
  Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus interessant sein dürften.
