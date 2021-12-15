@@ -29297,6 +29297,9 @@ exports.MetricResultBuilder = MetricResultBuilder;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChildrenBasedMetric = void 0;
 const hierarchical_component_1 = __nccwpck_require__(5448);
+/**
+ * Defines metrics that consider the children of a hierarchical component
+ */
 class ChildrenBasedMetric {
     shallConsider(component, params) {
         return component instanceof hierarchical_component_1.HierarchicalComponent;
@@ -29318,6 +29321,11 @@ const method_component_1 = __nccwpck_require__(6932);
 const metric_result_1 = __nccwpck_require__(3073);
 const children_based_metric_1 = __nccwpck_require__(2960);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
+/**
+ * This metric calculates how many lines of the hierarchical component are covered by
+ * undocumented methods and how many lines are covered by documented methods.
+ * It returns the percentage of documented lines
+ */
 class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMetric {
     analyze(component, builder, params) {
         let cls = component;
@@ -29361,6 +29369,9 @@ exports.CommentedLinesRatioMetric = CommentedLinesRatioMetric;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ComponentBasedMetric = void 0;
 const file_component_1 = __nccwpck_require__(6712);
+/**
+ * Defines metrics that only check the comment associated with the component
+ */
 class ComponentBasedMetric {
     shallConsider(component, params) {
         return !(component instanceof file_component_1.FileComponent);
@@ -29396,6 +29407,9 @@ const metric_result_1 = __nccwpck_require__(3073);
 const NLP_Helper_1 = __nccwpck_require__(1890);
 const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
+/**
+ * This metric calculate the flesh score which describes the readability of a text
+ */
 class FleshMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, params) {
         let textsToConsider = this.getTextToConsider(component, params);
@@ -29468,6 +29482,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IgnoreGetterSetterMetric = void 0;
 const method_component_1 = __nccwpck_require__(6932);
 const simple_comment_present_metric_1 = __nccwpck_require__(4086);
+/**
+ * This metric works the same as the simple comment present metric but ignores getter/setters
+ */
 class IgnoreGetterSetterMetric extends simple_comment_present_metric_1.SimpleCommentPresentMetric {
     shallConsider(component, params) {
         if ((!super.shallConsider(component, params))) {
@@ -29512,6 +29529,9 @@ const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
 const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
+/**
+ * This metric simply check whether a comment is present
+ */
 class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, params) {
         let score = 0;
@@ -29607,6 +29627,9 @@ const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
 const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
+/**
+ * This metric checks whether the return value and all parameters of a method are documented
+ */
 class SimpleMethodDocumentationMetric extends component_based__metric_1.ComponentBasedMetric {
     shallConsider(component, params) {
         return super.shallConsider(component, params) && component instanceof method_component_1.MethodComponent;
@@ -29678,6 +29701,9 @@ const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
 const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
+/**
+ * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
+ */
 class SimplePublicMembersOnlyMetric extends component_based__metric_1.ComponentBasedMetric {
     shallConsider(component, params) {
         return component.getComponentMetaInformation().isPublic() && super.shallConsider(component, params);
