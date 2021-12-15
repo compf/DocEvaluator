@@ -44,7 +44,7 @@ test("test easy flesh metric",()=>{
     let builder=new MetricResultBuilder();
     analyzer.analyze(res,new FleschMetric(),builder,MetricManager.getDefaultMetricParam("flesch"));
     let score=builder.getAggregatedResult().getResult();
-    expect(score).toBeCloseTo(70);
+    expect(score).toBeCloseTo(85);
 });
 
 

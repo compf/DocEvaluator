@@ -31,10 +31,10 @@ export class FleschMetric extends ComponentBasedMetric {
             }
         }
         else if(score>70 && score <100){
-            finalScore=-(score-70)+100;
+            finalScore=-(1/2)*(score-70)+100;
         }
         else {
-            finalScore=70;
+            finalScore=85;
             logMessages.push(new LogMessage("The documentation of " +component.getQualifiedName()+" is a little bit too easy"))
 
         }
