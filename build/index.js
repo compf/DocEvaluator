@@ -28872,6 +28872,41 @@ main(process.argv.slice(2));
 
 /***/ }),
 
+/***/ 1890:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.NLP_Helper = void 0;
+const compromise_1 = __importDefault(__nccwpck_require__(666));
+const syllable_1 = __nccwpck_require__(8610);
+/**
+ * This class exposes some methods to calculate word count, syllables, etc
+ * This will be useful if I try other NLP libraries later so the metrics don't need to be changed
+ */
+class NLP_Helper {
+    getRelevantVariables(text) {
+        let corpus = (0, compromise_1.default)(text);
+        //console.log(text);
+        const sent = corpus.sentences();
+        /* Somehow typescript thinks this a method but it is a property
+        and this strange conversion needs to be done
+        */
+        const numSentences = sent.length;
+        const numWords = corpus.wordCount();
+        const numSyllables = (0, syllable_1.syllable)(text);
+        return { numSentences, numWords, numSyllables };
+    }
+}
+exports.NLP_Helper = NLP_Helper;
+
+
+/***/ }),
+
 /***/ 5826:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -29350,32 +29385,29 @@ exports.MIN_SCORE = 0;
 /***/ }),
 
 /***/ 4530:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FleshMetric = void 0;
-const compromise_1 = __importDefault(__nccwpck_require__(666));
-const syllable_1 = __nccwpck_require__(8610);
 const log_message_1 = __nccwpck_require__(7740);
 const metric_result_1 = __nccwpck_require__(3073);
+const NLP_Helper_1 = __nccwpck_require__(1890);
 const component_based__metric_1 = __nccwpck_require__(7040);
 const documentation_analysis_metric_1 = __nccwpck_require__(9504);
 class FleshMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, params) {
         let textsToConsider = this.getTextToConsider(component, params);
         let logMessages = [];
+        let nlp_helper = new NLP_Helper_1.NLP_Helper();
         if (textsToConsider.length == 0) {
             logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "has no documentation and could be evaulated by the flesh formula"));
             builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, logMessages, this));
         }
         let sum = 0;
         for (let text of textsToConsider) {
-            sum += this.calcFleshKincaid(this.getRelevantVariables(text.replace("\n", "")));
+            sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n", "")));
         }
         let score = sum / textsToConsider.length;
         let finalScore = 0;
@@ -29420,18 +29452,6 @@ class FleshMetric extends component_based__metric_1.ComponentBasedMetric {
         console.log("num syl",vars.numSyllables);
         console.log("flesh",result)*/
         return result;
-    }
-    getRelevantVariables(text) {
-        let corpus = (0, compromise_1.default)(text);
-        //console.log(text);
-        const sent = corpus.sentences();
-        /* Somehow typescript thinks this a method but it is a property
-        and this strange conversion needs to be done
-        */
-        const numSentences = sent.length;
-        const numWords = corpus.wordCount();
-        const numSyllables = (0, syllable_1.syllable)(text);
-        return { numSentences, numWords, numSyllables };
     }
 }
 exports.FleshMetric = FleshMetric;
