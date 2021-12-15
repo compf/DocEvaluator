@@ -1,5 +1,5 @@
 \label{sec:background}
-In diesen Kapitel soll die Problemstellung der mangelhaften Softwaredokumentation analysiert werden. Hierzu muss zunächst der Begriff \enquote{Softwaredokumentation} definiert werden. Anschließend werden einige Statistiken präsentiert, die zeigen, dass eine mangelhafte Softwaredokumentation ein reales Problem für Entwickler ist. Des Weiteren sollen die Folgen von schlecht dokumentierten Code analysiert werden. Zudem wird in diesem Kapitel die Grundlagen von Javadocs erläutert, welches das Tool später als Grundlage für die Analyse der Dokumentation nutzt. Zuletzt werden noch einige Programme vorgestellt, die unter anderem auch die Dokumentation von Software bewerten können. 
+In diesem Kapitel soll die Problemstellung der mangelhaften Softwaredokumentation analysiert werden. Hierzu muss zunächst der Begriff \enquote{Softwaredokumentation} definiert werden. Anschließend werden einige Statistiken präsentiert, die zeigen, dass eine mangelhafte Softwaredokumentation ein reales Problem für Entwickler ist. Des Weiteren sollen die Folgen von schlecht dokumentierten Code analysiert werden. Zudem wird in diesem Kapitel die Grundlagen von Javadocs erläutert, welches das Tool später als Grundlage für die Analyse der Dokumentation nutzt. Zuletzt werden noch einige Programme vorgestellt, die unter anderem auch die Dokumentation von Software bewerten können. 
 
 \section{Definition der Softwaredokumentation}
 Um den Begriff \enquote{Softwaredokumentation} zu definieren, sollte zunächst der Begriff \enquote{Dokumentation} definiert werden. Das IEEE  definiert diesen Begriff als jede textliche oder bildliche Information, welche Aktivitäten, Anforderungen, Abläufe oder Ergebnisse beschreibt, definiert, spezifiziert, berichtet oder zertifiziert \cite[S. 28]{IEEEStandardGlossaryofSoftwareEngineeringTerminology}. Kurz zusammengefasst beschreibt eine Dokumentation also, wie sich eine Komponente aufgebaut ist oder wie sie sich verhält.
@@ -65,11 +65,11 @@ Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei
 \begin{figure}[h]
     \centering
     \includegraphics[width=\columnwidth]{figures/javadoc_screenshot.png}
-    \caption{Gerenderte HTML-Ausgabe von javadoc}
+    \caption{Gerenderte HTML-Ausgabe von Javadoc}
     \label{fig:javadoc_example_screenshot}
 \end{figure}
 
-in Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist eine Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. Mit \textit{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden.
+Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist eine Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. Mit \textit{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden.
 
 Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche Funktionen anbieten und bei denen die Dokumentationen mit einer relativ ähnlichen Syntax erstellt werden. Dazu gehören beispielsweise Doxygen für C++-Programme oder der PHP-Documentor für PHP-Programme. 
 \section{Tools zur Bewertung von Javadoc}
@@ -113,7 +113,7 @@ Die Autoren in \cite[S. 307ff.]{InferringResourceSpecificationsfromNaturalLangua
 Für jede dokumentierte Methode der API wird ein Aktion-Ressource-Paar erstellt. Diese beschreibt welche Aktion auf welche Ressource ausgeführt. Bei einer Methode namens \textit{close}, die mit dem englischen Text \enquote{Initiates close of the connection handle at the
 application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern, dass das Aktion-Ressource-Paar \textit{(close,connection)} sein kann; denn die Aktion \textit{close} bezieht sich auf die Ressource \textit{connection}. Dabei sind aber manchmal mehrere Aktion-Ressource-Paare möglich\cite[S. 308]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}.
 
-Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet, die in der die meisten Java-Methoden passen\cite[S. 311]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}:
+Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet,in der die meisten Java-Methoden passen\cite[S. 311]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}:
 \begin{description}
     \item[Creation] Methoden, die eine Ressource/Objekt erstellen
     \item[Lock] Methoden, die eine Ressource sperren
@@ -122,7 +122,7 @@ Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie pass
     \item[Closure] Methoden, die eine Ressource endgültig freigeben oder schließen
 \end{description}
 
-Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da eine fehlendes Freigeben von Ressourcen z.B. im Ausnahmefall ein häufiger Fehler sein kann. 
+Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.B. im Ausnahmefall ein häufiger Fehler sein kann. 
 
 \subsubsection{iComment}
 \enquote{\/\*iComment} \cite[S. 145ff.]{icomment} wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
@@ -157,17 +157,17 @@ Github Action \cite{GithubActions} ist eine von GitHub angebotene Plattform zur 
 
 Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-Ereignis kann der aktuelle Programmcode mit einer geeigneten Testbibliothek getestet werden, sodass im Falle eines fehlgeschlagenen Tests der Programmierer informiert wird und die notwendigen Änderungen veranlassen kann: 
 
-\subsection{Wichtige Begriffe im Zusammenhang mit Github Action}
+\subsection{Wichtige Begriffe im Zusammenhang mit GitHub Action}
 In der folgenden Auflistung werden einige wichtige Begriffe erläutert, die im Zusammenhang mit GitHub Actions verwendet werden und deren Kenntnis zum Verständnis wichtig ist. 
 \begin{description}
-    \item[Workflow] Ein Workflow(Ablauf) ist eine automatisierter Prozess, der verschiedene Jobs ausführt, wenn ein Ereignis eintritt. Der Worklflow wird durch eine YAML-Datei definiert
+    \item[Workflow] Ein Workflow(Ablauf) ist ein automatisierter Prozess, der verschiedene Jobs ausführt, wenn ein Ereignis eintritt. Der Worklflow wird durch eine YAML-Datei definiert
     \item[Job] Ein Job ist eine Ansammlung von sogenannten \enquote{Steps}, die man als Befehle interpretieren kann. Alle Befehle in einem Job werden auf der gleichen Maschine ausgeführt. Alle Jobs in einem Workflow werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird.
     \item[Step] Ein Step(Schritt) ist ein Shell-Befehl oder ein Verweis auf eine andere GitHub Action, die von einem Job ausgeführt werden soll. Innerhalb eines Jobs werden die Steps in der definierten Reihenfolge ausgeführt. 
     \item[Action] Eine Action ist ein Programm, das in Workflows eingebunden werden kann und häufig vorkommende Aufgaben erledigt. Dies hat den Vorteil, dass Redundanz vermieden wird. Im offiziellen Marketplace von GitHub lassen sich zu vielen verschiedenen Aufgaben bereits Actions finden. Es können aber auch eigene Actions definiert werden, was weiter unten beschrieben wird. 
     \item[Runner] Als Runner wird das System bezeichnet, auf dem die Jobs ausgeführt werden. Dies ist standardmäßig ein Linux-Betriebssystem; es können aber auch Windows oder macOS zur Ausführung des Codes verwendet werden. Bei besonderen Anforderungen kann der Runner auch auf einem System laufen, auf dem der Programmierer selbst Zugriff hat.
 \end{description}
 \subsection{Erstellung eines Workflows}
-Ein Workflow kann über die registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird. Der Code wird in Tabelle \ref{tab:descr_example_workflow} genauer erklärt.
+Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird. Der Code wird in Tabelle \ref{tab:descr_example_workflow} genauer erklärt.
 \clearpage
 \begin{table}[h!]
     \centering
@@ -176,7 +176,7 @@ Ein Workflow kann über die registerkarte \enquote{Actions} erstellt werden und 
          1 & Der Name des Workflows\\\hline
          2-6 & Hier werden die verschiedenen Ereignisse beschrieben, die den Workflow auslösen. Außerdem werden die Branches spezifiert, die auf das Ereignis überwacht werden sollenö\\\hline
          7 &  Dies erlaubt, dass ein Workflow auch manuell angestoßen wird, etwa zu Debugging-Zwecken\\\hline
-         8-9 & Erstellt einen Job mit den Namen \enquote{Build}\\\hline
+         8-9 & Erstellt einen Job mit dem Namen \enquote{Build}\\\hline
          10 & Bestimmt auf welchen System der Workflow läuft\\\hline
          11 & Beginn der einzelnen Steps\\\hline
          12 & Bestimmt, dass der Quellcode des Repositorys geklont wird und dessen Pfad über eine Umgebungsvariable zugängig gemacht wird\\\hline
@@ -205,7 +205,7 @@ Ein Workflow kann über die registerkarte \enquote{Actions} erstellt werden und 
 	    \label{fig:workflow_overview}
 	\end{figure}
 	
-	Durch einen Klick auf den Titel des Commits, wechselt Github auf eine weitere Seite, die grundsätzlich die gleichen Informationen wie zuvor enthält. Es ist jedoch hier möglich direkt zu der YAML-Datei zu gelangen, die diesen Workflow beschreibt. Ein weiterer Klick auf den Button mit dem Namen von dem definierten Jobs, wechselt auf eine weitere Seite, die die einzelnen Steps des Jobs auflistet und es ermöglicht, die Konsolenausgabe jedes Steps anzuzeigen. Auch eine Aufsplittung der Zeitdauer der einzelnen Steps wird angezeigt, sodass der Programmierer weiß, wie viel Zeit jeder Step benötigt. Abbildung \ref{fig:workflow_output} zeigt, wie eine solche Ausgabe auf der Konsole aussieht:
+	Durch einen Klick auf den Titel des Commits, wechselt Github auf eine weitere Seite, die grundsätzlich die gleichen Informationen wie zuvor enthält. Es ist jedoch hier möglich direkt zu der YAML-Datei zu gelangen, die diesen Workflow beschreibt. Ein weiterer Klick auf den Button mit dem Namen von dem definierten Job wechselt auf eine weitere Seite, die die einzelnen Steps des Jobs auflistet und es ermöglicht, die Konsolenausgabe jedes Steps anzuzeigen. Auch eine Aufsplittung der Zeitdauer der einzelnen Steps wird angezeigt, sodass der Programmierer weiß, wie viel Zeit jeder Step benötigt. Abbildung \ref{fig:workflow_output} zeigt, wie eine solche Ausgabe auf der Konsole aussieht:
 	\begin{figure}[h]
 	    \centering
 	    
@@ -214,7 +214,7 @@ Ein Workflow kann über die registerkarte \enquote{Actions} erstellt werden und 
 	    \label{fig:workflow_output}
 	\end{figure}
 \subsection{Erstellung einer eigenen Action}
-Um eine eigene Github Action zu erstellen, muss in dem Hautpverzeichnis des Repositorys, in dem der Programmcode der Action liegt, eine Datei namens \enquote{action.yaml} oder \enquote{action.yml} erstellt werden. Abbildung \ref{lst:create_action_example} zeigt eine beispielshafte \enquote{action.yaml}
+Um eine eigene Github Action zu erstellen, muss in dem Hauptverzeichnis des Repositorys, in dem der Programmcode der Action liegt, eine Datei namens \enquote{action.yaml} oder \enquote{action.yml} erstellt werden. Abbildung \ref{lst:create_action_example} zeigt eine beispielshafte \enquote{action.yaml}
 	\begin{figure}[h!]
 			\lstinputlisting
 			[caption={Beispielhafte Action-Konfigurationsdatei},
@@ -222,9 +222,9 @@ Um eine eigene Github Action zu erstellen, muss in dem Hautpverzeichnis des Repo
 			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/create_action_example.yaml}
 		\end{figure}
-Zunächst wird der Name der Action und eine Beschreibung definiert. Anschließend können Eingabeparameter definiert werden, die später im Programm verwendet werden können. Zu jedem Parameter kann auch festgelegt werden, ob er zwingend erforderlich ist und den Standardwert des Parameters. Außerdem können Ausgabeparameter festgelegt werden, die spätere Actions als Eingabe nutzen können. Danach wird festgelegt, wie diese Action ausgeführt wird. Eine Action kann in einer JavaScript-Umgebung, in einem einem Docker-Container, oder als Liste von verschiedenen Steps ausgeführt werden. Dies wird in den folgenden Unterabschnitten kurz beschrieben.
+Zunächst wird der Name der Action und eine Beschreibung definiert. Anschließend können Eingabeparameter definiert werden, die später im Programm verwendet werden können. Zu jedem Parameter kann auch festgelegt werden, ob er zwingend erforderlich ist und den Standardwert des Parameters. Außerdem können Ausgabeparameter festgelegt werden, die spätere Actions als Eingabe nutzen können. Danach wird festgelegt, wie diese Action ausgeführt wird. Eine Action kann in einer JavaScript-Umgebung, in einem Docker-Container, oder als Liste von verschiedenen Steps ausgeführt werden. Dies wird in den folgenden Unterabschnitten kurz beschrieben.
 \subsubsection{Docker-Umgebung}
-In einer Docker-Umgebung kann die Action ausgeführt werden, ohne dass der Nutzer der Action sich darüber Gedanken machen muss, welche Abhängigkeiten oder Voraussetzungen diese Action benötigt. Dies ermöglicht eine fehlertolerante Ausführung des Programmscodes. Das System kann dabei sehr frei konfiguriert werden. Allerdings laufen Actions in einer Docker-Umgebung langsamer als in einer JavaScript-Umgebung. Außerdem kann zurzeit ein Action in einer Docker-Umgebung nur mittels eines Runners in Linux ausgeführt werden.
+In einer Docker-Umgebung kann die Action ausgeführt werden, ohne dass der Nutzer der Action sich darüber Gedanken machen muss, welche Abhängigkeiten oder Voraussetzungen diese Action benötigt. Dies ermöglicht eine fehlertolerante Ausführung des Programmcodes. Das System kann dabei sehr frei konfiguriert werden. Allerdings laufen Actions in einer Docker-Umgebung langsamer als in einer JavaScript-Umgebung. Außerdem kann zurzeit ein Action in einer Docker-Umgebung nur mittels eines Runners in Linux ausgeführt werden.
 
 \subsubsection{JavaScript-Umgebung}
 Da viele GitHub Actions in JavaScript programmiert werden, ist diese Umgebung als Option vorhanden. Es kann direkt eine geeignete Node-Umgebung installiert werden und eine JavaScript-Datei mittels \textit{main} ausgeführt werden. 
