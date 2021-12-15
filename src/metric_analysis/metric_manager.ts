@@ -9,7 +9,7 @@ import { SimpleMethodDocumentationMetric } from "./metrics/simple_method_documen
 import { SimplePublicMembersOnlyMetric } from "./metrics/simple_public_members_only_metric";
 import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
 import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
-import { FleshMetric } from "./metrics/flesh_metric";
+import { FleschMetric } from "./metrics/flesch_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -55,7 +55,7 @@ export namespace MetricManager {
         allMetrics.add("method_fully_documented", new SimpleMethodDocumentationMetric());
         allMetrics.add("commented_lines_ratio", new CommentedLinesRatioMetric());
         allMetrics.add("ignore_getters_setters", new IgnoreGetterSetterMetric());
-        allMetrics.add("flesh",new FleshMetric())
+        allMetrics.add("flesch",new FleschMetric())
     }
     export function getNewMetricResultBuilder(builderName:string, weightMap:Map<any,number>|null):MetricResultBuilder{
         switch(builderName){
@@ -111,7 +111,7 @@ export namespace MetricManager {
                 return {ignoreLines:["", "{", "}"]};
             case "ignore_getters_setter":
                 return {getterPattern:"(get.*)|(is.*)",setterPattern:"set.*"};
-            case "flesh":
+            case "flesch":
                 return {considerTags:false};
             default:
                 return {}

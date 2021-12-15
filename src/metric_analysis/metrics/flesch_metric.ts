@@ -8,7 +8,7 @@ import { MIN_SCORE } from "./documentation_analysis_metric";
 /**
  * This metric calculate the flesh score which describes the readability of a text
  */
-export class FleshMetric extends ComponentBasedMetric {
+export class FleschMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {
         let textsToConsider = this.getTextToConsider(component, params);
         let logMessages:LogMessage[]=[]

@@ -1,7 +1,7 @@
 import nlp from "compromise";
 import {syllable} from "syllable";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
-import { FleshMetric } from "../../src/metric_analysis/metrics/flesh_metric";
+import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
@@ -26,23 +26,23 @@ test("test flesch kincaid",()=>{
 
 });
 test("test complex flesh metric",()=>{
-    const path="testDir/FleshTestComplex.java";
+    const path="testDir/FleschTestComplex.java";
     let root=new JavaParser().parse(path);
     let res={path,root}
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    analyzer.analyze(res,new FleshMetric(),builder,MetricManager.getDefaultMetricParam("flesh"));
+    analyzer.analyze(res,new FleschMetric(),builder,MetricManager.getDefaultMetricParam("flesch"));
     let score=builder.getAggregatedResult().getResult();
     expect(score).toBeCloseTo(15.68);
 });
 
 test("test easy flesh metric",()=>{
-    const path="testDir/FleshTestEasy.java";
+    const path="testDir/FleschTestEasy.java";
     let root=new JavaParser().parse(path);
     let res={path,root}
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    analyzer.analyze(res,new FleshMetric(),builder,MetricManager.getDefaultMetricParam("flesh"));
+    analyzer.analyze(res,new FleschMetric(),builder,MetricManager.getDefaultMetricParam("flesch"));
     let score=builder.getAggregatedResult().getResult();
     expect(score).toBeCloseTo(70);
 });
