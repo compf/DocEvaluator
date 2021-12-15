@@ -6,7 +6,9 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 
-
+/**
+ * This metric simply check whether a comment is present
+ */
 export class SimpleCommentPresentMetric extends ComponentBasedMetric {
     
     analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {

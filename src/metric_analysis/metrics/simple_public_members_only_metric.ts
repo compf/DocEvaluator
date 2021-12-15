@@ -6,7 +6,9 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 
-
+/**
+ * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
+ */
 export class SimplePublicMembersOnlyMetric extends ComponentBasedMetric {
     shallConsider(component: Component,params:any) {
         return component.getComponentMetaInformation().isPublic() && super.shallConsider(component,params);

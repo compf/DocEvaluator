@@ -5,6 +5,9 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { NLP_Helper, RelevantVariables } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MIN_SCORE } from "./documentation_analysis_metric";
+/**
+ * This metric calculate the flesh score which describes the readability of a text
+ */
 export class FleshMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {
         let textsToConsider = this.getTextToConsider(component, params);

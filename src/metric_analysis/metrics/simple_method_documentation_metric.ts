@@ -7,7 +7,9 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 
-
+/**
+ * This metric checks whether the return value and all parameters of a method are documented
+ */
 export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
     shallConsider(component: Component,params:any) {
         return super.shallConsider(component,params) &&  component instanceof MethodComponent;

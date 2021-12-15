@@ -4,7 +4,9 @@ import { Component } from "../../parser/parse_result/component";
 import { FileComponent } from "../../parser/parse_result/file_component";
 import { MethodComponent } from "../../parser/parse_result/method_component";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
-
+/**
+ * This metric works the same as the simple comment present metric but ignores getter/setters
+ */
 export class IgnoreGetterSetterMetric extends  SimpleCommentPresentMetric{
     override shallConsider(component:Component,params:any):boolean{
         if((!super.shallConsider(component,params))){
