@@ -29432,10 +29432,10 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
             }
         }
         else if (score > 70 && score < 100) {
-            finalScore = -(score - 70) + 100;
+            finalScore = -(1 / 2) * (score - 70) + 100;
         }
         else {
-            finalScore = 70;
+            finalScore = 85;
             logMessages.push(new log_message_1.LogMessage("The documentation of " + component.getQualifiedName() + " is a little bit too easy"));
         }
         builder.processResult(new metric_result_1.MetricResult(finalScore, [], this));
