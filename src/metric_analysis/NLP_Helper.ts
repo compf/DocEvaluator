@@ -1,5 +1,5 @@
 import nlp from "compromise";
-import { syllable } from "syllable";
+
 
 export type RelevantVariables = { numSentences: number, numWords: number, numSyllables: number }
 
@@ -8,8 +8,11 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
  * This will be useful if I try other NLP libraries later so the metrics don't need to be changed
  */
  export class NLP_Helper{
+     //TODO find better way to count syllable, try to use old lib again which require esm (https://www.npmjs.com/package/syllable)
     public getRelevantVariables(text: string): RelevantVariables {
         let corpus = nlp(text);
+        nlp.extend(require('compromise-syllables'));
+
         //console.log(text);
         const sent = corpus.sentences();
         /* Somehow typescript thinks this a method but it is a property 
@@ -17,8 +20,17 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
         */
         const numSentences = (sent.length as unknown) as number;
         const numWords = corpus.wordCount();
-        const numSyllables = syllable(text);
+        let s=(corpus.terms() as any).syllables()
+        //console.log("syllable",s)
+        const numSyllables =this.countSyllables(s)
         return { numSentences, numWords, numSyllables };
+    }
+    private countSyllables(words:{text:string,syllables:string[]}[]):number{
+        let sum=0;
+        for(let z of words){
+            sum+=z.syllables.length;
+        }
+        return sum;
     }
 
 }

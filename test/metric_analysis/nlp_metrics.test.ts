@@ -1,5 +1,4 @@
 import nlp from "compromise";
-import {syllable} from "syllable";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
@@ -9,7 +8,6 @@ import { JavaParser } from "../../src/parser/java_parser";
 test("Test syllables",()=>{
     const text="This is a sample text";
     let nlp_helper=new NLP_Helper();
-   let syllable_count= syllable(text);
    expect(nlp_helper.getRelevantVariables(text).numSyllables).toBe(6);
 });
 test("test flesch kincaid",()=>{
@@ -19,10 +17,10 @@ test("test flesch kincaid",()=>{
     let res=nlp_helper.getRelevantVariables(text);
     expect(res.numSentences).toBe(4);
     expect(res.numWords).toBe(21);
-    expect(res.numSyllables).toBe(33);
+    expect(res.numSyllables).toBe(34);
 
     let flesh_kincaid=206.835-1.015*(res.numWords/res.numSentences)-84.6*(res.numSyllables/res.numWords);
-    expect(flesh_kincaid).toBeCloseTo(68.563);
+    expect(flesh_kincaid).toBeCloseTo(64.5348);
 
 });
 test("test complex flesh metric",()=>{

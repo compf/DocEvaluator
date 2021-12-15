@@ -34,9 +34,19 @@ export class EvaluatorConf {
     global_threshold: number = 20.0;
 
     /**
-     * The result builder for the emtrics
+     * The result builder for the metrics
      */
-    result_builder: string = "default_builder";
+    metric_result_builder: string = "default_builder";
+
+        /**
+     * The result builder for the files
+     */
+    files_result_builder: string = "default_builder";
+
+    /**
+     * The result builder for the files
+     */
+    single_file_result_builder: string = "default_builder";
 
     /**
      * the parser to be used/ the programming languages to be analyzed

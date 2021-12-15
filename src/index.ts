@@ -29,9 +29,9 @@ function main(args: Array<string>) {
     }
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new FileAnalyzer();
-    let singleFileResultBuilder = new MetricResultBuilder();
-    let allFilesResultBulder = new MetricResultBuilder
-    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.result_builder,weightMap)
+    let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,weightMap);
+    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,weightMap);
+    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,weightMap)
 
     for (let metricInformation of metrics) {
         let params=MetricManager.getDefaultMetricParam(metricInformation.metricName);
