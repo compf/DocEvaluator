@@ -1,16 +1,15 @@
-import nlp from "compromise";
-import { syllable } from "syllable";
 import { Component } from "../../parser/parse_result/component";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
+import { NLP_Helper, RelevantVariables } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MIN_SCORE } from "./documentation_analysis_metric";
-type RelevantVariables = { numSentences: number, numWords: number, numSyllables: number }
 export class FleshMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, params: any): void {
         let textsToConsider = this.getTextToConsider(component, params);
         let logMessages:LogMessage[]=[]
+        let nlp_helper=new NLP_Helper();
         if(textsToConsider.length==0){
             logMessages.push(new LogMessage(component.getQualifiedName() + "has no documentation and could be evaulated by the flesh formula"))
             builder.processResult(new MetricResult(MIN_SCORE,logMessages,this));
@@ -18,7 +17,7 @@ export class FleshMetric extends ComponentBasedMetric {
         let sum = 0;
 
         for (let text of textsToConsider) {
-            sum += this.calcFleshKincaid(this.getRelevantVariables(text.replace("\n","")));
+            sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n","")));
         }
         let score = sum / textsToConsider.length;
         let finalScore = 0;
@@ -64,17 +63,6 @@ export class FleshMetric extends ComponentBasedMetric {
         console.log("flesh",result)*/
         return result;
     }
-    private getRelevantVariables(text: string): RelevantVariables {
-        let corpus = nlp(text);
-        //console.log(text);
-        const sent = corpus.sentences();
-        /* Somehow typescript thinks this a method but it is a property 
-        and this strange conversion needs to be done
-        */
-        const numSentences = (sent.length as unknown) as number;
-        const numWords = corpus.wordCount();
-        const numSyllables = syllable(text);
-        return { numSentences, numWords, numSyllables };
-    }
+    
 
 }
