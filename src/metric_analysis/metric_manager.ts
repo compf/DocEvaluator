@@ -92,7 +92,8 @@ export namespace MetricManager {
         "large_method_commented":["punish_large_uncommented","punish_large_undocumented","lmc",SimpleLargeMethodCommentedMetric.name],
         "method_fully_documented":["method_fully_commented","fully_documented","params_return_documented","params_return_commented","mfd",SimpleMethodDocumentationMetric.name],
         "commented_lines_ratio":["ratio_commented_uncommented","ratio_documented_undocumented","clr",CommentedLinesRatioMetric.name],
-        "ignore_getters_setters":["getters_setters","ignore_properties","ignore_getter_setter","igs",IgnoreGetterSetterMetric.name]
+        "ignore_getters_setters":["getters_setters","ignore_properties","ignore_getter_setter","igs",IgnoreGetterSetterMetric.name],
+        "flesch":["flesch_metric","flesch_readability","flesch_readability_metric"]
     }
 
     /**
