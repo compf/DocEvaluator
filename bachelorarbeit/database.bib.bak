@@ -37,14 +37,12 @@
 
 @WWW{PMD,
   title = {PMD},
-  date  = {2021-10-20},
-  url   = {https://pmd.github.io/},
+  urldate = {2021-12-16},  url   = {https://pmd.github.io/},
 }
 
 @WWW{Checkstyle,
   title    = {Checkstyle},
-  date     = {2021-10-20},
-  url      = {https://checkstyle.sourceforge.io/},
+  urldate = {2021-12-16},  url      = {https://checkstyle.sourceforge.io/},
 
 }
 @misc{treude2020accuracy,
@@ -57,20 +55,17 @@
 }
 @WWW{ANTLR,
   title = {ANTLR},
-  date  = {2021-10-20},
-  url   = {https://www.antlr.org/},
+  urldate = {2021-12-16},  url   = {https://www.antlr.org/},
 }
 
 @WWW{GithubActions,
   title = {Github Actions},
-  date  = {2021-10-20},
-  url   = {https://docs.github.com/en/actions},
+  urldate = {2021-12-16},  url   = {https://docs.github.com/en/actions},
 }
 
 @WWW{ANTLRgrammarforjava,
   title = {ANTLR grammar for java},
-  date  = {2021-10-20},
-  url   = {https://github.com/antlr/grammars-v4/tree/master/java},
+  urldate = {2021-12-16},  url   = {https://github.com/antlr/grammars-v4/tree/master/java},
 }
 
 @InProceedings{EvaluatingtheQualityoftheDocumentationofOpenSourceSoftware,
@@ -735,10 +730,11 @@ facilitating its maintenance.},
   file   = {:/home/compf/data/uni/sem7/bachelor/sources/10.1.1.91.3692.pdf:PDF},
 }
 
-@Misc{HowtoWriteDocCommentsfortheJavadocTool,
+@WWW{HowtoWriteDocCommentsfortheJavadocTool,
   title   = {How to Write Doc Comments for the Javadoc Tool},
   url     = {https://www.oracle.com/de/technical-resources/articles/java/javadoc-tool.html#styleguide},
   journal = {How to Write Doc Comments for the Javadoc Tool | Oracle Deutschland},
+urldate = {2021-12-16},
 }
 
 @Book{martin2009clean,
@@ -869,13 +865,12 @@ facilitating its maintenance.},
 }
 
 @WWW{Minimatch,
-  date = {2021-11-30},
-  url  = {https://github.com/isaacs/minimatch},
+  urldate = {2021-12-16},  url  = {https://github.com/isaacs/minimatch},
 }
 
 @WWW{antlr_grammar_github,
-  date = {2021-11-30},
-  url  = {https://github.com/antlr/grammars-v4/tree/master/java/java},
+urldate = {2021-12-16},
+url  = {https://github.com/antlr/grammars-v4/tree/master/java/java},
 }
 
 @InProceedings{Doautomaticrefactoringsimprovemaintainability?Anindustrialcasestudy,
@@ -901,7 +896,7 @@ facilitating its maintenance.},
 @WWW{javabeans,
   author  = {Sun Microsystems},
   url     = {https://download.oracle.com/otndocs/jcp/7224-javabeans-1.01-fr-spec-oth-JSpec/},
-  urldate = {2021-12-01},
+  urldate = {2021-12-16},
   file    = {:/home/compf/data/uni/sem7/bachelor/sources/beans.101.pdf:PDF},
 }
 
@@ -985,8 +980,7 @@ facilitating its maintenance.},
 
 @WWW{ncc,
   title = {NCC},
-  date  = {2021-12-14},
-  url   = {https://github.com/vercel/ncc},
+  urldate = {2021-12-16},  url   = {https://github.com/vercel/ncc},
 }
 
 @WWW{Branch-Push,
@@ -995,3 +989,14 @@ facilitating its maintenance.},
   url   = {https://github.com/ActionwareIO/branch-push-action},
 }
 
+@Book{gamma2015design,
+  author    = {Gamma, E. and Helm, R. and Johnson, R. and Vlissides, J.},
+  title     = {Design Patterns: Entwurfsmuster als Elemente wiederverwendbarer objektorientierter Software},
+  year      = {2015},
+  series    = {mitp Professional},
+  publisher = {MITP-Verlags GmbH \& Co. KG},
+  isbn      = {9783826699047},
+  url       = {https://books.google.de/books?id=lYyXBgAAQBAJ},
+}
+
+@Comment{jabref-meta: databaseType:biblatex;}
