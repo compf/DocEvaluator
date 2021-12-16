@@ -69,6 +69,8 @@ Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei
     \label{fig:javadoc_example_screenshot}
 \end{figure}
 
+Eine \ac{IDE} kann die Informationen auslesen und dann beispielsweise bei der Autovervollständigung nutzen, um den Entwickler beim Schreiben des Programmcodes unterstützen. So kann sich ein Programmierer auch mit einer fremden \ac{API} leichter zurechtfinden.
+
 Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist eine Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. Mit \textit{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden.
 
 Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche Funktionen anbieten und bei denen die Dokumentationen mit einer relativ ähnlichen Syntax erstellt werden. Dazu gehören beispielsweise Doxygen für C++-Programme oder der PHP-Documentor für PHP-Programme. 

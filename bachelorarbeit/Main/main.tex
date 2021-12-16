@@ -107,17 +107,25 @@ Mehr Änderungen mussten an der entsprechenden Parser-Datei \textit{JavaParser.g
 \end{table}
 
 \subsection{Metriken anwenden}
+
+Als nächster Schritt müssen auf die Informationen bezüglich der Dokumentation, die der Parser im vorherigen Schritt gesammelt hat, geeignet ausgewertet werden. Dazu können verschiedene Metriken verwenden, die im Späteren genauer erläutert werden. Dabei gibt es genau zwei Kategorien an Metriken. Die meisten Metriken arbeiten nur auf eine Komponente und der dazugehörigen Dokumentation. Andere Metriken sind nur mit hierarchischen Komponenten kompatibel und analysieren die Kommentare all ihrer Kinder. 
+
+Jede Metrik gibt eine numerische Bewertung ab, die eine Aussage über die Dokumentationsqualität trifft. Hier wurde eine 0 für sehr schlechte bis nicht existente Dokumentation und 100 für eine exzellente Dokumentation gewählt, sodass die Bewertung sich als Prozent lesen lassen kann. Grundsätzlich ist aber auch ein anderer Wertebereich möglich. Eine Metrik kann sich aber auch dafür entscheiden, eine Komponente komplett zu ignorieren, sodass sie für diese Metrik als nicht existent betrachtet wird.
+
+Zudem können Metriken Warn- oder Fehlermeldungen werfen, um den Anwender des Programms auf schlechte Dokumentation aufmerksam zu machen. Diese Fehlermeldung enthalten auch den Komponentennamen und die Zeilennummern, damit der Programmierer schnell auf die verwendete Komponente zugreifen kann.
+
+Die Metriken werden ein einziges Mal in einem Metrikmanager instantiiert, sodass es von jeder Metrik nur eine Instanz existiert. Daraus folgt auch, dass eine Metrik keinen inneren Zustand haben sollte, da dieser Zustand dann über verschiedene Komponenten  oder Dateien geteilt werden würde, was Ergebnisse verfälschen würde. Diese Designentscheidung wurde getroffen, damit der Metrikmanager die Kontrolle über die Verwaltung der Metriken erhält und eine Zuordnung von Gewichten (siehe unten) zu den Metriken leicht möglich ist. Diese Zuordnung könnte auch durch einen eindeutigen Namen ermöglicht werden, was aber einige Umstrukturierung erfordert, da die Metriken ihren eigenen Namen nicht kennen.
+
+Jede Metrik besitzt außerdem neben ihren Hauptnamen auch mehrere Aliasnamen, damit ein Entwickler sich nicht bestimmte Namen genau merken muss. Dazu gehören unter anderem der Klassenname und Abkürzungen des Hauptnamens. Die Die \enquote{Getter-Setter-Metrik} kann beispielsweise auch als \enquote{igs} angesprochen werden kann (\enquote{\textbf{I}gnore\textbf{G}etter\textbf{S}etter}). 
+
+Abbildung \ref{fig:uml_metrics}  zeigt ein UML-Klassendiagram, das alle wichtigen Klassen und Schnittstellen, die von den Metriken genutzt werden. 
 \begin{figure}
     \centering
     \includegraphics[width=\columnwidth]{figures/uml/metriken.png}
     \caption{UML-Diagramme aller Klassen, die relevant für die Metriken sind}
     \label{fig:uml_metrics}
 \end{figure}
-Als nächster Schritt müssen auf die Informationen bezüglich der Dokumentation, die der Parser im vorherigen Schritt gesammelt hat, geeignet ausgewertet werden. Dazu können verschiedene Metriken verwenden, die im Späteren genauer erläutert werden. Dabei gibt es genau zwei Kategorien an Metriken. Die meisten Metriken arbeiten nur auf eine Komponente und der dazugehörigen Dokumentation. Andere Metriken sind nur mit hierarchischen Komponenten kompatibel und analysieren die Kommentare all ihrer Kinder. 
-
-Jede Metrik gibt eine numerische Bewertung ab, die eine Aussage über die Dokumentationsqualität trifft. Hier wurde eine 0 für sehr schlechte bis nicht existente Dokumentation und 100 für eine exzellente Dokumentation gewählt, sodass die Bewertung sich als Prozent lesen lassen kann. Grundsätzlich ist aber auch ein anderer Wertebereich möglich. Eine Metrik kann sich aber auch dafür entscheiden, eine Komponente komplett zu ignorieren, sodass sie für diese Metrik als nicht existent betrachtet wird.
-
-Zudem können Metriken Warn- oder Fehlermeldungen werfen, um den Anwender des Programms auf schlechte Dokumentation aufmerksam zu machen. Diese Fehlermeldung enthalten auch den Komponentennamen und die Zeilennummern, damit der Programmierer schnell auf die verwendete Komponente zugreifen kann.\bigskip
+\bigskip
 \subsection{Resultate der Metriken anwenden}
 Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es sie in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein einfacher arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus auswählen kann. Ein \textit{ResultBuilder} wurde nach dem Vorbild des Design-Patterns \enquote{Builder} aus \cite[S.139-149]{gamma2015design} entwickelt, da es aus einzelnen Metrikresultaten ein vollständiges Metrikergebnis baut. 
 
