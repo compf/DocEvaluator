@@ -28861,7 +28861,8 @@ var MetricManager;
         "large_method_commented": ["punish_large_uncommented", "punish_large_undocumented", "lmc", simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric.name],
         "method_fully_documented": ["method_fully_commented", "fully_documented", "params_return_documented", "params_return_commented", "mfd", simple_method_documentation_metric_1.SimpleMethodDocumentationMetric.name],
         "commented_lines_ratio": ["ratio_commented_uncommented", "ratio_documented_undocumented", "clr", commented_lines_ratio_metric_1.CommentedLinesRatioMetric.name],
-        "ignore_getters_setters": ["getters_setters", "ignore_properties", "ignore_getter_setter", "igs", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric.name]
+        "ignore_getters_setters": ["getters_setters", "ignore_properties", "ignore_getter_setter", "igs", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric.name],
+        "flesch": ["flesch_metric", "flesch_readability", "flesch_readability_metric"]
     };
     /**
      *
