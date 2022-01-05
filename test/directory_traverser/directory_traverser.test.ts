@@ -28,7 +28,7 @@ beforeAll(() => {
 
 
     createEmptyFile(path.join(basePath, dirB, "moduleC.java"));
-    createEmptyFile(path.join(basePath, dirB, "Test.java"));
+    createEmptyFile(path.join(basePath, dirB, "Test1.java"));
     createEmptyFile(path.join(basePath, dirB, "test.java"));
 
 
