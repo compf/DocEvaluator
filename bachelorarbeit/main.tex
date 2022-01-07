@@ -12,6 +12,7 @@
 \usepackage{amsmath}
 \usepackage{floatflt}
 \usepackage{float} 
+\usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{pbox}
 \usepackage{algorithmic}
@@ -51,7 +52,6 @@
 
 
 
-   
 %Literatur
 %Ordering in references checken, vermutlich was mit style=numeric zu tun
 \usepackage[
@@ -108,6 +108,7 @@
 
 
 \mainmatter %switch roman auf arabic page numbers
+\input{Misc/Acronyms} %See inside for usage of acronmys
 \chapter{Einführung}
 \setcounter{page}{1} %Seitenzahlen hier mit 1 anfangen
 
@@ -135,7 +136,7 @@
 	\label{sec:evaluation}
 	\input{Evaluation/eval.tex}
 
-\chapter{Conclusion and Future Work}
+\chapter{Schlussfolgerung und mögliche Weriterentwicklung}
 \label{sec:conclusion}
 \input{Conclusion/conclusion}
 
@@ -143,7 +144,7 @@
 %Prints references
 \printbibliography
 
-\input{Misc/Acronyms} %See inside for usage of acronmys
+
 \clearpage 
 
 %Appendix (comes after bibliography)
