@@ -25,13 +25,23 @@ Basierend auf diesen Überlegungen soll ein Tool(z.dt. Werkzeug) entwickelt werd
 
 
 \section{Gliederung}
-Zur Umsetzung der Bachelorarbeit muss zunächst der Begriff der Softwaredokumentation genauer definiert werden, da der Begriff so noch sehr unklar ist. Außerdem werden einige verwandte Programme vorgestellt, die ebenfalls die Qualität der Softwaredokumentation analysieren können. Des Weiteren werden einige wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Analyse von Softwaredokumentationen beschäftigen. 
+Zur Umsetzung der Bachelorarbeit muss zunächst der Begriff der Softwaredokumentation genauer definiert werden, da der Begriff so noch sehr unklar ist. Außerdem werden einige verwandte Programme vorgestellt, die ebenfalls die Qualität der Softwaredokumentation analysieren können. Des Weiteren werden einige wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Analyse von Softwaredokumentationen beschäftigen.
+
+Um das Programm in dem \ac{CI/CD}-Prozess einzubinden, wird \enquote{GitHub Actions} verwendet. Dieser Service der Plattform GitHub \footnote{\href{https://github.com/}{Github Website (besucht am 07.01.2022)}} ermöglicht es, eigene Programme (oder Programme aus einer großen Auswahl von anderen Programmierern) auf den Quelltext auszuführen.  Diese Programme können dann Fehlermeldungen werfen, wenn es irgendwelche Probleme mit dem Quelltext gibt, sodass der Entwickler darauf aufmerksam wird und die Probleme lösen kann. Mit dieser Plattform ist damit möglich, die Qualität der Softwaredokumentation regelmäßig zu prüfen und bei einer deutlichen Unterschreitung den Entwickler durch Fehlermeldungen zu warnen.  Eine kurze Einführung in GitHub Actions erfolgt in Kapitel \ref{chapter:github_actions}
+
+Danach wird erläutert, wie das Programm entwickelt wurde und welche Herausforderungen zu bewältigen waren. Zunächst muss das Tool die Dateien finden, die vermutlich Softwaredokumentation enthalten und als relevant angesehen werden. Jede dieser Datei muss dann in einzelne Komponenten zerlegt werden, wobei jede Komponente einen Verweis auf ihre Dokumentation (z~B. Javadoc) enthält. Als Komponente im Sinne dieser Bachelorarbeit werden dabei Klassen, Schnittstellen, Methoden und Felder verstanden.
+
+Als nächstes wird beschrieben, wie das Tool zu einer numerischen Bewertung der Qualität der Softwaredokumentation gelangt. Dazu werden verschiedene Metriken angewendet, die in Kapitel \ref{chapter:metrics} erläutert werden. Das Ergebnis jeder Metrik wird dann geeignet aggregiert, damit der Benutzer des Tools eine grobe Einschätzung der Qualität der Dokumentation hat. Beispielsweise kann ein arithmetischer Mittelwert oder ein gewichteter Mittelwert gebildet werden. 
+
+In Anschluss wird in Kapitel \ref{chapter:github_actions_impl}  wird die Einbindung des Tools in GitHub Actions erläutert. Dazu muss das Programm in ein kompakteres Format gebracht werden und in einer separaten Branch in GitHub hochgeladen werden. 
+
+Anschließend soll das Tool mit anderen Tools, die ebenfalls die Dokumentationsqualität bewerten können, verglichen werden. Dazu werden ausgewählte Java-Projekte aus GitHub mit allen Tools analysiert und die Ergebnisse der Tools verglichen. 
 \section{Verwandte Werkzeuge}
 Um die Qualität der Softwaredokumentation in Javadoc zu bewerten, gibt es bereits einige Programme. In vielen Fällen handelt es sich dabei um Programme, die nicht auf die Bewertung der Softwaredokumentation beschränkt sind, sondern auch andere Fälle von unsauberem Code erkennen können. Da die Bewertung der Dokumentation nicht der primäre Zweck der Programme ist, sind die verwendeten Metriken recht allgemein und erkennen viele Problemfälle nicht. Nichtsdestotrotz sind diese Programme, dadurch dass sie viele \enquote{Code-Smells} erkennen, sehr gut geeignet, um sich ein gutes Bild über die Qualität des Quellcodes zu verschaffen und den Entwickler zu sauberer Arbeit auch außerhalb von Kommentaren zu ermuntern.
 \subsubsection{Checkstyle}
-Eines der bekanntesten Programme ist Checkstyle \cite{Checkstyle}. Mit Checkstyle lässt sich beispielsweise prüfen, ob alle Methoden überhaupt ein Javadoc-Block besitzen, der Javadoc-Block korrekt platziert wurde oder ein Javadoc-Tag wie zum Beispiel \enquote{@deprecated} auch mit einer zusätzlichen Begründung versehen wurde. 
+Eines der bekanntesten Programme ist Checkstyle \footnote{\href{https://checkstyle.sourceforge.io/}{Checkstyle Website (besucht 07.01.2022)}}. Mit Checkstyle lässt sich beispielsweise prüfen, ob alle Methoden überhaupt ein Javadoc-Block besitzen, der Javadoc-Block korrekt platziert wurde oder ein Javadoc-Tag wie zum Beispiel \enquote{@deprecated} auch mit einer zusätzlichen Begründung versehen wurde. 
 \subsubsection{PMD}
-Des Weiteren gibt es das Programm PMD\cite{PMD}, das ebenfalls einige Metriken für Javadoc mitliefert. Dazu gehört, ob jede öffentliche Methode dokumentiert wurde oder die Kommentare generell zu lang sind. Interessanterweise gibt es auch die Möglichkeit, bestimmte Wörter, die als anstößig empfunden werden, aus Kommentaren und Dokumentationen auszuschließen, damit Kommentare neutral bleiben. 
+Des Weiteren gibt es das Programm PMD\footnote{\href{https://pmd.github.io/}{PMD Website (besucht 07.01.2022)}}, das ebenfalls einige Metriken für Javadoc mitliefert. Dazu gehört, ob jede öffentliche Methode dokumentiert wurde oder die Kommentare generell zu lang sind. Interessanterweise gibt es auch die Möglichkeit, bestimmte Wörter, die als anstößig empfunden werden, aus Kommentaren und Dokumentationen auszuschließen, damit Kommentare neutral bleiben. 
 \subsubsection{Javadoc}
 Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generieren der HTML-Datei die Qualität des Javadocs zu prüfen. Dabei werden vor allem fehlende Tags für Parameter etc. bemängelt. Zudem erkennt Javadoc auch Tabellen mit fehlender Überschrift und andere Designmängel, die in der HTML-Seite später auffallen. Auch fehlerhaftes HTML kann erkannt werden.
 
@@ -79,14 +89,6 @@ Falls Nullwerte explizit erlaubt sind, sollte die Methode sich dann stets korrek
 
 
 
-Um das Programm in dem \ac{CI/CD}-Prozess einzubinden, wird \enquote{GitHub Actions} verwendet. Dieser Service der Plattform GitHub ermöglicht es, eigene Programme (oder Programme aus einer großen Auswahl von anderen Programmierern) auf den Quelltext auszuführen.  Diese Programme können dann Fehlermeldungen werfen, wenn es irgendwelche Probleme mit dem Quelltext gibt, sodass der Entwickler darauf aufmerksam wird und die Probleme lösen kann. Mit dieser Plattform ist damit möglich, die Qualität der Softwaredokumentation regelmäßig zu prüfen und bei einer deutlichen Unterschreitung den Entwickler durch Fehlermeldungen zu warnen.  Eine kurze Einführung in GitHub Actions erfolgt in Kapitel \ref{chapter:github_actions}
 
-Danach wird erläutert, wie das Programm entwickelt wurde und welche Herausforderungen zu bewältigen waren. Zunächst muss das Tool die Dateien finden, die vermutlich Softwaredokumentation enthalten und als relevant angesehen werden. Jede dieser Datei muss dann in einzelne Komponenten zerlegt werden, wobei jede Komponente einen Verweis auf ihre Dokumentation (z~B. Javadoc) enthält. Als Komponente im Sinne dieser Bachelorarbeit werden dabei Klassen, Schnittstellen, Methoden und Felder verstanden.
-
-Als nächstes wird beschrieben, wie das Tool zu einer numerischen Bewertung der Qualität der Softwaredokumentation gelangt. Dazu werden verschiedene Metriken angewendet, die in Kapitel \ref{chapter:metrics} erläutert werden. Das Ergebnis jeder Metrik wird dann geeignet aggregiert, damit der Benutzer des Tools eine grobe Einschätzung der Qualität der Dokumentation hat. Beispielsweise kann ein arithmetischer Mittelwert oder ein gewichteter Mittelwert gebildet werden. 
-
-In Anschluss wird in Kapitel \ref{chapter:github_actions_impl}  wird die Einbindung des Tools in GitHub Actions erläutert. Dazu muss das Programm in ein kompakteres Format gebracht werden und in einer separaten Branch in GitHub hochgeladen werden. 
-
-Anschließend soll das Tool mit anderen Tools, die ebenfalls die Dokumentationsqualität bewerten können, verglichen werden. Dazu werden ausgewählte Java-Projekte aus GitHub mit allen Tools analysiert und die Ergebnisse der Tools verglichen. 
 
 
