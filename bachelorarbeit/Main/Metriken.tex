@@ -25,7 +25,10 @@ Nicht trivial ist dagegen die Implementierung einer Metrik, die Getter- und Sett
 
 Der Vorteil des Ausschließens von Getter und Setter wurde bereits genannt. Die Kommentare von diesen Zugriffsmethoden sind oft repetitiv und enthalten keinen Mehrwert, sodass sie überlesen werden und der größere Code sogar unübersichtlicher wird. Allerdings sollte die dazugehörigen Felder trotzdem dokumentiert werden, um ihren Sinn und Zweck zu begründen. Dies wird hier nicht durchgesetzt, sodass es dazu kommen kann, dass Felder nicht dokumentiert sind und auch die dazugehörigen Zugriffsmethoden keine Hilfe bieten. Dies führt vermutlich zu einer schlechteren Lesbarkeit, da jedes Feld eine Bedeutung hat, die nicht immer offensichtlich ist.
 \subsection{Flesch-Reading Ease Score}\label{chapter:metrics_flesh}
-Der Flesch-Reading-Ease-Score\cite[S. 21]{ThePrinciplesofReadability} ist eine einfache Formel zur heuristischen Ermittlung der Lesbarkeit eines englischsprachigen Textes. Dabei werden die Anzahl der Sätze, die Anzahl der Wörter und die Anzahl der Silben im Text als Eingabeparameter. Die Formel lautet $206.835-1.015*(W/S)-84.6*(H/W)$. Dabei ist $S$ die Anzahl der Sätze, $W$ die Anzahl der Wörter und $H$ die Anzahl der Silben. 
+Der Flesch-Reading-Ease-Score\cite[S. 21]{ThePrinciplesofReadability} ist eine einfache Formel zur heuristischen Ermittlung der Lesbarkeit eines englischsprachigen Textes. Dabei werden die Anzahl der Sätze, die Anzahl der Wörter und die Anzahl der Silben im Text als Eingabeparameter. Die Formel lautet:
+\begin{equation}
+   206.835-1.015*\frac{W}{S}-84.6*\frac{H}{W}
+\end{equation}. Dabei ist $S$ die Anzahl der Sätze, $W$ die Anzahl der Wörter und $H$ die Anzahl der Silben. 
 
 Die Formel liefert normalerweise einen Wert von 0 bis 100 zurück. Dabei bedeutet der Wert 0, dass der Text sehr kompliziert geschrieben ist und nur von Personen mit akademischer Bildung gut verstanden werden kann. Ein Wert von 100 bedeutet dagegen, dass der Text sehr einfach aufgebaut ist und daher schon von einem Fünftklässler verstanden werden kann. Diese Formel und verwandte Formeln werden auch von verschiedenen US-Behörden verwendet, um die Lesbarkeit ihrer Dokumente zu verbessern\cite[S. 72]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}
 
@@ -42,13 +45,16 @@ Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung 
 \end{itemize}
 
  \section{Eigene Metriken}
- Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus interessant sein dürften.
+ Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus eine Betrachtung wert sind. Auch hier werden einige Vor- und Nachteile der jeweiligen Metrik genannt.
  \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}
 Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und längere Methoden in mehrere kleinere Methoden aufzuspalten. Jede Methode sollte dabei nicht mehr als vier Codezeilen lang sein \cite[S. 34]{martin2009clean}.
  
  Dennoch wird diese Empfehlung nicht immer befolgt. Im Kontext der Softwaredokumentation sollten diese größeren Methoden allerdings umso eher dokumentiert werden, da es ansonsten schwieriger ist, die Bedeutung der verschiedenen Parameter, des Rückgabewertes und allgemeinen Rolle der Funktion zu erfassen. Daher macht es Sinn undokumentierte Methoden mit vielen Codezeilen schlechter zu bewerten.
  
- Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information  an eine Funktion $B(l))S-(S-B_0)*e^(-k*l)$ übergeben, die eine beschränkt wachsende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung und $k$ eine Konstante für die Wachstumsrate. Um lange undokumentierte Methoden besser bestrafen zu können, wird eine Fallunterscheidung vorgenommen.
+ Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information  an die Funktion
+ \begin{equation}
+     B(l))S-(S-B_0)*e^(-k*l)
+ \end{equation} übergeben, die eine beschränkt wachsende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung und $k$ eine Konstante für die Wachstumsrate. Um lange undokumentierte Methoden besser bestrafen zu können, wird eine Fallunterscheidung vorgenommen.
  
  Bei kurzen Methoden unter zehn Zeilen beträgt die untere Schranke 90, da kurze Methoden nicht allzu schlecht bewertet werden sollen. Für Methoden mit mindestens zehn Zeilen sollte eine strengere Bewertung existieren, da diese wahrscheinlich unübersichtlicher sind. Aus diesem Grund werden längere Methoden mit nicht mehr als 90 Punkten und minimal null Punkten bewertet, sodass die Spannweite größer ist und die Bewertung schneller gegen null tendiert.
  

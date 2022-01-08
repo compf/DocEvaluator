@@ -4,7 +4,7 @@ In diesem Kapitel soll die Problemstellung der mangelhaften Softwaredokumentatio
 \section{Softwaredokumentation}
 Um den Begriff \enquote{Softwaredokumentation} zu definieren, sollte zunächst der Begriff \enquote{Dokumentation} definiert werden. Das IEEE  definiert diesen Begriff als jede textliche oder bildliche Information, welche Aktivitäten, Anforderungen, Abläufe oder Ergebnisse beschreibt, definiert, spezifiziert, berichtet oder zertifiziert \cite[S. 28]{IEEEStandardGlossaryofSoftwareEngineeringTerminology}. Somit beschreibt eine Dokumentation, wie sich eine Komponente aufgebaut ist oder wie sie sich verhält.
 
-Diese abstrakte Definition lässt sich so auf Softwareentwicklung übertragen. In \cite[S. 125]{Softwaredocumentationandstandards} wird Softwaredokumentation als eine Sammlung von technischen Informationen beschrieben, die für Menschen lesbar sind und welche die Funktionen, Benutzung oder das Design eines Softwaresystems beschreiben. So beschreibt Donald E. Knuth in \cite[S. 97]{LiterateProgramming}, dass die Hauptaufgabe beim Programmieren nicht sein sollte, einen Computer zu erklären, was er machen sollte, sondern anderen Menschen zu erklären, was der Computer machen sollte.
+Diese abstrakte Definition lässt sich so auf Softwareentwicklung übertragen. In \cite[S. 125]{Softwaredocumentationandstandards} wird Softwaredokumentation als eine Sammlung von technischen Informationen dargestellt, die für Menschen lesbar sind und welche die Funktionen, Benutzung oder das Design eines Softwaresystems beschreiben. So beschreibt Donald E. Knuth in \cite[S. 97]{LiterateProgramming}, dass die Hauptaufgabe beim Programmieren nicht sein sollte, einen Computer zu erklären, was er machen sollte, sondern anderen Menschen zu erklären, was der Computer machen sollte.
 
 Im Kontext dieser Bachelorarbeit sollen allerdings nur bestimmte Arten der Softwaredokumentation betrachtet werden, da eine umfassende Betrachtung innerhalb der vorgegebenen Zeit nicht möglich ist. 
 Für diese Bachelorarbeit werden daher nur bestimmte Inline-Kommentare im Quellcode betrachtet, die ein Spezialfall von normalen mehrzeiligen Kommentaren sind. Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Nichtsdestotrotz haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichte Verarbeitung durch Computerprogramme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. In vielen Fällen werden diese Kommentare einer bestimmten Komponente zugeordnet, wobei dies oft dadurch geschieht, dass der Kommentar direkt vor dieser Komponente steht. Ein Beispiel dafür ist Javadoc, da jeder Javadoc-Kommentar auch ein gültiger mehrzeiliger Kommentar ist. 
@@ -15,8 +15,18 @@ Andere Möglichkeiten zur Dokumentation, die nur hier kurz erwähnt werden solle
 
 \section{Javadoc}
 Javadoc \footnote{\href{https://www.oracle.com/java/technologies/javase/javadoc-tool.html}{Javadoc Website (besucht am 07.01.2022)} } ist ein Tool zur Generierung von Dokumentationen, das sich als de-facto Standard für Dokumentationen in der Programmiersprache Java etabliert hat \cite[S. 249]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}.  Javadoc besteht aus speziellen Java-Kommentaren, die an bestimmten Stellen im Quellcode eingefügt werden und daher bei der Kompilation nicht berücksichtigt werden. Ein Javadoc-Block beschreibt immer ein bestimmtes Modul (z. B. eine Klasse, Methode oder Feld).Es beginnt mit der Zeichenkette \enquote{/**}, wobei die ersten beiden Zeichen \enquote{/*} den Beginn eines mehrzeiligen Kommentars in Java einläuten, und endet mit \enquote{*/}. Durch das zusätzliche \enquote{*} unterscheidet sich ein Javadoc-Kommentar von einem normalen mehrzeiligen Kommentar, der zwar zur Kommentierung eines Blocks verwendet werden kann, aber vom Javadoc-Tool ignoriert wird und daher einen geringeren Mehrwert hat.
+		\begin{figure}[ht!]
+			\lstinputlisting
+			[caption={Beispielhafter Javdoc-Block für einfache Methode},
+			label={lst:simple_javadoc},
+			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			{figures/ternary.java}
+		\end{figure}
+Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente geschrieben werden. Danach können sogenannte Tags (z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
 
-Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente geschrieben werden. Danach können sogenannte Tags, die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
+Quelltext \ref{lst:simple_javadoc} zeigt ein Beispiel für eine gelungene Verwendung von Javadoc. Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert. Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes, welche am besten auch jeden möglichen Fall abdeckt. Mit \enquote{{@code ...}} kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
+
+
 
 Tabelle \ref{tab:table_javadoc_method} beschreibt einige Tags für Java-Methoden:
 \begin{table}[h]
@@ -43,14 +53,8 @@ Tabelle \ref{tab:table_javadoc_method} beschreibt einige Tags für Java-Methoden
     \label{tab:table_javadoc_method}
 \end{table}
 
-Quelltext \ref{lst:simple_javadoc} zeigt ein Beispiel für eine  \enquote{gelungene} Verwendung von Javadoc. Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert. Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes, welche am besten auch jeden möglichen Fall abdeckt. Mit \enquote{{@code ...}} kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
-		\begin{figure}
-			\lstinputlisting
-			[caption={Beispielhafter Javdoc-Block für einfache Methode},
-			label={lst:simple_javadoc},
-			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
-			{figures/ternary.java}
-		\end{figure}
+
+
 
 Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite \footnote{\href{https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html}{Javadoc Style-Guide (besucht am 07.01.2022)} }:
 \begin{itemize}
@@ -64,7 +68,7 @@ Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite \f
     \item Die Dokumentation sollte erläutern, wie sich die Komponente in Randfällen verhält
     
 \end{itemize}
-Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. Abbildung \ref{fig:javadoc_example_screenshot} zeigt, wie eine Methode mittels Javadoc in HTML beschrieben wird. 
+Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. Abbildung \ref{fig:javadoc_example_screenshot} zeigt, wie eine Methode mittels Javadoc in gerendertes HTML beschrieben wird. 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\columnwidth]{figures/javadoc_screenshot.png}
@@ -82,7 +86,9 @@ Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche F
 
 \section{GitHub Actions}\label{chapter:github_actions}
 
-Github Action \footnote{\href{https://github.com/features/actions}{GitHub Actions Website (besucht am 07.01.2022 }} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  Github Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird, oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann auf einem von GitHub vorbereiteten System ausgeführt werden; es ist aber auch möglich sein eigenes System dafür zur konfigurieren. Schlägt der Programmcode fehl, weil zum Beispiel ein Fehlercode ungleich null zurückgegeben wird oder ein anderer Systemfehler vorliegt, kann der Nutzer sich leicht über den Fehler informieren, indem auf die \enquote{Actions}-Registerkarte klickt. Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden. Die folgende nummerierte Liste beschreibt grob, wie Programmcode in Github Actions ausgeführt werden kann:
+Github Action \footnote{\href{https://github.com/features/actions}{GitHub Actions Website (besucht am 07.01.2022 }} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  Github Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird, oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenes System ausgeführt werden. Schlägt der Programmcode fehl kann der Nutzer den Grund des Fehlers über die  \enquote{Actions}-Registerkarte herausfinden.
+
+Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden. Die folgende nummerierte Liste beschreibt grob, wie Programmcode in GitHub Actions ausgeführt werden kann:
 \begin{enumerate}
     \item Ein Ereignis tritt ein, indem beispielsweise neuer Programmcode mittels Push hochgeladen wird 
     \item Github wählt ein geeignetes System aus (z. B. eine virtuelle Maschine oder ein vom Programmierer hierfür konfiguriertes System
@@ -100,9 +106,9 @@ Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-
 \subsection{Wichtige Begriffe im Zusammenhang mit GitHub Action}
 In der folgenden Auflistung werden einige wichtige Begriffe erläutert, die im Zusammenhang mit GitHub Actions verwendet werden und deren Kenntnis zum Verständnis wichtig ist. 
 \begin{description}
-    \item[Workflow] Ein Workflow(Ablauf) ist ein automatisierter Prozess, der verschiedene Jobs ausführt, wenn ein Ereignis eintritt. Der Worklflow wird durch eine YAML-Datei definiert
+    \item[Workflow] Ein Workflow (Ablauf) ist ein automatisierter Prozess, der verschiedene Jobs ausführt, wenn ein Ereignis eintritt. Der Worklflow wird durch eine YAML-Datei definiert
     \item[Job] Ein Job ist eine Ansammlung von sogenannten \enquote{Steps}, die man als Befehle interpretieren kann. Alle Befehle in einem Job werden auf der gleichen Maschine ausgeführt. Alle Jobs in einem Workflow werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird.
-    \item[Step] Ein Step(Schritt) ist ein Shell-Befehl oder ein Verweis auf eine andere GitHub Action, die von einem Job ausgeführt werden soll. Innerhalb eines Jobs werden die Steps in der definierten Reihenfolge ausgeführt. 
+    \item[Step] Ein Step (Schritt) ist ein Shell-Befehl oder ein Verweis auf eine andere GitHub Action, die von einem Job ausgeführt werden soll. Innerhalb eines Jobs werden die Steps in der definierten Reihenfolge ausgeführt. 
     \item[Action] Eine Action ist ein Programm, das in Workflows eingebunden werden kann und häufig vorkommende Aufgaben erledigt. Dies hat den Vorteil, dass Redundanz vermieden wird. Im offiziellen Marketplace von GitHub lassen sich zu vielen verschiedenen Aufgaben bereits Actions finden. Es können aber auch eigene Actions definiert werden, was weiter unten beschrieben wird. 
     \item[Runner] Als Runner wird das System bezeichnet, auf dem die Jobs ausgeführt werden. Dies ist standardmäßig ein Linux-Betriebssystem; es können aber auch Windows oder macOS zur Ausführung des Codes verwendet werden. Bei besonderen Anforderungen kann der Runner auch auf einem System laufen, auf dem der Programmierer selbst Zugriff hat.
 \end{description}
@@ -141,7 +147,7 @@ Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und 
 	    \centering
 	    
 	    \includegraphics[width=\columnwidth]{figures/workflow_overview.png}
-	    \caption{Übersicht über die ausgeführten Workflows}
+	    \caption{Übersicht über ausgeführten Workflows in GitHub Actions}
 	    \label{fig:workflow_overview}
 	\end{figure}
 	

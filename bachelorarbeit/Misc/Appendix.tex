@@ -42,5 +42,26 @@
     \caption{UML-Diagramme aller Klassen, die relevant für die Metriken sind}
     \label{fig:uml_metrics}
 \end{figure}
+\chapter{Konfiguration des Tools}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{m{4cm}|m{11cm}}
+    \hline
+        Parameter & Beschreibung  \\
+        \hline
+        include & Alle Dateien, die bei der Bewertung der Dokumentationsqualität berücksichtigt werden müssen\\
+        \hline
+        Exclude & Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen\\
+        \hline
+        metrics & Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Strukur \enquote{(name,weight,params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist( Bei Algorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name (oder Aliasname) der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik\\\hline
+        global\_threshold & Mindestwert der Bewertung ,der erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert\\\hline
+        metric\_result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse der Metriken verarbeitet und so das Gesamtergebnis berechnet.\\\hline
+          single\_file\_result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse einer Datei verarbeitet\\\hline
+        files\_result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse aller Dateien verarbeitet
+        
+    \end{tabular}
+    \caption{Parameter zur Konfiguration des Tools}
+    \label{tab:tool_javadoc_conf}
+\end{table}
 \end{appendices}
 	

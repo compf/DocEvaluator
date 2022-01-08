@@ -1,12 +1,16 @@
 formalParameter: 
-variableModifier* typeType variableDeclaratorId;
+	variableModifier* 
+	typeType
+	variableDeclaratorId;
 
 variableModifier: 
-FINAL | annotation;
+	FINAL | annotation;
 
 typeType
-    : annotation* (classOrInterfaceType | primitiveType) (annotation* '[' ']')*;
+    : annotation* 
+	(classOrInterfaceType | primitiveType)
+	(annotation* '[' ']')*;
     
-variableDeclaratorId
-    : IDENTIFIER ('[' ']')*
-    ;
+variableDeclaratorId:
+ IDENTIFIER 
+ ('[' ']')*;
