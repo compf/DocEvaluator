@@ -3,25 +3,44 @@
 \begin{appendices}
 
 
-\chapter{Anhang 1}
-\section{Verwendete Pakete aus NPM}
-Hier werden die verwendeten NPM-Pakete und andere wichtige Tools, die bei der Entwicklung verwendet wurden, kurz beschrieben. Triviale Werkzeuge wie IDE, Typescript etc. werden ausgelassen:
-\begin{table}[h]
-    \begin{tabular}{m{2.3cm}|m{8.5cm}|m{6.0cm}}
-       Name  & URL & Verwendung  \\
-       \hline
-        antlr4 & https://www.npmjs.com/package/antlr4 & Parsen von Grammatikdateien wie z.B. von Java\\
+\chapter{Änderungen an der Parserdatei}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{m{0.75cm}|m{4cm}|m{10cm}}
+        Zeile & Änderung & Begründung \\
+         \hline
+        116 & Deklaration Kommentar & Hier wird ein mehrzeiliger Kommentar definiert, dies ist hier ein Alias für den Token \textit{JCOMMENT}\\
         \hline
-        antlr4ts & https://www.npmjs.com/package/antlr4ts & Ermöglicht es ANTLR4 mit Typescript leicht zu benutzen. \\\hline
-        chalk & https://www.npmjs.com/package/chalk & leichte Konsolenausgabe mit Farben für Fehlermeldungen etc. \\\hline
-        minimatch & https://www.npmjs.com/package/minimatch & Filtern von Dateien mittels  Linux-Glob, wird für die Traversierung verwendet\\\hline
-        Branch push action & https://github.com/ActionwareIO/branch-push-action & Ermöglicht es, Dateien von einer Branch auf eine andere zu kopieren. Dies wird zur Erstellung einer Branch benötigt, die alle wichtige Dateien für die Action einhält.\\\hline
-        Compromise & https://www.npmjs.com/package/compromise & Tool, um bestimmte NLP-Funktionen wie Wörter und Sätze zu zählen\\\hline
-        Compromise-Syllables & https://www.npmjs.com/package/compromise-syllables/v/0.0.5 & Erweiterung von Compromise, um auch Silben zählen zu können
+        128 & \textit{comment} als möglicher Präfix in Klassenmember & Hier wird dem Parser mitgeteilt, dass ein Bestandteil einer Klasse wie z. B. eine Methode einen Javadoc-Kommentar besitzen kann\\
+        \hline
+        47 & \textit{comment} als möglicher Präfix vor Datentyp & Hier wird dem Parser mitgeteilt, dass ein Datentyp (Klasse, Schnittstelle etc. ) einen Javadoc-Kommentar haben kann \\
+        \hline
+        404 & Zulassung von Javadoc in Methoden & Da Javadoc-Kommentare an beliebigen Stellen auftauchen können, auch wenn es nicht empfohlen wird und keinen Mehrwert bietet, wird hier sichergestellt, dass solche Kommentare nicht zu Warnungen oder Fehler von ANTLR4 führen. Diese Javadoc-Kommentare werden nichtsdestotrotz später ignoriert.\\
+        \hline
+        34, 38& Zulassung von Kommentaren vor Paketdeklarationen und Imports & Hier werden Kommentare auch vor Paketdeklarationen und Import-Statements erlaubt, was vor allem bei Klassen mit Urheberrechtsangabe sinnvoll ist\\
+        \hline
+        105 & Zulassung von Kommentaren bei Enumerationen & Zwar werden Javadoc-Kommentare in Enumerationen mit diesem Tool nicht betrachtet, sie führen aber dennoch zu Warnungen und Fehlermeldungen. Daher werden sie hier zugelassen, aber später ignoriert. \\
+        \hline
+        82, 83 & Erzeugung eines separaten Knotens für \textit{Extends}- und \textit{Implements}-Deklarationen & In der originalen Version der Parserdatei wurde die Definition der Basisklasse bzw. der implementierten Schnittstellen direkt über die Tokens \textit{EXTENDS} bzw. \textit{IMPLEMENTS} gelöst. Dies wurde in einem neuen Knoten \textit{extendClass} bzw. \textit{implementInterfaces} ausgegliedert, um so das Parsing etwas zu vereinfachen.  \\
+         \hline
     \end{tabular}
-    \caption{Verwendete Tools}
-    \label{tab:used_tools}
+    \caption{Änderungen an der Parserdatei}
+    \label{tab:parser_changes}
 \end{table}
 
+\chapter{UML-Diagramm: Parser}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[height=7cm,keepaspectratio,angle=90]{figures/uml/parsing.png}
+    \caption{UML-Diagramme aller Klassen, die relevant für das Parsen sind}
+    \label{fig:uml_parsing}
+\end{figure}
+\chapter{UML-Diagramm: Metriken}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[height=10cm,keepaspectratio,angle=90]{figures/uml/metriken.png}
+    \caption{UML-Diagramme aller Klassen, die relevant für die Metriken sind}
+    \label{fig:uml_metrics}
+\end{figure}
 \end{appendices}
 	

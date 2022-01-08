@@ -1,127 +1,13 @@
-\section{Arbeitspakete}
-Zur Umsetzung des Tools wurde das Projekt in verschiedene Arbeitspakete zerlegt, wobei jedes Arbeitspaket auf den Vorgänger aufbaut.
-\subsection{Traversierung aller relevanten Dateien} 
-Softwareprojekte bestehen aus Hunderten von Dateien, die nicht alle Quellcode enthalten. Beispielsweise gehören Konfigurationsdateien, Ressourcedateien wie Bilder oder binäre Dateien zu den Dateien, bei denen eine Analyse der Softwaredokumentation nicht zweckmäßig wäre oder sogar zu Fehlern führen könnte. Daher ist es sinnvoll, bestimmte Dateien bei der Analyse auszuschließen beziehungsweise nur bestimmte Dateien zu betrachten. Beim JavadocEvaluator wird hierzu die NPM-Bibliothek Minimatch \footnote{\href{https://github.com/isaacs/minimatch}{Minimatch GitHub-Repository (besucht am 07.01.2022)}} verwendet, die es ermöglicht, Dateinamen mit Wildcard-Patterns zu vergleichen. Zum Beispiel könnte der Dateiname \enquote{test.txt} mit der Wildcard \enquote{test.*} verglichen werden und die Bibliothek würde eine Übereinstimmung melden.
+
 
   
 
-In der Konfigurationsdatei können solche Wildcard-Patterns sowohl für Dateien, die zwingend analysiert werden müssen, als auch Dateien, die in jeden Fall ausgeschlossen werden müssen, definiert werden. So kann der Benutzer des Tools beispielsweise nur Dateien mit der Dateiendung \textit{.java} analysieren, was in der Standardeinstellung auch so passiert, und Dateien aus bestimmten Verzeichnissen ignorieren, weil sie Unit-Tests enthalten.   
-
-  
-
-\subsection{Parsing der Java-Dateien} 
-Jede Datei, die laut dem vorherigen Arbeitspaket relevant sein soll, muss anschließend weiterverarbeitet werden. Für die Bewertung der Dokumentation sind nur wenige Bestandteile relevant. Beispielsweise sind alle For-Schleifen, If-Verzweigungen und viele andere Komponenten in Methodenrümpfen nicht relevant, da diese nur mit normalen Kommentaren und nicht mit Javadoc kommentiert werden; (sie werden dennoch unstrukturiert als Zeichenkette gespeichert, damit Metriken diese Information eventuell nutzen können). Aus diesem Grund müssen die notwendigen Informationen extrahiert werden. Zudem ist es ein Ziel der Arbeit , eine Erweiterbarkeit auf andere objektorientierte Programmiersprachen zu ermöglichen. Daher müssen die Informationen in ein abstraktes Format gebracht werden, welches eine gute Annäherung für die meisten objektorientierten Programmiersprachen ist. Beispielsweise unterscheiden sich die Zugriffsmodifizierer vieler Programmiersprache, sodass eine einheitliche Schnittstelle schwer umsetzbar ist. Daher enthält die abstrakte Repräsentation nur Informationen, ob eine Komponente als öffentlich markiert ist. Dies ist sinnvoll, da öffentliche Komponenten als Teil der öffentlichen Schnittstelle eher dokumentiert werden sollten als nicht öffentliche und eine weitergehende Differenzierung kaum Vorteile bietet. In einigen Programmiersprachen wie z. B. Python gibt es keine expliziten öffentliche Komponenten, jedoch existieren de facto Standards für Bezeichner, sodass beispielsweise private Komponenten zwei Unterstriche als Präfix haben.
-
-Außerdem werden in der abstrakten Repräsentation die Vererbung etwas vereinfacht dargestellt, indem nicht zwischen Basisklassen und Schnittstellen unterschieden wird, da es auch hier Unterschiede zwischen Programmiersprachen gibt, und die Informationen über die Vererbung, falls sie überhaupt von einer Metrik verwendet wird, vermutlich nicht so detailreich sein müsste. Zudem werden Konstruktoren als Methoden mit den Namen \enquote{constructor} und Schnittstellen als Klassen repräsentiert, da auch hier eine zu feine Spezifikation nicht notwendig sein wird.  
-
-  
-
-In anderen Fällen gibt es jedoch viele Gemeinsamkeiten zwischen objektorientierten Programmiersprachen; so gibt es in  allen relevanten Sprachen Klassen, Methoden und Felder, die alle einen Namen haben. Des Weiteren haben Methoden und Felder einen (Rückgabe-)Type und Methoden besitzen Parameter, die ihrerseits durch einen Namen und einen Typen definiert sind. Einige Sprachen sind zwar nicht stark typisiert, jedoch kann für nicht bekannte Datentypen ein Alias wie \enquote{Any} oder  \enquote{Object} verwendet werden.  Zudem sind viele Komponenten hierarchisch; in den meisten Sprachen können beispielsweise Klassen andere Klassen enthalten, sodass diese abstrakte Struktur diese Tatsache berücksichtigen müsste. 
-
-Um dennoch sprachspezifische Funktionen anbieten zu können, besitzt jede Komponente ein Feld mit dem Typen \textit{ComponentMetaInformation}, das wie oben erwähnt die Information enthält, ob eine Komponente als öffentlich angesehen werden soll. Dieser Typ, welches eine Schnittstelle ist, kann von einer Klasse implementiert werden, um Parser für andere Programmiersprachen die Möglichkeit zu geben, zusätzliche sprachspezifische Informationen zu speichern. Beim Java-Parser wird diese Funktion beispielsweise genutzt, um zu speichern welche \enquote{checked} Ausnahmen eine Methode werfen kann, sodass später ein Vergleich mit der Javadoc möglich ist. Die Schnittstelle enthält nur die Anforderung, eine \textit{isPublic}-Methode anzubieten und kann daher für viele andere objektorientierte Programmiersprache Informationen speichern, die für einige Metriken eventuell nützlich sind. 
-
-Abbildung \ref{fig:uml_parsing} gibt einen Überblick über die Klassen, die im Arbeitspaket \enquote{Parsing} verwendet wurden.
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/uml/parsing.png}
-    \caption{UML-Diagramm mit allen wichtigen Klassen für das Parsen}
-    \label{fig:uml_parsing}
-\end{figure}
-
-\subsubsection{ANTLR4}
-Um die Java-Dateien zu parsen, wird die Bibliothek ANTLR4\footnote{\href{https://www.antlr.org/}{ANTLR Website (besucht 07.01.2022)}} verwendet, die kostenlos verfügbar ist. Diese Bibliothek kann nicht nur viele Programmiersprachen, sondern auch selbst geschriebene Sprachen parsen, sofern eine passende Grammatik verfügbar ist. Daneben gibt es noch Bibliotheken wie Bison, PEG.JS, die ebenfalls eine ähnliche Aufgabe erfüllen können. Allerdings gibt es bereits vordefinierte Grammatiken für ANTLR4, sodass ein erheblicher Aufwand gespart werden konnte.  
-
-Zuvor wurde bereits versucht, die Java-Dateien mittels der NPM-Bibliothek \enquote{java-parser} \footnote{\href{https://www.npmjs.com/package/java-parser}{Java-Parser (besucht 07.01.2022)}} zu parsen. Dies hätte den Vorteil, dass das Parsen, welches nicht der Hauptfokus dieser Bachelorarbeit ist, ausgelagert wird und so Fehler vermieden werden. Allerdings konnte diese Bibliothek nicht die Verbindung zwischen einer Komponente und der dazugehörigen Javadoc herstellen, sodass eine Benutzung dieser Bibliothek die Arbeit deutlich erschwert hätte. Daher fiel die Wahl auf \textit{ANTLR4}. Außerdem wurde zunächst versucht eine eigene Grammatik für Java zu schreiben, da die originale Grammatik für Java sämtliche Kommentare ignoriert. Da dies jedoch deutlich komplizierter war als erwartet, wurde dennoch entschieden, die von vielen Entwicklern geschriebene Grammatik zu verwenden (siehe unten).
-
-\subsubsection{Lexer und Parser}
-Eine Grammatik besteht immer aus einer Lexer-Grammatik und eine Parser-Grammatik, die jeweils vom Lexer bzw. Parser in dieser Reihenfolge verarbeitet werden, um so eine Baumstruktur einer Quellcodedatei zu erhalten. Der Lexer erstellt aus einer Quellcodedatei eine Liste von Tokens. Dabei ist ein Token eine Gruppierung von einem oder mehreren Zeichen, die eine weitergehende Bedeutung haben. Beispielsweise können Schlüsselwörter einer Programmiersprache oder Operatoren als Token klassifiziert werden. Diese Tokens sind grundsätzlich kontextunabhängig, das heißt für die gleiche Zeichenkette wird das gleiche Token verwendet. Jeder Token wird durch seine Zeichenkette und den Tokentyp klassifiziert
-
-Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
-		\begin{figure} [htbp]
-			\lstinputlisting
-			[caption={Beispielhafte Syntax vom Lexer},
-			label={lst:lexer_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/lexer_example.g4}
-		\end{figure}
-
-Eine Zeile in der Lexer-Grammatik beginnt mit den Namen eines Tokens, gefolgt von einem Doppelpunkt und dann einem regulären Ausdruck, der dieses Token beschreibt. In der besipielhaften Lexer-Grammatik wird ein Javadoc-Kommentar definiert, das mit \enquote{/**} beginnt, dann folgen beliebige Zeichen und endet mit \enquote{*/}. Per Konvention haben die Bezeichner der Tokens nur Großbuchstaben, sie müssen auf jeden Fall mit einem Großbuchstaben beginnen \cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. 
-
-Der nächste Schritt ist das eigentliche Parsen. Dabei werden die im vorherigen Schritt generierten Tokens, die als Liste vorliegen, genommen und in eine hierarchische Baumstruktur umgewandelt, wobei hier der Kontext die entscheidende Rolle spielt. ANTLR4 lädt ein Token nach dem anderen und prüft ob es, basierend auf der aktuellen Position in der Baumstruktur, eine Regel gibt, die durch diesen Token erfüllt wird. Wenn es mehrere mögliche Pfade gibt, lädt ANTLR4 so viele Tokens bis die nächste Regel eindeutig feststeht. Gibt es dennoch Uneindeutigkeiten, so wird die Regel genommen, die als erstes in der Parser-Datei geschrieben wurde.\cite[S. 10ff.]{TheDefinitiveANTLR4Reference}
-
-So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren, der eine generelle Methode beschreibt. Eine Methode besteht nämlich aus Rückgabetyp, Bezeichner und Parameterliste. Die Parameterliste kann dann als eine Liste von Datentyp-Bezeichner-Paare aufgelöst werden. Der Rückgabetyp einer Methode ist allerdings anders zu verstehen als der Datentyp eines Parameters, da jeder Datentyp eines Parameters auch ein gültiger Rückgabetyp ist, was jedoch nicht umgekehrt der Fall ist; so ist \textit{}{void} ein gültiger Rückgabetyp, aber kein Datentyp. Listing \ref{lst:parser_example} zeigt einen typischen Ausschnitt aus einer Parser-Grammatik, wobei zur Übersichtlichkeit nicht alle Regeln und Tokens aufgelistet sind:
-		\begin{figure} [htbp]
-			\lstinputlisting
-			[caption={Beispielhafte Syntax vom Parser},
-			label={lst:parser_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/parser_example.g4}
-		\end{figure}
-		
-Listing \ref{lst:parser_example} beschreibt die notwendigen Regeln, um Methodenparameter zu parsen. Ein Methodenparameter kann keinen, einen oder mehrere  Modifizierer enthalten, die ihrerseits eine Java-Annotation sein können oder das Schlüsselwort\textit{final}. Anschließend muss ein Datentyp erfolgen, der wiederum aus einer Annotation bestehen kann, gefolgt von entweder einem primitiven Datentyp oder einem Klassen bzw. Schnittstellentyp. Auch die üblichen eckigen Klammern für Arrays in Java können nach diesem Datentyp folgen. Die letzte Voraussetzung für einen gültigen Methodenparameter ist ein valider Bezeichner.
-
-Die Parser-Grammatik ist ähnlich wie die der Lexer-Grammatik aufgebaut. Auch hier wird eine Variante der regulären Ausdrücken verwendet, wobei hier hier die reguläre Grammatik auf die Tokens (oder auf Zeichenketten, die eindeutig einem Token zugeordnet werden können) angewendet. Im Gegensatz zum Lexer muss der Bezeichner einer Parser-Regel mit einem Kleinbuchstaben beginnen\cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. So ist eine Unterscheidung zwischen Tokens und den Parserregeln stets möglich. 
 
 
-Basierend auf diese Baumstruktur des Parsers kann eine Quellcodedatei analysiert werden und so alle relevanten Informationen gesammelt werden. 
-Dies ist relativ leicht mit dem Visitor-Pattern möglich, da so nur die relevanten  Komponenten genauer betrachtet werden müsse und alle uninteressanten Komponenten automatisiert durchlaufen werden, bis eine relevante Komponente gefunden wird. Listing \ref{lst:visit_method_example} zeigt einen Ausschnitt aus dem Java-Parser um das Visitor-Pattern genauer zu erläutern.
+.
 
-		\begin{figure} [htbp]
-			\lstinputlisting
-			[caption={Codeauschnitt aus  Methoden-Visitor},
-			label={lst:visit_method_example},
-			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/visit_method_example.java}
-		\end{figure}
-Das Code-Snippet zeigt den einen Ausschnitt vom Visitor für Methodendeklarationen. Hier ist die Baumstruktur leicht sichtbar. Alle Einzelbestandteile einer Methode wie z. B. Bezeichner, Rückgabetyp etc. sind Kindknoten des \textit{RuleContext} und können über die Methode \textit{getChild} abgerufen werden. So werden sowohl der Bezeichner als auch der Rückgabetyp direkt als Text abgerufen. Diese  beiden Bestandteile bestehen wiederum auch aus weiteren Kindknoten, doch eine weitergehende Betrachtung ist nicht nötig, da nur die Bezeichnung als Zeichenkette benötigt wird. Andere Bestandteile wie die Methodenparameter sind jedoch komplexer, aus diesem Grund werden sie von separaten Visitors betrachtet.
 
-\subsubsection{Implementierung von ANTLR4}
-Für die Programmiersprache Java steht bereits eine Grammatik, die auf Github unter der BSD-Lizenz angeboten wird ist, zur Verfügung\footnote{\href{https://github.com/antlr/grammars-v4/tree/master/java/java}{Grammatik-Dateien für Java (besucht 07.01.2022)}}, allerdings ignoriert diese Grammatik alle Kommentare. Daher mussten einige Änderungen sowohl am Lexer als auch am Parser vorgenommen werden. Im Lexer werden standardmäßig alle Tokens in einem Kommentar in einen versteckten Kanal gespeichert, was dazu führt, dass diese Tokens vom Parser ignoriert werden. Daher wurde dieses Verhalten durch Definition eines neuen Tokens so geändert, dass Javadoc-Kommentare auch vom Parser verarbeitet werden können, aber mehrzeilige und einzeilige Kommentare weiterhin ignoriert werden. Einzeilige Kommentare sind hier nicht relevant, da sie kein Javadoc enthalten. Mehrzeilige Kommentare könnten theoretisch auch berücksichtigt werden, da einige Entwickler diese anstelle von Javadoc benutzen. Allerdings werden solche mehrzeilige Kommentare vor Komponenten nicht von Tools erkannt und haben daher einen geringeren, aber durchaus vorhandenen Nutzen \cite[S. 4]{HowDocumentationEvolvesoverTime}. Deshalb werden Komponenten, die zwar mit mehrzeiligen Kommentaren aber nicht mit Javadoc dokumentiert sind, wie undokumentierte Komponenten zu betrachten. Für einen Entwickler sollte es so schnell möglich sein, solche nicht korrekt dokumentierten Komponenten zu identifizieren und deren mehrzeilige Kommentare in gültige Javadoc-Kommentare umzuwandeln und so die Qualität der Dokumentation zu erhöhen. Für andere Programmiersprachen können jedoch normale mehrzeilige wie strukturierte Kommentare betrachtet werden, wenn dies für sinnvollerer erachtet wird.
 
-Mehr Änderungen müssen an der entsprechenden Parser-Datei \textit{JavaParser.g4} durchgeführt werden.  Tabelle \ref{tab:parser_changes} listet alle Änderungen an der Parserdatei auf;
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{m{0.75cm}|m{4cm}|m{10cm}}
-        Zeile & Änderung & Begründung \\
-         \hline
-        116 & Deklaration Kommentar & Hier wird ein mehrzeiliger Kommentar definiert, dies ist hier ein Alias für den Token \textit{JCOMMENT}\\
-        \hline
-        128 & \textit{comment} als möglicher Präfix in Klassenmember & Hier wird dem Parser mitgeteilt, dass ein Bestandteil einer Klasse wie z. B. eine Methode einen Javadoc-Kommentar besitzen kann\\
-        \hline
-        47 & \textit{comment} als möglicher Präfix vor Datentyp & Hier wird dem Parser mitgeteilt, dass ein Datentyp (Klasse, Schnittstelle etc. ) einen Javadoc-Kommentar haben kann \\
-        \hline
-        404 & Zulassung von Javadoc in Methoden & Da Javadoc-Kommentare an beliebigen Stellen auftauchen können, auch wenn es nicht empfohlen wird und keinen Mehrwert bietet, wird hier sichergestellt, dass solche Kommentare nicht zu Warnungen oder Fehler von ANTLR4 führen. Diese Javadoc-Kommentare werden nichtsdestotrotz später ignoriert.\\
-        \hline
-        34, 38& Zulassung von Kommentaren vor Paketdeklarationen und Imports & Hier werden Kommentare auch vor Paketdeklarationen und Import-Statements erlaubt, was vor allem bei Klassen mit Urheberrechtsangabe sinnvoll ist\\
-        \hline
-        105 & Zulassung von Kommentaren bei Enumerationen & Zwar werden Javadoc-Kommentare in Enumerationen mit diesem Tool nicht betrachtet, sie führen aber dennoch zu Warnungen und Fehlermeldungen. Daher werden sie hier zugelassen, aber später ignoriert. \\
-        \hline
-        82, 83 & Erzeugung eines separaten Knotens für \textit{Extends}- und \textit{Implements}-Deklarationen & In der originalen Version der Parserdatei wurde die Definition der Basisklasse bzw. der implementierten Schnittstellen direkt über die Tokens \textit{EXTENDS} bzw. \textit{IMPLEMENTS} gelöst. Dies wurde in einem neuen Knoten \textit{extendClass} bzw. \textit{implementInterfaces} ausgegliedert, um so das Parsing etwas zu vereinfachen.  \\
-         \hline
-    \end{tabular}
-    \caption{Änderungen an der Parserdatei}
-    \label{tab:parser_changes}
-\end{table}
-
-\subsection{Metriken anwenden}
-
-Als nächster Schritt müssen auf die Informationen bezüglich der Dokumentation, die der Parser im vorherigen Schritt gesammelt hat, geeignet ausgewertet werden. Dazu können verschiedene Metriken verwenden, die im Späteren genauer erläutert werden. Dabei gibt es genau zwei Kategorien an Metriken. Die meisten Metriken arbeiten nur auf eine Komponente und der dazugehörigen Dokumentation. Andere Metriken sind nur mit hierarchischen Komponenten kompatibel und analysieren die Kommentare all ihrer Kinder. 
-
-Jede Metrik gibt eine numerische Bewertung ab, die eine Aussage über die Dokumentationsqualität trifft. Hier wurde eine 0 für sehr schlechte bis nicht existente Dokumentation und 100 für eine exzellente Dokumentation gewählt, sodass die Bewertung sich als Prozent lesen lassen kann. Grundsätzlich ist aber auch ein anderer Wertebereich möglich. Eine Metrik kann sich aber auch dafür entscheiden, eine Komponente komplett zu ignorieren, sodass sie für diese Metrik als nicht existent betrachtet wird.
-
-Zudem können Metriken Warn- oder Fehlermeldungen werfen, um den Anwender des Programms auf schlechte Dokumentation aufmerksam zu machen. Diese Fehlermeldung enthalten auch den Komponentennamen und die Zeilennummern, damit der Programmierer schnell auf die verwendete Komponente zugreifen kann.
-
-Die Metriken werden ein einziges Mal in einem Metrikmanager instantiiert, sodass es von jeder Metrik nur eine Instanz existiert. Daraus folgt auch, dass eine Metrik keinen inneren Zustand haben sollte, da dieser Zustand dann über verschiedene Komponenten  oder Dateien geteilt werden würde, was Ergebnisse verfälschen würde. Diese Designentscheidung wurde getroffen, damit der Metrikmanager die Kontrolle über die Verwaltung der Metriken erhält und eine Zuordnung von Gewichten (siehe unten) zu den Metriken leicht möglich ist. Diese Zuordnung könnte auch durch einen eindeutigen Namen ermöglicht werden, was aber einige Umstrukturierung erfordert, da die Metriken ihren eigenen Namen nicht kennen.
-
-Jede Metrik besitzt außerdem neben ihren Hauptnamen auch mehrere Aliasnamen, damit ein Entwickler sich nicht bestimmte Namen genau merken muss. Dazu gehören unter anderem der Klassenname und Abkürzungen des Hauptnamens. Die Die \enquote{Getter-Setter-Metrik} kann beispielsweise auch als \enquote{igs} angesprochen werden kann (\enquote{\textbf{I}gnore\textbf{G}etter\textbf{S}etter}). 
-
-Abbildung \ref{fig:uml_metrics}  zeigt ein UML-Klassendiagram, das alle wichtigen Klassen und Schnittstellen, die von den Metriken genutzt werden. 
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/uml/metriken.png}
-    \caption{UML-Diagramme aller Klassen, die relevant für die Metriken sind}
-    \label{fig:uml_metrics}
-\end{figure}
 \bigskip
 \subsection{Resultate der Metriken anwenden}
 Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es sie in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein einfacher arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus auswählen kann. Ein \textit{ResultBuilder} basiert auf dem Vorbild des Design-Patterns \enquote{Builder} aus \cite[S.139-149]{gamma2015design}, da es aus einzelnen Metrikresultaten ein vollständiges Metrikergebnis baut. 
