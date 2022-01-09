@@ -90,61 +90,33 @@ Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche F
 
 \section{GitHub Actions}\label{chapter:github_actions}
 
-Github Action \footnote{\href{https://github.com/features/actions}{GitHub Actions Website (besucht am 07.01.2022 }} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  Github Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird, oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenes System ausgeführt werden. Schlägt der Programmcode fehl kann der Nutzer den Grund des Fehlers über die  \enquote{Actions}-Registerkarte herausfinden.
+Github Action \footnote{\href{https://github.com/features/actions}{GitHub Actions Website (besucht am 07.01.2022 }} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  Github Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird, oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenes System ausgeführt werden. Dieses System wird auch als \textbf{Runner} bezeichnet.
 
-Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden. Die folgende nummerierte Liste beschreibt grob, wie Programmcode in GitHub Actions ausgeführt werden kann:
-\begin{enumerate}
-    \item Ein Ereignis tritt ein, indem beispielsweise neuer Programmcode mittels Push hochgeladen wird 
-    \item Github wählt ein geeignetes System aus (z. B. eine virtuelle Maschine oder ein vom Programmierer hierfür konfiguriertes System
-    \item Auf dem System wird der aktuelle Programmcode des Repositorys geklont (der Branch kann frei bestimmt werden) 
-    \item Der Programmcode ausgeführt, dabei steht der Pfad zum geklonten Repository über die Umgebungsvariable \textit{\$GITHUB\_WORKSPACE} bereit
-    \item Abhängig vom Erfolg der Ausführung des Programmcodes:
-    \begin{enumerate}
-        \item Bei einem Erfolg wird der Programmierer mittels eines grünen Häkchens informiert
-        \item Bei einer Fehlermeldung wird der Programmierer mittels eines roten Kreuzes über den Fehlschlag informiert und hat auch Zugriff auf die Fehlermeldungen. Je nach Einstellung des Repositorys können bestimmte Aktivitäten dann auch gestoppt werden, damit fehlerhafter Programmcode nicht weiter verbreitet wird. 
-    \end{enumerate}
-\end{enumerate}
+Der gesamte Programmcode wird im Kontext von GitHub Actions auch als \textbf{Workflow (Ablauf)} bezeichneit und führt einen oder mehrere \textbf{Jobs} aus. Diese Jobs sind eine Ansammlung von \textbf{Steps (Schritte)}, die man als Befehle interpretieren kann. Die Jobs werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird. Ein Step kann Befehl sein, der auf einer Kommandozeile ausgeführt werden kann, oder ein Verweis auf eine andere GitHub Action, die dann ausgeführt wird. 
 
-Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-Ereignis kann der aktuelle Programmcode mit einer geeigneten Testbibliothek getestet werden, sodass im Falle eines fehlgeschlagenen Tests der Programmierer informiert wird und die notwendigen Änderungen veranlassen kann: 
+Schlägt der Programmcode fehl kann der Nutzer den Grund des Fehlers über die  \enquote{Actions}-Registerkarte herausfinden.Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden.
+\subsection{Verwendungsmöglichkeiten für GitHub Actions}
 
-\subsection{Wichtige Begriffe im Zusammenhang mit GitHub Action}
-In der folgenden Auflistung werden einige wichtige Begriffe erläutert, die im Zusammenhang mit GitHub Actions verwendet werden und deren Kenntnis zum Verständnis wichtig ist. 
-\begin{description}
-    \item[Workflow] Ein Workflow (Ablauf) ist ein automatisierter Prozess, der verschiedene Jobs ausführt, wenn ein Ereignis eintritt. Der Worklflow wird durch eine YAML-Datei definiert
-    \item[Job] Ein Job ist eine Ansammlung von sogenannten \enquote{Steps}, die man als Befehle interpretieren kann. Alle Befehle in einem Job werden auf der gleichen Maschine ausgeführt. Alle Jobs in einem Workflow werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird.
-    \item[Step] Ein Step (Schritt) ist ein Shell-Befehl oder ein Verweis auf eine andere GitHub Action, die von einem Job ausgeführt werden soll. Innerhalb eines Jobs werden die Steps in der definierten Reihenfolge ausgeführt. 
-    \item[Action] Eine Action ist ein Programm, das in Workflows eingebunden werden kann und häufig vorkommende Aufgaben erledigt. Dies hat den Vorteil, dass Redundanz vermieden wird. Im offiziellen Marketplace von GitHub lassen sich zu vielen verschiedenen Aufgaben bereits Actions finden. Es können aber auch eigene Actions definiert werden, was weiter unten beschrieben wird. 
-    \item[Runner] Als Runner wird das System bezeichnet, auf dem die Jobs ausgeführt werden. Dies ist standardmäßig ein Linux-Betriebssystem; es können aber auch Windows oder macOS zur Ausführung des Codes verwendet werden. Bei besonderen Anforderungen kann der Runner auch auf einem System laufen, auf dem der Programmierer selbst Zugriff hat.
-\end{description}
+Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-Ereignis kann der aktuelle Programmcode mit einer geeigneten Testbibliothek getestet werden, sodass im Falle eines fehlgeschlagenen Tests der Programmierer informiert wird und die notwendigen Änderungen veranlassen kann.
+
+Des Weiteren kann das Deployment (z.~dt. Verteilung) der Software mittels einer Action automatisiert erfolgen. So lässt sich z.~B. bei Programmen, die auf verschieden Plattformen (NPM, Yarn, NuGet etc.)  veröffentlicht werden, sicherstellen, dass stets die aktuelle Version auf jeder Plattform verfügbar ist, was auch zu einem besseren Schutz vor Sicherheitslücken führen kann. 
+
+Auch die Qualität des Codes kann mit geeigneten Actions geprüft werden, was im Kontext dieser Bachelorarbeit besonders interessant ist.  
+
+
+
 \subsection{Erstellung eines Workflows}
-Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird. Der Code wird in Tabelle \ref{tab:descr_example_workflow} genauer erklärt.
-\clearpage
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{c|m{10cm}}
-        Zeile(n) &  Beschreibung \\\hline
-         1 & Der Name des Workflows\\\hline
-         2-6 & Hier werden die verschiedenen Ereignisse beschrieben, die den Workflow auslösen. Außerdem werden die Branches spezifiert, die auf das Ereignis überwacht werden sollenö\\\hline
-         7 &  Dies erlaubt, dass ein Workflow auch manuell angestoßen wird, etwa zu Debugging-Zwecken\\\hline
-         8-9 & Erstellt einen Job mit dem Namen \enquote{Build}\\\hline
-         10 & Bestimmt auf welchen System der Workflow läuft\\\hline
-         11 & Beginn der einzelnen Steps\\\hline
-         12 & Bestimmt, dass der Quellcode des Repositorys geklont wird und dessen Pfad über eine Umgebungsvariable zugängig gemacht wird\\\hline
-         13-14 & Gibt hier als Beispiel \enquote{Hello World} aus\\\hline
-         16-19 &Beispiel um mehrere Befehle sequentiell auszuführen\\\hline
-         
-    \end{tabular}
-    \caption{Beispielhafter Workflow}
-    \label{tab:descr_example_workflow}
-\end{table}
-		\begin{figure}[h!]
-			\lstinputlisting
+Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird.
+
+
+\begin{figure}[h!]
+	\lstinputlisting
 			[caption={Beispielhafter Workflow-Datei},
 			label={lst:simple_workflow},
 			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/workflow_example.yaml}
-		\end{figure}
-	\clearpage
+			\end{figure}
+In Zeile 1 wird der Name des Workflows festgelegt. Anschließend werden die Bedingungen festgelegt, die den Workflow starten. In diesem Beispiel wird dieser Workflow bei einem Push (Z. 3) oder ein Pull-Request (Z. 5) ajusgeführt, wenn dabei die Main-Branch betroffen ist. Mit \enquote{workflow\_dispatch} wird zusätzlich ermöglicht, den Workflow auch manuell zu starten, was zu Debugging-Zwecken sinnvoll sein kann. In Zeile 8 werden dann die Jobs definiert, wobei hier nur ein Job namens \enquote{build} (Z. 9) erstellt wird. Der Job benötigt einen Runner, der hier ein System mit einer aktuellen Ubuntu-Version ist (Z. 10). Als nächstes werden die einzelnen Steps deklariert. Jeder Steps beginnt mit einem Bindestrich. Der erste Step (Z. 12) sorgt dafür, dass der Quellcode der entsprechenden Branch des Repositorys auf das System geklont wird. Dabei wird auch eine Umgebungsvariable namens \textit{\$GITHUB\_WORKSPACE} bereitgestellt, die den Pfad des geklonten Repositories enthält .Der nächste Step (Z. 13-14) gibt den Text \enquote{Hello, world!} auf der Kommandozeile aus. Der letzte Step (Z. 17-19) zeigt exemplarisch, dass auch mehrere Kommandozeilenbefehle sequentiell ausgeführt  werden können, indem die einzelnen Befehle auf  mehrere Zeilen verteilt werden und die erste Zeile hinter dem \textit{run} mit dem Zeichen \enquote{\textbf{|}} beginnt. Natürlich können mehrere Befehle auch per \enquote{\&} verknüpft werden. 
 	\subsection{Ausführung von Workflows}
 	Wenn ein Workflow durch ein Ereignis ausgeführt wird, lässt sich die Ausgabe des Workflows über die Registerkarte \enquote{Actions} anzeigen. Dabei erhält der Programmierer auch Informationen darüber, ob der Workflow erfolgreich war oder fehlgeschlagen ist. Abbildung \ref{fig:workflow_overview} zeigt die Übersicht der ausgeführten Workflows. Wie der Abbildung zu entnehmen ist, sieht der Programmierer den Commit, auf dem der Workflow ausgeführt wurde. Auf der rechten Seite befindet sich auch eine Angabe, wann dieser Workflow ausgeführt wurde. Zudem enthält die Übersicht die Information, wie lange der Prozess gedauert hat. 
 	\begin{figure}[h]
