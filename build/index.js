@@ -28516,6 +28516,7 @@ const metric_manager_1 = __nccwpck_require__(4330);
 const file_analyzer_1 = __nccwpck_require__(245);
 const EvaluatorConf_1 = __nccwpck_require__(1382);
 const parser_factory_1 = __nccwpck_require__(3614);
+const weight_resolver_1 = __nccwpck_require__(5259);
 const factory = new parser_factory_1.ParserFactory();
 function main(args) {
     var workingDirectory = "";
@@ -28532,13 +28533,15 @@ function main(args) {
     let weightMap = new Map();
     let metrics = conf.metrics.map((m) => metric_manager_1.MetricManager.createMetricByName(m.metricName, m.uniqueName, m.params));
     for (let m of conf.metrics) {
-        weightMap.set(m.uniqueName, m.weight);
+        weightMap.set(metric_manager_1.MetricManager.getMetricByUniqueName(m.uniqueName), m.weight);
     }
+    let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
+    let filesWeightResolver = null;
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
-    let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, weightMap);
-    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, weightMap);
-    let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, weightMap);
+    let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, metricWeightResolver);
+    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
+    let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
     for (let metric of metrics) {
         console.log("Using metric", metric.getUniqueName());
         for (let relevantFile of relevantFiles) {
@@ -28818,6 +28821,10 @@ var MetricManager;
         return allMetricTypes.getByValue(type);
     }
     MetricManager.getMetricName = getMetricName;
+    function getMetricByUniqueName(uniqueName) {
+        return allMetrics.get(uniqueName);
+    }
+    MetricManager.getMetricByUniqueName = getMetricByUniqueName;
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
     function init() {
@@ -28830,7 +28837,7 @@ var MetricManager;
         allMetricTypes.add("ignore_getters_setters", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric);
         allMetricTypes.add("flesch", flesch_metric_1.FleschMetric);
     }
-    function getNewMetricResultBuilder(builderName, weightMap) {
+    function getNewMetricResultBuilder(builderName, weightResolver) {
         switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":
@@ -28843,10 +28850,10 @@ var MetricManager;
             case "weighted_mean_builder":
             case "weighted_metric_result_builder":
             case "weighted_mean_result_builder":
-                return new weighted_metric_result_builder_1.WeightedMetricResultBuilder(weightMap);
+                return new weighted_metric_result_builder_1.WeightedMetricResultBuilder(weightResolver);
             case "weighted_median_result_builder":
             case "weighted_median_builder":
-                return new weighted_median_result_builder_1.WeightedMedianResultBuilder(weightMap);
+                return new weighted_median_result_builder_1.WeightedMedianResultBuilder(weightResolver);
         }
         throw new Error("Could not identify ResultBuilder");
     }
@@ -29448,6 +29455,26 @@ exports.SimplePublicMembersOnlyMetric = SimplePublicMembersOnlyMetric;
 
 /***/ }),
 
+/***/ 5259:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SimpleWeightResolver = void 0;
+class SimpleWeightResolver {
+    constructor(weightMap) {
+        this.weightMap = weightMap;
+    }
+    resolveWeight(key) {
+        return this.weightMap.get(key);
+    }
+}
+exports.SimpleWeightResolver = SimpleWeightResolver;
+
+
+/***/ }),
+
 /***/ 8891:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -29463,7 +29490,7 @@ class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.Weigh
         let weightSum = 0;
         let allLogMessages = [];
         for (let partialResult of this.resultList) {
-            let weight = this.weightMap.get(partialResult.getCreator());
+            let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             weightResultList.push({ weight: weight, result: partialResult.getResult() });
             weightSum += weight;
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
@@ -29494,16 +29521,16 @@ exports.WeightedMetricResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(2299);
 const metric_result_builder_1 = __nccwpck_require__(1535);
 class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBuilder {
-    constructor(weightMap) {
+    constructor(weightResolver) {
         super();
-        this.weightMap = weightMap;
+        this.weightResolver = weightResolver;
     }
     getAggregatedResult() {
         let resultSum = 0;
         let weightSum = 0;
         let allLogMessages = [];
         for (let partialResult of this.resultList) {
-            let weight = this.weightMap.get(partialResult.getCreator());
+            let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             resultSum += (partialResult.getResult() * weight);
             weightSum += weight;
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
