@@ -28313,7 +28313,7 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const metric_manager_1 = __nccwpck_require__(4330);
 const process_1 = __nccwpck_require__(7282);
-const defaultMetrics = metric_manager_1.MetricManager.getMetricNames();
+const defaultMetrics = metric_manager_1.MetricManager.getAllImplementedMetricNames();
 const CONF_FILENAME = "comment_conf.json";
 /**
  * This class contains the configuration information for the tool
@@ -28355,7 +28355,7 @@ class EvaluatorConf {
          */
         this.parser = "java";
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s) });
+            this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), uniqueName: s });
         }
     }
 }
@@ -28530,24 +28530,21 @@ function main(args) {
     let traverser = new directory_traverser_1.DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
     let weightMap = new Map();
-    let metrics = conf.metrics;
-    for (let m of metrics) {
-        weightMap.set(metric_manager_1.MetricManager.getMetric(m.metricName), m.weight);
+    let metrics = conf.metrics.map((m) => metric_manager_1.MetricManager.createMetricByName(m.metricName, m.uniqueName, m.params));
+    for (let m of conf.metrics) {
+        weightMap.set(m.uniqueName, m.weight);
     }
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, weightMap);
     let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, weightMap);
     let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, weightMap);
-    for (let metricInformation of metrics) {
-        let params = metric_manager_1.MetricManager.getDefaultMetricParam(metricInformation.metricName);
-        Object.assign(params, metricInformation.params);
-        let metric = metric_manager_1.MetricManager.getMetric(metricInformation.metricName);
-        console.log("Using metric", metricInformation.metricName);
+    for (let metric of metrics) {
+        console.log("Using metric", metric.getUniqueName());
         for (let relevantFile of relevantFiles) {
             var root = { root: parser.parse(relevantFile), path: relevantFile };
             console.log("Looking at " + root.path);
-            fileAnaylzer.analyze(root, metric, singleFileResultBuilder, params);
+            fileAnaylzer.analyze(root, metric, singleFileResultBuilder);
             let partialResult = singleFileResultBuilder.getAggregatedResult();
             console.log("Partial result", partialResult.getResult());
             allFilesResultBulder.processResult(partialResult);
@@ -28639,8 +28636,8 @@ class FileAnalyzer {
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result, analyzer, builder, params) {
-        this.analyzeComponent(parse_result.root, builder, analyzer, params);
+    analyze(parse_result, analyzer, builder) {
+        this.analyzeComponent(parse_result.root, builder, analyzer);
     }
     /**
      *
@@ -28648,11 +28645,11 @@ class FileAnalyzer {
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    analyzeComponent(component, builder, analyzer, params) {
+    analyzeComponent(component, builder, analyzer) {
         let ignoreTag = this.getIgnoreFlag(component);
         // Only analyze relevant component to this metric
-        if (analyzer.shallConsider(component, params) && ignoreTag != IgnoreTags.IGNORE_THIS && ignoreTag != IgnoreTags.IGNORE_NODE) {
-            analyzer.analyze(component, builder, params);
+        if (analyzer.shallConsider(component) && ignoreTag != IgnoreTags.IGNORE_THIS && ignoreTag != IgnoreTags.IGNORE_NODE) {
+            analyzer.analyze(component, builder);
         }
         /* Analyze the children of the component if it is a hierarchical one
         This will be done even if the parent was not considered because we don't want to miss
@@ -28661,7 +28658,7 @@ class FileAnalyzer {
         if (component instanceof hierarchical_component_1.HierarchicalComponent && ignoreTag != IgnoreTags.IGNORE_NODE) {
             let hierarchical = component;
             for (let c of hierarchical.getChildren()) {
-                this.analyzeComponent(c, builder, analyzer, params);
+                this.analyzeComponent(c, builder, analyzer);
             }
         }
     }
@@ -28805,24 +28802,33 @@ var MetricManager;
      * @returns the instance of the respective metric
      * @throws An error if key not present
      */
-    function getMetric(metricName) {
-        return allMetrics.getByKey(resolveMetricName(metricName));
+    function createMetricByName(metricName, uniqueName, params) {
+        let instance = new (allMetricTypes.getByKey(metricName))(uniqueName, params);
+        allMetrics.set(uniqueName, instance);
+        return instance;
     }
-    MetricManager.getMetric = getMetric;
-    function getMetricName(metric) {
-        return allMetrics.getByValue(metric);
+    MetricManager.createMetricByName = createMetricByName;
+    function createMetricByType(type, uniqueName, params) {
+        let instance = new (type)(uniqueName, params);
+        allMetrics.set(uniqueName, instance);
+        return instance;
+    }
+    MetricManager.createMetricByType = createMetricByType;
+    function getMetricName(type) {
+        return allMetricTypes.getByValue(type);
     }
     MetricManager.getMetricName = getMetricName;
-    const allMetrics = new BiMap();
+    const allMetrics = new Map();
+    const allMetricTypes = new BiMap();
     function init() {
         // main metric names must be lower case
-        allMetrics.add("simple_comment", new simple_comment_present_metric_1.SimpleCommentPresentMetric());
-        allMetrics.add("public_members_only", new simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric());
-        allMetrics.add("large_method_commented", new simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric());
-        allMetrics.add("method_fully_documented", new simple_method_documentation_metric_1.SimpleMethodDocumentationMetric());
-        allMetrics.add("commented_lines_ratio", new commented_lines_ratio_metric_1.CommentedLinesRatioMetric());
-        allMetrics.add("ignore_getters_setters", new ignore_getters_setter_metric_1.IgnoreGetterSetterMetric());
-        allMetrics.add("flesch", new flesch_metric_1.FleschMetric());
+        allMetricTypes.add("simple_comment", simple_comment_present_metric_1.SimpleCommentPresentMetric);
+        allMetricTypes.add("public_members_only", simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric);
+        allMetricTypes.add("large_method_commented", simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric);
+        allMetricTypes.add("method_fully_documented", simple_method_documentation_metric_1.SimpleMethodDocumentationMetric);
+        allMetricTypes.add("commented_lines_ratio", commented_lines_ratio_metric_1.CommentedLinesRatioMetric);
+        allMetricTypes.add("ignore_getters_setters", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric);
+        allMetricTypes.add("flesch", flesch_metric_1.FleschMetric);
     }
     function getNewMetricResultBuilder(builderName, weightMap) {
         switch (builderName) {
@@ -28845,35 +28851,19 @@ var MetricManager;
         throw new Error("Could not identify ResultBuilder");
     }
     MetricManager.getNewMetricResultBuilder = getNewMetricResultBuilder;
-    function resolveMetricName(metricName) {
-        if (allMetrics.containsKey(metricName.toLowerCase()))
-            return metricName.toLowerCase();
-        for (let metric of Object.entries(aliases)) {
-            if (metric[0] == metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())) {
-                return metric[0];
-            }
-        }
-        throw new Error("Could not identify metric");
-    }
-    const aliases = {
-        "simple_comment": ["comment_present", "all_members", "all_components", "simple_documentation_present", "documentation_present", "sc", simple_comment_present_metric_1.SimpleCommentPresentMetric.name],
-        "public_members_only": ["public_members", "public_components", "only_public", "pmo", simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric.name],
-        "large_method_commented": ["punish_large_uncommented", "punish_large_undocumented", "lmc", simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric.name],
-        "method_fully_documented": ["method_fully_commented", "fully_documented", "params_return_documented", "params_return_commented", "mfd", simple_method_documentation_metric_1.SimpleMethodDocumentationMetric.name],
-        "commented_lines_ratio": ["ratio_commented_uncommented", "ratio_documented_undocumented", "clr", commented_lines_ratio_metric_1.CommentedLinesRatioMetric.name],
-        "ignore_getters_setters": ["getters_setters", "ignore_properties", "ignore_getter_setter", "igs", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric.name],
-        "flesch": ["flesch_metric", "flesch_readability", "flesch_readability_metric"]
-    };
     /**
      *
      * @returns All metric names that are declared
      */
-    function getMetricNames() {
+    function getUsedMetricNames() {
         return Array.from(allMetrics.keys());
     }
-    MetricManager.getMetricNames = getMetricNames;
+    MetricManager.getUsedMetricNames = getUsedMetricNames;
+    function getAllImplementedMetricNames() {
+        return Array.from(allMetricTypes.keys());
+    }
+    MetricManager.getAllImplementedMetricNames = getAllImplementedMetricNames;
     function getDefaultMetricParam(metricName) {
-        metricName = resolveMetricName(metricName);
         switch (metricName) {
             case "large_method_commented":
                 return { ignoreLines: ["", "{", "}"], k: 0.2 };
@@ -29010,11 +29000,12 @@ exports.MetricResultBuilder = MetricResultBuilder;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ChildrenBasedMetric = void 0;
 const hierarchical_component_1 = __nccwpck_require__(8510);
+const documentation_analysis_metric_1 = __nccwpck_require__(9295);
 /**
  * Defines metrics that consider the children of a hierarchical component
  */
-class ChildrenBasedMetric {
-    shallConsider(component, params) {
+class ChildrenBasedMetric extends documentation_analysis_metric_1.DocumentationAnalysisMetric {
+    shallConsider(component) {
         return component instanceof hierarchical_component_1.HierarchicalComponent;
     }
 }
@@ -29040,7 +29031,8 @@ const documentation_analysis_metric_1 = __nccwpck_require__(9295);
  * It returns the percentage of documented lines
  */
 class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMetric {
-    analyze(component, builder, params) {
+    analyze(component, builder) {
+        let params = this.getParams();
         let cls = component;
         let methods = cls.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).map((c) => c);
         let commentedLOC = 0;
@@ -29065,8 +29057,8 @@ class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMet
         let result = documentation_analysis_metric_1.MIN_SCORE + (documentation_analysis_metric_1.MAX_SCORE - documentation_analysis_metric_1.MIN_SCORE) * perc;
         builder.processResult(new metric_result_1.MetricResult(result, [], this));
     }
-    shallConsider(component, params) {
-        return super.shallConsider(component, params) && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
+    shallConsider(component) {
+        return super.shallConsider(component) && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
     }
 }
 exports.CommentedLinesRatioMetric = CommentedLinesRatioMetric;
@@ -29082,11 +29074,12 @@ exports.CommentedLinesRatioMetric = CommentedLinesRatioMetric;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ComponentBasedMetric = void 0;
 const file_component_1 = __nccwpck_require__(6199);
+const documentation_analysis_metric_1 = __nccwpck_require__(9295);
 /**
  * Defines metrics that only check the comment associated with the component
  */
-class ComponentBasedMetric {
-    shallConsider(component, params) {
+class ComponentBasedMetric extends documentation_analysis_metric_1.DocumentationAnalysisMetric {
+    shallConsider(component) {
         return !(component instanceof file_component_1.FileComponent);
     }
 }
@@ -29101,9 +29094,25 @@ exports.ComponentBasedMetric = ComponentBasedMetric;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MIN_SCORE = exports.MAX_SCORE = void 0;
+exports.DocumentationAnalysisMetric = exports.MIN_SCORE = exports.MAX_SCORE = void 0;
 exports.MAX_SCORE = 100;
 exports.MIN_SCORE = 0;
+/**
+ * This is the abstract base class for all metrics
+ */
+class DocumentationAnalysisMetric {
+    constructor(name, params) {
+        this.uniqueName = name;
+        this.params = params;
+    }
+    getUniqueName() {
+        return this.uniqueName;
+    }
+    getParams() {
+        return this.params;
+    }
+}
+exports.DocumentationAnalysisMetric = DocumentationAnalysisMetric;
 
 
 /***/ }),
@@ -29124,12 +29133,13 @@ const documentation_analysis_metric_1 = __nccwpck_require__(9295);
  * This metric calculate the flesh score which describes the readability of a text
  */
 class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
-    analyze(component, builder, params) {
+    analyze(component, builder) {
+        let params = this.getParams();
         let textsToConsider = this.getTextToConsider(component, params);
         let logMessages = [];
         let nlp_helper = new NLP_Helper_1.NLP_Helper();
         if (textsToConsider.length == 0) {
-            logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "has no documentation and could be evaulated by the flesh formula"));
+            logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "has no documentation and could not be evaulated by the flesh formula"));
             builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, logMessages, this));
         }
         let sum = 0;
@@ -29199,8 +29209,9 @@ const simple_comment_present_metric_1 = __nccwpck_require__(6198);
  * This metric works the same as the simple comment present metric but ignores getter/setters
  */
 class IgnoreGetterSetterMetric extends simple_comment_present_metric_1.SimpleCommentPresentMetric {
-    shallConsider(component, params) {
-        if ((!super.shallConsider(component, params))) {
+    shallConsider(component) {
+        let params = this.getParams();
+        if ((!super.shallConsider(component))) {
             return false;
         }
         else if (component instanceof method_component_1.MethodComponent) {
@@ -29246,7 +29257,7 @@ const documentation_analysis_metric_1 = __nccwpck_require__(9295);
  * This metric simply check whether a comment is present
  */
 class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBasedMetric {
-    analyze(component, builder, params) {
+    analyze(component, builder) {
         let score = 0;
         let logMessages = [];
         if (component.getComment() != null) {
@@ -29284,10 +29295,11 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
     boundedGrowth(S, B0, k, l) {
         return S - (S - B0) * Math.exp(-k * l);
     }
-    shallConsider(component, params) {
-        return super.shallConsider(component, params) && component instanceof method_component_1.MethodComponent;
+    shallConsider(component) {
+        return super.shallConsider(component) && component instanceof method_component_1.MethodComponent;
     }
-    analyze(component, builder, params) {
+    analyze(component, builder) {
+        let params = this.getParams();
         let logMessages = [];
         let result = 0;
         if (component.getComment() == null) {
@@ -29344,10 +29356,10 @@ const documentation_analysis_metric_1 = __nccwpck_require__(9295);
  * This metric checks whether the return value and all parameters of a method are documented
  */
 class SimpleMethodDocumentationMetric extends component_based__metric_1.ComponentBasedMetric {
-    shallConsider(component, params) {
-        return super.shallConsider(component, params) && component instanceof method_component_1.MethodComponent;
+    shallConsider(component) {
+        return super.shallConsider(component) && component instanceof method_component_1.MethodComponent;
     }
-    analyze(component, builder, params) {
+    analyze(component, builder) {
         let logMessages = [];
         let method = component;
         let score = 0;
@@ -29418,10 +29430,10 @@ const documentation_analysis_metric_1 = __nccwpck_require__(9295);
  * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
  */
 class SimplePublicMembersOnlyMetric extends component_based__metric_1.ComponentBasedMetric {
-    shallConsider(component, params) {
-        return component.getComponentMetaInformation().isPublic() && super.shallConsider(component, params);
+    shallConsider(component) {
+        return component.getComponentMetaInformation().isPublic() && super.shallConsider(component);
     }
-    analyze(component, builder, params) {
+    analyze(component, builder) {
         if (component.getComment() != null) {
             builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MAX_SCORE, [], this));
         }
