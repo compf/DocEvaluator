@@ -122,8 +122,24 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_PARSER) {
             conf.parser = JSON.parse(env.INPUT_PARSER)
         }
-      
-
+        if (env.INPUT_METRIC_RESULT_BUILDER) {
+            conf.metric_result_builder = JSON.parse(env.INPUT_METRIC_RESULT_BUILDER)
+        }
+        if (env.INPUT_SINGLE_FILE_RESULT_BUILDER) {
+            conf.single_file_result_builder = JSON.parse(env.INPUT_SINGLE_FILE_RESULT_BUILDER)
+        }
+        if (env.INPUT_FILES_RESULT_BUILDER) {
+            conf.files_result_builder = JSON.parse(env.INPUT_FILES_RESULT_BUILDER)
+        }
+        if (env.INPUT_PARSER) {
+            conf.parser = (env.INPUT_PARSER)
+        }
+        if (env.INPUT_PATH_WEIGHTS) {
+            conf.path_weights = JSON.parse(env.INPUT_PATH_WEIGHTS)
+        }
+        if (env.INPUT_DEFAULT_PATH_WEIGHT) {
+            conf.default_path_weight = parseFloat(env.INPUT_DEFAULT_PATH_WEIGHT)
+        }
 
     }
 
