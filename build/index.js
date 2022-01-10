@@ -28307,7 +28307,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EnvCommentConfLoader = exports.JSONCommentConfLoader = exports.loadConf = exports.EvaluatorConf = void 0;
+exports.EnvCommentConfLoader = exports.JSONCommentConfLoader = exports.loadConf = exports.EvaluatorConf = exports.MiniMatchConf = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(5099));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
@@ -28315,6 +28315,7 @@ const metric_manager_1 = __nccwpck_require__(4330);
 const process_1 = __nccwpck_require__(7282);
 const defaultMetrics = metric_manager_1.MetricManager.getAllImplementedMetricNames();
 const CONF_FILENAME = "comment_conf.json";
+exports.MiniMatchConf = { dot: true, matchBase: true };
 /**
  * This class contains the configuration information for the tool
  */
@@ -28354,6 +28355,14 @@ class EvaluatorConf {
          * the parser to be used/ the programming languages to be analyzed
          */
         this.parser = "java";
+        /**
+         * An array of pairs of a glob pattern and a weight that will be used to make some paths more important for evaluation
+         */
+        this.path_weights = [];
+        /**
+         * The default weight for a given path
+         */
+        this.default_path_weight = 1;
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), uniqueName: s });
         }
@@ -28427,7 +28436,7 @@ exports.DirectoryTraverser = void 0;
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const minimatch_1 = __nccwpck_require__(1445);
-const MiniMatchConf = { dot: true, matchBase: true };
+const EvaluatorConf_1 = __nccwpck_require__(1382);
 /**
  * This class will be used to find all files in a directory( and subdirectories)
  * You can only consider some files that match the include pattern and ignore all files that match the exclude pattern
@@ -28449,10 +28458,10 @@ class DirectoryTraverser {
         // which contains Minimatch objects, this will done for caching and preventing
         // to create Minimatch objects for each file
         for (let include of this.conf.include) {
-            this.includeItems.push(new minimatch_1.Minimatch(include, MiniMatchConf));
+            this.includeItems.push(new minimatch_1.Minimatch(include, EvaluatorConf_1.MiniMatchConf));
         }
         for (let exclude of this.conf.exclude) {
-            this.excludeItems.push(new minimatch_1.Minimatch(exclude, MiniMatchConf));
+            this.excludeItems.push(new minimatch_1.Minimatch(exclude, EvaluatorConf_1.MiniMatchConf));
         }
     }
     /**
@@ -28536,30 +28545,30 @@ function main(args) {
         weightMap.set(metric_manager_1.MetricManager.getMetricByUniqueName(m.uniqueName), m.weight);
     }
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
-    let filesWeightResolver = null;
+    let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, metricWeightResolver);
     let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
     let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
-    for (let metric of metrics) {
-        console.log("Using metric", metric.getUniqueName());
-        for (let relevantFile of relevantFiles) {
-            var root = { root: parser.parse(relevantFile), path: relevantFile };
-            console.log("Looking at " + root.path);
+    for (let relevantFile of relevantFiles) {
+        var root = { root: parser.parse(relevantFile), path: relevantFile };
+        console.log("Looking at " + root.path);
+        for (let metric of metrics) {
+            console.log("Using metric", metric.getUniqueName());
             fileAnaylzer.analyze(root, metric, singleFileResultBuilder);
-            let partialResult = singleFileResultBuilder.getAggregatedResult();
+            let partialResult = singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
             console.log("Partial result", partialResult.getResult());
-            allFilesResultBulder.processResult(partialResult);
+            metricBuilder.processResult(partialResult);
             singleFileResultBuilder.reset();
             console.log();
         }
         console.log();
-        let fileResult = allFilesResultBulder.getAggregatedResult();
-        allFilesResultBulder.reset();
-        metricBuilder.processResult(fileResult);
+        let metricResult = metricBuilder.getAggregatedResult(root.path);
+        metricBuilder.reset();
+        allFilesResultBulder.processResult(metricResult);
     }
-    let result = metricBuilder.getAggregatedResult();
+    let result = allFilesResultBulder.getAggregatedResult("");
     for (let log of result.getLogMessages()) {
         log.log();
     }
@@ -28731,7 +28740,7 @@ exports.MedianResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(2299);
 const metric_result_builder_1 = __nccwpck_require__(1535);
 class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
-    getAggregatedResult() {
+    getAggregatedResult(creator) {
         this.resultList.sort((a, b) => a.getResult() - b.getResult());
         let median = 0;
         if (this.resultList.length % 2 == 0) {
@@ -28746,7 +28755,7 @@ class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
         for (let partialResult of this.resultList) {
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
-        return new metric_result_1.MetricResult(median, allLogMessages, this.creator);
+        return new metric_result_1.MetricResult(median, allLogMessages, this.resolveCreator(creator));
     }
 }
 exports.MedianResultBuilder = MedianResultBuilder;
@@ -28947,7 +28956,6 @@ const metric_result_1 = __nccwpck_require__(2299);
  */
 class MetricResultBuilder {
     constructor() {
-        this.creator = null;
         this.resultList = [];
     }
     /**
@@ -28957,23 +28965,29 @@ class MetricResultBuilder {
      */
     processResult(result) {
         this.resultList.push(result);
-        if (this.creator == null) {
-            this.creator = result.getCreator();
-        }
-        else if (this.creator != result.getCreator()) {
-            this.creator = this;
-        }
     }
     putAllLogMessages(src, dest) {
         for (let item of src) {
             dest.push(item);
         }
     }
+    resolveCreator(creator) {
+        let result_creator_set = new Set(this.resultList.map((r) => r.getCreator()));
+        if (result_creator_set.size > 1) {
+            return creator;
+        }
+        else {
+            for (let s of result_creator_set) {
+                return s;
+            }
+            return "";
+        }
+    }
     /**
      * Creates the aggegrated MetricResult
      * @returns some kind of aggregation of all results that have been processed
      */
-    getAggregatedResult() {
+    getAggregatedResult(creator) {
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
         if (numberResults == 0)
@@ -28984,7 +28998,7 @@ class MetricResultBuilder {
             sum += partialResult.getResult();
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
-        let result = new metric_result_1.MetricResult(sum / numberResults, allLogMessages, this.creator);
+        let result = new metric_result_1.MetricResult(sum / numberResults, allLogMessages, creator);
         return result;
     }
     /**
@@ -29062,7 +29076,7 @@ class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMet
         }
         let perc = commentedLOC / (commentedLOC + unCommentedLOC);
         let result = documentation_analysis_metric_1.MIN_SCORE + (documentation_analysis_metric_1.MAX_SCORE - documentation_analysis_metric_1.MIN_SCORE) * perc;
-        builder.processResult(new metric_result_1.MetricResult(result, [], this));
+        builder.processResult(new metric_result_1.MetricResult(result, [], this.getUniqueName()));
     }
     shallConsider(component) {
         return super.shallConsider(component) && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
@@ -29147,7 +29161,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         let nlp_helper = new NLP_Helper_1.NLP_Helper();
         if (textsToConsider.length == 0) {
             logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "has no documentation and could not be evaulated by the flesh formula"));
-            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, logMessages, this));
+            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, logMessages, this.getUniqueName()));
         }
         let sum = 0;
         for (let text of textsToConsider) {
@@ -29168,7 +29182,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
             finalScore = 85;
             logMessages.push(new log_message_1.LogMessage("The documentation of " + component.getQualifiedName() + " is a little bit too easy"));
         }
-        builder.processResult(new metric_result_1.MetricResult(finalScore, [], this));
+        builder.processResult(new metric_result_1.MetricResult(finalScore, [], this.getUniqueName()));
     }
     quadratic(root1, root2, a, x) {
         return a * (x - root1) * (x - root2);
@@ -29274,7 +29288,7 @@ class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBase
             score = documentation_analysis_metric_1.MIN_SCORE;
             logMessages.push(new log_message_1.LogMessage(`Component ${component.getQualifiedName()} has no documentation`));
         }
-        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this));
+        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
     }
 }
 exports.SimpleCommentPresentMetric = SimpleCommentPresentMetric;
@@ -29337,7 +29351,7 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
         else {
             result = documentation_analysis_metric_1.MAX_SCORE;
         }
-        let metricResult = new metric_result_1.MetricResult(result, logMessages, this);
+        let metricResult = new metric_result_1.MetricResult(result, logMessages, this.getUniqueName());
         builder.processResult(metricResult);
     }
 }
@@ -29378,7 +29392,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             let returnExistingResult = returnExisting ? documentation_analysis_metric_1.MAX_SCORE : documentation_analysis_metric_1.MIN_SCORE;
             score = (paramsResult + nonExistingParamResult + returnExistingResult) / 3;
         }
-        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this));
+        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
     }
     checkNonExistingDocumentedParameters(method, logMessages) {
         var _a;
@@ -29442,11 +29456,11 @@ class SimplePublicMembersOnlyMetric extends component_based__metric_1.ComponentB
     }
     analyze(component, builder) {
         if (component.getComment() != null) {
-            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MAX_SCORE, [], this));
+            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MAX_SCORE, [], this.getUniqueName()));
         }
         else {
             let logMessage = new log_message_1.LogMessage("Public component " + component.getQualifiedName() + " is not documented");
-            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, [logMessage], this));
+            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, [logMessage], this.getUniqueName()));
         }
     }
 }
@@ -29456,12 +29470,14 @@ exports.SimplePublicMembersOnlyMetric = SimplePublicMembersOnlyMetric;
 /***/ }),
 
 /***/ 5259:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SimpleWeightResolver = void 0;
+exports.PathWeightResolver = exports.SimpleWeightResolver = void 0;
+const minimatch_1 = __nccwpck_require__(1445);
+const EvaluatorConf_1 = __nccwpck_require__(1382);
 class SimpleWeightResolver {
     constructor(weightMap) {
         this.weightMap = weightMap;
@@ -29471,6 +29487,26 @@ class SimpleWeightResolver {
     }
 }
 exports.SimpleWeightResolver = SimpleWeightResolver;
+class PathWeightResolver {
+    constructor(map, defaultWeight) {
+        this.miniMatchMap = new Map();
+        for (let path_weight of map) {
+            let match = new minimatch_1.Minimatch(path_weight.path, EvaluatorConf_1.MiniMatchConf);
+            this.miniMatchMap.set(match, path_weight.weight);
+        }
+        this.defaultWeight = defaultWeight;
+    }
+    resolveWeight(key) {
+        const path = key;
+        for (let mm_weight of this.miniMatchMap) {
+            if (mm_weight[0].match(path)) {
+                return mm_weight[1];
+            }
+        }
+        return this.defaultWeight;
+    }
+}
+exports.PathWeightResolver = PathWeightResolver;
 
 
 /***/ }),
@@ -29485,10 +29521,11 @@ exports.WeightedMedianResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(2299);
 const weighted_metric_result_builder_1 = __nccwpck_require__(9813);
 class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.WeightedMetricResultBuilder {
-    getAggregatedResult() {
+    getAggregatedResult(creator) {
         let weightResultList = [];
         let weightSum = 0;
         let allLogMessages = [];
+        creator = this.resolveCreator(creator);
         for (let partialResult of this.resultList) {
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             weightResultList.push({ weight: weight, result: partialResult.getResult() });
@@ -29500,10 +29537,10 @@ class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.Weigh
         for (let weight_result of weightResultList) {
             sum += weight_result.weight;
             if (sum > weightSum / 2) { // might not be totally correct
-                return new metric_result_1.MetricResult(weight_result.result, allLogMessages, this.creator);
+                return new metric_result_1.MetricResult(weight_result.result, allLogMessages, creator);
             }
         }
-        return new metric_result_1.MetricResult(weightResultList[weightResultList.length - 1].result, allLogMessages, this.creator);
+        return new metric_result_1.MetricResult(weightResultList[weightResultList.length - 1].result, allLogMessages, creator);
     }
 }
 exports.WeightedMedianResultBuilder = WeightedMedianResultBuilder;
@@ -29525,10 +29562,11 @@ class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBu
         super();
         this.weightResolver = weightResolver;
     }
-    getAggregatedResult() {
+    getAggregatedResult(creator) {
         let resultSum = 0;
         let weightSum = 0;
         let allLogMessages = [];
+        creator = this.resolveCreator(creator);
         for (let partialResult of this.resultList) {
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             resultSum += (partialResult.getResult() * weight);
@@ -29537,7 +29575,7 @@ class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBu
         }
         if (weightSum == 0)
             weightSum = 1;
-        return new metric_result_1.MetricResult(resultSum / weightSum, allLogMessages, this.creator);
+        return new metric_result_1.MetricResult(resultSum / weightSum, allLogMessages, creator);
     }
 }
 exports.WeightedMetricResultBuilder = WeightedMetricResultBuilder;
