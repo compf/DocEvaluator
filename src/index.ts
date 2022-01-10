@@ -8,6 +8,7 @@ import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
+import { SimpleWeightResolver } from "./metric_analysis/weight_resolver";
 const factory=new ParserFactory();
 function main(args: Array<string>) {
     var workingDirectory = "";
@@ -25,13 +26,15 @@ function main(args: Array<string>) {
     let weightMap=new Map<any,number>();
     let metrics = conf.metrics.map((m)=>MetricManager.createMetricByName(m.metricName,m.uniqueName,m.params));
     for(let m of conf.metrics){
-        weightMap.set(m.uniqueName,m.weight);
+        weightMap.set(MetricManager.getMetricByUniqueName(m.uniqueName),m.weight);
     }
+    let metricWeightResolver=new SimpleWeightResolver(weightMap);
+    let filesWeightResolver=null;
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new FileAnalyzer();
-    let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,weightMap);
-    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,weightMap);
-    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,weightMap)
+    let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,metricWeightResolver);
+    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,filesWeightResolver);
+    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,metricWeightResolver)
 
     for (let metric of metrics) {
         

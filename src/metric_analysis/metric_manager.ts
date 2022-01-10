@@ -10,6 +10,7 @@ import { SimplePublicMembersOnlyMetric } from "./metrics/simple_public_members_o
 import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
 import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
 import { FleschMetric } from "./metrics/flesch_metric";
+import { WeightResolver } from "./weight_resolver";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -53,6 +54,9 @@ export namespace MetricManager {
     export function getMetricName(type:new (name: string, params: any) => DocumentationAnalysisMetric):string{
         return allMetricTypes.getByValue(type);
     }
+    export function getMetricByUniqueName(uniqueName:string):DocumentationAnalysisMetric{
+        return allMetrics.get(uniqueName)!;
+    }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
     const allMetricTypes:BiMap<string,new (name: string, params: any) => DocumentationAnalysisMetric>=new BiMap<string,new (name: string, params: any) => DocumentationAnalysisMetric>()
     function init() {
@@ -68,7 +72,7 @@ export namespace MetricManager {
        
     }
    
-    export function getNewMetricResultBuilder(builderName: string, weightMap: Map<any, number> | null): MetricResultBuilder {
+    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver| null): MetricResultBuilder {
         switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":
@@ -81,10 +85,10 @@ export namespace MetricManager {
             case "weighted_mean_builder":
             case "weighted_metric_result_builder":
             case "weighted_mean_result_builder":
-                return new WeightedMetricResultBuilder(weightMap!);
+                return new WeightedMetricResultBuilder(weightResolver!);
             case "weighted_median_result_builder":
             case "weighted_median_builder":
-                return new WeightedMedianResultBuilder(weightMap!);
+                return new WeightedMedianResultBuilder(weightResolver!);
         }
         throw new Error("Could not identify ResultBuilder");
     }

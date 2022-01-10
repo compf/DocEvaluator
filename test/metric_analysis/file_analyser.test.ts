@@ -18,6 +18,7 @@ import { WeightedMetricResultBuilder } from "../../src/metric_analysis/weighted_
 import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 import { MethodComponent } from "../../src/parser/parse_result/method_component";
+import { SimpleWeightResolver } from "../../src/metric_analysis/weight_resolver";
 const path = "testDir/commented_class.java";
 function getCommentedClassRoot(): HierarchicalComponent {
     let parser = new JavaParser();
@@ -119,7 +120,7 @@ test("weighted median builder", () => {
     map.set(simple_metric,2);
     map.set(public_members,5);
     
-    let medianBuilder = new WeightedMedianResultBuilder(map)
+    let medianBuilder = new WeightedMedianResultBuilder(new SimpleWeightResolver(map))
     for (let number of oddCountArray) {
         medianBuilder.processResult(new MetricResult(number, [], number % 2 == 0 ? simple_metric : public_members))
     }
@@ -157,7 +158,7 @@ test("weighted result builder", () => {
     const path = "testDir/commented_class.java";
     let root = parser.parse(path);
    
-    let builder = new WeightedMetricResultBuilder(weightMap);
+    let builder = new WeightedMetricResultBuilder(new SimpleWeightResolver(weightMap));
 
     let firstBuilder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
