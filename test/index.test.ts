@@ -36,5 +36,13 @@ test("Test  get new result builder",()=>{
     }
 
 });
+test("test unique name from MetricManager",()=>{
+    const test="test";
+    for(let i=0;i<3;i++){
+        const expectedName=test+i;
+        const receivedName=MetricManager.getUniqueName(test);
+        expect(receivedName).toBe(expectedName);
+    }
+});
 
 

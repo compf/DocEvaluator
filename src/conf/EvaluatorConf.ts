@@ -63,7 +63,7 @@ export class EvaluatorConf {
     default_path_weight:number=1;
     constructor() {
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s),uniqueName:s })
+            this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s),uniqueName:MetricManager.getUniqueName(s) })
         }
     }
 
@@ -122,6 +122,7 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_PARSER) {
             conf.parser = JSON.parse(env.INPUT_PARSER)
         }
+      
 
 
     }

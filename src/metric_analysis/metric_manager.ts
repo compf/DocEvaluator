@@ -71,7 +71,19 @@ export namespace MetricManager {
 
        
     }
-   
+    const uniqueNameCountMap:Map<string,number>=new Map<string,number>();
+    export  function  getUniqueName(baseName:string):string{
+        if(uniqueNameCountMap.has(baseName)){
+            const newCount=uniqueNameCountMap.get(baseName)!+1;
+            uniqueNameCountMap.set(baseName,newCount);
+            return baseName+newCount;
+        }
+        else{
+            uniqueNameCountMap.set(baseName,0);
+            return baseName+"0";
+
+        }
+    }
     export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver| null): MetricResultBuilder {
         switch (builderName) {
             case "mean_builder":
