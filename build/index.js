@@ -28416,6 +28416,24 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_PARSER) {
             conf.parser = JSON.parse(process_1.env.INPUT_PARSER);
         }
+        if (process_1.env.INPUT_METRIC_RESULT_BUILDER) {
+            conf.metric_result_builder = JSON.parse(process_1.env.INPUT_METRIC_RESULT_BUILDER);
+        }
+        if (process_1.env.INPUT_SINGLE_FILE_RESULT_BUILDER) {
+            conf.single_file_result_builder = JSON.parse(process_1.env.INPUT_SINGLE_FILE_RESULT_BUILDER);
+        }
+        if (process_1.env.INPUT_FILES_RESULT_BUILDER) {
+            conf.files_result_builder = JSON.parse(process_1.env.INPUT_FILES_RESULT_BUILDER);
+        }
+        if (process_1.env.INPUT_PARSER) {
+            conf.parser = (process_1.env.INPUT_PARSER);
+        }
+        if (process_1.env.INPUT_PATH_WEIGHTS) {
+            conf.path_weights = JSON.parse(process_1.env.INPUT_PATH_WEIGHTS);
+        }
+        if (process_1.env.INPUT_DEFAULT_PATH_WEIGHT) {
+            conf.default_path_weight = parseFloat(process_1.env.INPUT_DEFAULT_PATH_WEIGHT);
+        }
     }
 }
 exports.EnvCommentConfLoader = EnvCommentConfLoader;
