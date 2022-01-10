@@ -5,10 +5,10 @@ import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
 /**
  * Defines metrics that consider the children of a hierarchical component
  */
-export abstract class ChildrenBasedMetric implements DocumentationAnalysisMetric{
- shallConsider(component: Component, params: any): boolean {
+export abstract class ChildrenBasedMetric extends DocumentationAnalysisMetric{
+ shallConsider(component: Component): boolean {
      return component instanceof HierarchicalComponent;
  }
- abstract analyze(component: Component, builder: MetricResultBuilder, params: any): void;
+ abstract analyze(component: Component, builder: MetricResultBuilder): void;
  
 }

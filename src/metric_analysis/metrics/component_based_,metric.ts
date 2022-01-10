@@ -5,9 +5,9 @@ import { DocumentationAnalysisMetric } from "./documentation_analysis_metric";
 /**
  * Defines metrics that only check the comment associated with the component
  */
-export abstract class ComponentBasedMetric implements DocumentationAnalysisMetric{
-    shallConsider(component: Component, params: any): boolean {
+export abstract class ComponentBasedMetric extends DocumentationAnalysisMetric{
+    shallConsider(component: Component): boolean {
         return !(component instanceof FileComponent);
     }
-    abstract analyze(component: Component, builder: MetricResultBuilder, params: any): void;
+    abstract analyze(component: Component, builder: MetricResultBuilder): void;
 }

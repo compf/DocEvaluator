@@ -29,7 +29,8 @@ test("test complex flesh metric",()=>{
     let res={path,root}
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    analyzer.analyze(res,new FleschMetric(),builder,MetricManager.getDefaultMetricParam("flesch"));
+    let params=MetricManager.getDefaultMetricParam("flesch");
+    analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,);
     let score=builder.getAggregatedResult().getResult();
     expect(score).toBeCloseTo(15.68);
 });
@@ -40,7 +41,9 @@ test("test easy flesh metric",()=>{
     let res={path,root}
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    analyzer.analyze(res,new FleschMetric(),builder,MetricManager.getDefaultMetricParam("flesch"));
+    let params=MetricManager.getDefaultMetricParam("flesch");
+
+    analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,);
     let score=builder.getAggregatedResult().getResult();
     expect(score).toBeCloseTo(85);
 });

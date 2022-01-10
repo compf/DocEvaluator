@@ -8,8 +8,10 @@ import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
  * This metric works the same as the simple comment present metric but ignores getter/setters
  */
 export class IgnoreGetterSetterMetric extends  SimpleCommentPresentMetric{
-    override shallConsider(component:Component,params:any):boolean{
-        if((!super.shallConsider(component,params))){
+    override shallConsider(component:Component):boolean{
+        let params=this.getParams();
+
+        if((!super.shallConsider(component))){
             return false;
         }
         else if(component instanceof MethodComponent){

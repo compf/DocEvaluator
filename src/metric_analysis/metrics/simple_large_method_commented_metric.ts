@@ -14,10 +14,11 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
     boundedGrowth(S: number, B0: number, k: number, l: number): number {
         return S - (S - B0) * Math.exp(-k * l);
     }
-    shallConsider(component: Component,params:any) {
-        return  super.shallConsider(component,params) && component instanceof MethodComponent;
+    shallConsider(component: Component) {
+        return  super.shallConsider(component) && component instanceof MethodComponent;
     }
-    analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {
+    analyze(component: Component, builder: MetricResultBuilder): void {
+        let params=this.getParams();
         let logMessages: LogMessage[] = [];
         let result = 0;
         if (component.getComment() == null) {

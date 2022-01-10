@@ -13,8 +13,8 @@ export class FileAnalyzer {
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result: ParseResult, analyzer: DocumentationAnalysisMetric, builder: MetricResultBuilder, params: any | undefined) {
-        this.analyzeComponent(parse_result.root, builder, analyzer, params);
+    analyze(parse_result: ParseResult, analyzer: DocumentationAnalysisMetric, builder: MetricResultBuilder) {
+        this.analyzeComponent(parse_result.root, builder, analyzer);
     }
     /**
      * 
@@ -22,11 +22,11 @@ export class FileAnalyzer {
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    private analyzeComponent(component: Component, builder: MetricResultBuilder, analyzer: DocumentationAnalysisMetric, params: any | undefined): void {
+    private analyzeComponent(component: Component, builder: MetricResultBuilder, analyzer: DocumentationAnalysisMetric): void {
         let ignoreTag=this.getIgnoreFlag(component);
         // Only analyze relevant component to this metric
-        if (analyzer.shallConsider(component,params) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {
-            analyzer.analyze(component, builder, params);
+        if (analyzer.shallConsider(component) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {
+            analyzer.analyze(component, builder);
         }
         /* Analyze the children of the component if it is a hierarchical one
         This will be done even if the parent was not considered because we don't want to miss
@@ -35,7 +35,7 @@ export class FileAnalyzer {
         if (component instanceof HierarchicalComponent && ignoreTag!=IgnoreTags.IGNORE_NODE) {
             let hierarchical = component as HierarchicalComponent;
             for (let c of hierarchical.getChildren()) {
-                this.analyzeComponent(c, builder, analyzer, params);
+                this.analyzeComponent(c, builder, analyzer);
             }
         }
 

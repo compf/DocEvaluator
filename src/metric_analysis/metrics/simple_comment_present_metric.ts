@@ -11,7 +11,7 @@ import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentati
  */
 export class SimpleCommentPresentMetric extends ComponentBasedMetric {
     
-    analyze(component: Component, builder: MetricResultBuilder, params: any | undefined): void {
+    analyze(component: Component, builder: MetricResultBuilder): void {
         let score = 0;
         let logMessages: LogMessage[] = []
         if (component.getComment() != null) {

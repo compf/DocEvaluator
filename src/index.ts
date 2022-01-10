@@ -23,9 +23,9 @@ function main(args: Array<string>) {
     const relevantFiles = traverser.getRelevantFiles();
 
     let weightMap=new Map<any,number>();
-    let metrics = conf.metrics;
-    for(let m of metrics){
-        weightMap.set(MetricManager.getMetric(m.metricName),m.weight);
+    let metrics = conf.metrics.map((m)=>MetricManager.createMetricByName(m.metricName,m.uniqueName,m.params));
+    for(let m of conf.metrics){
+        weightMap.set(m.uniqueName,m.weight);
     }
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new FileAnalyzer();
@@ -33,17 +33,14 @@ function main(args: Array<string>) {
     let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,weightMap);
     let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,weightMap)
 
-    for (let metricInformation of metrics) {
-        let params=MetricManager.getDefaultMetricParam(metricInformation.metricName);
-        Object.assign(params,metricInformation.params);
-
-        let metric = MetricManager.getMetric(metricInformation.metricName);
-        console.log("Using metric", metricInformation.metricName)
+    for (let metric of metrics) {
+        
+        console.log("Using metric", metric.getUniqueName())
         
         for (let relevantFile of relevantFiles) {
             var root: ParseResult = { root: parser.parse(relevantFile), path: relevantFile };
             console.log("Looking at " + root.path)
-            fileAnaylzer.analyze(root, metric, singleFileResultBuilder, params);
+            fileAnaylzer.analyze(root, metric, singleFileResultBuilder);
             let partialResult = singleFileResultBuilder.getAggregatedResult();
             console.log("Partial result", partialResult.getResult());
     

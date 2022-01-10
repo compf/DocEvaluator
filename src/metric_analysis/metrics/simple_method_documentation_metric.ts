@@ -11,10 +11,10 @@ import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentati
  * This metric checks whether the return value and all parameters of a method are documented
  */
 export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
-    shallConsider(component: Component,params:any) {
-        return super.shallConsider(component,params) &&  component instanceof MethodComponent;
+    shallConsider(component: Component) {
+        return super.shallConsider(component) &&  component instanceof MethodComponent;
     }
-    analyze(component: Component, builder: MetricResultBuilder, params: any): void {
+    analyze(component: Component, builder: MetricResultBuilder): void {
         let logMessages: LogMessage[] = [];
         let method = component as MethodComponent;
         let score = 0;

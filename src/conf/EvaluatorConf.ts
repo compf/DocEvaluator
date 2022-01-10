@@ -4,7 +4,7 @@ import fs from "fs";
 import { MetricManager } from "../metric_analysis/metric_manager";
 import { env } from "process";
 import { json } from "stream/consumers";
-const defaultMetrics = MetricManager.getMetricNames();
+const defaultMetrics = MetricManager.getAllImplementedMetricNames();
 const CONF_FILENAME = "comment_conf.json";
 
 /**
@@ -26,7 +26,7 @@ export class EvaluatorConf {
     /**
      * define all metrics and their respective weights here
      */
-    metrics: { weight: number, metricName: string, params: any }[] = [];
+    metrics: { weight: number, metricName: string, params: any,uniqueName:string }[] = [];
 
     /**
      * the global threshold that the average of all metrics should meet to pass the documentation check
@@ -55,7 +55,7 @@ export class EvaluatorConf {
 
     constructor() {
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s) })
+            this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s),uniqueName:s })
         }
     }
 

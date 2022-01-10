@@ -12,7 +12,8 @@ import {  MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
  * It returns the percentage of documented lines
  */
 export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
-    analyze(component: Component, builder: MetricResultBuilder, params: any): void {
+    analyze(component: Component, builder: MetricResultBuilder): void {
+        let params=this.getParams();
         let cls = component as HierarchicalComponent;
         let methods = cls.getChildren().filter((c) => c instanceof MethodComponent).map((c) => c as MethodComponent);
         let commentedLOC = 0;
@@ -37,8 +38,8 @@ export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
         let result = MIN_SCORE + (MAX_SCORE - MIN_SCORE) * perc;
         builder.processResult(new MetricResult(result, [], this));
     }
-    shallConsider(component: Component,params:any): boolean {
-        return super.shallConsider(component,params) && (component as HierarchicalComponent).getChildren().filter((c) => c instanceof MethodComponent).length > 0
+    shallConsider(component: Component,): boolean {
+        return super.shallConsider(component) && (component as HierarchicalComponent).getChildren().filter((c) => c instanceof MethodComponent).length > 0
     }
 
 }

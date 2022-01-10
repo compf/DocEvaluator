@@ -18,14 +18,7 @@ test("test empty class instanceof works", () => {
     expect(derive instanceof BaseClass).toBeTruthy();
     expect(derive instanceof DerivedClass).toBeTruthy();
 });
-test("Test MetricManager instancing works", () => {
-    let simple_comment = MetricManager.getMetric("simple_comment");
-    let simple_comment_name = MetricManager.getMetricName(simple_comment);
-    expect(simple_comment_name).toBe("simple_comment");
-    let second_instance = MetricManager.getMetric(simple_comment_name);
-    expect(second_instance).toBe(simple_comment);
 
-});
 test("Test  get new result builder",()=>{
     expect(MetricManager.getNewMetricResultBuilder("default_builder",null) instanceof MetricResultBuilder).toBeTruthy();
     expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder",new Map()) instanceof WeightedMedianResultBuilder).toBeTruthy();
@@ -37,17 +30,5 @@ test("Test  get new result builder",()=>{
     }
 
 });
-test("Test MetricManager aliasing works",()=>{
-    const alias_simple_comment="all_components";
-    const alias_method_fully_commented="params_return_documented";
 
-    expect(MetricManager.getMetric(alias_method_fully_commented )instanceof SimpleMethodDocumentationMetric).toBeTruthy();
-    try {
-        expect(MetricManager.getMetric(alias_simple_comment+"1"));
-        fail();
-    } catch (error) {
-        
-    }
-   
-});
 

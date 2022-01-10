@@ -29,7 +29,7 @@ class BiMap<K, V>{
     public values() {
         this.v_to_k.keys();
     }
-    public containsKey(key:K){
+    public containsKey(key: K) {
         return this.k_to_v.has(key);
     }
 }
@@ -40,25 +40,36 @@ export namespace MetricManager {
      * @returns the instance of the respective metric
      * @throws An error if key not present
      */
-    export function getMetric(metricName: string): DocumentationAnalysisMetric {
-        return allMetrics.getByKey(resolveMetricName(metricName))!!;
+    export function createMetricByName(metricName: string,uniqueName:string,params:any): DocumentationAnalysisMetric {
+        let instance=   new (allMetricTypes.getByKey(metricName))(uniqueName,params);
+        allMetrics.set(uniqueName,instance);
+        return instance;
     }
-    export function getMetricName(metric: DocumentationAnalysisMetric): string {
-        return allMetrics.getByValue(metric)
+    export function createMetricByType(type:new (name: string, params: any) => DocumentationAnalysisMetric,uniqueName:string,params:any): DocumentationAnalysisMetric {
+        let instance=   new (type)(uniqueName,params);
+        allMetrics.set(uniqueName,instance);
+        return instance;
     }
-    const allMetrics: BiMap<string, DocumentationAnalysisMetric> = new BiMap<string, DocumentationAnalysisMetric>();
+    export function getMetricName(type:new (name: string, params: any) => DocumentationAnalysisMetric):string{
+        return allMetricTypes.getByValue(type);
+    }
+    const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
+    const allMetricTypes:BiMap<string,new (name: string, params: any) => DocumentationAnalysisMetric>=new BiMap<string,new (name: string, params: any) => DocumentationAnalysisMetric>()
     function init() {
         // main metric names must be lower case
-        allMetrics.add("simple_comment", new SimpleCommentPresentMetric());
-        allMetrics.add("public_members_only", new SimplePublicMembersOnlyMetric());
-        allMetrics.add("large_method_commented", new SimpleLargeMethodCommentedMetric());
-        allMetrics.add("method_fully_documented", new SimpleMethodDocumentationMetric());
-        allMetrics.add("commented_lines_ratio", new CommentedLinesRatioMetric());
-        allMetrics.add("ignore_getters_setters", new IgnoreGetterSetterMetric());
-        allMetrics.add("flesch",new FleschMetric())
+        allMetricTypes.add("simple_comment", SimpleCommentPresentMetric);
+        allMetricTypes.add("public_members_only", SimplePublicMembersOnlyMetric);
+        allMetricTypes.add("large_method_commented", SimpleLargeMethodCommentedMetric);
+        allMetricTypes.add("method_fully_documented", SimpleMethodDocumentationMetric);
+        allMetricTypes.add("commented_lines_ratio", CommentedLinesRatioMetric);
+        allMetricTypes.add("ignore_getters_setters", IgnoreGetterSetterMetric);
+        allMetricTypes.add("flesch", FleschMetric)
+
+       
     }
-    export function getNewMetricResultBuilder(builderName:string, weightMap:Map<any,number>|null):MetricResultBuilder{
-        switch(builderName){
+   
+    export function getNewMetricResultBuilder(builderName: string, weightMap: Map<any, number> | null): MetricResultBuilder {
+        switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":
             case "default_builder":
@@ -77,43 +88,29 @@ export namespace MetricManager {
         }
         throw new Error("Could not identify ResultBuilder");
     }
-    function resolveMetricName(metricName:string):string{
-        if(allMetrics.containsKey(metricName.toLowerCase()))return metricName.toLowerCase();
-        for(let metric of Object.entries(aliases)){
-            if(metric[0]==metricName.toLowerCase() || metric[1].includes(metricName.toLowerCase())){
-                return metric[0];
-            }
-        }
-        throw new Error("Could not identify metric");
-    }
-    const aliases={
-        "simple_comment":["comment_present","all_members","all_components","simple_documentation_present","documentation_present","sc",SimpleCommentPresentMetric.name],
-        "public_members_only":["public_members","public_components","only_public","pmo",SimplePublicMembersOnlyMetric.name],
-        "large_method_commented":["punish_large_uncommented","punish_large_undocumented","lmc",SimpleLargeMethodCommentedMetric.name],
-        "method_fully_documented":["method_fully_commented","fully_documented","params_return_documented","params_return_commented","mfd",SimpleMethodDocumentationMetric.name],
-        "commented_lines_ratio":["ratio_commented_uncommented","ratio_documented_undocumented","clr",CommentedLinesRatioMetric.name],
-        "ignore_getters_setters":["getters_setters","ignore_properties","ignore_getter_setter","igs",IgnoreGetterSetterMetric.name],
-        "flesch":["flesch_metric","flesch_readability","flesch_readability_metric"]
-    }
+
+
 
     /**
      * 
      * @returns All metric names that are declared
      */
-    export function getMetricNames(): string[] {
+    export function getUsedMetricNames(): string[] {
         return Array.from(allMetrics.keys());
     }
+    export function getAllImplementedMetricNames():string[]{
+        return Array.from(allMetricTypes.keys());
+    }
     export function getDefaultMetricParam(metricName: string): any {
-        metricName=resolveMetricName(metricName);
-        switch(metricName){
+        switch (metricName) {
             case "large_method_commented":
-                return {ignoreLines:["", "{", "}"],k:0.2}
+                return { ignoreLines: ["", "{", "}"], k: 0.2 }
             case "commented_lines_ratio":
-                return {ignoreLines:["", "{", "}"]};
+                return { ignoreLines: ["", "{", "}"] };
             case "ignore_getters_setter":
-                return {getterPattern:"(get.*)|(is.*)",setterPattern:"set.*"};
+                return { getterPattern: "(get.*)|(is.*)", setterPattern: "set.*" };
             case "flesch":
-                return {considerTags:false};
+                return { considerTags: false };
             default:
                 return {}
         }
