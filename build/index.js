@@ -28364,7 +28364,7 @@ class EvaluatorConf {
          */
         this.default_path_weight = 1;
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), uniqueName: s });
+            this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), uniqueName: metric_manager_1.MetricManager.getUniqueName(s) });
         }
     }
 }
@@ -28846,6 +28846,19 @@ var MetricManager;
         allMetricTypes.add("ignore_getters_setters", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric);
         allMetricTypes.add("flesch", flesch_metric_1.FleschMetric);
     }
+    const uniqueNameCountMap = new Map();
+    function getUniqueName(baseName) {
+        if (uniqueNameCountMap.has(baseName)) {
+            const newCount = uniqueNameCountMap.get(baseName) + 1;
+            uniqueNameCountMap.set(baseName, newCount);
+            return baseName + newCount;
+        }
+        else {
+            uniqueNameCountMap.set(baseName, 0);
+            return baseName + "0";
+        }
+    }
+    MetricManager.getUniqueName = getUniqueName;
     function getNewMetricResultBuilder(builderName, weightResolver) {
         switch (builderName) {
             case "mean_builder":
