@@ -8527,7 +8527,7 @@ const RuleStartState_1 = __nccwpck_require__(3369);
 const RuleStopState_1 = __nccwpck_require__(2332);
 const RuleTransition_1 = __nccwpck_require__(551);
 const SetTransition_1 = __nccwpck_require__(223);
-const StarBlockStartState_1 = __nccwpck_require__(8262);
+const StarBlockStartState_1 = __nccwpck_require__(8173);
 const StarLoopbackState_1 = __nccwpck_require__(9055);
 const StarLoopEntryState_1 = __nccwpck_require__(8054);
 const Token_1 = __nccwpck_require__(4913);
@@ -18065,7 +18065,7 @@ exports.SimulatorState = SimulatorState;
 
 /***/ }),
 
-/***/ 8262:
+/***/ 8173:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -24054,7 +24054,7 @@ const XPathRuleElement_1 = __nccwpck_require__(6564);
 const XPathTokenAnywhereElement_1 = __nccwpck_require__(1873);
 const XPathTokenElement_1 = __nccwpck_require__(5076);
 const XPathWildcardAnywhereElement_1 = __nccwpck_require__(7051);
-const XPathWildcardElement_1 = __nccwpck_require__(2569);
+const XPathWildcardElement_1 = __nccwpck_require__(8262);
 /**
  * Represent a subset of XPath XML path syntax for use in identifying nodes in
  * parse trees.
@@ -25004,7 +25004,7 @@ exports.XPathWildcardAnywhereElement = XPathWildcardAnywhereElement;
 
 /***/ }),
 
-/***/ 2569:
+/***/ 8262:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -41635,9 +41635,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BaseParser = void 0;
-const antlr4ts_1 = __nccwpck_require__(9100);
 const fs_1 = __importDefault(__nccwpck_require__(7147));
-const antlr4ts_2 = __nccwpck_require__(9100);
 class BaseParser {
     /**
      * Parse the specified  parser using the parser of the derived class
@@ -41647,19 +41645,6 @@ class BaseParser {
     parse(filepath) {
         let input = fs_1.default.readFileSync(filepath).toString();
         return this.parseString(input, filepath);
-    }
-    /**
-     * Reads all tokens from the source code file
-     * @param content a string that contains valid source code
-     * @returns a CommonTokenStream that contains all read tokens
-     */
-    getTokens(content) {
-        let inputStream = antlr4ts_2.CharStreams.fromString(content);
-        const lexerType = this.getLexerType();
-        let lexer = new lexerType(inputStream);
-        let tokenStream = new antlr4ts_1.CommonTokenStream(lexer);
-        tokenStream.fill();
-        return tokenStream;
     }
 }
 exports.BaseParser = BaseParser;
@@ -41676,6 +41661,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JavadocParser = exports.JavaParser = void 0;
 const base_parser_1 = __nccwpck_require__(7778);
 var JavaLexer = (__nccwpck_require__(3383).JavaLexer);
+const antlr4ts_1 = __nccwpck_require__(9100);
 const JavaParser_1 = __nccwpck_require__(5142);
 const AbstractParseTreeVisitor_1 = __nccwpck_require__(1575);
 const structured_comment_1 = __nccwpck_require__(3794);
@@ -41690,6 +41676,18 @@ const file_component_1 = __nccwpck_require__(6199);
 //import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
 //import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
 class JavaParser extends base_parser_1.BaseParser {
+    /**
+    * Reads all tokens from the source code file
+    * @param content a string that contains valid source code
+    * @returns a CommonTokenStream that contains all read tokens
+    */
+    getTokens(content) {
+        let inputStream = antlr4ts_1.CharStreams.fromString(content);
+        let lexer = new JavaLexer(inputStream);
+        let tokenStream = new antlr4ts_1.CommonTokenStream(lexer);
+        tokenStream.fill();
+        return tokenStream;
+    }
     parseString(content, filepath) {
         let tokens = this.getTokens(content);
         tokens.fill();
@@ -41699,9 +41697,6 @@ class JavaParser extends base_parser_1.BaseParser {
         let rel = parser.compilationUnit();
         var res = visitor.visit(rel);
         return res;
-    }
-    getLexerType() {
-        return JavaLexer;
     }
 }
 exports.JavaParser = JavaParser;
