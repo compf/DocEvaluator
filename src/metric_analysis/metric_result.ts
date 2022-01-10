@@ -5,8 +5,8 @@ import { MetricResultBuilder } from "./metric_result_builder";
 export class MetricResult {
     private result: number;
     private logMessages: LogMessage[];
-    private creator: any;
-    constructor(res: number, msgs: LogMessage[], creator: any) {
+    private creator: string;
+    constructor(res: number, msgs: LogMessage[], creator: string) {
         this.result = res;
         this.logMessages = msgs;
         this.creator = creator;
@@ -31,7 +31,7 @@ export class MetricResult {
      * was created by a metric or is an aggregrated result by a builder
      * @returns 
      */
-    public getCreator(): any {
+    public getCreator(): string {
         return this.creator;
     }
 }

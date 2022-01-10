@@ -6,6 +6,7 @@ import { env } from "process";
 import { json } from "stream/consumers";
 const defaultMetrics = MetricManager.getAllImplementedMetricNames();
 const CONF_FILENAME = "comment_conf.json";
+export const MiniMatchConf = { dot: true, matchBase: true };
 
 /**
  * This class contains the configuration information for the tool
@@ -52,7 +53,14 @@ export class EvaluatorConf {
      * the parser to be used/ the programming languages to be analyzed
      */
     parser: string = "java";
-
+    /**
+     * An array of pairs of a glob pattern and a weight that will be used to make some paths more important for evaluation
+     */
+    path_weights:{path:string,weight:number}[]=[];
+    /**
+     * The default weight for a given path
+     */
+    default_path_weight:number=1;
     constructor() {
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s),uniqueName:s })

@@ -8,7 +8,7 @@ import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
-import { SimpleWeightResolver } from "./metric_analysis/weight_resolver";
+import { PathWeightResolver, SimpleWeightResolver } from "./metric_analysis/weight_resolver";
 const factory=new ParserFactory();
 function main(args: Array<string>) {
     var workingDirectory = "";
@@ -29,37 +29,38 @@ function main(args: Array<string>) {
         weightMap.set(MetricManager.getMetricByUniqueName(m.uniqueName),m.weight);
     }
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
-    let filesWeightResolver=null;
+    let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
     let parser = factory.createParser(conf.parser);
     let fileAnaylzer = new FileAnalyzer();
     let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,metricWeightResolver);
     let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,filesWeightResolver);
     let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,metricWeightResolver)
-
-    for (let metric of metrics) {
-        
-        console.log("Using metric", metric.getUniqueName())
-        
-        for (let relevantFile of relevantFiles) {
-            var root: ParseResult = { root: parser.parse(relevantFile), path: relevantFile };
-            console.log("Looking at " + root.path)
+    for (let relevantFile of relevantFiles)
+     {
+        var root: ParseResult = { root: parser.parse(relevantFile), path: relevantFile };
+        console.log("Looking at " + root.path)       
+        for (let metric of metrics)
+         {
+            console.log("Using metric", metric.getUniqueName())
+           
             fileAnaylzer.analyze(root, metric, singleFileResultBuilder);
-            let partialResult = singleFileResultBuilder.getAggregatedResult();
+            let partialResult = singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
             console.log("Partial result", partialResult.getResult());
     
-            allFilesResultBulder.processResult(partialResult);
+            metricBuilder.processResult(partialResult);
             singleFileResultBuilder.reset();
             console.log();
 
         }
+
         console.log();
-        let fileResult = allFilesResultBulder.getAggregatedResult();
-        allFilesResultBulder.reset();
-        metricBuilder.processResult(fileResult);
+        let metricResult = metricBuilder.getAggregatedResult(root.path);
+        metricBuilder.reset();
+        allFilesResultBulder.processResult(metricResult);
 
 
     }
-    let result = metricBuilder.getAggregatedResult();
+    let result = allFilesResultBulder.getAggregatedResult("");
     for (let log of result.getLogMessages()) {
         log.log();
     }

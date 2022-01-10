@@ -15,11 +15,11 @@ export class SimplePublicMembersOnlyMetric extends ComponentBasedMetric {
     }
     analyze(component: Component, builder: MetricResultBuilder): void {
         if (component.getComment() != null) {
-            builder.processResult(new MetricResult(MAX_SCORE, [], this))
+            builder.processResult(new MetricResult(MAX_SCORE, [], this.getUniqueName()))
         }
         else {
             let logMessage = new LogMessage("Public component " + component.getQualifiedName() + " is not documented");
-            builder.processResult(new MetricResult(MIN_SCORE, [logMessage], this))
+            builder.processResult(new MetricResult(MIN_SCORE, [logMessage], this.getUniqueName()))
         }
     }
 

@@ -10,10 +10,11 @@ export class WeightedMetricResultBuilder extends MetricResultBuilder {
         super();
         this.weightResolver = weightResolver;
     }
-    override getAggregatedResult(): MetricResult {
+    override getAggregatedResult(creator:string): MetricResult {
         let resultSum = 0;
         let weightSum = 0;
         let allLogMessages: LogMessage[] = [];
+        creator=this.resolveCreator(creator);
         for (let partialResult of this.resultList) {
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator())!;
             resultSum += (partialResult.getResult() * weight);
@@ -21,6 +22,6 @@ export class WeightedMetricResultBuilder extends MetricResultBuilder {
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
         }
         if (weightSum == 0) weightSum = 1;
-        return new MetricResult(resultSum / weightSum, allLogMessages, this.creator!!);
+        return new MetricResult(resultSum / weightSum, allLogMessages, creator);
     }
 }

@@ -2,8 +2,7 @@ import fs from "fs"
 import path from "path"
 import minimatch, { IMinimatch, Minimatch } from "minimatch"
 import chalk from "chalk";
-import { EvaluatorConf } from "../conf/EvaluatorConf";
-const MiniMatchConf = { dot: true, matchBase: true };
+import { EvaluatorConf ,MiniMatchConf} from "../conf/EvaluatorConf";
 
 
 

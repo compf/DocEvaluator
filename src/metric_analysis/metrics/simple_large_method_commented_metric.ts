@@ -50,7 +50,7 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
         else {
             result = MAX_SCORE;
         }
-        let metricResult = new MetricResult(result, logMessages, this);
+        let metricResult = new MetricResult(result, logMessages, this.getUniqueName());
         builder.processResult(metricResult);
 
     }

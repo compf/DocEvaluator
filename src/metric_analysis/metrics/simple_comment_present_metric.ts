@@ -21,7 +21,7 @@ export class SimpleCommentPresentMetric extends ComponentBasedMetric {
             score = MIN_SCORE;
             logMessages.push(new LogMessage(`Component ${component.getQualifiedName()} has no documentation`))
         }
-        builder.processResult(new MetricResult(score, logMessages, this));
+        builder.processResult(new MetricResult(score, logMessages, this.getUniqueName()));
     }
 
 

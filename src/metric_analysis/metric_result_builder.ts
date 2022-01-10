@@ -7,7 +7,6 @@ import { MetricResult } from "./metric_result";
  * the final average result can be obtained by getAggregatedResult 
  */
 export class MetricResultBuilder {
-    protected creator: DocumentationAnalysisMetric | MetricResultBuilder | null = null;
     protected resultList: MetricResult[] = []
     /**
      * Process a MetricResult in order to  aggregate them
@@ -16,24 +15,29 @@ export class MetricResultBuilder {
      */
     processResult(result: MetricResult) {
         this.resultList.push(result)
-        if (this.creator == null) {
-            this.creator = result.getCreator();
-        }
-        else if (this.creator != result.getCreator()) {
-            this.creator = this;
-        }
-
     }
     protected putAllLogMessages(src: LogMessage[], dest: LogMessage[]) {
         for (let item of src) {
             dest.push(item)
         }
     }
+    protected resolveCreator(creator:string):string{
+        let result_creator_set=new Set(this.resultList.map((r)=>r.getCreator()));
+        if(result_creator_set.size>1){
+            return creator;
+        }
+        else{
+            for(let s of result_creator_set){
+                return s;
+            }
+            return "";
+        }
+    }
     /**
      * Creates the aggegrated MetricResult 
      * @returns some kind of aggregation of all results that have been processed
      */
-    getAggregatedResult(): MetricResult {
+    getAggregatedResult(creator:string): MetricResult {
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
         if (numberResults == 0) numberResults = 1;
@@ -43,7 +47,7 @@ export class MetricResultBuilder {
             sum += partialResult.getResult();
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
         }
-        let result = new MetricResult(sum / numberResults, allLogMessages, this.creator!!);
+        let result = new MetricResult(sum / numberResults, allLogMessages, creator);
         return result;
     }
     /**

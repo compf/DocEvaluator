@@ -17,7 +17,7 @@ export class FleschMetric extends ComponentBasedMetric {
         let nlp_helper=new NLP_Helper();
         if(textsToConsider.length==0){
             logMessages.push(new LogMessage(component.getQualifiedName() + "has no documentation and could not be evaulated by the flesh formula"))
-            builder.processResult(new MetricResult(MIN_SCORE,logMessages,this));
+            builder.processResult(new MetricResult(MIN_SCORE,logMessages,this.getUniqueName()));
         }
         let sum = 0;
 
@@ -40,7 +40,7 @@ export class FleschMetric extends ComponentBasedMetric {
             logMessages.push(new LogMessage("The documentation of " +component.getQualifiedName()+" is a little bit too easy"))
 
         }
-        builder.processResult(new MetricResult(finalScore, [], this));
+        builder.processResult(new MetricResult(finalScore, [], this.getUniqueName()));
     }
     quadratic(root1: number, root2: number, a: number, x: number) {
         return a * (x - root1) * (x - root2);

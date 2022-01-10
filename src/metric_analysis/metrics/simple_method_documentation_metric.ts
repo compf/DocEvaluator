@@ -26,7 +26,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
             score = (paramsResult + nonExistingParamResult + returnExistingResult) / 3;
         }
-        builder.processResult(new MetricResult(score, logMessages, this));
+        builder.processResult(new MetricResult(score, logMessages, this.getUniqueName()));
 
     }
     private checkNonExistingDocumentedParameters(method: MethodComponent, logMessages: LogMessage[]): number {
