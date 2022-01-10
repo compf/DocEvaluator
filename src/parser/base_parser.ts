@@ -1,10 +1,5 @@
-import { ParseResult } from "./parse_result/parse_result";
 
-import antlr4 from 'antlr4';
-import { CommonTokenStream } from 'antlr4ts';
 import fs from 'fs';
-import { TokenStream } from 'antlr4ts';
-import { CharStream, CharStreams } from 'antlr4ts';
 import { HierarchicalComponent } from "./parse_result/hierarchical_component";
 export abstract class BaseParser {
 
@@ -24,25 +19,4 @@ export abstract class BaseParser {
      * @returns A object that represent the parse result
      */
     public abstract parseString(content: string, filepath: string | null): HierarchicalComponent;
-
-    /**
-     * Reads all tokens from the source code file
-     * @param content a string that contains valid source code
-     * @returns a CommonTokenStream that contains all read tokens
-     */
-    public getTokens<T>(content: string): CommonTokenStream {
-
-        let inputStream = CharStreams.fromString(content);
-        const lexerType = this.getLexerType();
-        let lexer = new lexerType(inputStream)
-        let tokenStream = new CommonTokenStream(lexer as any)
-        tokenStream.fill();
-        return tokenStream;
-    }
-    /**
-     * Returns the type of the lexer which will be used to simply instantiate the lexer
-     */
-    public abstract getLexerType<T>(): { new(stream: CharStream): T; }
-
-
 }

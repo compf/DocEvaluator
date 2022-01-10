@@ -23,6 +23,19 @@ import { FileComponent } from "./parse_result/file_component";
 
 
 export class JavaParser extends BaseParser {
+     /**
+     * Reads all tokens from the source code file
+     * @param content a string that contains valid source code
+     * @returns a CommonTokenStream that contains all read tokens
+     */
+      public getTokens<T>(content: string): CommonTokenStream {
+
+        let inputStream = CharStreams.fromString(content);
+        let lexer =  new JavaLexer(inputStream)
+        let tokenStream = new CommonTokenStream(lexer as any)
+        tokenStream.fill();
+        return tokenStream;
+    }
     override parseString(content: string, filepath: string | null): HierarchicalComponent {
         let tokens = this.getTokens(content);
         tokens.fill()
@@ -32,9 +45,6 @@ export class JavaParser extends BaseParser {
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as FileComponent;
         return res;
-    }
-    public override getLexerType<T>(): { new(stream: CharStream): T; } {
-        return JavaLexer;
     }
 
 }
