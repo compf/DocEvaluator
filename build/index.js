@@ -28364,7 +28364,7 @@ class EvaluatorConf {
          */
         this.default_path_weight = 1;
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metricName: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), uniqueName: metric_manager_1.MetricManager.getUniqueName(s) });
+            this.metrics.push({ weight: 1.0, metric_name: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), unique_name: metric_manager_1.MetricManager.getUniqueName(s) });
         }
     }
 }
@@ -28558,9 +28558,9 @@ function main(args) {
     let traverser = new directory_traverser_1.DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
     let weightMap = new Map();
-    let metrics = conf.metrics.map((m) => metric_manager_1.MetricManager.createMetricByName(m.metricName, m.uniqueName, m.params));
+    let metrics = conf.metrics.map((m) => metric_manager_1.MetricManager.createMetricByName(m.metric_name, m.unique_name, m.params));
     for (let m of conf.metrics) {
-        weightMap.set(metric_manager_1.MetricManager.getMetricByUniqueName(m.uniqueName), m.weight);
+        weightMap.set(metric_manager_1.MetricManager.getMetricByUniqueName(m.unique_name), m.weight);
     }
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
@@ -28827,23 +28827,37 @@ class BiMap {
 var MetricManager;
 (function (MetricManager) {
     /**
-     * Method to get metric based on key
+     * Method to create a metric based on key
      * @param metricName A valid metric name
-     * @returns the instance of the respective metric
+     * @returns the new instance of the respective metric
      * @throws An error if key not present
      */
     function createMetricByName(metricName, uniqueName, params) {
-        let instance = new (allMetricTypes.getByKey(metricName))(uniqueName, params);
+        let type = allMetricTypes.getByKey(metricName);
+        let instance = new type(uniqueName, params);
         allMetrics.set(uniqueName, instance);
         return instance;
     }
     MetricManager.createMetricByName = createMetricByName;
+    /**
+     * Creates a metric based on the given Metric Type constructor
+     * @param type A constructor that is given (uniquename:string,params:any) and return a valid Metric
+     * @param uniqueName the unique name of the new metric
+     * @param params the params for this metric
+     * @returns a valid metric instance
+     */
     function createMetricByType(type, uniqueName, params) {
-        let instance = new (type)(uniqueName, params);
+        let instance = new type(uniqueName, params);
         allMetrics.set(uniqueName, instance);
         return instance;
     }
     MetricManager.createMetricByType = createMetricByType;
+    /**
+     * return the metric name of a metric type
+     * @param type A constructor that is given (uniquename:string,params:any) and return a valid Metric
+     * @returns a valid metric name
+     * @throws a KeyError if this type is not a valid metric
+     */
     function getMetricName(type) {
         return allMetricTypes.getByValue(type);
     }
@@ -28855,7 +28869,6 @@ var MetricManager;
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
     function init() {
-        // main metric names must be lower case
         allMetricTypes.add("simple_comment", simple_comment_present_metric_1.SimpleCommentPresentMetric);
         allMetricTypes.add("public_members_only", simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric);
         allMetricTypes.add("large_method_commented", simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric);
@@ -28865,6 +28878,12 @@ var MetricManager;
         allMetricTypes.add("flesch", flesch_metric_1.FleschMetric);
     }
     const uniqueNameCountMap = new Map();
+    /**
+     * Creates a unique name by appending a number at the base name depending of how often this base name was used
+     * E.g. if the input is test, the first invocation would return test0, the second invocation returns test1
+     * @param baseName a bgase name where a number wil be attached so that an unique name can be created
+     * @returns an unique name
+     */
     function getUniqueName(baseName) {
         if (uniqueNameCountMap.has(baseName)) {
             const newCount = uniqueNameCountMap.get(baseName) + 1;
@@ -28877,6 +28896,12 @@ var MetricManager;
         }
     }
     MetricManager.getUniqueName = getUniqueName;
+    /**
+     * Creates a new MetricResultBuilder instance based on the given name
+     * @param builderName must be a valid name of a MetricResultBuilder (e.g. mean_builder or default_builder)
+     * @param weightResolver an object to assign a weight to a given string, if the builder doesn't need a resolver it will be ignored
+     * @returns a new MetricResultBuilder whose type depends on a the builderName
+     */
     function getNewMetricResultBuilder(builderName, weightResolver) {
         switch (builderName) {
             case "mean_builder":
@@ -28900,16 +28925,24 @@ var MetricManager;
     MetricManager.getNewMetricResultBuilder = getNewMetricResultBuilder;
     /**
      *
-     * @returns All metric names that are declared
+     * @returns All metric names that have been loaded from the config
      */
     function getUsedMetricNames() {
         return Array.from(allMetrics.keys());
     }
     MetricManager.getUsedMetricNames = getUsedMetricNames;
+    /**
+     * @return all metric names that are implemented regardless if or how often they are used currently
+     */
     function getAllImplementedMetricNames() {
         return Array.from(allMetricTypes.keys());
     }
     MetricManager.getAllImplementedMetricNames = getAllImplementedMetricNames;
+    /**
+     * Get the default params for each metric
+     * @param metricName a valid metric name
+     * @returns all default params or an empty object {} if metric name is not known or has no parameters
+     */
     function getDefaultMetricParam(metricName) {
         switch (metricName) {
             case "large_method_commented":
@@ -28959,9 +28992,9 @@ class MetricResult {
         return this.logMessages;
     }
     /**
-     * Getter for the creator of this result. This could be a metric or a builder depending on whether the result
-     * was created by a metric or is an aggregrated result by a builder
-     * @returns
+     * Getter for the creator of this result. This could be a unique name of a metric, a path if the result is
+     * of a file, or some other unique string
+     * @returns the unique creator name
      */
     getCreator() {
         return this.creator;
@@ -29002,6 +29035,13 @@ class MetricResultBuilder {
             dest.push(item);
         }
     }
+    /**
+     * Find the creator of all results
+     * If the there is only one unqie creator in the resultList, this will be the creator
+     * Otherwise the creator given will be used
+     * @param creator the creator to be used if there are different creators in the resultList
+     * @returns a valid creator
+     */
     resolveCreator(creator) {
         let result_creator_set = new Set(this.resultList.map((r) => r.getCreator()));
         if (result_creator_set.size > 1) {
@@ -29157,9 +29197,16 @@ class DocumentationAnalysisMetric {
         this.uniqueName = name;
         this.params = params;
     }
+    /**
+     * returns an unique name for this metric
+     */
     getUniqueName() {
         return this.uniqueName;
     }
+    /**
+     *
+     * @returns  the param of this metric instance
+     */
     getParams() {
         return this.params;
     }
@@ -29509,6 +29556,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.PathWeightResolver = exports.SimpleWeightResolver = void 0;
 const minimatch_1 = __nccwpck_require__(1445);
 const EvaluatorConf_1 = __nccwpck_require__(1382);
+/**
+ * Simple implementation of the WeightResolver by using a Map. Will be used for metrics
+ */
 class SimpleWeightResolver {
     constructor(weightMap) {
         this.weightMap = weightMap;
@@ -29518,6 +29568,9 @@ class SimpleWeightResolver {
     }
 }
 exports.SimpleWeightResolver = SimpleWeightResolver;
+/**
+ * Used to assign a unix path glob a weight, so that not every file needs to have a weight
+ */
 class PathWeightResolver {
     constructor(map, defaultWeight) {
         this.miniMatchMap = new Map();
