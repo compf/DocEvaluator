@@ -24,9 +24,9 @@ function main(args: Array<string>) {
     const relevantFiles = traverser.getRelevantFiles();
 
     let weightMap=new Map<any,number>();
-    let metrics = conf.metrics.map((m)=>MetricManager.createMetricByName(m.metricName,m.uniqueName,m.params));
+    let metrics = conf.metrics.map((m)=>MetricManager.createMetricByName(m.metric_name,m.unique_name,m.params));
     for(let m of conf.metrics){
-        weightMap.set(MetricManager.getMetricByUniqueName(m.uniqueName),m.weight);
+        weightMap.set(MetricManager.getMetricByUniqueName(m.unique_name),m.weight);
     }
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);

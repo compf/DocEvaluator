@@ -25,9 +25,16 @@ export  abstract class DocumentationAnalysisMetric {
         this.uniqueName=name;
         this.params=params;
     }
+    /**
+     * returns an unique name for this metric
+     */
     public getUniqueName():string{
         return this.uniqueName;
     }
+    /**
+     * 
+     * @returns  the param of this metric instance
+     */
     public getParams():any{
         return this.params;
     }

@@ -27,7 +27,7 @@ export class EvaluatorConf {
     /**
      * define all metrics and their respective weights here
      */
-    metrics: { weight: number, metricName: string, params: any,uniqueName:string }[] = [];
+    metrics: { weight: number, metric_name: string, params: any,unique_name:string }[] = [];
 
     /**
      * the global threshold that the average of all metrics should meet to pass the documentation check
@@ -63,7 +63,7 @@ export class EvaluatorConf {
     default_path_weight:number=1;
     constructor() {
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metricName: s, params: MetricManager.getDefaultMetricParam(s),uniqueName:MetricManager.getUniqueName(s) })
+            this.metrics.push({ weight: 1.0, metric_name: s, params: MetricManager.getDefaultMetricParam(s),unique_name:MetricManager.getUniqueName(s) })
         }
     }
 

@@ -27,9 +27,9 @@ export class MetricResult {
     }
 
     /**
-     * Getter for the creator of this result. This could be a metric or a builder depending on whether the result
-     * was created by a metric or is an aggregrated result by a builder
-     * @returns 
+     * Getter for the creator of this result. This could be a unique name of a metric, a path if the result is
+     * of a file, or some other unique string
+     * @returns the unique creator name
      */
     public getCreator(): string {
         return this.creator;

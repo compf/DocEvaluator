@@ -21,6 +21,13 @@ export class MetricResultBuilder {
             dest.push(item)
         }
     }
+    /**
+     * Find the creator of all results
+     * If the there is only one unqie creator in the resultList, this will be the creator
+     * Otherwise the creator given will be used
+     * @param creator the creator to be used if there are different creators in the resultList
+     * @returns a valid creator
+     */
     protected resolveCreator(creator:string):string{
         let result_creator_set=new Set(this.resultList.map((r)=>r.getCreator()));
         if(result_creator_set.size>1){
