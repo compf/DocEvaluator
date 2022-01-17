@@ -17,7 +17,7 @@ public class CommentCoherenceTest{
 
     }
     /**
-     * This method calculates the good correlation between comment and code
+     * This method calculates the good corelation between comment and code
      */
     public void goodCorrelationBetweenCommentCode(){
 

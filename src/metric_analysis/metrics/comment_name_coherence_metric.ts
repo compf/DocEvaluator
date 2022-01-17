@@ -5,6 +5,7 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { NLP_Helper } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
+interface ParamType{upper_theshold:number,lower_threshold:number,levenshtein_distance:number}
 /**
  * Measures the coherence of comment and name of component
  * This will ensure that a comment does not simply repeat the component's name but contains additional information
@@ -31,12 +32,12 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric{
 
     }
     public override processResult(result:number,messages:string[]):number{
-       
-        if(result==0){
+        let params=this.getParams() as ParamType;
+        if(result<=params.lower_threshold){
             messages.push("Comment has nothing to do with the name of the component. Consider rewriting the comment")
             return MIN_SCORE;
         }
-        else if(result>0.5){
+        else if(result>params.upper_theshold){
             messages.push("Comment and component name are very similar, consider adding more information");
             return MIN_SCORE
         }
@@ -44,7 +45,8 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric{
     }
     private nlp_helper=new NLP_Helper();
     private areSimilar(word1:string,word2:string):boolean{
-        return this.nlp_helper.levenshtein(word1,word2)<2;
+        let params=this.getParams() as ParamType;
+        return this.nlp_helper.levenshtein(word1,word2)<=params.levenshtein_distance;
     }
     public splitByNameConvention(name:string):string[]{
         let result:string[]=[];

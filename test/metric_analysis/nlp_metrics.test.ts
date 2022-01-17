@@ -74,7 +74,8 @@ test("test levenshtein",()=>{
     expect(res).toBe(1);
 });
 test("test method coherence",()=>{
-    let coherence=MetricManager.createMetricByType(CommentNameCoherenceMetric,"coherence1",null);
+    let params=MetricManager.getDefaultMetricParam(MetricManager.getMetricName(CommentNameCoherenceMetric));
+    let coherence=MetricManager.createMetricByType(CommentNameCoherenceMetric,"coherence1",params);
     let builder=new MetricResultBuilder();
     const path="testDir/CommentCoherenceTest.java";
     let root=new JavaParser().parse(path);

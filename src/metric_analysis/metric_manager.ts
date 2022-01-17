@@ -161,6 +161,8 @@ export namespace MetricManager {
                 return { getterPattern: "(get.*)|(is.*)", setterPattern: "set.*" };
             case "flesch":
                 return { considerTags: false };
+            case "comment_name_coherence":
+                return {upper_theshold:0.5,lower_threshold:0,levenshtein_distance:1};
             default:
                 return {}
         }
