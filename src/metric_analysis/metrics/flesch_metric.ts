@@ -5,6 +5,7 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { NLP_Helper, RelevantVariables } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MIN_SCORE } from "./documentation_analysis_metric";
+interface ParamsType{considerTags:boolean}
 /**
  * This metric calculate the flesh score which describes the readability of a text
  */
@@ -12,7 +13,7 @@ export class FleschMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder): void {
         let params=this.getParams();
 
-        let textsToConsider = this.getTextToConsider(component, params);
+        let textsToConsider = this.getTextToConsider(component, params as ParamsType);
         let logMessages:LogMessage[]=[]
         let nlp_helper=new NLP_Helper();
         if(textsToConsider.length==0){
@@ -51,7 +52,7 @@ export class FleschMetric extends ComponentBasedMetric {
     quadratic(root1: number, root2: number, a: number, x: number) {
         return a * (x - root1) * (x - root2);
     }
-    private getTextToConsider(component: Component, params: any): string[] {
+    private getTextToConsider(component: Component, params: ParamsType): string[] {
         let textsToConsider: string[] = [];
         if (component.getComment() != null) {
             if (component.getComment()?.getGeneralDescription() != null) {

@@ -5,7 +5,7 @@ import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ChildrenBasedMetric } from "./children_based_metric";
 import {  MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-
+interface ParamType{ignoreLines:string[]|undefined}
 /**
  * This metric calculates how many lines of the hierarchical component are covered by 
  * undocumented methods and how many lines are covered by documented methods.
@@ -13,7 +13,7 @@ import {  MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
  */
 export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder): void {
-        let params=this.getParams();
+        let params=this.getParams() as ParamType;
         let cls = component as HierarchicalComponent;
         let methods = cls.getChildren().filter((c) => c instanceof MethodComponent).map((c) => c as MethodComponent);
         let commentedLOC = 0;

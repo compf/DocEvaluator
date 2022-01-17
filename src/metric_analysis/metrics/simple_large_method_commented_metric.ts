@@ -5,7 +5,7 @@ import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-
+interface ParamsType{k:number,ignoreLines:string[]}
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer
@@ -19,7 +19,7 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
     }
     override processResult(lines: number, logMessages: string[]): number {
         let l = lines;
-        let params = this.getParams();
+        let params = this.getParams() as ParamsType;
         let result = 0;
         let k = params.k;
          /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
@@ -45,7 +45,7 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
         return result;
     }
     analyze(component: Component, builder: MetricResultBuilder): void {
-        let params = this.getParams();
+        let params = this.getParams() as ParamsType;
         let logMessages: string[] = [];
         let result = 0;
         if (component.getComment() == null) {
