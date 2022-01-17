@@ -1,6 +1,6 @@
 import nlp from "compromise";
 
-
+import Levenshtein from "levenshtein"
 export type RelevantVariables = { numSentences: number, numWords: number, numSyllables: number }
 
 /**
@@ -25,12 +25,19 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
         const numSyllables =this.countSyllables(s)
         return { numSentences, numWords, numSyllables };
     }
+    public getTokens(text:string):string[]{
+        return nlp.tokenize(text).termList().map((x)=>x.text);
+    }
+    
     private countSyllables(words:{text:string,syllables:string[]}[]):number{
         let sum=0;
         for(let z of words){
             sum+=z.syllables.length;
         }
         return sum;
+    }
+    public levenshtein(word1:string,word2:string):number{
+        return (new Levenshtein(word1,word2)).distance
     }
 
 }

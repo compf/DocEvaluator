@@ -1,7 +1,9 @@
 import nlp from "compromise";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
+import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
+import { MetricResult } from "../../src/metric_analysis/metric_result";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
 import { JavaParser } from "../../src/parser/java_parser";
@@ -47,6 +49,40 @@ test("test easy flesh metric",()=>{
     let score=builder.getAggregatedResult("").getResult();
     expect(score).toBeCloseTo(85);
 });
+test(" test get words",()=>{
+    let nlp_helper=new NLP_Helper();
+    const text="This is a text";
+    const splitted_expected=text.split(" ");
+    let splitted=nlp_helper.getTokens(text);
+    expect(splitted).toMatchObject(splitted_expected);
+});
+test("test name convention splitting",()=>{
 
+    let coherence=new CommentNameCoherenceMetric("",null);
+    let result=coherence.splitByNameConvention("getTest");
+    expect(result).toMatchObject(["get","Test"]);
+
+    result=coherence.splitByNameConvention("get_Test");
+    expect(result).toMatchObject(["get","Test"]);
+
+    result=coherence.splitByNameConvention("get_helloWorld");
+    expect(result).toMatchObject(["get","hello","World"]);
+});
+test("test levenshtein",()=>{
+    let nlp_helper=new NLP_Helper();
+    let res=nlp_helper.levenshtein("test","tast");
+    expect(res).toBe(1);
+});
+test("test method coherence",()=>{
+    let coherence=MetricManager.createMetricByType(CommentNameCoherenceMetric,"coherence1",null);
+    let builder=new MetricResultBuilder();
+    const path="testDir/CommentCoherenceTest.java";
+    let root=new JavaParser().parse(path);
+    let res={path,root}
+    let analyzer=new FileAnalyzer();
+    analyzer.analyze(res,coherence,builder);
+    let result=builder.getAggregatedResult("").getResult()
+    expect(result).toBe(60);
+});
 
 

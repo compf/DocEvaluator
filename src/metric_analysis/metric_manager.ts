@@ -11,6 +11,7 @@ import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
 import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
 import { FleschMetric } from "./metrics/flesch_metric";
 import { WeightResolver } from "./weight_resolver";
+import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -81,7 +82,7 @@ export namespace MetricManager {
         allMetricTypes.add("commented_lines_ratio", CommentedLinesRatioMetric);
         allMetricTypes.add("ignore_getters_setters", IgnoreGetterSetterMetric);
         allMetricTypes.add("flesch", FleschMetric)
-
+        allMetricTypes.add("comment_name_coherence",CommentNameCoherenceMetric)
        
     }
     const uniqueNameCountMap:Map<string,number>=new Map<string,number>();
