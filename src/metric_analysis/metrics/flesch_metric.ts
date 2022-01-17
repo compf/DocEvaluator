@@ -5,7 +5,7 @@ import { MetricResultBuilder } from "../metric_result_builder";
 import { NLP_Helper, RelevantVariables } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MIN_SCORE } from "./documentation_analysis_metric";
-interface ParamsType{considerTags:boolean}
+interface ParamsType{consider_tags:boolean}
 /**
  * This metric calculate the flesh score which describes the readability of a text
  */
@@ -58,7 +58,7 @@ export class FleschMetric extends ComponentBasedMetric {
             if (component.getComment()?.getGeneralDescription() != null) {
                 textsToConsider.push(component.getComment()?.getGeneralDescription()!);
             }
-            if (params.considerTags) {
+            if (params.consider_tags) {
                 for (let tag of component.getComment()?.getTags()!) {
                     if (tag.getDescription() != null)
                         textsToConsider.push(tag.getDescription()!);

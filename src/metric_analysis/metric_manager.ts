@@ -154,13 +154,13 @@ export namespace MetricManager {
     export function getDefaultMetricParam(metricName: string): any {
         switch (metricName) {
             case "large_method_commented":
-                return { ignoreLines: ["", "{", "}"], k: 0.2 }
+                return { ignore_lines: ["", "{", "}"], k: 0.2 }
             case "commented_lines_ratio":
-                return { ignoreLines: ["", "{", "}"] };
+                return { ignore_ines: ["", "{", "}"] };
             case "ignore_getters_setter":
-                return { getterPattern: "(get.*)|(is.*)", setterPattern: "set.*" };
+                return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*" };
             case "flesch":
-                return { considerTags: false };
+                return { consider_tags: false };
             case "comment_name_coherence":
                 return {upper_theshold:0.5,lower_threshold:0,levenshtein_distance:1};
             default:

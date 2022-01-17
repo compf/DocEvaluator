@@ -5,7 +5,7 @@ import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-interface ParamsType{k:number,ignoreLines:string[]}
+interface ParamsType{k:number,ignore_lines:string[]}
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer
@@ -49,7 +49,7 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
         let logMessages: string[] = [];
         let result = 0;
         if (component.getComment() == null) {
-            let ignoreLines = params.ignoreLines;
+            let ignoreLines = params.ignore_lines;
             let method = component as MethodComponent;
             let lines = method.getLinesOfCode(ignoreLines);
            

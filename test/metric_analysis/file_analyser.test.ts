@@ -51,7 +51,7 @@ test("test longer uncommented method", () => {
     let root = parser.parse(path);
     let builder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
-    let conf = { ignoreLines: ["", "{", "}"],k:0.2 }
+    let conf = { ignore_lines: ["", "{", "}"],k:0.2 }
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleLargeMethodCommentedMetric,"large_method_test",conf), builder);
     let result = builder.getAggregatedResult("");
 
@@ -75,7 +75,7 @@ test("test commented ratio metric", () => {
     let root = parser.parse(path);
     let builder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
-    let conf = { ignoreLines: ["", "{", "}"] }
+    let conf = { ignore_lines: ["", "{", "}"] }
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(CommentedLinesRatioMetric,"comment_line_ratio_test",conf), builder);
     let result = builder.getAggregatedResult("");
     expect(result.getResult()).toBe(50);

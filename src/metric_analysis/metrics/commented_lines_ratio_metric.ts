@@ -5,7 +5,7 @@ import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ChildrenBasedMetric } from "./children_based_metric";
 import {  MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-interface ParamType{ignoreLines:string[]|undefined}
+interface ParamType{ignore_lines:string[]|undefined}
 /**
  * This metric calculates how many lines of the hierarchical component are covered by 
  * undocumented methods and how many lines are covered by documented methods.
@@ -19,8 +19,8 @@ export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
         let commentedLOC = 0;
         let unCommentedLOC = 0;
         let ignoreLines = [""];
-        if (params != undefined && params.ignoreLines != undefined) {
-            ignoreLines = params.ignoreLines;
+        if (params != undefined && params.ignore_lines != undefined) {
+            ignoreLines = params.ignore_lines;
         }
         for (let method of methods) {
             let loc = method.getLinesOfCode(ignoreLines);
