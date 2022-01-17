@@ -41,7 +41,7 @@ Für einen Flesch-Score unter 70 wird eine quadratische Funktion verwendet, die 
 Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung von Flesch bei kurzen Texten, zum Beispiel aus nur einem Satz, stark fluktuiert. Außerdem ist die Bestimmung der Silbenzahl eines Wortes nicht immer trivial; bei der Entwicklung des Tools musste bei einem Austausch einer Bibliothekt die Testmethode angepasst werden, da das Wort \enquote{themselves} plötzlich drei statt zwei Silben hatte. Dies hängt natürlich auch von der Aussprache und somit von kulturellen Gegebenheiten ab. Dies gilt natürlich auch für Wörter und Sätze. 
 \subsubsection{Parameter}
 \begin{itemize}
-    \item \textit{considerTags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
+    \item \textit{consider\_tags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
 \end{itemize}
 \subsection{Metrik:Kohärenz zwischen Kommentar und Komponentenname}
 Die Dokumentation einer Komponente sollte einen Mehrwert bieten und nicht nur den Namen der Komponente wiederholen  Gleichzeitig sollte es einen Zusammenhang zwischen den Namen einer Komponente und dessen Dokumentation geben, da ansonsten keine gute Beziehung hergestellt werden kann\cite[S. 86-87]{Qualityanalysisofsourcecodecomments}. Um diese Beziehung mittels einer Metrik bewerten zu können, kann die Anzahl der Wörter bestimmt werden, die sowohl im Komponentennamen als auch in der Dokumentation auftauchen. Durch Division dieser Anzahl durch die Gesamtzahl der Wörter wird der \textbf{Koheränzkoeffizient} berechnet. Die Autoren in \cite[S. 86-87]{Qualityanalysisofsourcecodecomments} wenden diesen Koeffizienten nur auf Methodennamen an und vertreten die Auffassung, dass ein Koheränzkoeffizient von 0 bzw. über 0.5 auf eine schlechte Dokumentierung hindeuten, da im ersten Fall es keine Verbindung zwischen den Kommentar und der Komponente gibt und im zweiten Fall zu viele Gemeinsamkeiten existieren. Diese Metrik nutzt die ermittelten Ober- und Untergrenze des Koheränzkoeffizienten für alle Komponenten, da die Beschränkung auf Methoden nicht sinnvoll ist und auch andere Komponenten einen nicht repetitiven Kommentar haben sollten. Außerdem sind die Grenzen hier parametrisierbar, um die Handhabung der Metrik auf unterschiedliche Situationen zu erleichtern. Komponenten ohne Dokumentation werden hier vollstädnig ignoriert. 
@@ -81,7 +81,7 @@ Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und lä
  \subsubsection{Parameter}
  \begin{itemize}
      \item \textit{k} Die Wachstumsrate des beschränktes Wachstum
-     \item \textit{ignoreLines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
+     \item \textit{ignore\_lines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
  \end{itemize}
      
 
@@ -89,6 +89,6 @@ Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und lä
 Diese Metrik ist relativ ähnlich zu der vorherigen Metrik. Allerdings arbeitet diese Metrik auf dem Level von hierarchischen Komponenten (z. B. Klassen) und summiert die \ac{LOC} der dokumentierten und undokumentierten Methoden und ermittelt daraus den Anteil der dokumentierten \ac{LOC} an allen \ac{LOC}. Dadurch werden längere Methoden wichtiger als kürzere, wodurch undokumentierter Getter- oder Setter-Methoden nicht so negativ bewertet werden. In Unterschied zu der vorherigen Metrik werden auch kommentierte Methoden nach ihrer Länge bewertet, anstatt wie bei der vorherigen Metrik stets mit 100 Prozent. Dies hat den Vorteil, dass jede dokumentierte Methode anhand ihres Gewichts in puncto \ac{LOC} gewichtet wird und der Entwickler für viele dokumentierte Methoden, die in vielen Fällen mehrere Codezeilen lang sind, eher belohnt wird als bei der vorherigen Metrik. Allerdings sollte auch erwähnt werden, dass hierdurch lange Methoden, auch wenn diese kommentiert sind, positiv bewertet werden, was eindeutig gegen die Grundsätze aus \cite[S. 34]{martin2009clean} verstößt. Zudem sollte es klar sein, dass eine undokumentierte lange Methode wahrscheinlich unverständlicher ist als eine gleich lange dokumentierte Methode. Da diese beiden Methoden sich dann bei dieser Metrik ausgleichen, würde die Qualität der Softwaredokumentation nur unzureichend widergespiegelt werden.
   \subsubsection{Parameter}
   \begin{itemize}
-     \item \textit{ignoreLines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
+     \item \textit{ignore\_lines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
  \end{itemize}
  
