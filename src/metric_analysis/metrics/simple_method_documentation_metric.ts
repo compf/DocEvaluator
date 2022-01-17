@@ -26,7 +26,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
             score = (paramsResult + nonExistingParamResult + returnExistingResult) / 3;
         }
-        builder.processResult(new MetricResult(score, logMessages, this.getUniqueName()));
+       this.pushResult(builder,score,logMessages);
 
     }
     private checkNonExistingDocumentedParameters(method: MethodComponent, logMessages: LogMessage[]): number {
@@ -42,7 +42,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             }
             else {
                 let paramName = tag.getParam() ?? "Unnamed";
-                logMessages.push(new LogMessage("Parameter " + paramName + " is documented but has no matching method param"))
+                this.pushLogMessage(method,"Parameter " + paramName + " is documented but has no matching method param",logMessages)
             }
         }
         return matchingParamsCount / paramsTags.length * 100;
@@ -60,7 +60,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
                 matchingParamsCount++;
             }
             else {
-                logMessages.push(new LogMessage("Parameter " + param.name + " is not documented"))
+                this.pushLogMessage(method,"Parameter " + param.name + " is not documented",logMessages);
             }
         }
         return matchingParamsCount / method.getParams().length * 100;

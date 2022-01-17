@@ -1,11 +1,17 @@
 import { Component } from "../../parser/parse_result/component";
+import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { NLP_Helper } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-
+/**
+ * Measures the coherence of comment and name of component
+ * This will ensure that a comment does not simply repeat the component's name but contains additional information
+ * On the other hand comments that have nothing to do with the name will be punished
+ */
 export class CommentNameCoherenceMetric extends ComponentBasedMetric{
+
     analyze(component: Component, builder: MetricResultBuilder): void {
         if(component.getComment()==null || component.getComment()?.getGeneralDescription()==null)return;
         let componentNameWords=this.splitByNameConvention(component.getName());
@@ -19,13 +25,21 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric{
                 }
             }
         }
-        let result=this.mapResult(similarWordsCount/commentWords.length);
-        builder.processResult(new MetricResult(result,[],this.getUniqueName()));
+        let messages: string[]=[];
+        let result=this.processResult(similarWordsCount/commentWords.length,messages);
+       this.pushResult(builder,result,this.createLogMessages(messages,component));
 
     }
-    public mapResult(result:number):number{
-        if(result==0)return MIN_SCORE;
-        else if(result>0.5)return MIN_SCORE;
+    public override processResult(result:number,messages:string[]):number{
+       
+        if(result==0){
+            messages.push("Comment has nothing to do with the name of the component. Consider rewriting the comment")
+            return MIN_SCORE;
+        }
+        else if(result>0.5){
+            messages.push("Comment and component name are very similar, consider adding more information");
+            return MIN_SCORE
+        }
         else return MAX_SCORE;
     }
     private nlp_helper=new NLP_Helper();

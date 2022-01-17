@@ -36,7 +36,7 @@ export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
         }
         let perc = commentedLOC / (commentedLOC + unCommentedLOC);
         let result = MIN_SCORE + (MAX_SCORE - MIN_SCORE) * perc;
-        builder.processResult(new MetricResult(result, [], this.getUniqueName()));
+        this.pushResult(builder,this.processResult(result,[]),[]);
     }
     shallConsider(component: Component,): boolean {
         return super.shallConsider(component) && (component as HierarchicalComponent).getChildren().filter((c) => c instanceof MethodComponent).length > 0

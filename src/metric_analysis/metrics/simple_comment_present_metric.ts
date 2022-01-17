@@ -13,15 +13,20 @@ export class SimpleCommentPresentMetric extends ComponentBasedMetric {
     
     analyze(component: Component, builder: MetricResultBuilder): void {
         let score = 0;
-        let logMessages: LogMessage[] = []
+        let logMessages: string[] = []
         if (component.getComment() != null) {
             score = MAX_SCORE;
         }
         else {
             score = MIN_SCORE;
-            logMessages.push(new LogMessage(`Component ${component.getQualifiedName()} has no documentation`))
         }
-        builder.processResult(new MetricResult(score, logMessages, this.getUniqueName()));
+        score=this.processResult(score,logMessages)
+       this.pushResult(builder,score,this.createLogMessages(logMessages,component));
+    }
+    protected processResult(result: number, logMessages: string[]): number {
+        logMessages.push("Component has no documentation")
+        return result;
+
     }
 
 

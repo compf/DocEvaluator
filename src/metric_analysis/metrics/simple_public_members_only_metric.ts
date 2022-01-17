@@ -5,23 +5,21 @@ import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
+import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 /**
  * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
  */
-export class SimplePublicMembersOnlyMetric extends ComponentBasedMetric {
+export class SimplePublicMembersOnlyMetric extends SimpleCommentPresentMetric {
     shallConsider(component: Component) {
         return component.getComponentMetaInformation().isPublic() && super.shallConsider(component);
     }
-    analyze(component: Component, builder: MetricResultBuilder): void {
-        if (component.getComment() != null) {
-            builder.processResult(new MetricResult(MAX_SCORE, [], this.getUniqueName()))
-        }
-        else {
-            let logMessage = new LogMessage("Public component " + component.getQualifiedName() + " is not documented");
-            builder.processResult(new MetricResult(MIN_SCORE, [logMessage], this.getUniqueName()))
-        }
+    protected processResult(result: number, logMessages: string[]): number {
+        logMessages.push("Public member has no documentation");
+        return result;
+
     }
+  
 
 
 }

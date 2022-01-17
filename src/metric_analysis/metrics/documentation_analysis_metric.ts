@@ -1,4 +1,6 @@
 import { Component } from "../../parser/parse_result/component";
+import { LogMessage } from "../log_message";
+import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 
 export const MAX_SCORE = 100;
@@ -37,6 +39,22 @@ export  abstract class DocumentationAnalysisMetric {
      */
     public getParams():any{
         return this.params;
+    }
+    protected processResult(result:number,logMessages:string[]):number{
+        return result;
+    }
+    protected pushResult(builder:MetricResultBuilder,score:number,logMessages:LogMessage[]){
+        builder.processResult(new MetricResult(score,logMessages,this.getUniqueName()));
+    }
+    protected pushLogMessage(component:Component,msg:string,logMessages:LogMessage[]){
+        logMessages.push(new LogMessage(component.getQualifiedName() + "["+component.getLineNumber()+"]: "+msg));
+    }
+    protected createLogMessages(messages:string[],component:Component){
+        let result:LogMessage[]=[]
+        for(let msg of messages){
+            this.pushLogMessage(component,msg,result);
+        }
+        return result;
     }
 
 }

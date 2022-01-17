@@ -15,43 +15,50 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
         return S - (S - B0) * Math.exp(-k * l);
     }
     shallConsider(component: Component) {
-        return  super.shallConsider(component) && component instanceof MethodComponent;
+        return super.shallConsider(component) && component instanceof MethodComponent;
     }
-    analyze(component: Component, builder: MetricResultBuilder): void {
-        let params=this.getParams();
-        let logMessages: LogMessage[] = [];
+    override processResult(lines: number, logMessages: string[]): number {
+        let l = lines;
+        let params = this.getParams();
         let result = 0;
-        if (component.getComment() == null) {
-            let ignoreLines = params.ignoreLines;
-            let method = component as MethodComponent;
-            let lines = method.getLinesOfCode(ignoreLines);
-            /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
+        let k = params.k;
+         /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
             S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
             
             The function si plit into two parts, one part deals with relatively small function <10 lines and tolerates
             some code lines, the part above 10 lines massively punnishes large function by using a large k-Factor
             */
-            let l = lines;
-            let k = params.k;
-            if (l < 10) {
-                result = this.boundedGrowth(0.9 * MAX_SCORE, MAX_SCORE, k, l)
-            }
-            else {
-                /*
-                10 lines are subtracted because we are only interested in the excess lines
-                */
-                result = this.boundedGrowth(MIN_SCORE, 0.9 * MAX_SCORE, k, l - 10);
-            }
+        if (l < 10) {
+            result = this.boundedGrowth(0.9 * MAX_SCORE, MAX_SCORE, k, l)
+        }
+        else {
+            /*
+            10 lines are subtracted because we are only interested in the excess lines
+            */
+            result = this.boundedGrowth(MIN_SCORE, 0.9 * MAX_SCORE, k, l - 10);
+        }
 
-            if (result < 50) {
-                logMessages.push(new LogMessage(component.getName() + " is relatively long and has no documentation"));
-            }
+        if (result < 50) {
+            logMessages.push(" Method is relatively long and has no documentation")
+        
+        }
+        return result;
+    }
+    analyze(component: Component, builder: MetricResultBuilder): void {
+        let params = this.getParams();
+        let logMessages: string[] = [];
+        let result = 0;
+        if (component.getComment() == null) {
+            let ignoreLines = params.ignoreLines;
+            let method = component as MethodComponent;
+            let lines = method.getLinesOfCode(ignoreLines);
+           
+            result=this.processResult(lines,logMessages);
         }
         else {
             result = MAX_SCORE;
         }
-        let metricResult = new MetricResult(result, logMessages, this.getUniqueName());
-        builder.processResult(metricResult);
+       this.pushResult(builder,result,this.createLogMessages(logMessages,component));
 
     }
 

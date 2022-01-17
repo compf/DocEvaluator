@@ -24,12 +24,18 @@ export class FleschMetric extends ComponentBasedMetric {
         for (let text of textsToConsider) {
             sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n","")));
         }
+        let msgs:string[]=[];
         let score = sum / textsToConsider.length;
-        let finalScore = 0;
+        let finalScore = this.processResult(score,msgs);
+        
+        this.pushResult(builder,finalScore,this.createLogMessages(msgs,component))
+    }
+    public override  processResult(score: number,msgs:string[]): number {
+        let finalScore=0;
         if (score <= 70) {
             finalScore = this.quadratic(0, 140, -1 / 49, score);
             if(score<40){
-                logMessages.push(new LogMessage("The documentation of " +component.getQualifiedName()+" seems to be very difficult. Consider rewriting it"))
+                msgs.push("The documentation seems to be very hard to read. Consider rewriting it");
             }
         }
         else if(score>70 && score <100){
@@ -37,10 +43,10 @@ export class FleschMetric extends ComponentBasedMetric {
         }
         else {
             finalScore=85;
-            logMessages.push(new LogMessage("The documentation of " +component.getQualifiedName()+" is a little bit too easy"))
+            msgs.push("The documentation is a little bit too easy");
 
         }
-        builder.processResult(new MetricResult(finalScore, [], this.getUniqueName()));
+        return finalScore
     }
     quadratic(root1: number, root2: number, a: number, x: number) {
         return a * (x - root1) * (x - root2);
