@@ -29236,10 +29236,14 @@ exports.ChildrenBasedMetric = ChildrenBasedMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommentNameCoherenceMetric = void 0;
-const metric_result_1 = __nccwpck_require__(6673);
 const NLP_Helper_1 = __nccwpck_require__(2396);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+/**
+ * Measures the coherence of comment and name of component
+ * This will ensure that a comment does not simply repeat the component's name but contains additional information
+ * On the other hand comments that have nothing to do with the name will be punished
+ */
 class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor() {
         super(...arguments);
@@ -29261,14 +29265,19 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
                 }
             }
         }
-        let result = this.mapResult(similarWordsCount / commentWords.length);
-        builder.processResult(new metric_result_1.MetricResult(result, [], this.getUniqueName()));
+        let messages = [];
+        let result = this.processResult(similarWordsCount / commentWords.length, messages);
+        this.pushResult(builder, result, this.createLogMessages(messages, component));
     }
-    mapResult(result) {
-        if (result == 0)
+    processResult(result, messages) {
+        if (result == 0) {
+            messages.push("Comment has nothing to do with the name of the component. Consider rewriting the comment");
             return documentation_analysis_metric_1.MIN_SCORE;
-        else if (result > 0.5)
+        }
+        else if (result > 0.5) {
+            messages.push("Comment and component name are very similar, consider adding more information");
             return documentation_analysis_metric_1.MIN_SCORE;
+        }
         else
             return documentation_analysis_metric_1.MAX_SCORE;
     }
@@ -29312,7 +29321,6 @@ exports.CommentNameCoherenceMetric = CommentNameCoherenceMetric;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommentedLinesRatioMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
-const metric_result_1 = __nccwpck_require__(6673);
 const children_based_metric_1 = __nccwpck_require__(1706);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 /**
@@ -29345,7 +29353,7 @@ class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMet
         }
         let perc = commentedLOC / (commentedLOC + unCommentedLOC);
         let result = documentation_analysis_metric_1.MIN_SCORE + (documentation_analysis_metric_1.MAX_SCORE - documentation_analysis_metric_1.MIN_SCORE) * perc;
-        builder.processResult(new metric_result_1.MetricResult(result, [], this.getUniqueName()));
+        this.pushResult(builder, this.processResult(result, []), []);
     }
     shallConsider(component) {
         return super.shallConsider(component) && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
@@ -29379,12 +29387,14 @@ exports.ComponentBasedMetric = ComponentBasedMetric;
 /***/ }),
 
 /***/ 5830:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentationAnalysisMetric = exports.MIN_SCORE = exports.MAX_SCORE = void 0;
+const log_message_1 = __nccwpck_require__(4938);
+const metric_result_1 = __nccwpck_require__(6673);
 exports.MAX_SCORE = 100;
 exports.MIN_SCORE = 0;
 /**
@@ -29407,6 +29417,22 @@ class DocumentationAnalysisMetric {
      */
     getParams() {
         return this.params;
+    }
+    processResult(result, logMessages) {
+        return result;
+    }
+    pushResult(builder, score, logMessages) {
+        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
+    }
+    pushLogMessage(component, msg, logMessages) {
+        logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "[" + component.getLineNumber() + "]: " + msg));
+    }
+    createLogMessages(messages, component) {
+        let result = [];
+        for (let msg of messages) {
+            this.pushLogMessage(component, msg, result);
+        }
+        return result;
     }
 }
 exports.DocumentationAnalysisMetric = DocumentationAnalysisMetric;
@@ -29443,12 +29469,17 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         for (let text of textsToConsider) {
             sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n", "")));
         }
+        let msgs = [];
         let score = sum / textsToConsider.length;
+        let finalScore = this.processResult(score, msgs);
+        this.pushResult(builder, finalScore, this.createLogMessages(msgs, component));
+    }
+    processResult(score, msgs) {
         let finalScore = 0;
         if (score <= 70) {
             finalScore = this.quadratic(0, 140, -1 / 49, score);
             if (score < 40) {
-                logMessages.push(new log_message_1.LogMessage("The documentation of " + component.getQualifiedName() + " seems to be very difficult. Consider rewriting it"));
+                msgs.push("The documentation seems to be very hard to read. Consider rewriting it");
             }
         }
         else if (score > 70 && score < 100) {
@@ -29456,9 +29487,9 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         }
         else {
             finalScore = 85;
-            logMessages.push(new log_message_1.LogMessage("The documentation of " + component.getQualifiedName() + " is a little bit too easy"));
+            msgs.push("The documentation is a little bit too easy");
         }
-        builder.processResult(new metric_result_1.MetricResult(finalScore, [], this.getUniqueName()));
+        return finalScore;
     }
     quadratic(root1, root2, a, x) {
         return a * (x - root1) * (x - root2);
@@ -29546,8 +29577,6 @@ exports.IgnoreGetterSetterMetric = IgnoreGetterSetterMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimpleCommentPresentMetric = void 0;
-const log_message_1 = __nccwpck_require__(4938);
-const metric_result_1 = __nccwpck_require__(6673);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 /**
@@ -29562,9 +29591,13 @@ class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBase
         }
         else {
             score = documentation_analysis_metric_1.MIN_SCORE;
-            logMessages.push(new log_message_1.LogMessage(`Component ${component.getQualifiedName()} has no documentation`));
         }
-        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
+        score = this.processResult(score, logMessages);
+        this.pushResult(builder, score, this.createLogMessages(logMessages, component));
+    }
+    processResult(result, logMessages) {
+        logMessages.push("Component has no documentation");
+        return result;
     }
 }
 exports.SimpleCommentPresentMetric = SimpleCommentPresentMetric;
@@ -29580,8 +29613,6 @@ exports.SimpleCommentPresentMetric = SimpleCommentPresentMetric;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimpleLargeMethodCommentedMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
-const log_message_1 = __nccwpck_require__(4938);
-const metric_result_1 = __nccwpck_require__(6673);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 /**
@@ -29595,6 +29626,31 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
     shallConsider(component) {
         return super.shallConsider(component) && component instanceof method_component_1.MethodComponent;
     }
+    processResult(lines, logMessages) {
+        let l = lines;
+        let params = this.getParams();
+        let result = 0;
+        let k = params.k;
+        /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
+           S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
+           
+           The function si plit into two parts, one part deals with relatively small function <10 lines and tolerates
+           some code lines, the part above 10 lines massively punnishes large function by using a large k-Factor
+           */
+        if (l < 10) {
+            result = this.boundedGrowth(0.9 * documentation_analysis_metric_1.MAX_SCORE, documentation_analysis_metric_1.MAX_SCORE, k, l);
+        }
+        else {
+            /*
+            10 lines are subtracted because we are only interested in the excess lines
+            */
+            result = this.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, 0.9 * documentation_analysis_metric_1.MAX_SCORE, k, l - 10);
+        }
+        if (result < 50) {
+            logMessages.push(" Method is relatively long and has no documentation");
+        }
+        return result;
+    }
     analyze(component, builder) {
         let params = this.getParams();
         let logMessages = [];
@@ -29603,32 +29659,12 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
             let ignoreLines = params.ignoreLines;
             let method = component;
             let lines = method.getLinesOfCode(ignoreLines);
-            /* calculating the result of the metric as limited growth function B(l)=S-(S-B(0))*e^(k*l)
-            S ist the minimum score, B(0) is the max score, k is a factor that the metric user can choose
-            
-            The function si plit into two parts, one part deals with relatively small function <10 lines and tolerates
-            some code lines, the part above 10 lines massively punnishes large function by using a large k-Factor
-            */
-            let l = lines;
-            let k = params.k;
-            if (l < 10) {
-                result = this.boundedGrowth(0.9 * documentation_analysis_metric_1.MAX_SCORE, documentation_analysis_metric_1.MAX_SCORE, k, l);
-            }
-            else {
-                /*
-                10 lines are subtracted because we are only interested in the excess lines
-                */
-                result = this.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, 0.9 * documentation_analysis_metric_1.MAX_SCORE, k, l - 10);
-            }
-            if (result < 50) {
-                logMessages.push(new log_message_1.LogMessage(component.getName() + " is relatively long and has no documentation"));
-            }
+            result = this.processResult(lines, logMessages);
         }
         else {
             result = documentation_analysis_metric_1.MAX_SCORE;
         }
-        let metricResult = new metric_result_1.MetricResult(result, logMessages, this.getUniqueName());
-        builder.processResult(metricResult);
+        this.pushResult(builder, result, this.createLogMessages(logMessages, component));
     }
 }
 exports.SimpleLargeMethodCommentedMetric = SimpleLargeMethodCommentedMetric;
@@ -29645,8 +29681,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimpleMethodDocumentationMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
 const structured_comment_1 = __nccwpck_require__(4048);
-const log_message_1 = __nccwpck_require__(4938);
-const metric_result_1 = __nccwpck_require__(6673);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 /**
@@ -29668,7 +29702,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             let returnExistingResult = returnExisting ? documentation_analysis_metric_1.MAX_SCORE : documentation_analysis_metric_1.MIN_SCORE;
             score = (paramsResult + nonExistingParamResult + returnExistingResult) / 3;
         }
-        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
+        this.pushResult(builder, score, logMessages);
     }
     checkNonExistingDocumentedParameters(method, logMessages) {
         var _a;
@@ -29684,7 +29718,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             }
             else {
                 let paramName = (_a = tag.getParam()) !== null && _a !== void 0 ? _a : "Unnamed";
-                logMessages.push(new log_message_1.LogMessage("Parameter " + paramName + " is documented but has no matching method param"));
+                this.pushLogMessage(method, "Parameter " + paramName + " is documented but has no matching method param", logMessages);
             }
         }
         return matchingParamsCount / paramsTags.length * 100;
@@ -29701,7 +29735,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
                 matchingParamsCount++;
             }
             else {
-                logMessages.push(new log_message_1.LogMessage("Parameter " + param.name + " is not documented"));
+                this.pushLogMessage(method, "Parameter " + param.name + " is not documented", logMessages);
             }
         }
         return matchingParamsCount / method.getParams().length * 100;
@@ -29719,25 +29753,17 @@ exports.SimpleMethodDocumentationMetric = SimpleMethodDocumentationMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimplePublicMembersOnlyMetric = void 0;
-const log_message_1 = __nccwpck_require__(4938);
-const metric_result_1 = __nccwpck_require__(6673);
-const component_based__metric_1 = __nccwpck_require__(5165);
-const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+const simple_comment_present_metric_1 = __nccwpck_require__(4913);
 /**
  * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
  */
-class SimplePublicMembersOnlyMetric extends component_based__metric_1.ComponentBasedMetric {
+class SimplePublicMembersOnlyMetric extends simple_comment_present_metric_1.SimpleCommentPresentMetric {
     shallConsider(component) {
         return component.getComponentMetaInformation().isPublic() && super.shallConsider(component);
     }
-    analyze(component, builder) {
-        if (component.getComment() != null) {
-            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MAX_SCORE, [], this.getUniqueName()));
-        }
-        else {
-            let logMessage = new log_message_1.LogMessage("Public component " + component.getQualifiedName() + " is not documented");
-            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, [logMessage], this.getUniqueName()));
-        }
+    processResult(result, logMessages) {
+        logMessages.push("Public member has no documentation");
+        return result;
     }
 }
 exports.SimplePublicMembersOnlyMetric = SimplePublicMembersOnlyMetric;
