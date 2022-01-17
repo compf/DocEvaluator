@@ -29069,13 +29069,15 @@ var MetricManager;
     function getDefaultMetricParam(metricName) {
         switch (metricName) {
             case "large_method_commented":
-                return { ignoreLines: ["", "{", "}"], k: 0.2 };
+                return { ignore_lines: ["", "{", "}"], k: 0.2 };
             case "commented_lines_ratio":
-                return { ignoreLines: ["", "{", "}"] };
+                return { ignore_ines: ["", "{", "}"] };
             case "ignore_getters_setter":
-                return { getterPattern: "(get.*)|(is.*)", setterPattern: "set.*" };
+                return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*" };
             case "flesch":
-                return { considerTags: false };
+                return { consider_tags: false };
+            case "comment_name_coherence":
+                return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };
             default:
                 return {};
         }
@@ -29270,11 +29272,12 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
         this.pushResult(builder, result, this.createLogMessages(messages, component));
     }
     processResult(result, messages) {
-        if (result == 0) {
+        let params = this.getParams();
+        if (result <= params.lower_threshold) {
             messages.push("Comment has nothing to do with the name of the component. Consider rewriting the comment");
             return documentation_analysis_metric_1.MIN_SCORE;
         }
-        else if (result > 0.5) {
+        else if (result > params.upper_theshold) {
             messages.push("Comment and component name are very similar, consider adding more information");
             return documentation_analysis_metric_1.MIN_SCORE;
         }
@@ -29282,7 +29285,8 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
             return documentation_analysis_metric_1.MAX_SCORE;
     }
     areSimilar(word1, word2) {
-        return this.nlp_helper.levenshtein(word1, word2) < 2;
+        let params = this.getParams();
+        return this.nlp_helper.levenshtein(word1, word2) <= params.levenshtein_distance;
     }
     splitByNameConvention(name) {
         let result = [];
@@ -29336,8 +29340,8 @@ class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMet
         let commentedLOC = 0;
         let unCommentedLOC = 0;
         let ignoreLines = [""];
-        if (params != undefined && params.ignoreLines != undefined) {
-            ignoreLines = params.ignoreLines;
+        if (params != undefined && params.ignore_lines != undefined) {
+            ignoreLines = params.ignore_lines;
         }
         for (let method of methods) {
             let loc = method.getLinesOfCode(ignoreLines);
@@ -29501,7 +29505,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
             if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
                 textsToConsider.push((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
             }
-            if (params.considerTags) {
+            if (params.consider_tags) {
                 for (let tag of (_c = component.getComment()) === null || _c === void 0 ? void 0 : _c.getTags()) {
                     if (tag.getDescription() != null)
                         textsToConsider.push(tag.getDescription());
@@ -29552,14 +29556,14 @@ class IgnoreGetterSetterMetric extends simple_comment_present_metric_1.SimpleCom
     }
     isGetter(component, params) {
         let name = component.getName();
-        let nameValid = name.match(params.getterPattern) != null;
+        let nameValid = name.match(params.getter_pattern) != null;
         let noParameter = component.getParams().length == 0;
         let hasReturnType = component.getReturnType() != "void";
         return nameValid && noParameter && hasReturnType;
     }
     isSetter(component, params) {
         let name = component.getName();
-        let nameValid = name.match(params.setterPattern) != null;
+        let nameValid = name.match(params.setter_pattern) != null;
         let oneParameter = component.getParams().length == 1;
         let hasNoReturnType = component.getReturnType() == "void";
         return nameValid && oneParameter && hasNoReturnType;
@@ -29656,7 +29660,7 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
         let logMessages = [];
         let result = 0;
         if (component.getComment() == null) {
-            let ignoreLines = params.ignoreLines;
+            let ignoreLines = params.ignore_lines;
             let method = component;
             let lines = method.getLinesOfCode(ignoreLines);
             result = this.processResult(lines, logMessages);
