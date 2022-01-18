@@ -17,14 +17,88 @@ Außerdem werden in der abstrakten Repräsentation die Vererbung etwas vereinfac
 In anderen Fällen gibt es jedoch viele Gemeinsamkeiten zwischen objektorientierten Programmiersprachen; so gibt es in  allen relevanten Sprachen Klassen, Methoden und Felder, die alle einen Namen haben. Des Weiteren haben Methoden und Felder einen (Rückgabe-)Type und Methoden besitzen Parameter, die ihrerseits durch einen Namen und einen Typen definiert sind. Einige Sprachen sind zwar nicht stark typisiert, jedoch kann für nicht bekannte Datentypen ein Alias wie \enquote{Any} oder  \enquote{Object} verwendet werden.  Zudem sind viele Komponenten hierarchisch; in den meisten Sprachen können beispielsweise Klassen andere Klassen enthalten, sodass diese abstrakte Struktur diese Tatsache berücksichtigen müsste. 
 
 Um dennoch sprachspezifische Funktionen anbieten zu können, besitzt jede Komponente ein Feld mit dem Typen \textit{ComponentMetaInformation}, das wie oben erwähnt die Information enthält, ob eine Komponente als öffentlich angesehen werden soll. Dieser Typ, welches eine Schnittstelle ist, kann von einer Klasse implementiert werden, um Parser für andere Programmiersprachen die Möglichkeit zu geben, zusätzliche sprachspezifische Informationen zu speichern. Beim Java-Parser wird diese Funktion beispielsweise genutzt, um zu speichern welche \enquote{checked} Ausnahmen eine Methode werfen kann, sodass später ein Vergleich mit der Javadoc möglich ist. Die Schnittstelle enthält nur die Anforderung, eine \textit{isPublic}-Methode anzubieten und kann daher für viele andere objektorientierte Programmiersprache Informationen speichern, die für einige Metriken eventuell nützlich sind. 
+ \clearpage
+ \begin{figure}[ht!]
+ \begin{tikzpicture}
+ \pgfmathsetlengthmacro\breite{6cm}
+\pgfmathsetlengthmacro\hoehe{2.567cm}
+\pgfmathsetlengthmacro\InnerSep{0.4cm}
+\node[draw,
+anchor=center, 
+inner sep=0pt, 
+minimum width=5cm, text width=6cm-\InnerSep,
+align=justify,
+minimum height=\hoehe
+] (java) {
+  \hspace*{0.1cm}\textbf{public} \textbf{class} Main\{.\newline 
+     \hspace*{0.5cm}\textbf{private} \textbf{int} test(\textbf{int} a)\{\newline
+    \hspace*{0.5cm}\}\newline
+\hspace*{0.1cm}\}
 
-Abbildung \ref{fig:uml_parsing} gibt einen Überblick über die Klassen, die im Arbeitspaket \enquote{Parsing} verwendet wurden.
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/uml/parsing.png}
-    \caption{UML-Diagramm mit allen wichtigen Klassen für das Parsen}
-    \label{fig:uml_parsing}
-\end{figure}
+};
+\node[draw,text width=5.5cm, left = of java](python){
+\textbf{class} Main:\newline
+     \hspace*{0.5cm}\textbf{def} \_\_test(a:\textbf{int}): -> \textbf{int}\newline
+         \hspace*{1cm}pass
+
+};
+\draw[line width=0.05cm] (python) -- (-4,-2.5) ;
+\draw [line width=0.05cm](java) -- (-4,-2.5);
+\draw[->,thick,line width=0.05cm] (-4,-2.5) -- (-4,-3.5);
+\draw [] (-9,-3.5) rectangle(4,-16);
+\begin{scope} {0,-10}
+       \begin{object}[text width=8cm]{fileObj}{-4,-4}
+        \instanceOf{FileComponent}
+        \attribute{name = "filepath"}
+        \attribute{parent = null}
+        \attribute{children={[}classObj{]}}
+      \end{object}
+      \begin{object}[text width=8cm]{classObj}{-4,-8 }
+        \instanceOf{ClassComponent}
+        \attribute{name="Main"}
+        \attribute{parent=fileObj}
+        \attribute{children={[}methodObj{]}}
+          \attribute{metaInformation=meta}
+      \end{object}
+    \begin{object}[text width=8cm]{methodObj}{-4,-12}
+        \instanceOf{MethodComponent}
+        \attribute{name="test"}
+        \attribute{parent=classObj}
+        \attribute{params={[}paramsObj{]}}
+        \attribute{metaInformation=meta2}
+        \attribute{returnType=int}
+      \end{object}
+      \begin{object}[text width=2.5cm]{paramObj}{2,-10}
+        \attribute{name=a}
+        \attribute{type=int}
+      \end{object}
+    \begin{object}[text width=2.5cm]{meta}{2,-6}
+        \attribute{isPublic=true}
+      \end{object}
+    \begin{object}[text width=2.5cm]{meta2}{2.5,-14.5}
+        \attribute{isPublic=false}
+      \end{object}
+\end{scope}
+\begin{scope}[line width=0.05cm]
+    \aggregation{fileObj}{}{}{classObj}{}{}
+     \aggregation {classObj}{}{}{methodObj}{}{}
+      \aggregation {methodObj}{}{}{paramObj}{}{}
+    \aggregation {classObj}{}{}{meta}{}{}
+        \aggregation {methodObj}{}{}{meta2}{}{}
+\end{scope}
+
+    
+\end{tikzpicture}
+     
+     \caption{Objektdiagramm aus Java- und Python-Code}
+     \label{fig:python_java_comp}
+ \end{figure}
+
+
+Abbildung \ref{fig:python_java_comp} veranschaulicht wie eine einfache Datei in die Objektstruktur umgewandelt werden kann. Dabei wird ein einfache Java-Klasse und eine semantisch äquivalente Python-Datei als Beispiel verwendet, um zu zeigen, dass aus beiden Sprachen eine gleiche Objektstruktur erzeugt werden kann. Dabei wurden zur Übersichtlichkeit einige nicht relevanten Attribute entfernt.
+
+Das Programm in beiden Sprachen besteht aus einer öffentlichen Klasse \textit{Main} und einer privaten Methode \textit{test}, die einen Parameter \textit{a} als Ganzzahl erhält und eine Ganzzahl zurückgibt. Die höchste Hierarchieebene ist immer ein \textit{FileComponent}. Diese Datei enthält hier genau ein Kind namens \textit{classObj}, könnte aber in anderen Fällen auch mehrere Kinder (wie z.~B. Klassen enthalten). Die Klasse besitzt zudem einen Verweis auf ihren Elternteil. Außerdem enthält das \textit{classObj} eine Referenz auf MetaInformationen, die hier nur angeben, dass die Klasse öffentlich ist. In diesen MetaInformationen könnte auch die Basisklasse und andere relativ sprachspezifische Informationen enthalten. Die Klasse enthält wiederum genau die Methode als einziges Kind. Die Methode hat ebenfalls einen Verweis auf Metainformation, welche die Methode als privat markieren. Außerdem hat die Methode einen \textit{returnType} und einen Verweis auf die Liste der Parameter, die wiederum aus einen Namen und einen Datentyp bestehen.
+
 \section{ANTLR4}
 Um die Java-Dateien zu parsen, wird die Bibliothek ANTLR4\footnote{\href{https://www.antlr.org/}{ANTLR Website (besucht 07.01.2022)}} verwendet, die kostenlos verfügbar ist. Diese Bibliothek kann nicht nur viele Programmiersprachen, sondern auch selbst geschriebene Sprachen parsen, sofern eine passende Grammatik verfügbar ist. Daneben gibt es noch Bibliotheken wie Bison, PEG.JS, die ebenfalls eine ähnliche Aufgabe erfüllen können. Allerdings gibt es bereits vordefinierte Grammatiken für ANTLR4, sodass ein erheblicher Aufwand gespart werden konnte.  
 
