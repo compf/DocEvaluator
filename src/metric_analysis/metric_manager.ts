@@ -96,11 +96,11 @@ export namespace MetricManager {
         if(uniqueNameCountMap.has(baseName)){
             const newCount=uniqueNameCountMap.get(baseName)!+1;
             uniqueNameCountMap.set(baseName,newCount);
-            return baseName+newCount;
+            return baseName+"_"+newCount;
         }
         else{
             uniqueNameCountMap.set(baseName,0);
-            return baseName+"0";
+            return baseName+"_0";
 
         }
     }

@@ -9,7 +9,19 @@ import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
 import { PathWeightResolver, SimpleWeightResolver } from "./metric_analysis/weight_resolver";
+import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
+import { MetricResult } from "./metric_analysis/metric_result";
 const factory=new ParserFactory();
+interface Parameters{
+  
+     parser:BaseParser,
+     fileAnalyzer: FileAnalyzer,
+     singleFileResultBuilder:MetricResultBuilder,
+     allFilesResultBulder:MetricResultBuilder,
+     metricBuilder :MetricResultBuilder,
+     metrics:DocumentationAnalysisMetric[],
+     resultByMetric:Map<string,MetricResultBuilder>
+} 
 function main(args: Array<string>) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -31,44 +43,58 @@ function main(args: Array<string>) {
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
     let parser = factory.createParser(conf.parser);
-    let fileAnaylzer = new FileAnalyzer();
+    let fileAnalyzer = new FileAnalyzer();
     let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,metricWeightResolver);
     let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,filesWeightResolver);
     let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,metricWeightResolver)
+    let resultByMetric:Map<string,MetricResultBuilder>=new Map();
+
+    let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric};
     for (let relevantFile of relevantFiles)
-     {
-        var root: ParseResult = { root: parser.parse(relevantFile), path: relevantFile };
-        console.log("Looking at " + root.path)       
-        for (let metric of metrics)
-         {
-            console.log("Using metric", metric.getUniqueName())
-           
-            fileAnaylzer.analyze(root, metric, singleFileResultBuilder);
-            let partialResult = singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
-            console.log("Partial result", partialResult.getResult());
-    
-            metricBuilder.processResult(partialResult);
-            singleFileResultBuilder.reset();
-            console.log();
-
-        }
-
-        console.log();
-        let metricResult = metricBuilder.getAggregatedResult(root.path);
-        metricBuilder.reset();
-        allFilesResultBulder.processResult(metricResult);
-
-
+     {   
+        processByFile(relevantFile,params);
     }
     let result = allFilesResultBulder.getAggregatedResult("");
     for (let log of result.getLogMessages()) {
         log.log();
     }
     metricBuilder.reset();
+    console.log("Results by metric:");
+    for(let m of params.resultByMetric){
+       let res= m[1].getAggregatedResult("").getResult();
+       console.log(m[0],res);
+    }
     console.log("The result was " + result.getResult());
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
 }
+function processByMetric(root:ParseResult,metric:DocumentationAnalysisMetric, params:Parameters){
+    console.log("Using metric", metric.getUniqueName())
+           
+    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder);
+    let partialResult = params.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
+    if(!params.resultByMetric.has(metric.getUniqueName())){
+        params.resultByMetric.set(metric.getUniqueName(),new MetricResultBuilder());
+    }
+    params.resultByMetric.get(metric.getUniqueName())?.processResult(partialResult);
+    console.log("Partial result", partialResult.getResult());
 
+    params.metricBuilder.processResult(partialResult);
+    params.singleFileResultBuilder.reset();
+    console.log();
+}
+function processByFile(relevantFile:string,params:Parameters){
+    var root: ParseResult = { root: params.parser.parse(relevantFile), path: relevantFile };
+    console.log("Looking at " + root.path)       
+    for (let metric of params.metrics)
+     {
+        processByMetric(root,metric,params)
+    }
+
+    console.log();
+    let metricResult = params.metricBuilder.getAggregatedResult(root.path);
+    params.metricBuilder.reset();
+    params.allFilesResultBulder.processResult(metricResult);
+}
 main(process.argv.slice(2))
