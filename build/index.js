@@ -28477,6 +28477,14 @@ class EvaluatorConf {
          * The default weight for a given path
          */
         this.default_path_weight = 1;
+        /**
+         * The state manager to store the result of the last run
+         */
+        this.state_manager = "file";
+        /**
+         * max tolerable absolute difference from current to last run
+         */
+        this.max_diff_last_run = 30;
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), unique_name: metric_manager_1.MetricManager.getUniqueName(s) });
         }
@@ -28548,9 +28556,70 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_DEFAULT_PATH_WEIGHT) {
             conf.default_path_weight = parseFloat(process_1.env.INPUT_DEFAULT_PATH_WEIGHT);
         }
+        if (process_1.env.INPUT_STATE_MANAGER) {
+            conf.state_manager = process_1.env.INPUT_STATE_MANAGER;
+        }
+        if (process_1.env.INPUT_MAX_DIFF_LAST_RUN) {
+            conf.max_diff_last_run = parseFloat(process_1.env.INPUT_MAX_DIFF_LAST_RUN);
+        }
     }
 }
 exports.EnvCommentConfLoader = EnvCommentConfLoader;
+
+
+/***/ }),
+
+/***/ 3422:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FileStateManager = void 0;
+const fs_1 = __nccwpck_require__(7147);
+const path_1 = __nccwpck_require__(1017);
+const STATE_PATH = ".evaluator_last_state.txt";
+class FileStateManager {
+    constructor(workingDirectory) {
+        this.path = (0, path_1.join)(workingDirectory, STATE_PATH);
+    }
+    save(num) {
+        (0, fs_1.writeFileSync)(this.path, num + "");
+    }
+    load() {
+        if ((0, fs_1.existsSync)(this.path)) {
+            return parseInt((0, fs_1.readFileSync)(this.path).toString());
+        }
+        else {
+            return null;
+        }
+    }
+}
+exports.FileStateManager = FileStateManager;
+
+
+/***/ }),
+
+/***/ 5253:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.StateManagerFactory = void 0;
+const file_state_manager_1 = __nccwpck_require__(3422);
+var StateManagerFactory;
+(function (StateManagerFactory) {
+    function load(name, workingDirectory) {
+        switch (name) {
+            case "file":
+                return new file_state_manager_1.FileStateManager(workingDirectory);
+            default:
+                throw new Error("Could find state manager " + name);
+        }
+    }
+    StateManagerFactory.load = load;
+})(StateManagerFactory = exports.StateManagerFactory || (exports.StateManagerFactory = {}));
 
 
 /***/ }),
@@ -28659,7 +28728,7 @@ const file_analyzer_1 = __nccwpck_require__(779);
 const EvaluatorConf_1 = __nccwpck_require__(6410);
 const parser_factory_1 = __nccwpck_require__(8799);
 const weight_resolver_1 = __nccwpck_require__(3910);
-const factory = new parser_factory_1.ParserFactory();
+const state_manager_factory_1 = __nccwpck_require__(5253);
 function main(args) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -28679,12 +28748,14 @@ function main(args) {
     }
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
-    let parser = factory.createParser(conf.parser);
+    let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, metricWeightResolver);
     let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
     let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
     let resultByMetric = new Map();
+    let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
+    let lastResult = stateManager.load();
     let params = { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric };
     for (let relevantFile of relevantFiles) {
         processByFile(relevantFile, params);
@@ -28700,8 +28771,12 @@ function main(args) {
         console.log(m[0], res);
     }
     console.log("The result was " + result.getResult());
+    stateManager.save(result.getResult());
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
+    }
+    else if (lastResult != null && lastResult < result.getResult() && Math.abs(lastResult - result.getResult()) < conf.max_diff_last_run) {
+        throw new Error("Difference from last run is too high");
     }
 }
 function processByMetric(root, metric, params) {
@@ -42886,8 +42961,9 @@ exports.StructuredCommentTag = StructuredCommentTag;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.ParserFactory = void 0;
 const java_parser_1 = __nccwpck_require__(7905);
-class ParserFactory {
-    createParser(parserName) {
+var ParserFactory;
+(function (ParserFactory) {
+    function createParser(parserName) {
         switch (parserName.toLowerCase()) {
             case "java":
                 return new java_parser_1.JavaParser();
@@ -42895,8 +42971,8 @@ class ParserFactory {
                 throw new Error("Could not find parser " + parserName);
         }
     }
-}
-exports.ParserFactory = ParserFactory;
+    ParserFactory.createParser = createParser;
+})(ParserFactory = exports.ParserFactory || (exports.ParserFactory = {}));
 
 
 /***/ }),
