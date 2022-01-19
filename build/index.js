@@ -28767,6 +28767,20 @@ exports.NLP_Helper = NLP_Helper;
 
 /***/ }),
 
+/***/ 2962:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AbstractMetricBuilder = void 0;
+class AbstractMetricBuilder {
+}
+exports.AbstractMetricBuilder = AbstractMetricBuilder;
+
+
+/***/ }),
+
 /***/ 779:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -29138,20 +29152,17 @@ exports.MetricResult = MetricResult;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MetricResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(6673);
+const abstract_metric_builder_1 = __nccwpck_require__(2962);
 /**
  * This class should be called to aggregate many MetricResults and for example an average result
  * For each MetricResult, processResult should be called
  * the final average result can be obtained by getAggregatedResult
  */
-class MetricResultBuilder {
+class MetricResultBuilder extends abstract_metric_builder_1.AbstractMetricBuilder {
     constructor() {
+        super(...arguments);
         this.resultList = [];
     }
-    /**
-     * Process a MetricResult in order to  aggregate them
-     * The log message of the result will be included in the new result
-     * @param result
-     */
     processResult(result) {
         this.resultList.push(result);
     }
@@ -29391,12 +29402,16 @@ exports.ComponentBasedMetric = ComponentBasedMetric;
 /***/ }),
 
 /***/ 5830:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentationAnalysisMetric = exports.MIN_SCORE = exports.MAX_SCORE = void 0;
+const chalk_1 = __importDefault(__nccwpck_require__(6504));
 const log_message_1 = __nccwpck_require__(4938);
 const metric_result_1 = __nccwpck_require__(6673);
 exports.MAX_SCORE = 100;
@@ -29429,7 +29444,10 @@ class DocumentationAnalysisMetric {
         builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
     }
     pushLogMessage(component, msg, logMessages) {
-        logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "[" + component.getLineNumber() + "]: " + msg));
+        let path = chalk_1.default.green(component.getTopParent().getName());
+        let qualifiedName = chalk_1.default.yellow(component.getQualifiedName());
+        let prefix = path + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
+        logMessages.push(new log_message_1.LogMessage(prefix + msg));
     }
     createLogMessages(messages, component) {
         let result = [];
@@ -29451,11 +29469,8 @@ exports.DocumentationAnalysisMetric = DocumentationAnalysisMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FleschMetric = void 0;
-const log_message_1 = __nccwpck_require__(4938);
-const metric_result_1 = __nccwpck_require__(6673);
 const NLP_Helper_1 = __nccwpck_require__(2396);
 const component_based__metric_1 = __nccwpck_require__(5165);
-const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 /**
  * This metric calculate the flesh score which describes the readability of a text
  */
@@ -29463,12 +29478,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder) {
         let params = this.getParams();
         let textsToConsider = this.getTextToConsider(component, params);
-        let logMessages = [];
         let nlp_helper = new NLP_Helper_1.NLP_Helper();
-        if (textsToConsider.length == 0) {
-            logMessages.push(new log_message_1.LogMessage(component.getQualifiedName() + "has no documentation and could not be evaulated by the flesh formula"));
-            builder.processResult(new metric_result_1.MetricResult(documentation_analysis_metric_1.MIN_SCORE, logMessages, this.getUniqueName()));
-        }
         let sum = 0;
         for (let text of textsToConsider) {
             sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n", "")));
