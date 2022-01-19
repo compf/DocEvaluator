@@ -28756,6 +28756,7 @@ function main(args) {
     let resultByMetric = new Map();
     let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
     let lastResult = stateManager.load();
+    console.log("last result", lastResult);
     let params = { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric };
     for (let relevantFile of relevantFiles) {
         processByFile(relevantFile, params);
