@@ -1,4 +1,6 @@
+import chalk from "chalk";
 import { Component } from "../../parser/parse_result/component";
+import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -16,7 +18,7 @@ export  abstract class DocumentationAnalysisMetric {
      * @param component The Component to analyze
      * @param builder The builder to process all results of the component and its children
      */
-    public abstract analyze(component: Component, builder: MetricResultBuilder| undefined): void
+    public abstract analyze(component: Component, builder: AbstractMetricBuilder| undefined): void
     /**
      * 
      * @param component Determines whether a component is worth checking
@@ -43,11 +45,14 @@ export  abstract class DocumentationAnalysisMetric {
     protected processResult(result:number,logMessages:string[]):number{
         return result;
     }
-    protected pushResult(builder:MetricResultBuilder,score:number,logMessages:LogMessage[]){
+    protected pushResult(builder:AbstractMetricBuilder,score:number,logMessages:LogMessage[]){
         builder.processResult(new MetricResult(score,logMessages,this.getUniqueName()));
     }
     protected pushLogMessage(component:Component,msg:string,logMessages:LogMessage[]){
-        logMessages.push(new LogMessage(component.getQualifiedName() + "["+component.getLineNumber()+"]: "+msg));
+        let path= chalk.green( component.getTopParent().getName());
+        let qualifiedName=chalk.yellow(component.getQualifiedName())
+        let prefix=path+ " "+ qualifiedName + "(L. "+component.getLineNumber()+"): ";
+        logMessages.push(new LogMessage(prefix+msg));
     }
     protected createLogMessages(messages:string[],component:Component){
         let result:LogMessage[]=[]

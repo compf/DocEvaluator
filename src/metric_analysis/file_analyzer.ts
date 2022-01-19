@@ -2,6 +2,7 @@ import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
 import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
 import { ParseResult } from "../parser/parse_result/parse_result";
+import { AbstractMetricBuilder } from "./abstract_metric_builder";
 import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { MetricResultBuilder } from "./metric_result_builder";
 
@@ -13,7 +14,7 @@ export class FileAnalyzer {
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result: ParseResult, analyzer: DocumentationAnalysisMetric, builder: MetricResultBuilder) {
+    analyze(parse_result: ParseResult, analyzer: DocumentationAnalysisMetric, builder: AbstractMetricBuilder) {
         this.analyzeComponent(parse_result.root, builder, analyzer);
     }
     /**
@@ -22,7 +23,7 @@ export class FileAnalyzer {
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    private analyzeComponent(component: Component, builder: MetricResultBuilder, analyzer: DocumentationAnalysisMetric): void {
+    private analyzeComponent(component: Component, builder: AbstractMetricBuilder, analyzer: DocumentationAnalysisMetric): void {
         let ignoreTag=this.getIgnoreFlag(component);
         // Only analyze relevant component to this metric
         if (analyzer.shallConsider(component) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {

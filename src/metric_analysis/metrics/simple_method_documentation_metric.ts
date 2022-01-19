@@ -1,6 +1,7 @@
 import { Component } from "../../parser/parse_result/component";
 import { MethodComponent } from "../../parser/parse_result/method_component";
 import { StructuredCommentTagKind } from "../../parser/parse_result/structured_comment";
+import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -14,7 +15,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
     shallConsider(component: Component) {
         return super.shallConsider(component) &&  component instanceof MethodComponent;
     }
-    analyze(component: Component, builder: MetricResultBuilder): void {
+    analyze(component: Component, builder: AbstractMetricBuilder): void {
         let logMessages: LogMessage[] = [];
         let method = component as MethodComponent;
         let score = 0;

@@ -1,7 +1,5 @@
 import { Component } from "../../parser/parse_result/component";
-import { LogMessage } from "../log_message";
-import { MetricResult } from "../metric_result";
-import { MetricResultBuilder } from "../metric_result_builder";
+import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { NLP_Helper } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
@@ -13,7 +11,7 @@ interface ParamType{upper_theshold:number,lower_threshold:number,levenshtein_dis
  */
 export class CommentNameCoherenceMetric extends ComponentBasedMetric{
 
-    analyze(component: Component, builder: MetricResultBuilder): void {
+    analyze(component: Component, builder: AbstractMetricBuilder): void {
         if(component.getComment()==null || component.getComment()?.getGeneralDescription()==null)return;
         let componentNameWords=this.splitByNameConvention(component.getName());
         let commentWords=this.nlp_helper.getTokens(component.getComment()!.getGeneralDescription()!);

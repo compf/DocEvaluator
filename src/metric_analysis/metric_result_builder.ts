@@ -1,19 +1,16 @@
 import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { LogMessage } from "./log_message";
 import { MetricResult } from "./metric_result";
+import { AbstractMetricBuilder } from "./abstract_metric_builder";
 /**
  * This class should be called to aggregate many MetricResults and for example an average result
  * For each MetricResult, processResult should be called
  * the final average result can be obtained by getAggregatedResult 
  */
-export class MetricResultBuilder {
+export class MetricResultBuilder extends AbstractMetricBuilder {
     protected resultList: MetricResult[] = []
-    /**
-     * Process a MetricResult in order to  aggregate them
-     * The log message of the result will be included in the new result
-     * @param result  
-     */
-    processResult(result: MetricResult) {
+    
+    override processResult(result: MetricResult) {
         this.resultList.push(result)
     }
     protected putAllLogMessages(src: LogMessage[], dest: LogMessage[]) {
