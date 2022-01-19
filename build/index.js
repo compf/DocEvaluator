@@ -28588,7 +28588,7 @@ class FileStateManager {
     }
     load() {
         if ((0, fs_1.existsSync)(this.path)) {
-            return parseInt((0, fs_1.readFileSync)(this.path).toString());
+            return parseFloat((0, fs_1.readFileSync)(this.path).toString());
         }
         else {
             return null;
