@@ -1,4 +1,5 @@
 \chapter{Umsetzung}
+In diesem Kapitel wird auf die Umsetzung der in Kapitel \ref{chapter:3} beschriebene Architektur eingegangen. Dazu werden Informationen über die Einrichtung und Konfiguration des Tools gegeben.
 \section{Implementierung von ANTLR4}\label{chapter:antlr4_impl}
 Für die Programmiersprache Java steht eine Grammatik, die auf Github unter der BSD-Lizenz angeboten wird ist, zur Verfügung\footnote{\href{https://github.com/antlr/grammars-v4/tree/master/java/java}{Grammatik-Dateien für Java (besucht 07.01.2022)}}, allerdings ignoriert diese Grammatik alle Kommentare. Daher müssen einige Änderungen sowohl am Lexer als auch am Parser vorgenommen werden. Im Lexer werden standardmäßig alle Tokens in einem Kommentar in einen versteckten Kanal gespeichert, was dazu führt, dass diese Tokens vom Parser ignoriert werden. Daher wird dieses Verhalten durch Definition eines neuen Tokens so geändert, dass Javadoc-Kommentare auch vom Parser verarbeitet werden können, aber mehrzeilige und einzeilige Kommentare weiterhin ignoriert werden. Einzeilige Kommentare sind hier nicht relevant, da sie kein Javadoc enthalten.
 
