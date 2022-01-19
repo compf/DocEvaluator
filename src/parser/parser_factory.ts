@@ -1,8 +1,8 @@
 import { BaseParser } from "./base_parser";
 import { JavaParser } from "./java_parser";
 
-export class ParserFactory{
-    createParser(parserName:string):BaseParser{
+export namespace ParserFactory{
+    export function createParser(parserName:string):BaseParser{
         switch(parserName.toLowerCase()){
             case "java":
                 return new JavaParser();
@@ -11,3 +11,4 @@ export class ParserFactory{
         }
     }
 }
+    

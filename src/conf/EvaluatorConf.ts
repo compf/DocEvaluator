@@ -61,6 +61,15 @@ export class EvaluatorConf {
      * The default weight for a given path
      */
     default_path_weight:number=1;
+
+    /**
+     * The state manager to store the result of the last run
+     */
+    state_manager:string="file";
+    /**
+     * max tolerable absolute difference from current to last run
+     */
+    max_diff_last_run:number=30;
     constructor() {
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s, params: MetricManager.getDefaultMetricParam(s),unique_name:MetricManager.getUniqueName(s) })
@@ -139,6 +148,12 @@ export class EnvCommentConfLoader implements ConfLoader {
         }
         if (env.INPUT_DEFAULT_PATH_WEIGHT) {
             conf.default_path_weight = parseFloat(env.INPUT_DEFAULT_PATH_WEIGHT)
+        }
+        if (env.INPUT_STATE_MANAGER) {
+            conf.state_manager = env.INPUT_STATE_MANAGER
+        }
+        if (env.INPUT_MAX_DIFF_LAST_RUN) {
+            conf.max_diff_last_run = parseFloat(env.INPUT_MAX_DIFF_LAST_RUN)
         }
 
     }

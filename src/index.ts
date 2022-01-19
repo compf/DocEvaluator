@@ -11,7 +11,7 @@ import { ParserFactory } from "./parser/parser_factory";
 import { PathWeightResolver, SimpleWeightResolver } from "./metric_analysis/weight_resolver";
 import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
 import { MetricResult } from "./metric_analysis/metric_result";
-const factory=new ParserFactory();
+import { StateManagerFactory } from "./conf/state_manager_factory";
 interface Parameters{
   
      parser:BaseParser,
@@ -42,13 +42,14 @@ function main(args: Array<string>) {
     }
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
-    let parser = factory.createParser(conf.parser);
+    let parser = ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new FileAnalyzer();
     let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,metricWeightResolver);
     let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,filesWeightResolver);
     let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,metricWeightResolver)
     let resultByMetric:Map<string,MetricResultBuilder>=new Map();
-
+    let stateManager=StateManagerFactory.load(conf.state_manager,workingDirectory);
+    let lastResult=stateManager.load();
     let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric};
     for (let relevantFile of relevantFiles)
      {   
@@ -65,8 +66,13 @@ function main(args: Array<string>) {
        console.log(m[0],res);
     }
     console.log("The result was " + result.getResult());
+    stateManager.save(result.getResult());
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
+    }
+    else if( lastResult!=null && lastResult<result.getResult() && Math.abs(lastResult-result.getResult())<conf.max_diff_last_run){
+        throw new Error("Difference from last run is too high");
+
     }
 }
 function processByMetric(root:ParseResult,metric:DocumentationAnalysisMetric, params:Parameters){
