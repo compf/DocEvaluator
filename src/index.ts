@@ -71,7 +71,7 @@ function main(args: Array<string>) {
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if( lastResult!=null && lastResult<result.getResult() && Math.abs(lastResult-result.getResult())<conf.max_diff_last_run){
+    else if( lastResult!=null && lastResult<result.getResult() && Math.abs(lastResult-result.getResult())>=conf.max_diff_last_run){
         throw new Error("Difference from last run is too high");
 
     }
