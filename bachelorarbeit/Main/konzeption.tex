@@ -164,7 +164,17 @@ Zudem können die Implementation der Metriken Warn- oder Fehlermeldungen werfen,
   
 
 \subsection{Resultate der Metriken anwenden}
-Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es das Ergebnis in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus (z.~B. Median) auswählen kann. Ein \textit{ResultBuilder} basiert auf dem Vorbild des Design-Patterns \enquote{Builder} aus \cite[S.139-149]{gamma2015design}, da es aus einzelnen Metrikresultaten ein vollständiges Metrikergebnis baut. 
+Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es das Ergebnis in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus (z.~B. Median) auswählen kann. Ein \textit{ResultBuilder} basiert auf dem Vorbild des Design-Patterns \enquote{Builder} aus \cite[S.139-149]{gamma2015design}, da es aus einzelnen Metrikresultaten ein vollständiges Metrikergebnis baut.
+
+Abbildung \ref{fig:metrics_apply} zeigt schematisch, wie aus verschiedenen Dateien ein Gesamtergebnis ausgebaut wird. Hier werden zwei Dateien und zwei exemplarische Metriken verwendet. Links unten wird die erste Datei durch der ersten Metrik bewertet. Dazu wird ein interner \textit{MetricResultBuilder} verwendet, was aber hier aus Übersichtlichkeitsgründen nicht dargestellt wird. Auch die zweite Metrik bewertet die gleiche Datei, sodass von beiden Metriken ein Ergebnis vorliegt. Diese Ergebnisse werden von einem \textit{MetricResultBuilder} verarbeiten, der beispielsweise die Ergebnisse je nach Metrik gewichten kann. Das Ergebnis dieses Vorgangs wird von einem separaten \textit{MetricResultBuilder} verarbeitet, welcher dieses und das Ergebnis aller anderen Dateien, die analog ermittelt werden, verarbeitet und und eine Gewichtung nach Dateipfad vornehmen könnte. Das Gesamtergebnis oben in der Mitte ist dann Maß für die Entscheidung, ob die Dokumentationsqualität als ausreichend angesehen wird. 
+\begin{figure}[ht!]
+\fontsize{7}{10}\selectfont
+    \centering
+\includesvg[scale=0.5]{figures/metrics.svg}
+    \caption{Anwendung der Metriken}
+    \label{fig:metrics_apply}
+\end{figure}
+ 
 
 In den folgenden Unterabschnitten wird jeder Algorithmus kurz erläutert und dabei kurz auf die Vor- und Nachteile eingegangen. 
 
@@ -188,5 +198,3 @@ Dieser Algorithmus ermöglicht es, bestimmte Metriken zu bevorzugen bzw. zu bena
 Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} implementiert. Dabei wird zunächst die Summe der Gewichte berechnet und die Resultate nach ihrem Gewicht sortiert. Anschließend werden die sortierten Resultate und ihre Gewichte so lange aufsummiert, bis diese temporäre Summe die Hälfte der Gesamtsumme überschreitet. Das Metrikergebnis, bei der diese Bedingung zutrifft, ist das gesuchte Gesamtergebnis. Die Vor- und Nachteile dieses Algorithmus entsprechen den Vor- und Nachteilen des gewichteten Mittelwerts und des Medians. So muss auch hier eine Sortierung durchgeführt werden und die Wahl der richtigen Gewichte ist nicht trivial. 
 
 
-
- 
