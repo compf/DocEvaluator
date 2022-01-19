@@ -50,6 +50,7 @@ function main(args: Array<string>) {
     let resultByMetric:Map<string,MetricResultBuilder>=new Map();
     let stateManager=StateManagerFactory.load(conf.state_manager,workingDirectory);
     let lastResult=stateManager.load();
+    console.log("last result",lastResult);
     let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric};
     for (let relevantFile of relevantFiles)
      {   
