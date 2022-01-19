@@ -13,7 +13,7 @@ export class FileStateManager implements StateManager{
     }
     load(): number|null {
         if(existsSync(this.path)){
-            return parseInt(readFileSync(this.path).toString());
+            return parseFloat(readFileSync(this.path).toString());
         }
         else{
             return null;
