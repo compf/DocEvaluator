@@ -28654,6 +28654,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const chalk_1 = __importDefault(__nccwpck_require__(6504));
 const directory_traverser_1 = __nccwpck_require__(70);
 const metric_manager_1 = __nccwpck_require__(2217);
+const metric_result_builder_1 = __nccwpck_require__(9514);
 const file_analyzer_1 = __nccwpck_require__(779);
 const EvaluatorConf_1 = __nccwpck_require__(6410);
 const parser_factory_1 = __nccwpck_require__(8799);
@@ -28679,36 +28680,54 @@ function main(args) {
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = factory.createParser(conf.parser);
-    let fileAnaylzer = new file_analyzer_1.FileAnalyzer();
+    let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
     let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, metricWeightResolver);
     let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
     let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
+    let resultByMetric = new Map();
+    let params = { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric };
     for (let relevantFile of relevantFiles) {
-        var root = { root: parser.parse(relevantFile), path: relevantFile };
-        console.log("Looking at " + root.path);
-        for (let metric of metrics) {
-            console.log("Using metric", metric.getUniqueName());
-            fileAnaylzer.analyze(root, metric, singleFileResultBuilder);
-            let partialResult = singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
-            console.log("Partial result", partialResult.getResult());
-            metricBuilder.processResult(partialResult);
-            singleFileResultBuilder.reset();
-            console.log();
-        }
-        console.log();
-        let metricResult = metricBuilder.getAggregatedResult(root.path);
-        metricBuilder.reset();
-        allFilesResultBulder.processResult(metricResult);
+        processByFile(relevantFile, params);
     }
     let result = allFilesResultBulder.getAggregatedResult("");
     for (let log of result.getLogMessages()) {
         log.log();
     }
     metricBuilder.reset();
+    console.log("Results by metric:");
+    for (let m of params.resultByMetric) {
+        let res = m[1].getAggregatedResult("").getResult();
+        console.log(m[0], res);
+    }
     console.log("The result was " + result.getResult());
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
+}
+function processByMetric(root, metric, params) {
+    var _a;
+    console.log("Using metric", metric.getUniqueName());
+    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder);
+    let partialResult = params.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
+    if (!params.resultByMetric.has(metric.getUniqueName())) {
+        params.resultByMetric.set(metric.getUniqueName(), new metric_result_builder_1.MetricResultBuilder());
+    }
+    (_a = params.resultByMetric.get(metric.getUniqueName())) === null || _a === void 0 ? void 0 : _a.processResult(partialResult);
+    console.log("Partial result", partialResult.getResult());
+    params.metricBuilder.processResult(partialResult);
+    params.singleFileResultBuilder.reset();
+    console.log();
+}
+function processByFile(relevantFile, params) {
+    var root = { root: params.parser.parse(relevantFile), path: relevantFile };
+    console.log("Looking at " + root.path);
+    for (let metric of params.metrics) {
+        processByMetric(root, metric, params);
+    }
+    console.log();
+    let metricResult = params.metricBuilder.getAggregatedResult(root.path);
+    params.metricBuilder.reset();
+    params.allFilesResultBulder.processResult(metricResult);
 }
 main(process.argv.slice(2));
 
@@ -29025,11 +29044,11 @@ var MetricManager;
         if (uniqueNameCountMap.has(baseName)) {
             const newCount = uniqueNameCountMap.get(baseName) + 1;
             uniqueNameCountMap.set(baseName, newCount);
-            return baseName + newCount;
+            return baseName + "_" + newCount;
         }
         else {
             uniqueNameCountMap.set(baseName, 0);
-            return baseName + "0";
+            return baseName + "_0";
         }
     }
     MetricManager.getUniqueName = getUniqueName;
