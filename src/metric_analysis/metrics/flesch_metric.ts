@@ -16,6 +16,7 @@ export class FleschMetric extends ComponentBasedMetric {
         let params=this.getParams();
 
         let textsToConsider = this.getTextToConsider(component, params as ParamsType);
+        if(textsToConsider.length==0)return;
         let nlp_helper=new NLP_Helper();
         let sum = 0;
 
