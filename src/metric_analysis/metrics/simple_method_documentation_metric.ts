@@ -2,6 +2,7 @@ import { Component } from "../../parser/parse_result/component";
 import { MethodComponent } from "../../parser/parse_result/method_component";
 import { StructuredCommentTagKind } from "../../parser/parse_result/structured_comment";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
+import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -15,7 +16,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
     shallConsider(component: Component) {
         return super.shallConsider(component) &&  component instanceof MethodComponent;
     }
-    analyze(component: Component, builder: AbstractMetricBuilder): void {
+    analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void {
         let logMessages: LogMessage[] = [];
         let method = component as MethodComponent;
         let score = 0;
@@ -26,7 +27,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.RETURN);
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
            let results=[paramsResult , nonExistingParamResult , returnExistingResult];
-           DocumentationAnalysisMetric.languageHelper?.rateDocumentaionCompatibility(component,results,logMessages);
+            langSpec.rateDocumentaionCompatibility(component,results,logMessages);
            let sum=0;
            for(let s of results){
                sum+=s;

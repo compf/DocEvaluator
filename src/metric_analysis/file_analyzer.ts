@@ -3,6 +3,7 @@ import { Component } from "../parser/parse_result/component";
 import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
 import { ParseResult } from "../parser/parse_result/parse_result";
 import { AbstractMetricBuilder } from "./abstract_metric_builder";
+import { LanguageSpecificHelper } from "./language_specific/language_specific_helper";
 import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { MetricResultBuilder } from "./metric_result_builder";
 
@@ -14,8 +15,8 @@ export class FileAnalyzer {
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result: ParseResult, analyzer: DocumentationAnalysisMetric, builder: AbstractMetricBuilder) {
-        this.analyzeComponent(parse_result.root, builder, analyzer);
+    analyze(parse_result: ParseResult, analyzer: DocumentationAnalysisMetric, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper) {
+        this.analyzeComponent(parse_result.root, builder, analyzer,langSpec);
     }
     /**
      * 
@@ -23,12 +24,12 @@ export class FileAnalyzer {
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    private analyzeComponent(component: Component, builder: AbstractMetricBuilder, analyzer: DocumentationAnalysisMetric): void {
+    private analyzeComponent(component: Component, builder: AbstractMetricBuilder, analyzer: DocumentationAnalysisMetric,langSpec:LanguageSpecificHelper): void {
         let ignoreTag=this.getIgnoreFlag(component);
         //console.log(DocumentationAnalysisMetric.languageHelper);
         // Only analyze relevant component to this metric
-        if ( DocumentationAnalysisMetric.languageHelper?.shallConsider(component) && analyzer.shallConsider(component) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {
-            analyzer.analyze(component, builder);
+        if ( langSpec.shallConsider(component) && analyzer.shallConsider(component) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {
+            analyzer.analyze(component, builder,langSpec);
         }
         /* Analyze the children of the component if it is a hierarchical one
         This will be done even if the parent was not considered because we don't want to miss
@@ -37,7 +38,7 @@ export class FileAnalyzer {
         if (component instanceof HierarchicalComponent && ignoreTag!=IgnoreTags.IGNORE_NODE) {
             let hierarchical = component as HierarchicalComponent;
             for (let c of hierarchical.getChildren()) {
-                this.analyzeComponent(c, builder, analyzer);
+                this.analyzeComponent(c, builder, analyzer,langSpec);
             }
         }
 

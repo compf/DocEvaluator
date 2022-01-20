@@ -1,6 +1,7 @@
 import { Component } from "../../parser/parse_result/component";
 import { FileComponent } from "../../parser/parse_result/file_component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
+import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -12,7 +13,7 @@ import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentati
  */
 export class SimpleCommentPresentMetric extends ComponentBasedMetric {
     
-    analyze(component: Component, builder: AbstractMetricBuilder): void {
+    analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void {
         let score = 0;
         let logMessages: string[] = []
         if (component.getComment() != null) {

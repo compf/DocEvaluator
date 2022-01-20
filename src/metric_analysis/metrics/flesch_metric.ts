@@ -1,5 +1,6 @@
 import { Component } from "../../parser/parse_result/component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
+import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -11,7 +12,7 @@ interface ParamsType{consider_tags:boolean}
  * This metric calculate the flesh score which describes the readability of a text
  */
 export class FleschMetric extends ComponentBasedMetric {
-    analyze(component: Component, builder: AbstractMetricBuilder): void {
+    analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void {
         let params=this.getParams();
 
         let textsToConsider = this.getTextToConsider(component, params as ParamsType);

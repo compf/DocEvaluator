@@ -13,6 +13,7 @@ import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documenta
 import { MetricResult } from "./metric_analysis/metric_result";
 import { StateManagerFactory } from "./conf/state_manager_factory";
 import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
+import { LanguageSpecificHelper } from "./metric_analysis/language_specific/language_specific_helper";
 interface Parameters{
   
      parser:BaseParser,
@@ -21,7 +22,8 @@ interface Parameters{
      allFilesResultBulder:MetricResultBuilder,
      metricBuilder :MetricResultBuilder,
      metrics:DocumentationAnalysisMetric[],
-     resultByMetric:Map<string,MetricResultBuilder>
+     resultByMetric:Map<string,MetricResultBuilder>,
+     languageHelper:LanguageSpecificHelper
 } 
 function main(args: Array<string>) {
     var workingDirectory = "";
@@ -41,7 +43,7 @@ function main(args: Array<string>) {
     for(let m of conf.metrics){
         weightMap.set(MetricManager.getMetricByUniqueName(m.unique_name),m.weight);
     }
-    DocumentationAnalysisMetric.languageHelper=LanguageSpecificHelperFactory.loadHelper(conf.parser);
+    let languageHelper=LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
     let parser = ParserFactory.createParser(conf.parser);
@@ -54,7 +56,7 @@ function main(args: Array<string>) {
     let lastResult=stateManager.load();
     console.log("last result",lastResult);
 
-    let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric};
+    let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric,languageHelper};
     for (let relevantFile of relevantFiles)
      {   
         processByFile(relevantFile,params);
@@ -82,7 +84,7 @@ function main(args: Array<string>) {
 function processByMetric(root:ParseResult,metric:DocumentationAnalysisMetric, params:Parameters){
     console.log("Using metric", metric.getUniqueName())
            
-    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder);
+    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder,params.languageHelper);
     let partialResult = params.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
     if(!params.resultByMetric.has(metric.getUniqueName())){
         params.resultByMetric.set(metric.getUniqueName(),new MetricResultBuilder());

@@ -1,6 +1,7 @@
 import { Component } from "../../parser/parse_result/component";
 import { MethodComponent } from "../../parser/parse_result/method_component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
+import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -45,7 +46,7 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
         }
         return result;
     }
-    analyze(component: Component, builder: AbstractMetricBuilder): void {
+    analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void {
         let params = this.getParams() as ParamsType;
         let logMessages: string[] = [];
         let result = 0;

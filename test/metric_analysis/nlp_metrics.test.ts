@@ -9,9 +9,11 @@ import { MetricResult } from "../../src/metric_analysis/metric_result";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
 import { JavaParser } from "../../src/parser/java_parser";
+const languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
+
 beforeAll(()=>{
     MetricManager.getAllImplementedMetricNames();
-    DocumentationAnalysisMetric.languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
+    
 
 });
 test("Test syllables",()=>{
@@ -39,7 +41,7 @@ test("test complex flesh metric",()=>{
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
     let params=MetricManager.getDefaultMetricParam("flesch");
-    analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,);
+    analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,languageHelper);
     let score=builder.getAggregatedResult("").getResult();
     expect(score).toBeCloseTo(15.68);
 });
@@ -52,7 +54,7 @@ test("test easy flesh metric",()=>{
     let builder=new MetricResultBuilder();
     let params=MetricManager.getDefaultMetricParam("flesch");
 
-    analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,);
+    analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,languageHelper);
     let score=builder.getAggregatedResult("").getResult();
     expect(score).toBeCloseTo(85);
 });
@@ -88,7 +90,7 @@ test("test method coherence",()=>{
     let root=new JavaParser().parse(path);
     let res={path,root}
     let analyzer=new FileAnalyzer();
-    analyzer.analyze(res,coherence,builder);
+    analyzer.analyze(res,coherence,builder,languageHelper);
     let result=builder.getAggregatedResult("").getResult()
     expect(result).toBe(60);
 });

@@ -14,13 +14,12 @@ export const MIN_SCORE = 0;
 export  abstract class DocumentationAnalysisMetric {
     private uniqueName:string;
     private params:any;
-    public static languageHelper:LanguageSpecificHelper|null;
     /**
      * should analyze the documentation of a single component and processes the result of the analysis using the given @see[MetricResultBuilder]
      * @param component The Component to analyze
      * @param builder The builder to process all results of the component and its children
      */
-    public abstract analyze(component: Component, builder: AbstractMetricBuilder| undefined): void
+    public abstract analyze(component: Component, builder: AbstractMetricBuilder| undefined,langSpec:LanguageSpecificHelper): void
     /**
      * 
      * @param component Determines whether a component is worth checking

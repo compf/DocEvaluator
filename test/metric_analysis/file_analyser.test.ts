@@ -21,6 +21,7 @@ import { MethodComponent } from "../../src/parser/parse_result/method_component"
 import { PathWeightResolver, SimpleWeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 const path = "testDir/commented_class.java";
+const languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
 function getCommentedClassRoot(): HierarchicalComponent {
     let parser = new JavaParser();
 
@@ -30,14 +31,13 @@ function getCommentedClassRoot(): HierarchicalComponent {
 
 beforeAll(()=>{
     MetricManager.getAllImplementedMetricNames();
-    DocumentationAnalysisMetric.languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
 
 });
 test("test simple present metric on commented class", () => {
     let root = getCommentedClassRoot();
     let analyzer = new FileAnalyzer();
     let resultBuilder = new MetricResultBuilder();
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleCommentPresentMetric,"simple_comment_test",undefined), resultBuilder);
+    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleCommentPresentMetric,"simple_comment_test",undefined), resultBuilder,languageHelper);
     const expectedResult = (3 / 11) * 100;
     expect(resultBuilder.getAggregatedResult("").getResult()).toBeCloseTo(expectedResult, 5)
 });
@@ -45,7 +45,7 @@ test("test public only metric on commented class", () => {
     let root = getCommentedClassRoot();
     let resultBuilder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimplePublicMembersOnlyMetric,"public_only_test",undefined), resultBuilder);
+    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimplePublicMembersOnlyMetric,"public_only_test",undefined), resultBuilder,languageHelper);
     const expectedResult = (2 / 6) * 100;
     expect(resultBuilder.getAggregatedResult("").getResult()).toBeCloseTo(expectedResult, 5)
 });
@@ -56,7 +56,7 @@ test("test longer uncommented method", () => {
     let builder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
     let conf = { ignore_lines: ["", "{", "}"],k:0.2 }
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleLargeMethodCommentedMetric,"large_method_test",conf), builder);
+    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleLargeMethodCommentedMetric,"large_method_test",conf), builder,languageHelper);
     let result = builder.getAggregatedResult("");
 
 
@@ -80,7 +80,7 @@ test("test commented ratio metric", () => {
     let builder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
     let conf = { ignore_lines: ["", "{", "}"] }
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(CommentedLinesRatioMetric,"comment_line_ratio_test",conf), builder);
+    analyzer.analyze({ root, path }, MetricManager.createMetricByType(CommentedLinesRatioMetric,"comment_line_ratio_test",conf), builder,languageHelper);
     let result = builder.getAggregatedResult("");
     expect(result.getResult()).toBe(50);
 });
@@ -142,7 +142,7 @@ test("test method documentation compatible", () => {
     let builder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
     let conf = undefined;
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleMethodDocumentationMetric,"doc_complete",conf), builder);
+    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleMethodDocumentationMetric,"doc_complete",conf), builder,languageHelper);
     let result = builder.getAggregatedResult("");
 
     const expected = 63.8888888;
@@ -165,13 +165,13 @@ test("weighted result builder", () => {
 
     let firstBuilder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
-    analyzer.analyze({ root, path }, simple_comment, firstBuilder);
+    analyzer.analyze({ root, path }, simple_comment, firstBuilder,languageHelper);
     const simpleCommentExpectedResult = (3 / 11) * 100;
     let simpleCommentResult = firstBuilder.getAggregatedResult("simple_comment_weighted");
 
     let secondBuilder = new MetricResultBuilder();
 
-    analyzer.analyze({ root, path }, public_members, secondBuilder);
+    analyzer.analyze({ root, path }, public_members, secondBuilder,languageHelper);
     let publicMembersOnlyResult = secondBuilder.getAggregatedResult("simple_public_weighted");
 
     const publicMembersExpectedOnlyResult = (2 / 6) * 100;
@@ -194,7 +194,7 @@ let builder=new MetricResultBuilder();
 let metric=MetricManager.createMetricByType(IgnoreGetterSetterMetric,"getter_setter_test",params);
 let analyzer=new FileAnalyzer();
 
-analyzer.analyze(res,metric,builder)
+analyzer.analyze(res,metric,builder,languageHelper)
 let result=builder.getAggregatedResult("");
 expect(result.getResult()).toBe(25);
 
@@ -207,7 +207,7 @@ test("test ignore comments",()=>{
     let result={path,root};
     let file_analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    file_analyzer.analyze(result,MetricManager.createMetricByType(SimpleCommentPresentMetric,"simple_comment_ignore",undefined),builder);
+    file_analyzer.analyze(result,MetricManager.createMetricByType(SimpleCommentPresentMetric,"simple_comment_ignore",undefined),builder,languageHelper);
     let metricResult=builder.getAggregatedResult("").getResult();
     expect(metricResult).toBe(50);
 });
@@ -222,7 +222,7 @@ test("test weighted path",()=>{
     let singleFileResultBuilder=new MetricResultBuilder();
     for(let p of paths){
         let root=parser.parse(p);
-        fileAnalyzer.analyze({path:p,root:root},metric,singleFileResultBuilder);
+        fileAnalyzer.analyze({path:p,root:root},metric,singleFileResultBuilder,languageHelper);
         builder.processResult(singleFileResultBuilder.getAggregatedResult(p));
         singleFileResultBuilder.reset();
     }
@@ -238,7 +238,7 @@ test("test overriding and java throws",()=>{
     let doc=MetricManager.createMetricByType(SimpleMethodDocumentationMetric,"doc2",null);
     let fileAnalyzer=new FileAnalyzer();
     let singleFileResultBuilder=new MetricResultBuilder();
-    fileAnalyzer.analyze(result,doc,singleFileResultBuilder);
+    fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
     let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
     const expectedResult=80;
     expect(finalResult).toBeCloseTo(expectedResult);
