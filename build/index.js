@@ -28729,6 +28729,7 @@ const EvaluatorConf_1 = __nccwpck_require__(6410);
 const parser_factory_1 = __nccwpck_require__(8799);
 const weight_resolver_1 = __nccwpck_require__(3910);
 const state_manager_factory_1 = __nccwpck_require__(5253);
+const language_specific_helper_factory_1 = __nccwpck_require__(6035);
 function main(args) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -28746,6 +28747,7 @@ function main(args) {
     for (let m of conf.metrics) {
         weightMap.set(metric_manager_1.MetricManager.getMetricByUniqueName(m.unique_name), m.weight);
     }
+    let languageHelper = language_specific_helper_factory_1.LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
@@ -28757,7 +28759,7 @@ function main(args) {
     let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
     let lastResult = stateManager.load();
     console.log("last result", lastResult);
-    let params = { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric };
+    let params = { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper };
     for (let relevantFile of relevantFiles) {
         processByFile(relevantFile, params);
     }
@@ -28783,7 +28785,7 @@ function main(args) {
 function processByMetric(root, metric, params) {
     var _a;
     console.log("Using metric", metric.getUniqueName());
-    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder);
+    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder, params.languageHelper);
     let partialResult = params.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
     if (!params.resultByMetric.has(metric.getUniqueName())) {
         params.resultByMetric.set(metric.getUniqueName(), new metric_result_builder_1.MetricResultBuilder());
@@ -28896,8 +28898,8 @@ class FileAnalyzer {
      * @param analyzer The metric to evaluate the file
      * @param builder The result builder to process the several results
      */
-    analyze(parse_result, analyzer, builder) {
-        this.analyzeComponent(parse_result.root, builder, analyzer);
+    analyze(parse_result, analyzer, builder, langSpec) {
+        this.analyzeComponent(parse_result.root, builder, analyzer, langSpec);
     }
     /**
      *
@@ -28905,11 +28907,12 @@ class FileAnalyzer {
      * @param builder  The result builder to process the several results
      * @param analyzer The metric to evaluate the file
      */
-    analyzeComponent(component, builder, analyzer) {
+    analyzeComponent(component, builder, analyzer, langSpec) {
         let ignoreTag = this.getIgnoreFlag(component);
+        //console.log(DocumentationAnalysisMetric.languageHelper);
         // Only analyze relevant component to this metric
-        if (analyzer.shallConsider(component) && ignoreTag != IgnoreTags.IGNORE_THIS && ignoreTag != IgnoreTags.IGNORE_NODE) {
-            analyzer.analyze(component, builder);
+        if (langSpec.shallConsider(component) && analyzer.shallConsider(component) && ignoreTag != IgnoreTags.IGNORE_THIS && ignoreTag != IgnoreTags.IGNORE_NODE) {
+            analyzer.analyze(component, builder, langSpec);
         }
         /* Analyze the children of the component if it is a hierarchical one
         This will be done even if the parent was not considered because we don't want to miss
@@ -28918,7 +28921,7 @@ class FileAnalyzer {
         if (component instanceof hierarchical_component_1.HierarchicalComponent && ignoreTag != IgnoreTags.IGNORE_NODE) {
             let hierarchical = component;
             for (let c of hierarchical.getChildren()) {
-                this.analyzeComponent(c, builder, analyzer);
+                this.analyzeComponent(c, builder, analyzer, langSpec);
             }
         }
     }
@@ -28948,15 +28951,94 @@ exports.FileAnalyzer = FileAnalyzer;
 
 /***/ }),
 
-/***/ 4938:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ 5715:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.JavaSpecificHelper = void 0;
+const method_component_1 = __nccwpck_require__(4725);
+const log_message_1 = __nccwpck_require__(4938);
+const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+class JavaSpecificHelper {
+    rateDocumentaionCompatibility(component, results, logMessages) {
+        var _a;
+        let methodData = component.getComponentMetaInformation();
+        let throwTags = (_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getTags().filter((x) => x.getKind() == "@throws");
+        let throwParamInComment = new Set(throwTags === null || throwTags === void 0 ? void 0 : throwTags.map((x) => x.getParam()));
+        let throwParamInDecl = new Set(methodData.getThrownException());
+        for (let s1 of throwParamInDecl) {
+            if (throwParamInComment.has(s1)) {
+                results.push(documentation_analysis_metric_1.MAX_SCORE);
+            }
+            else {
+                results.push(documentation_analysis_metric_1.MIN_SCORE);
+                logMessages.push(new log_message_1.LogMessage("Throw " + s1 + " is not documented", component));
+            }
+        }
+    }
+    shallConsider(component) {
+        if (component instanceof method_component_1.MethodComponent) {
+            let methodData = component.getComponentMetaInformation();
+            return !methodData.isOverriding();
+        }
+        return true;
+    }
+}
+exports.JavaSpecificHelper = JavaSpecificHelper;
+
+
+/***/ }),
+
+/***/ 6035:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LanguageSpecificHelperFactory = void 0;
+const java_specific_helper_1 = __nccwpck_require__(5715);
+var LanguageSpecificHelperFactory;
+(function (LanguageSpecificHelperFactory) {
+    function loadHelper(name) {
+        switch (name) {
+            case "java":
+                return new java_specific_helper_1.JavaSpecificHelper();
+            default:
+                return new EmptyHelper();
+        }
+    }
+    LanguageSpecificHelperFactory.loadHelper = loadHelper;
+    class EmptyHelper {
+        rateDocumentaionCompatibility(component, results, logMessages) {
+            return;
+        }
+        shallConsider(component) {
+            return true;
+        }
+    }
+})(LanguageSpecificHelperFactory = exports.LanguageSpecificHelperFactory || (exports.LanguageSpecificHelperFactory = {}));
+
+
+/***/ }),
+
+/***/ 4938:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LogMessage = void 0;
+const chalk_1 = __importDefault(__nccwpck_require__(6504));
 class LogMessage {
-    constructor(msg) {
+    constructor(msg, component) {
+        let path = chalk_1.default.green(component.getTopParent().getName());
+        let qualifiedName = chalk_1.default.yellow(component.getQualifiedName());
+        let prefix = path + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
         this.msg = msg;
     }
     /**
@@ -29357,7 +29439,7 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
         super(...arguments);
         this.nlp_helper = new NLP_Helper_1.NLP_Helper();
     }
-    analyze(component, builder) {
+    analyze(component, builder, langSpec) {
         var _a;
         if (component.getComment() == null || ((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) == null)
             return;
@@ -29439,7 +29521,7 @@ const documentation_analysis_metric_1 = __nccwpck_require__(5830);
  * It returns the percentage of documented lines
  */
 class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMetric {
-    analyze(component, builder) {
+    analyze(component, builder, langSpec) {
         let params = this.getParams();
         let cls = component;
         let methods = cls.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).map((c) => c);
@@ -29497,16 +29579,12 @@ exports.ComponentBasedMetric = ComponentBasedMetric;
 /***/ }),
 
 /***/ 5830:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DocumentationAnalysisMetric = exports.MIN_SCORE = exports.MAX_SCORE = void 0;
-const chalk_1 = __importDefault(__nccwpck_require__(6504));
 const log_message_1 = __nccwpck_require__(4938);
 const metric_result_1 = __nccwpck_require__(6673);
 exports.MAX_SCORE = 100;
@@ -29539,10 +29617,7 @@ class DocumentationAnalysisMetric {
         builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
     }
     pushLogMessage(component, msg, logMessages) {
-        let path = chalk_1.default.green(component.getTopParent().getName());
-        let qualifiedName = chalk_1.default.yellow(component.getQualifiedName());
-        let prefix = path + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
-        logMessages.push(new log_message_1.LogMessage(prefix + msg));
+        logMessages.push(new log_message_1.LogMessage(msg, component));
     }
     createLogMessages(messages, component) {
         let result = [];
@@ -29570,7 +29645,7 @@ const component_based__metric_1 = __nccwpck_require__(5165);
  * This metric calculate the flesh score which describes the readability of a text
  */
 class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
-    analyze(component, builder) {
+    analyze(component, builder, langSpec) {
         let params = this.getParams();
         let textsToConsider = this.getTextToConsider(component, params);
         let nlp_helper = new NLP_Helper_1.NLP_Helper();
@@ -29692,7 +29767,7 @@ const documentation_analysis_metric_1 = __nccwpck_require__(5830);
  * This metric simply check whether a comment is present
  */
 class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBasedMetric {
-    analyze(component, builder) {
+    analyze(component, builder, langSpec) {
         let score = 0;
         let logMessages = [];
         if (component.getComment() != null) {
@@ -29760,7 +29835,7 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
         }
         return result;
     }
-    analyze(component, builder) {
+    analyze(component, builder, langSpec) {
         let params = this.getParams();
         let logMessages = [];
         let result = 0;
@@ -29799,7 +29874,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
     shallConsider(component) {
         return super.shallConsider(component) && component instanceof method_component_1.MethodComponent;
     }
-    analyze(component, builder) {
+    analyze(component, builder, langSpec) {
         let logMessages = [];
         let method = component;
         let score = 0;
@@ -29809,7 +29884,13 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             let nonExistingParamResult = this.checkNonExistingDocumentedParameters(method, logMessages);
             let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == structured_comment_1.StructuredCommentTagKind.RETURN);
             let returnExistingResult = returnExisting ? documentation_analysis_metric_1.MAX_SCORE : documentation_analysis_metric_1.MIN_SCORE;
-            score = (paramsResult + nonExistingParamResult + returnExistingResult) / 3;
+            let results = [paramsResult, nonExistingParamResult, returnExistingResult];
+            langSpec.rateDocumentaionCompatibility(component, results, logMessages);
+            let sum = 0;
+            for (let s of results) {
+                sum += s;
+            }
+            score = sum / results.length;
         }
         this.pushResult(builder, score, logMessages);
     }
@@ -42807,8 +42888,14 @@ const component_data_1 = __nccwpck_require__(5789);
 class JavaMethodData extends component_data_1.DefaultComponentMetaInformation {
     constructor(isPublic, isOverriding, exceptionThrown) {
         super(isPublic);
-        this.isOverriding = isOverriding;
+        this.overriding = isOverriding;
         this.exceptionThrown = exceptionThrown;
+    }
+    getThrownException() {
+        return this.exceptionThrown;
+    }
+    isOverriding() {
+        return this.overriding;
     }
 }
 exports.JavaMethodData = JavaMethodData;
