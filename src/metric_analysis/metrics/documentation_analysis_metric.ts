@@ -49,10 +49,8 @@ export  abstract class DocumentationAnalysisMetric {
         builder.processResult(new MetricResult(score,logMessages,this.getUniqueName()));
     }
     protected pushLogMessage(component:Component,msg:string,logMessages:LogMessage[]){
-        let path= chalk.green( component.getTopParent().getName());
-        let qualifiedName=chalk.yellow(component.getQualifiedName())
-        let prefix=path+ " "+ qualifiedName + "(L. "+component.getLineNumber()+"): ";
-        logMessages.push(new LogMessage(prefix+msg));
+       
+        logMessages.push(new LogMessage(msg,component));
     }
     protected createLogMessages(messages:string[],component:Component){
         let result:LogMessage[]=[]
