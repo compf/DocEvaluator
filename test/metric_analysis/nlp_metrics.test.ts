@@ -1,12 +1,19 @@
 import nlp from "compromise";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
+import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
+import { DocumentationAnalysisMetric } from "../../src/metric_analysis/metrics/documentation_analysis_metric";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResult } from "../../src/metric_analysis/metric_result";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
 import { JavaParser } from "../../src/parser/java_parser";
+beforeAll(()=>{
+    MetricManager.getAllImplementedMetricNames();
+    DocumentationAnalysisMetric.languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
+
+});
 test("Test syllables",()=>{
     const text="This is a sample text";
     let nlp_helper=new NLP_Helper();

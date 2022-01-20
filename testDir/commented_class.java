@@ -28,7 +28,6 @@ public class SecondClass extends Object implements List<Integer> {
     /**
      * 
      */
-    @Override
     private /* test */ String hallo() {
 
     }

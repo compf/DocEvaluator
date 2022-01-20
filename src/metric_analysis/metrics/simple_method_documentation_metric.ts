@@ -25,7 +25,13 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let nonExistingParamResult = this.checkNonExistingDocumentedParameters(method, logMessages);
             let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.RETURN);
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
-            score = (paramsResult + nonExistingParamResult + returnExistingResult) / 3;
+           let results=[paramsResult , nonExistingParamResult , returnExistingResult];
+           DocumentationAnalysisMetric.languageHelper?.rateDocumentaionCompatibility(component,results,logMessages);
+           let sum=0;
+           for(let s of results){
+               sum+=s;
+           }
+           score=sum/results.length;
         }
        this.pushResult(builder,score,logMessages);
 

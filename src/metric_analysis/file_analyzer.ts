@@ -25,8 +25,9 @@ export class FileAnalyzer {
      */
     private analyzeComponent(component: Component, builder: AbstractMetricBuilder, analyzer: DocumentationAnalysisMetric): void {
         let ignoreTag=this.getIgnoreFlag(component);
+        //console.log(DocumentationAnalysisMetric.languageHelper);
         // Only analyze relevant component to this metric
-        if (analyzer.shallConsider(component) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {
+        if ( DocumentationAnalysisMetric.languageHelper?.shallConsider(component) && analyzer.shallConsider(component) && ignoreTag!=IgnoreTags.IGNORE_THIS && ignoreTag!=IgnoreTags.IGNORE_NODE) {
             analyzer.analyze(component, builder);
         }
         /* Analyze the children of the component if it is a hierarchical one

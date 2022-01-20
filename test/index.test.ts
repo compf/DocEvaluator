@@ -4,12 +4,14 @@ import { SimpleCommentPresentMetric } from "../src/metric_analysis/metrics/simpl
 import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/metrics/simple_method_documentation_metric";
 import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_median_result_builder";
 import { WeightResolver } from "../src/metric_analysis/weight_resolver";
+
 class BaseClass {
 
 }
 class DerivedClass extends BaseClass {
 
 }
+
 test("test empty class instanceof works", () => {
     let base = new BaseClass();
     let derive = new DerivedClass();

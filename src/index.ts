@@ -12,6 +12,7 @@ import { PathWeightResolver, SimpleWeightResolver } from "./metric_analysis/weig
 import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
 import { MetricResult } from "./metric_analysis/metric_result";
 import { StateManagerFactory } from "./conf/state_manager_factory";
+import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
 interface Parameters{
   
      parser:BaseParser,
@@ -40,6 +41,7 @@ function main(args: Array<string>) {
     for(let m of conf.metrics){
         weightMap.set(MetricManager.getMetricByUniqueName(m.unique_name),m.weight);
     }
+    DocumentationAnalysisMetric.languageHelper=LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
     let parser = ParserFactory.createParser(conf.parser);
@@ -51,6 +53,7 @@ function main(args: Array<string>) {
     let stateManager=StateManagerFactory.load(conf.state_manager,workingDirectory);
     let lastResult=stateManager.load();
     console.log("last result",lastResult);
+
     let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric};
     for (let relevantFile of relevantFiles)
      {   

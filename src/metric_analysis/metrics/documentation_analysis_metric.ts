@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { Component } from "../../parser/parse_result/component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
+import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { LogMessage } from "../log_message";
 import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
@@ -13,6 +14,7 @@ export const MIN_SCORE = 0;
 export  abstract class DocumentationAnalysisMetric {
     private uniqueName:string;
     private params:any;
+    public static languageHelper:LanguageSpecificHelper|null;
     /**
      * should analyze the documentation of a single component and processes the result of the analysis using the given @see[MetricResultBuilder]
      * @param component The Component to analyze

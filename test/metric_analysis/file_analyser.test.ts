@@ -19,6 +19,7 @@ import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 import { MethodComponent } from "../../src/parser/parse_result/method_component";
 import { PathWeightResolver, SimpleWeightResolver } from "../../src/metric_analysis/weight_resolver";
+import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 const path = "testDir/commented_class.java";
 function getCommentedClassRoot(): HierarchicalComponent {
     let parser = new JavaParser();
@@ -26,8 +27,11 @@ function getCommentedClassRoot(): HierarchicalComponent {
     let root = parser.parse(path);
     return root;
 }
+
 beforeAll(()=>{
     MetricManager.getAllImplementedMetricNames();
+    DocumentationAnalysisMetric.languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
+
 });
 test("test simple present metric on commented class", () => {
     let root = getCommentedClassRoot();
@@ -226,3 +230,17 @@ test("test weighted path",()=>{
     expect(result).toBeCloseTo(40.887,3);
 
 });
+test("test overriding and java throws",()=>{
+    const path="testDir/OverridingTest.java";
+    let parser=new JavaParser();
+    let root=parser.parse(path);
+    let result={path,root};
+    let doc=MetricManager.createMetricByType(SimpleMethodDocumentationMetric,"doc2",null);
+    let fileAnalyzer=new FileAnalyzer();
+    let singleFileResultBuilder=new MetricResultBuilder();
+    fileAnalyzer.analyze(result,doc,singleFileResultBuilder);
+    let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
+    const expectedResult=80;
+    expect(finalResult).toBeCloseTo(expectedResult);
+});
+
