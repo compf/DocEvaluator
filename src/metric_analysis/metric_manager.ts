@@ -12,7 +12,7 @@ import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
 import { FleschMetric } from "./metrics/flesch_metric";
 import { WeightResolver } from "./weight_resolver";
 import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_metric";
-import { AbbreviationCountMetric } from "./metrics/abbreviation_count_metric";
+import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -82,7 +82,7 @@ export namespace MetricManager {
         commented_lines_ratio="commented_lines_ratio",
         flesch="flesch",
         comment_name_coherence="comment_name_coherence",
-        abbreviation_count="abbreviation_count",
+        certain_terms="certain_terms",
     }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
     const allMetricTypes:BiMap<MetricNames,new (name: string, params: any) => DocumentationAnalysisMetric>=new BiMap<MetricNames,new (name: string, params: any) => DocumentationAnalysisMetric>()
@@ -94,7 +94,7 @@ export namespace MetricManager {
         allMetricTypes.add(MetricNames.commented_lines_ratio, CommentedLinesRatioMetric);
         allMetricTypes.add(MetricNames.flesch, FleschMetric)
         allMetricTypes.add(MetricNames.comment_name_coherence,CommentNameCoherenceMetric);
-        allMetricTypes.add(MetricNames.abbreviation_count,AbbreviationCountMetric);
+        allMetricTypes.add(MetricNames.certain_terms,CertainTermCountMetric);
        
     }
     const uniqueNameCountMap:Map<string,number>=new Map<string,number>();
@@ -177,8 +177,8 @@ export namespace MetricManager {
                 return { consider_tags: false };
             case MetricNames.comment_name_coherence:
                 return {upper_theshold:0.5,lower_threshold:0,levenshtein_distance:1};
-            case MetricNames.abbreviation_count:
-                return {consider_tags:false,k:0.1};
+            case MetricNames.certain_terms:
+                return {consider_tags:false,k:0.1,levenshtein_distance:1,terms:["aka","e.g.","viz","i.e."]};
             default:
                 return {}
         }

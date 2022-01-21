@@ -1,7 +1,7 @@
 /**
- * This class contains one abbreviation etc. 
+ * This class contains one abbreviation e.g. 
  */
-public class AbbreviationTest {
+public class CertainWordsTest {
     public void testMethod(){
 
     }
@@ -12,7 +12,7 @@ public class AbbreviationTest {
 
     }
     /**
-     * This method has many mr etc
+     * This method has aka viz
      */
     protected void manyAbbrev(){
 
