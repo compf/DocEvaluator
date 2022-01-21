@@ -27,7 +27,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.RETURN);
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
            let results=[paramsResult , nonExistingParamResult , returnExistingResult];
-            langSpec.rateDocumentaionCompatibility(component,results,logMessages);
+            langSpec.rateDocumentationCompatibility(component,results,logMessages);
            let sum=0;
            for(let s of results){
                sum+=s;

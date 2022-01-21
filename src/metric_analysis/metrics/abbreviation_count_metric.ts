@@ -7,6 +7,9 @@ import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
 
 interface ParamsType { k: number, consider_tags: boolean }
+/**
+ * Punishes comments with abbreviation as they are usually harder to read 
+ */
 export class AbbreviationCountMetric extends ComponentBasedMetric {
     private nlp_helper = new NLP_Helper();
     public analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
