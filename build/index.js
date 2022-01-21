@@ -28778,7 +28778,7 @@ function main(args) {
     if (result.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult < result.getResult() && Math.abs(lastResult - result.getResult()) >= conf.max_diff_last_run) {
+    else if (lastResult != null && lastResult > result.getResult() && Math.abs(lastResult - result.getResult()) >= conf.max_diff_last_run) {
         throw new Error("Difference from last run is too high");
     }
 }
@@ -29101,7 +29101,6 @@ exports.MedianResultBuilder = MedianResultBuilder;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.MetricManager = void 0;
 const commented_lines_ratio_metric_1 = __nccwpck_require__(5409);
-const ignore_getters_setter_metric_1 = __nccwpck_require__(7383);
 const median_result_builder_1 = __nccwpck_require__(3107);
 const metric_result_builder_1 = __nccwpck_require__(9514);
 const simple_comment_present_metric_1 = __nccwpck_require__(4913);
@@ -29147,9 +29146,7 @@ var MetricManager;
      */
     function createMetricByName(metricName, uniqueName, params) {
         let type = allMetricTypes.getByKey(metricName);
-        let instance = new type(uniqueName, params);
-        allMetrics.set(uniqueName, instance);
-        return instance;
+        return createMetricByType(type, uniqueName, params);
     }
     MetricManager.createMetricByName = createMetricByName;
     /**
@@ -29160,7 +29157,9 @@ var MetricManager;
      * @returns a valid metric instance
      */
     function createMetricByType(type, uniqueName, params) {
+        let defaultParams = MetricManager.getDefaultMetricParam(getMetricName(type));
         let instance = new type(uniqueName, params);
+        Object.assign(defaultParams, params);
         allMetrics.set(uniqueName, instance);
         return instance;
     }
@@ -29179,17 +29178,26 @@ var MetricManager;
         return allMetrics.get(uniqueName);
     }
     MetricManager.getMetricByUniqueName = getMetricByUniqueName;
+    let MetricNames;
+    (function (MetricNames) {
+        MetricNames["simple_comment"] = "simple_comment";
+        MetricNames["public_members_only"] = "public_members_only";
+        MetricNames["large_method_commented"] = "large_method_commented";
+        MetricNames["method_fully_documented"] = "method_fully_documented";
+        MetricNames["commented_lines_ratio"] = "commented_lines_ratio";
+        MetricNames["flesch"] = "flesch";
+        MetricNames["comment_name_coherence"] = "comment_name_coherence";
+    })(MetricNames = MetricManager.MetricNames || (MetricManager.MetricNames = {}));
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
     function init() {
-        allMetricTypes.add("simple_comment", simple_comment_present_metric_1.SimpleCommentPresentMetric);
-        allMetricTypes.add("public_members_only", simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric);
-        allMetricTypes.add("large_method_commented", simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric);
-        allMetricTypes.add("method_fully_documented", simple_method_documentation_metric_1.SimpleMethodDocumentationMetric);
-        allMetricTypes.add("commented_lines_ratio", commented_lines_ratio_metric_1.CommentedLinesRatioMetric);
-        allMetricTypes.add("ignore_getters_setters", ignore_getters_setter_metric_1.IgnoreGetterSetterMetric);
-        allMetricTypes.add("flesch", flesch_metric_1.FleschMetric);
-        allMetricTypes.add("comment_name_coherence", comment_name_coherence_metric_1.CommentNameCoherenceMetric);
+        allMetricTypes.add(MetricNames.simple_comment, simple_comment_present_metric_1.SimpleCommentPresentMetric);
+        allMetricTypes.add(MetricNames.public_members_only, simple_public_members_only_metric_1.SimplePublicMembersOnlyMetric);
+        allMetricTypes.add(MetricNames.large_method_commented, simple_large_method_commented_metric_1.SimpleLargeMethodCommentedMetric);
+        allMetricTypes.add(MetricNames.method_fully_documented, simple_method_documentation_metric_1.SimpleMethodDocumentationMetric);
+        allMetricTypes.add(MetricNames.commented_lines_ratio, commented_lines_ratio_metric_1.CommentedLinesRatioMetric);
+        allMetricTypes.add(MetricNames.flesch, flesch_metric_1.FleschMetric);
+        allMetricTypes.add(MetricNames.comment_name_coherence, comment_name_coherence_metric_1.CommentNameCoherenceMetric);
     }
     const uniqueNameCountMap = new Map();
     /**
@@ -29259,15 +29267,16 @@ var MetricManager;
      */
     function getDefaultMetricParam(metricName) {
         switch (metricName) {
-            case "large_method_commented":
+            case MetricNames.large_method_commented:
                 return { ignore_lines: ["", "{", "}"], k: 0.2 };
-            case "commented_lines_ratio":
+            case MetricNames.commented_lines_ratio:
                 return { ignore_ines: ["", "{", "}"] };
-            case "ignore_getters_setter":
-                return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*" };
-            case "flesch":
+            case MetricNames.simple_comment:
+            case MetricNames.public_members_only:
+                return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*", ignore_getter_setter: false };
+            case MetricNames.flesch:
                 return { consider_tags: false };
-            case "comment_name_coherence":
+            case MetricNames.comment_name_coherence:
                 return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };
             default:
                 return {};
@@ -29648,6 +29657,8 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, langSpec) {
         let params = this.getParams();
         let textsToConsider = this.getTextToConsider(component, params);
+        if (textsToConsider.length == 0)
+            return;
         let nlp_helper = new NLP_Helper_1.NLP_Helper();
         let sum = 0;
         for (let text of textsToConsider) {
@@ -29716,17 +29727,12 @@ exports.FleschMetric = FleschMetric;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IgnoreGetterSetterMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
-const simple_comment_present_metric_1 = __nccwpck_require__(4913);
 /**
  * This metric works the same as the simple comment present metric but ignores getter/setters
  */
-class IgnoreGetterSetterMetric extends simple_comment_present_metric_1.SimpleCommentPresentMetric {
-    shallConsider(component) {
-        let params = this.getParams();
-        if ((!super.shallConsider(component))) {
-            return false;
-        }
-        else if (component instanceof method_component_1.MethodComponent) {
+class IgnoreGetterSetterMetric {
+    shallConsider(component, params) {
+        if (component instanceof method_component_1.MethodComponent) {
             let method = component;
             return !this.isGetter(method, params) && !this.isSetter(method, params);
         }
@@ -29763,10 +29769,15 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimpleCommentPresentMetric = void 0;
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+const ignore_getters_setter_metric_1 = __nccwpck_require__(7383);
 /**
  * This metric simply check whether a comment is present
  */
 class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBasedMetric {
+    constructor() {
+        super(...arguments);
+        this.getterSetterMetric = new ignore_getters_setter_metric_1.IgnoreGetterSetterMetric();
+    }
     analyze(component, builder, langSpec) {
         let score = 0;
         let logMessages = [];
@@ -29782,6 +29793,14 @@ class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBase
     processResult(result, logMessages) {
         logMessages.push("Component has no documentation");
         return result;
+    }
+    shallConsider(component) {
+        let params = this.getParams();
+        let consider = super.shallConsider(component);
+        if (params != undefined && params.ignore_getter_setter) {
+            return consider && this.getterSetterMetric.shallConsider(component, params);
+        }
+        return consider;
     }
 }
 exports.SimpleCommentPresentMetric = SimpleCommentPresentMetric;
