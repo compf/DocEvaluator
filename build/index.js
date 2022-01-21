@@ -28579,6 +28579,10 @@ exports.FileStateManager = void 0;
 const fs_1 = __nccwpck_require__(7147);
 const path_1 = __nccwpck_require__(1017);
 const STATE_PATH = ".evaluator_last_state.txt";
+/**
+ * Saves the state in a file called ".evaluator_last_state.txt"
+ * This file can be pushed to GitHub so that it will persist
+ */
 class FileStateManager {
     constructor(workingDirectory) {
         this.path = (0, path_1.join)(workingDirectory, STATE_PATH);
@@ -28610,6 +28614,12 @@ exports.StateManagerFactory = void 0;
 const file_state_manager_1 = __nccwpck_require__(3422);
 var StateManagerFactory;
 (function (StateManagerFactory) {
+    /**
+     * Creates a state manager based on a string
+     * @param name a name to identify the state manager
+     * @param workingDirectory the directory where the documentation analysis is happening
+     * @returns a valid state manager
+     */
     function load(name, workingDirectory) {
         switch (name) {
             case "file":
@@ -28858,6 +28868,9 @@ class NLP_Helper {
     levenshtein(word1, word2) {
         return (new levenshtein_1.default(word1, word2)).distance;
     }
+    countAbbreviations(text) {
+        return (0, compromise_1.default)(text).abbreviations().length;
+    }
 }
 exports.NLP_Helper = NLP_Helper;
 
@@ -28962,7 +28975,7 @@ const method_component_1 = __nccwpck_require__(4725);
 const log_message_1 = __nccwpck_require__(4938);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 class JavaSpecificHelper {
-    rateDocumentaionCompatibility(component, results, logMessages) {
+    rateDocumentationCompatibility(component, results, logMessages) {
         var _a;
         let methodData = component.getComponentMetaInformation();
         let throwTags = (_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getTags().filter((x) => x.getKind() == "@throws");
@@ -28999,6 +29012,9 @@ exports.JavaSpecificHelper = JavaSpecificHelper;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LanguageSpecificHelperFactory = void 0;
 const java_specific_helper_1 = __nccwpck_require__(5715);
+/**
+ * Creates a Language Specific helper based on a string
+ */
 var LanguageSpecificHelperFactory;
 (function (LanguageSpecificHelperFactory) {
     function loadHelper(name) {
@@ -29010,8 +29026,11 @@ var LanguageSpecificHelperFactory;
         }
     }
     LanguageSpecificHelperFactory.loadHelper = loadHelper;
+    /**
+     * Stub class so that not every language need a specific helper
+     */
     class EmptyHelper {
-        rateDocumentaionCompatibility(component, results, logMessages) {
+        rateDocumentationCompatibility(component, results, logMessages) {
             return;
         }
         shallConsider(component) {
@@ -29111,6 +29130,7 @@ const weighted_median_result_builder_1 = __nccwpck_require__(7634);
 const weighted_metric_result_builder_1 = __nccwpck_require__(745);
 const flesch_metric_1 = __nccwpck_require__(544);
 const comment_name_coherence_metric_1 = __nccwpck_require__(3970);
+const abbreviation_count_metric_1 = __nccwpck_require__(1777);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -29187,6 +29207,7 @@ var MetricManager;
         MetricNames["commented_lines_ratio"] = "commented_lines_ratio";
         MetricNames["flesch"] = "flesch";
         MetricNames["comment_name_coherence"] = "comment_name_coherence";
+        MetricNames["abbreviation_count"] = "abbreviation_count";
     })(MetricNames = MetricManager.MetricNames || (MetricManager.MetricNames = {}));
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
@@ -29198,6 +29219,7 @@ var MetricManager;
         allMetricTypes.add(MetricNames.commented_lines_ratio, commented_lines_ratio_metric_1.CommentedLinesRatioMetric);
         allMetricTypes.add(MetricNames.flesch, flesch_metric_1.FleschMetric);
         allMetricTypes.add(MetricNames.comment_name_coherence, comment_name_coherence_metric_1.CommentNameCoherenceMetric);
+        allMetricTypes.add(MetricNames.abbreviation_count, abbreviation_count_metric_1.AbbreviationCountMetric);
     }
     const uniqueNameCountMap = new Map();
     /**
@@ -29278,6 +29300,8 @@ var MetricManager;
                 return { consider_tags: false };
             case MetricNames.comment_name_coherence:
                 return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };
+            case MetricNames.abbreviation_count:
+                return { consider_tags: false, k: 0.1 };
             default:
                 return {};
         }
@@ -29402,6 +29426,57 @@ class MetricResultBuilder extends abstract_metric_builder_1.AbstractMetricBuilde
     }
 }
 exports.MetricResultBuilder = MetricResultBuilder;
+
+
+/***/ }),
+
+/***/ 1777:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.AbbreviationCountMetric = void 0;
+const NLP_Helper_1 = __nccwpck_require__(2396);
+const component_based__metric_1 = __nccwpck_require__(5165);
+const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+const util_1 = __nccwpck_require__(996);
+/**
+ * Punishes comments with abbreviation as they are usually harder to read
+ */
+class AbbreviationCountMetric extends component_based__metric_1.ComponentBasedMetric {
+    constructor() {
+        super(...arguments);
+        this.nlp_helper = new NLP_Helper_1.NLP_Helper();
+    }
+    analyze(component, builder, langSpec) {
+        let params = this.getParams();
+        if (component.getComment() == null)
+            return;
+        let abbrevCount = 0;
+        if (component.getComment().getGeneralDescription() != null) {
+            abbrevCount += this.nlp_helper.countAbbreviations(component.getComment().getGeneralDescription());
+        }
+        if (params.consider_tags) {
+            for (let tag of component.getComment().getTags()) {
+                if (tag.getDescription() != null) {
+                    abbrevCount += this.nlp_helper.countAbbreviations(tag.getDescription());
+                }
+            }
+        }
+        let logMessages = [];
+        let score = this.processResult(abbrevCount, logMessages);
+        this.pushResult(builder, score, this.createLogMessages(logMessages, component));
+    }
+    processResult(result, logMessages) {
+        let params = this.getParams();
+        if (result > 1) {
+            logMessages.push("More than one abbreviation detected");
+        }
+        return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
+    }
+}
+exports.AbbreviationCountMetric = AbbreviationCountMetric;
 
 
 /***/ }),
@@ -29818,14 +29893,12 @@ exports.SimpleLargeMethodCommentedMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+const util_1 = __nccwpck_require__(996);
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer
  */
 class SimpleLargeMethodCommentedMetric extends component_based__metric_1.ComponentBasedMetric {
-    boundedGrowth(S, B0, k, l) {
-        return S - (S - B0) * Math.exp(-k * l);
-    }
     shallConsider(component) {
         return super.shallConsider(component) && component instanceof method_component_1.MethodComponent;
     }
@@ -29841,13 +29914,13 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
            some code lines, the part above 10 lines massively punnishes large function by using a large k-Factor
            */
         if (l < 10) {
-            result = this.boundedGrowth(0.9 * documentation_analysis_metric_1.MAX_SCORE, documentation_analysis_metric_1.MAX_SCORE, k, l);
+            result = util_1.Utils.boundedGrowth(0.9 * documentation_analysis_metric_1.MAX_SCORE, documentation_analysis_metric_1.MAX_SCORE, k, l);
         }
         else {
             /*
             10 lines are subtracted because we are only interested in the excess lines
             */
-            result = this.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, 0.9 * documentation_analysis_metric_1.MAX_SCORE, k, l - 10);
+            result = util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, 0.9 * documentation_analysis_metric_1.MAX_SCORE, k, l - 10);
         }
         if (result < 50) {
             logMessages.push(" Method is relatively long and has no documentation");
@@ -29904,7 +29977,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == structured_comment_1.StructuredCommentTagKind.RETURN);
             let returnExistingResult = returnExisting ? documentation_analysis_metric_1.MAX_SCORE : documentation_analysis_metric_1.MIN_SCORE;
             let results = [paramsResult, nonExistingParamResult, returnExistingResult];
-            langSpec.rateDocumentaionCompatibility(component, results, logMessages);
+            langSpec.rateDocumentationCompatibility(component, results, logMessages);
             let sum = 0;
             for (let s of results) {
                 sum += s;
@@ -29976,6 +30049,27 @@ class SimplePublicMembersOnlyMetric extends simple_comment_present_metric_1.Simp
     }
 }
 exports.SimplePublicMembersOnlyMetric = SimplePublicMembersOnlyMetric;
+
+
+/***/ }),
+
+/***/ 996:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Utils = void 0;
+/**
+ * collection of utility methods that are shared
+ */
+var Utils;
+(function (Utils) {
+    function boundedGrowth(S, B0, k, l) {
+        return S - (S - B0) * Math.exp(-k * l);
+    }
+    Utils.boundedGrowth = boundedGrowth;
+})(Utils = exports.Utils || (exports.Utils = {}));
 
 
 /***/ }),
@@ -42904,15 +42998,26 @@ exports.HierarchicalComponent = HierarchicalComponent;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.JavaMethodData = void 0;
 const component_data_1 = __nccwpck_require__(5789);
+/**
+ * Special data about java methods
+ */
 class JavaMethodData extends component_data_1.DefaultComponentMetaInformation {
     constructor(isPublic, isOverriding, exceptionThrown) {
         super(isPublic);
         this.overriding = isOverriding;
         this.exceptionThrown = exceptionThrown;
     }
+    /**
+     * gets all thrown exceptions as string array
+     * @returns all thrown exception
+     */
     getThrownException() {
         return this.exceptionThrown;
     }
+    /**
+     * getter to check whether method is overriding
+     * @returns true if the method is overriding
+     */
     isOverriding() {
         return this.overriding;
     }
