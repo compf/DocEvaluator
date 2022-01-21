@@ -29301,7 +29301,7 @@ var MetricManager;
             case MetricNames.comment_name_coherence:
                 return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };
             case MetricNames.certain_terms:
-                return { consider_tags: false, k: 0.1, levenshtein_distance: 1, terms: ["aka", "e.g.", "viz", "i.e."] };
+                return { consider_tags: false, k: 0.1, levenshtein_distance: 1, terms: ["aka", "e.g.", "viz", "i.e."], use_default_terms_too: false };
             default:
                 return {};
         }
@@ -29437,6 +29437,7 @@ exports.MetricResultBuilder = MetricResultBuilder;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CertainTermCountMetric = void 0;
+const metric_manager_1 = __nccwpck_require__(2217);
 const NLP_Helper_1 = __nccwpck_require__(2396);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
@@ -29445,9 +29446,17 @@ const util_1 = __nccwpck_require__(996);
  * Punishes comments with abbreviation as they are usually harder to read
  */
 class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMetric {
-    constructor() {
-        super(...arguments);
+    constructor(uniqueName, params) {
+        super(uniqueName, params);
         this.nlp_helper = new NLP_Helper_1.NLP_Helper();
+        let p = this.getParams();
+        if (p.use_default_terms_too) {
+            let defaultValue = metric_manager_1.MetricManager.getDefaultMetricParam(metric_manager_1.MetricManager.MetricNames.certain_terms);
+            for (let t of defaultValue.terms) {
+                if (!p.terms.includes(t))
+                    p.terms.push(t);
+            }
+        }
     }
     analyze(component, builder, langSpec) {
         let params = this.getParams();
