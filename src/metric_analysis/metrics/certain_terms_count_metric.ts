@@ -1,12 +1,13 @@
 import { Component } from "../../parser/parse_result/component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
+import { MetricManager } from "../metric_manager";
 import { NLP_Helper } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
 
-interface ParamsType { k: number, consider_tags: boolean,terms:string[],levenshtein_distance:number }
+interface ParamsType { k: number, consider_tags: boolean,terms:string[],levenshtein_distance:number,use_default_terms_too:boolean }
 /**
  * Punishes comments with abbreviation as they are usually harder to read 
  */
@@ -30,6 +31,18 @@ export class CertainTermCountMetric extends ComponentBasedMetric {
         let score=this.processResult(termCount,logMessages);
         this.pushResult(builder,score,this.createLogMessages(logMessages,component));
 
+    }
+    constructor(uniqueName:string,params:any){
+        super(uniqueName,params);
+        let p=this.getParams() as ParamsType;
+        if(p.use_default_terms_too){
+            let defaultValue=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.certain_terms) as ParamsType;
+            for(let t of defaultValue.terms){
+                if(!p.terms.includes(t))
+                    p.terms.push(t);
+            }
+        }
+       
     }
     private countSimilarTerms(text:string):number{
         let params=this.getParams() as ParamsType;

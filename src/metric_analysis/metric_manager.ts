@@ -178,7 +178,7 @@ export namespace MetricManager {
             case MetricNames.comment_name_coherence:
                 return {upper_theshold:0.5,lower_threshold:0,levenshtein_distance:1};
             case MetricNames.certain_terms:
-                return {consider_tags:false,k:0.1,levenshtein_distance:1,terms:["aka","e.g.","viz","i.e."]};
+                return {consider_tags:false,k:0.1,levenshtein_distance:1,terms:["aka","e.g.","viz","i.e."],use_default_terms_too:false};
             default:
                 return {}
         }
