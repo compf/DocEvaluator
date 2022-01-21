@@ -4,7 +4,7 @@ Im Folgenden werden die Metriken präsentiert, die in der finalen Version des \t
 Bei dieser Metrik werden dokumentierte Komponenten mit hundert Punkten bewertet, während undokumentierte Komponenten null Punkte erhalten. Dabei ist es irrelevant, wie gut die Dokumentation ist. Selbst die leere Dokumentation \textbf{/***/} würde ein Rating von 100 erhalten, da hier eine weitergehende Differenzierung zwar umsetzbar ist, aber dafür eine davon abgeleitete Metrik besser geeignet wäre. Vorteilhaft an dieser Metrik ist die Einfachheit der Implementierung. Außerdem ist sie als grober Indikator gut geeignet, die Qualität der Dokumentation abzuschätzen. Ein Nachteil an dieser Metrik ist, dass sie auch sinnlose Kommentare, die leer oder nichts mit der dokumentierten Komponente zu tun haben, mit der vollen Punktzahl bewertet werden. Außerdem bestehen moderne Softwareprojekte aus vielen verschiedenen Komponenten, wobei einige Komponenten nur an einigen wenigen Stellen verwendet werden und daher nur selten dokumentiert wurden. Aus diesen Grund würde diese Metrik die \enquote{wahre} Dokumentationsqualität unterschätzen. 
 Diese Metrik wurde unter anderem in \cite[S. 5]{HowDocumentationEvolvesoverTime} erläutert und dort als \enquote{ANYJ} bezeichnet. Da dies einfache Metrik ist und für eine grobe Einschätzung der Qualität der Dokumentation geeignet ist, wurde diese Metrik im Tool implementiert.
 
-\subsection{Metrik: Anteil dokumentierter öffentlicher Komponenten an allen öffentlichen Komponenten }
+\subsection{Metrik: Anteil dokumentierter öffentlicher Komponenten an allen öffentlichen Komponenten }\label{chapter:public_members}
 Diese Metrik basiert auf der vorherigen Metrik und verwendet sie sogar intern. Im Unterschied zu dieser werden hier nur öffentliche Komponenten betrachtet. Dies bedeutet, dass alle nicht öffentlichen Komponenten so betrachtet werden, als wären sie nicht existent. Die öffentlichen Komponenten dagegen werden wie oben mit hundert bzw. null Punkten bewertet. Dies hat den Vorteil, dass nur die Komponenten, die wahrscheinlich von anderen Komponenten verwendet werden müssen und daher auch gut verstanden werden müssen, bei der Bewertung der Qualität der Dokumentation berücksichtigt werden. So hat der Entwickler einen guten Überblick über die Stellen, die nach gängiger Erfahrung unbedingt besser dokumentiert werden müssen. Auf der anderen Seite werden sinnlose Kommentare weiterhin akzeptiert und nicht öffentliche Komponenten werden ohne Berücksichtigung ihrer Wichtigkeit ignoriert, obwohl auch hier eine gute Dokumentation Fehler vermeiden kann und zu einer besseren Softwarequalität führen kann. 
 
 Diese Metrik wurde unter anderem von \cite{Doautomaticrefactoringsimprovemaintainability?Anindustrialcasestudy} verwendet, um die Wirkung von Refactorings zu analysieren, Auch PMD und Checkstyle besitzen Optionen, um nur öffentliche Komponenten zu analysieren, sodass diese Metrik durchaus Relevanz hat und daher implementiert wurde.
@@ -18,8 +18,8 @@ Viele Methoden in objektorientierten Programmiersprachen besitzen Parameter und 
  
  Diese Metrik wird auch in Checkstyle implementiert, das auf nicht dokumentierte Parameter hinweist. In der wissenschaftlichen Literatur wird diese Metrik unter anderem in \cite[S. 5]{HowDocumentationEvolvesoverTime} genannt und dort als \enquote{DIR} bezeichnet. Da eine vollständig dokumentierte Methode zu einer guten Dokumentationsqualität beiträgt, wurde auch diese Metrik aufgenommen.
 
-\subsection{Metrik: Ignorieren von Getter und Setter }
-Getter und Setter sind typische Konstrukte in objektorientierten Programmiersprachen, die es ermöglichen, auf ein gekapseltes Feld zu lesen oder es zu verändern. Dadurch ermöglichen sie einen kontrollierten Zugriff auf die Felder und können so Fehler vermeiden \cite[S. 235]{OntheUseofPropertiesinJavaApplications}. Viele dieser Getter- und Setter-Methoden werden oft nicht dokumentiert, da sie nur triviale Codezeilen enthalten und sehr kurz sind, sodass eine Dokumentierung den Code aufbläht und keine Vorteile bietet. \cite[S. 254]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}. Auch Checkstyle bietet die Option an, diese trivialen Methoden bei der Analyse der Softwaredokumentation auszuschließen. 
+\subsection{Ignorieren von Getter und Setter }
+Getter und Setter sind typische Konstrukte in objektorientierten Programmiersprachen, die es ermöglichen, auf ein gekapseltes Feld zu lesen oder es zu verändern. Dadurch ermöglichen sie einen kontrollierten Zugriff auf die Felder und können so Fehler vermeiden \cite[S. 235]{OntheUseofPropertiesinJavaApplications}. Viele dieser Getter- und Setter-Methoden werden oft nicht dokumentiert, da sie nur triviale Codezeilen enthalten und sehr kurz sind, sodass eine Dokumentierung den Code aufbläht und keine Vorteile bietet. \cite[S. 254]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}. Auch Checkstyle bietet die Option an, diese trivialen Methoden bei der Analyse der Softwaredokumentation auszuschließen. Daher gibt es für die Metriken in Kapitel \ref{chapter:metrics_simple_comment} und \ref{chapter:public_members} die Option, Getter und Setter auszuschließen.
 
 Nicht trivial ist dagegen die Implementierung einer Metrik, die Getter- und Setter-Methoden ausschließt. Laut der JavaBeans-Spezifikation \cite[S. 55]{javabeans} sollen diese Zugriffsmethoden mit dem Präfix \enquote{get} bzw. \enquote{set} beginnen. Außerdem besitzt ein Getter keine Parameter und besitzt einen Rückgabetyp. Ein Setter sollte den Rückgabetyp \enquote{void} haben und exakt ein Parameter übergeben bekommen. Abweichend davon können Getter, die einen Boolean zurückgeben, mit dem Präfix \enquote{is} beginnen. Die Namenskonvention ist allerdings sprachspezifisch und noch kein eindeutiges Indiz für einen Getter bzw. Setter. Nichtsdestotrotz wurde entschieden die Filterung nach den JavaBeans-Kriterien durchzuführen und dafür eine Möglichkeit anzubieten, die Namenskonvention nach eigenen Wünschen zu konfigurieren. 
 
@@ -60,22 +60,45 @@ Mit dieser Metrik können Entwickler dazu angeregt werden, informative Kommentar
     \item \textit{upper\_threshold} minimaler Wert für den  Koheränzkoeffizienten, bei dem ein zu großer Zusammenhang vermutet wird und daher mit null Punkten bewertet wird
 \item \textit{levenshtein\_distance} maximale Levenshtein-Distanz, bei denen zwei Wörter als ähnlich angesehen werden. 
  \end{itemize}
+\subsection{Metrik: Verwendung bestimmter Wörter bestrafen}\label{chapter:certain_words}
+Nach \cite{HowtoWriteDocCommentsfortheJavadocTool} sollte ein Kommentar keine lateinischen Ausdrücke verwendet werden. So sollten beispielsweise die folgenden Ausdrücke geändert werden
+\begin{itemize}
+    \item {e.g.} durch \enquote{for example}
+    \item \enquote{aka} durch \enquote{also known as}
+    \item \enquote{i.e.} durch \enquote{that is} 
+    
+\end{itemize}
+Diese Metrik greift die Empfehlung auf und ermöglicht es zusätzlich, eigene Wörter als unzulässig zu definieren. So können obszöne Begriffe oder bestimmte Abkürzungen bestraft werden. Jedes Vorkommen eines unzulässigen Begriffes wird gezählt. Um eventuelle kleinere Rechtschreibfehler zu ignorieren wird auch hier mittels einer maximalen Levenshtein-Distanz nach unzulässigen Wörtern gefiltert.
+
+Anschließend wird diese Anzahl der Funktion
+\begin{equation}
+     B(l))S-(S-B_0)*e^(-k*l)
+ \end{equation} übergeben, die eine beschränkt wachsende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung,  $k$ eine Konstante für die Wachstumsrate und $l$ die Zahl der unzulässigen Wörter. 
+  Die Konstante $k$ kann vom Benutzer der Metrik frei ermittelt werden; ein Wert von $k=0.1$ scheint jedoch passend zu sein, da so das Auftauchen eines Begriffes noch nicht allzu hart bestraft wird, bei mehreren unzulässigen Begriffen allerdings schon.
+  
+  Durch diese Metrik kann ein Style-Guide eines Unternehmens, der von der Verwendung bestimmter Begriffe in Javadoc abrät, besser durchgesetzt werden. So lassen sich Begriffe, die unklar sind oder nicht geläufig sind vermeiden, sodass die Verständlichkeit der Dokumentation erhöht wird. Andererseits ist die Wahl dieser Begriffe nicht trivial und aufgrund der Verwendung der Levenshtein-Distanz können falsch-positive Treffer zu einer Verzerrung des Ergebnisses führen
+  \subsubsection{Parameter}
+\begin{itemize}
+    \item \textit{consider\_tags} Wenn true, zähle die Treffer auch in den einzelnen Tags standardmäßig false
+    \item \textit{k} Der Wachstumsfaktor für das beschränkte Wachstum
+    \item \textit{levenshtein\_distance} Die maximale Levenshtein-Distance, damit zwei Wörter als ähnlich gelten
+    \item \textit{terms} alle unzulässigen Wörter
+    \item \textit{use\_default\_terms\_too} Wenn true, nutze auch die in \cite{HowtoWriteDocCommentsfortheJavadocTool} beschriebenen Begriffe auch wenn durch Verwendung eigener Begriffe diese überschrieben wurden
+\end{itemize}
 
  \section{Eigene Metriken}
  Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus eine Betrachtung wert sind. Auch hier werden einige Vor- und Nachteile der jeweiligen Metrik genannt.
- \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}
+ \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}\label{chapter:method_long}
 Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und längere Methoden in mehrere kleinere Methoden aufzuspalten. Jede Methode sollte dabei nicht mehr als vier Codezeilen lang sein \cite[S. 34]{martin2009clean}.
  
  Dennoch wird diese Empfehlung nicht immer befolgt. Im Kontext der Softwaredokumentation sollten diese größeren Methoden allerdings umso eher dokumentiert werden, da es ansonsten schwieriger ist, die Bedeutung der verschiedenen Parameter, des Rückgabewertes und allgemeinen Rolle der Funktion zu erfassen. Daher macht es Sinn undokumentierte Methoden mit vielen Codezeilen schlechter zu bewerten.
  
- Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information  an die Funktion
- \begin{equation}
-     B(l))S-(S-B_0)*e^(-k*l)
- \end{equation} übergeben, die eine beschränkt wachsende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung und $k$ eine Konstante für die Wachstumsrate. Um lange undokumentierte Methoden besser bestrafen zu können, wird eine Fallunterscheidung vorgenommen.
+ Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information an eine beschränkt wachsende Funktion (siehe Kapitel \ref{chapter:certain_word}) übergeben, um so einen Wert zwischen 0 bis 100 zu ermitteln. 
+  Um lange undokumentierte Methoden besser bestrafen zu können, wird eine Fallunterscheidung vorgenommen.
  
- Bei kurzen Methoden unter zehn Zeilen beträgt die untere Schranke 90, da kurze Methoden nicht allzu schlecht bewertet werden sollen. Für Methoden mit mindestens zehn Zeilen sollte eine strengere Bewertung existieren, da diese wahrscheinlich unübersichtlicher sind. Aus diesem Grund werden längere Methoden mit nicht mehr als 90 Punkten und minimal null Punkten bewertet, sodass die Spannweite größer ist und die Bewertung schneller gegen null tendiert.
+ Bei kurzen Methoden unter zehn Zeilen beträgt die untere Schranke der Funktion 90, da kurze Methoden nicht allzu schlecht bewertet werden sollen. Für Methoden mit mindestens zehn Zeilen sollte eine strengere Bewertung existieren, da diese wahrscheinlich unübersichtlicher sind. Aus diesem Grund werden längere Methoden mit nicht mehr als 90 Punkten und minimal null Punkten bewertet, sodass die Spannweite größer ist und die Bewertung schneller gegen null tendiert.
  
- Die Konstante $k$ kann vom Benutzer der Metrik frei ermittelt werden; ein Wert von $k=0.2$ scheint jedoch passend zu sein, da Methoden mit bis zu zehn Zeilen noch relativ gut bewertet werden und längere Methoden gut bestraft werden.
+ Die Konstante $k$ ist hier standardmäßig  0.2, da Methoden mit bis zu zehn Zeilen noch relativ gut bewertet werden und längere Methoden gut bestraft werden. Er kann jedoch angepasst werden-
  
  Diese Metrik wird allerdings nur auf undokumentierte Methoden angewendet, sodass dokumentierte Methoden wie bei der Metrik \textit{SimpleCommentPresentMetric} mit 100 Punkten bewertet werden. Andere Komponenten wie zum Beispiel Klassen werden hier vollständig ignoriert, sodass sie keinen Einfluss auf das Gesamtergebnis haben.
  \subsubsection{Parameter}
