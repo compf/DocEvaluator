@@ -29130,7 +29130,7 @@ const weighted_median_result_builder_1 = __nccwpck_require__(7634);
 const weighted_metric_result_builder_1 = __nccwpck_require__(745);
 const flesch_metric_1 = __nccwpck_require__(544);
 const comment_name_coherence_metric_1 = __nccwpck_require__(3970);
-const abbreviation_count_metric_1 = __nccwpck_require__(1777);
+const certain_terms_count_metric_1 = __nccwpck_require__(480);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -29207,7 +29207,7 @@ var MetricManager;
         MetricNames["commented_lines_ratio"] = "commented_lines_ratio";
         MetricNames["flesch"] = "flesch";
         MetricNames["comment_name_coherence"] = "comment_name_coherence";
-        MetricNames["abbreviation_count"] = "abbreviation_count";
+        MetricNames["certain_terms"] = "certain_terms";
     })(MetricNames = MetricManager.MetricNames || (MetricManager.MetricNames = {}));
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
@@ -29219,7 +29219,7 @@ var MetricManager;
         allMetricTypes.add(MetricNames.commented_lines_ratio, commented_lines_ratio_metric_1.CommentedLinesRatioMetric);
         allMetricTypes.add(MetricNames.flesch, flesch_metric_1.FleschMetric);
         allMetricTypes.add(MetricNames.comment_name_coherence, comment_name_coherence_metric_1.CommentNameCoherenceMetric);
-        allMetricTypes.add(MetricNames.abbreviation_count, abbreviation_count_metric_1.AbbreviationCountMetric);
+        allMetricTypes.add(MetricNames.certain_terms, certain_terms_count_metric_1.CertainTermCountMetric);
     }
     const uniqueNameCountMap = new Map();
     /**
@@ -29300,8 +29300,8 @@ var MetricManager;
                 return { consider_tags: false };
             case MetricNames.comment_name_coherence:
                 return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };
-            case MetricNames.abbreviation_count:
-                return { consider_tags: false, k: 0.1 };
+            case MetricNames.certain_terms:
+                return { consider_tags: false, k: 0.1, levenshtein_distance: 1, terms: ["aka", "e.g.", "viz", "i.e."] };
             default:
                 return {};
         }
@@ -29430,13 +29430,13 @@ exports.MetricResultBuilder = MetricResultBuilder;
 
 /***/ }),
 
-/***/ 1777:
+/***/ 480:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.AbbreviationCountMetric = void 0;
+exports.CertainTermCountMetric = void 0;
 const NLP_Helper_1 = __nccwpck_require__(2396);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
@@ -29444,7 +29444,7 @@ const util_1 = __nccwpck_require__(996);
 /**
  * Punishes comments with abbreviation as they are usually harder to read
  */
-class AbbreviationCountMetric extends component_based__metric_1.ComponentBasedMetric {
+class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor() {
         super(...arguments);
         this.nlp_helper = new NLP_Helper_1.NLP_Helper();
@@ -29453,30 +29453,43 @@ class AbbreviationCountMetric extends component_based__metric_1.ComponentBasedMe
         let params = this.getParams();
         if (component.getComment() == null)
             return;
-        let abbrevCount = 0;
+        let termCount = 0;
         if (component.getComment().getGeneralDescription() != null) {
-            abbrevCount += this.nlp_helper.countAbbreviations(component.getComment().getGeneralDescription());
+            termCount += this.countSimilarTerms(component.getComment().getGeneralDescription());
         }
         if (params.consider_tags) {
             for (let tag of component.getComment().getTags()) {
                 if (tag.getDescription() != null) {
-                    abbrevCount += this.nlp_helper.countAbbreviations(tag.getDescription());
+                    termCount += this.countSimilarTerms(tag.getDescription());
                 }
             }
         }
         let logMessages = [];
-        let score = this.processResult(abbrevCount, logMessages);
+        let score = this.processResult(termCount, logMessages);
         this.pushResult(builder, score, this.createLogMessages(logMessages, component));
+    }
+    countSimilarTerms(text) {
+        let params = this.getParams();
+        let count = 0;
+        let words = this.nlp_helper.getTokens(text);
+        for (let w1 of words) {
+            for (let w2 of params.terms) {
+                if (this.nlp_helper.levenshtein(w1, w2) <= params.levenshtein_distance) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
     processResult(result, logMessages) {
         let params = this.getParams();
         if (result > 1) {
-            logMessages.push("More than one abbreviation detected");
+            logMessages.push("More than one forbidden term detected. Forbidden are ", params.terms.join(","));
         }
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
     }
 }
-exports.AbbreviationCountMetric = AbbreviationCountMetric;
+exports.CertainTermCountMetric = CertainTermCountMetric;
 
 
 /***/ }),
