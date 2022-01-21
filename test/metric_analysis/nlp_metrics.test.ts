@@ -1,6 +1,7 @@
 import nlp from "compromise";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
+import { AbbreviationCountMetric } from "../../src/metric_analysis/metrics/abbreviation_count_metric";
 import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
 import { DocumentationAnalysisMetric } from "../../src/metric_analysis/metrics/documentation_analysis_metric";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
@@ -94,5 +95,16 @@ test("test method coherence",()=>{
     let result=builder.getAggregatedResult("").getResult()
     expect(result).toBe(60);
 });
-
+test("test abbreviation count",()=>{
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.abbreviation_count);
+    let abbrev=MetricManager.createMetricByType(AbbreviationCountMetric,"abbrev",params);
+    let builder=new MetricResultBuilder();
+    const path="testDir/AbbreviationTest.java";
+    let root=new JavaParser().parse(path);
+    let res={path,root}
+    let analyzer=new FileAnalyzer();
+    analyzer.analyze(res,abbrev,builder,languageHelper);
+    let result=builder.getAggregatedResult("").getResult()
+    expect(result).toBeCloseTo(90.7856);
+});
 

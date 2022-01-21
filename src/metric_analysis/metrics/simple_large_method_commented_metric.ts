@@ -7,15 +7,14 @@ import { MetricResult } from "../metric_result";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
+import { Utils } from "./util";
 interface ParamsType{k:number,ignore_lines:string[]}
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer
  */
 export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
-    boundedGrowth(S: number, B0: number, k: number, l: number): number {
-        return S - (S - B0) * Math.exp(-k * l);
-    }
+   
     shallConsider(component: Component) {
         return super.shallConsider(component) && component instanceof MethodComponent;
     }
@@ -31,13 +30,13 @@ export class SimpleLargeMethodCommentedMetric extends ComponentBasedMetric {
             some code lines, the part above 10 lines massively punnishes large function by using a large k-Factor
             */
         if (l < 10) {
-            result = this.boundedGrowth(0.9 * MAX_SCORE, MAX_SCORE, k, l)
+            result = Utils.boundedGrowth(0.9 * MAX_SCORE, MAX_SCORE, k, l)
         }
         else {
             /*
             10 lines are subtracted because we are only interested in the excess lines
             */
-            result = this.boundedGrowth(MIN_SCORE, 0.9 * MAX_SCORE, k, l - 10);
+            result = Utils.boundedGrowth(MIN_SCORE, 0.9 * MAX_SCORE, k, l - 10);
         }
 
         if (result < 50) {

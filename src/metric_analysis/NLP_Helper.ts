@@ -39,6 +39,9 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
     public levenshtein(word1:string,word2:string):number{
         return (new Levenshtein(word1,word2)).distance
     }
+    public countAbbreviations(text:string):number{
+        return nlp(text).abbreviations().length as unknown as number;
+    }
 
 }
 

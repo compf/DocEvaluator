@@ -19,7 +19,7 @@ export  abstract class DocumentationAnalysisMetric {
      * @param component The Component to analyze
      * @param builder The builder to process all results of the component and its children
      */
-    public abstract analyze(component: Component, builder: AbstractMetricBuilder| undefined,langSpec:LanguageSpecificHelper): void
+    public abstract analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void
     /**
      * 
      * @param component Determines whether a component is worth checking
