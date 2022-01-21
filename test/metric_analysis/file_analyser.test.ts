@@ -189,9 +189,9 @@ let parser=new JavaParser();
 const path="testDir/GetterSetter.java"
 let root=parser.parse(path);
 let res={root,path};
-let params={getterPattern:"(get.*)|(is.*)",setterPattern:"set.*"}
+let params={getterPattern:"(get.*)|(is.*)",setterPattern:"set.*",ignore_getter_setter:true}
 let builder=new MetricResultBuilder();
-let metric=MetricManager.createMetricByType(IgnoreGetterSetterMetric,"getter_setter_test",params);
+let metric=MetricManager.createMetricByType(SimpleCommentPresentMetric,"getter_setter_test",params);
 let analyzer=new FileAnalyzer();
 
 analyzer.analyze(res,metric,builder,languageHelper)

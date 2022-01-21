@@ -40,7 +40,7 @@ test("test complex flesh metric",()=>{
     let res={path,root}
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    let params=MetricManager.getDefaultMetricParam("flesch");
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
     analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,languageHelper);
     let score=builder.getAggregatedResult("").getResult();
     expect(score).toBeCloseTo(15.68);
@@ -52,7 +52,7 @@ test("test easy flesh metric",()=>{
     let res={path,root}
     let analyzer=new FileAnalyzer();
     let builder=new MetricResultBuilder();
-    let params=MetricManager.getDefaultMetricParam("flesch");
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
 
     analyzer.analyze(res,MetricManager.createMetricByType(FleschMetric,"flesch_complex",params),builder,languageHelper);
     let score=builder.getAggregatedResult("").getResult();
@@ -83,7 +83,7 @@ test("test levenshtein",()=>{
     expect(res).toBe(1);
 });
 test("test method coherence",()=>{
-    let params=MetricManager.getDefaultMetricParam(MetricManager.getMetricName(CommentNameCoherenceMetric));
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.comment_name_coherence);
     let coherence=MetricManager.createMetricByType(CommentNameCoherenceMetric,"coherence1",params);
     let builder=new MetricResultBuilder();
     const path="testDir/CommentCoherenceTest.java";

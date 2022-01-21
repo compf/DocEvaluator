@@ -35,6 +35,7 @@ class BiMap<K, V>{
         return this.k_to_v.has(key);
     }
 }
+export  type MetricConstructor =new (name: string, params: any) => DocumentationAnalysisMetric;
 export namespace MetricManager {
     /**
      * Method to create a metric based on key
@@ -42,11 +43,9 @@ export namespace MetricManager {
      * @returns the new instance of the respective metric
      * @throws An error if key not present
      */
-    export function createMetricByName(metricName: string,uniqueName:string,params:any): DocumentationAnalysisMetric {
+    export function createMetricByName(metricName: MetricNames,uniqueName:string,params:any): DocumentationAnalysisMetric {
         let type=allMetricTypes.getByKey(metricName)
-        let instance=   new  type(uniqueName,params);
-        allMetrics.set(uniqueName,instance);
-        return instance;
+        return createMetricByType(type,uniqueName,params);
     }
     /**
      * Creates a metric based on the given Metric Type constructor
@@ -56,7 +55,9 @@ export namespace MetricManager {
      * @returns a valid metric instance
      */
     export function createMetricByType(type:new (name: string, params: any) => DocumentationAnalysisMetric,uniqueName:string,params:any): DocumentationAnalysisMetric {
+        let defaultParams=MetricManager.getDefaultMetricParam(getMetricName(type));
         let instance=   new type(uniqueName,params);
+        Object.assign(defaultParams,params);
         allMetrics.set(uniqueName,instance);
         return instance;
     }
@@ -66,23 +67,31 @@ export namespace MetricManager {
      * @returns a valid metric name
      * @throws a KeyError if this type is not a valid metric
      */
-    export function getMetricName(type:new (name: string, params: any) => DocumentationAnalysisMetric):string{
+    export function getMetricName(type:new (name: string, params: any) => DocumentationAnalysisMetric):MetricNames{
         return allMetricTypes.getByValue(type);
     }
     export function getMetricByUniqueName(uniqueName:string):DocumentationAnalysisMetric{
         return allMetrics.get(uniqueName)!;
     }
+    export enum MetricNames{
+        simple_comment="simple_comment",
+        public_members_only="public_members_only",
+        large_method_commented="large_method_commented",
+        method_fully_documented="method_fully_documented",
+        commented_lines_ratio="commented_lines_ratio",
+        flesch="flesch",
+        comment_name_coherence="comment_name_coherence",
+    }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
-    const allMetricTypes:BiMap<string,new (name: string, params: any) => DocumentationAnalysisMetric>=new BiMap<string,new (name: string, params: any) => DocumentationAnalysisMetric>()
+    const allMetricTypes:BiMap<MetricNames,new (name: string, params: any) => DocumentationAnalysisMetric>=new BiMap<MetricNames,new (name: string, params: any) => DocumentationAnalysisMetric>()
     function init() {
-        allMetricTypes.add("simple_comment", SimpleCommentPresentMetric);
-        allMetricTypes.add("public_members_only", SimplePublicMembersOnlyMetric);
-        allMetricTypes.add("large_method_commented", SimpleLargeMethodCommentedMetric);
-        allMetricTypes.add("method_fully_documented", SimpleMethodDocumentationMetric);
-        allMetricTypes.add("commented_lines_ratio", CommentedLinesRatioMetric);
-        allMetricTypes.add("ignore_getters_setters", IgnoreGetterSetterMetric);
-        allMetricTypes.add("flesch", FleschMetric)
-        allMetricTypes.add("comment_name_coherence",CommentNameCoherenceMetric)
+        allMetricTypes.add(MetricNames.simple_comment, SimpleCommentPresentMetric);
+        allMetricTypes.add(MetricNames.public_members_only, SimplePublicMembersOnlyMetric);
+        allMetricTypes.add(MetricNames.large_method_commented, SimpleLargeMethodCommentedMetric);
+        allMetricTypes.add(MetricNames.method_fully_documented, SimpleMethodDocumentationMetric);
+        allMetricTypes.add(MetricNames.commented_lines_ratio, CommentedLinesRatioMetric);
+        allMetricTypes.add(MetricNames.flesch, FleschMetric)
+        allMetricTypes.add(MetricNames.comment_name_coherence,CommentNameCoherenceMetric)
        
     }
     const uniqueNameCountMap:Map<string,number>=new Map<string,number>();
@@ -130,6 +139,7 @@ export namespace MetricManager {
         }
         throw new Error("Could not identify ResultBuilder");
     }
+   
 
 
 
@@ -151,17 +161,18 @@ export namespace MetricManager {
      * @param metricName a valid metric name 
      * @returns all default params or an empty object {} if metric name is not known or has no parameters
      */
-    export function getDefaultMetricParam(metricName: string): any {
+    export function getDefaultMetricParam(metricName: MetricNames): any {
         switch (metricName) {
-            case "large_method_commented":
+            case MetricNames.large_method_commented:
                 return { ignore_lines: ["", "{", "}"], k: 0.2 }
-            case "commented_lines_ratio":
+            case MetricNames.commented_lines_ratio:
                 return { ignore_ines: ["", "{", "}"] };
-            case "ignore_getters_setter":
-                return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*" };
-            case "flesch":
+            case MetricNames.simple_comment:
+            case MetricNames.public_members_only:
+                return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*",ignore_getter_setter:false };
+            case MetricNames.flesch:
                 return { consider_tags: false };
-            case "comment_name_coherence":
+            case MetricNames.comment_name_coherence:
                 return {upper_theshold:0.5,lower_threshold:0,levenshtein_distance:1};
             default:
                 return {}
