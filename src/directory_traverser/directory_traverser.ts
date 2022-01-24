@@ -1,8 +1,7 @@
 import fs from "fs"
 import path from "path"
-import minimatch, { IMinimatch, Minimatch } from "minimatch"
-import chalk from "chalk";
-import { EvaluatorConf ,MiniMatchConf} from "../conf/EvaluatorConf";
+import { IMinimatch, Minimatch } from "minimatch"
+import { MiniMatchConf} from "../conf/EvaluatorConf";
 
 
 
@@ -61,7 +60,7 @@ export class DirectoryTraverser {
      * @param baseDir the current directory to enumerate the files there
      * @param resultSet will be filled during the recursion to store all relevant files
      */
-    private getRelevantFilesRec(baseDir: string, resultSet: Set<String>): void {
+    private getRelevantFilesRec(baseDir: string, resultSet: Set<string>): void {
         let entries = fs.readdirSync(baseDir, { withFileTypes: true });
         for (let entry of entries) {
             let fullname = path.join(baseDir, entry.name);

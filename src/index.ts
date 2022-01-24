@@ -10,7 +10,6 @@ import { loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
 import { PathWeightResolver, SimpleWeightResolver } from "./metric_analysis/weight_resolver";
 import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
-import { MetricResult } from "./metric_analysis/metric_result";
 import { StateManagerFactory } from "./conf/state_manager_factory";
 import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
 import { LanguageSpecificHelper } from "./metric_analysis/language_specific/language_specific_helper";

@@ -1,10 +1,9 @@
 import { BaseParser } from "./base_parser";
-import { ParseResult } from "./parse_result/parse_result";
 var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
-import { CharStream, CharStreams, CommonTokenStream, ConsoleErrorListener, RuleContext } from 'antlr4ts';
+import { CharStreams, CommonTokenStream, ParserRuleContext, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Component } from "./parse_result/component";
-import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, FormalParameterListContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, AnnotationContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext, MethodBodyContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext, MethodBodyContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/structured_comment";
 import { HierarchicalComponent } from "./parse_result/hierarchical_component";
@@ -16,11 +15,6 @@ import { JavaMethodData } from "./parse_result/java/JavaMethodData";
 import { GroupedMemberComponent } from "./parse_result/grouped_member_component";
 import { Interval } from "antlr4ts/misc/Interval";
 import { FileComponent } from "./parse_result/file_component";
-
-//import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
-//import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
-
-
 
 export class JavaParser extends BaseParser {
      /**
@@ -48,18 +42,7 @@ export class JavaParser extends BaseParser {
     }
 
 }
-/*class JavaDocVisitor extends AbstractParseTreeVisitor<StructuredComment|null>{
-    protected defaultResult(): StructuredComment | null {
-        return null;
-    }
-    private description:string=""
-    private tags:StructuredCommentTag[]=[]
-    visitDescription(ctx:DescriptionContext){
-        this.description=ctx.text;
-    }
-    
 
-}*/
 class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
 
     protected defaultResult(): Component | null {
@@ -110,15 +93,18 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         this.meta = meta;
     }
 }
+function addSuperTypes(superTypes:string[],ctx: ParserRuleContext){
+    let splitted = ctx.getChild(1).text.split(",");
+    for (let s of splitted) {
+        superTypes.push(s);
+    }
+}
 class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<string[]>{
     protected defaultResult(): string[] {
         return []
     }
     visitImplementInterfaces(ctx: ImplementInterfacesContext) {
-        let splitted = ctx.getChild(1).text.split(",");
-        for (let s of splitted) {
-            this.superTypes.push(s);
-        }
+        addSuperTypes(this.superTypes,ctx);
     }
     visitExtendClass(ctx: ExtendClassContext) {
         this.superTypes.push(ctx.getChild(1).text);
@@ -135,10 +121,7 @@ class InterfaceExtendVisitor extends AbstractParseTreeVisitor<string[]>{
         return []
     }
     visitExtendInterface(ctx: ExtendInterfaceContext) {
-        let splitted = ctx.getChild(1).text.split(",");
-        for (let s of splitted) {
-            this.superTypes.push(s);
-        }
+       addSuperTypes(this.superTypes,ctx);
     }
     private superTypes: string[] = [];
 
@@ -409,7 +392,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     private isOverriding: boolean;
 
     protected defaultResult(): void {
-
+        // do nothing
     }
     constructor(parent: Component | null, comment: StructuredComment | null, isPublic: boolean, isOverriding: boolean) {
         super();

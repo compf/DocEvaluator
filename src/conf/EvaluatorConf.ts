@@ -3,7 +3,6 @@ import path from "path";
 import fs from "fs";
 import { MetricManager } from "../metric_analysis/metric_manager";
 import { env } from "process";
-import { json } from "stream/consumers";
 const defaultMetrics = MetricManager.getAllImplementedMetricNames();
 const CONF_FILENAME = "comment_conf.json";
 export const MiniMatchConf = { dot: true, matchBase: true };

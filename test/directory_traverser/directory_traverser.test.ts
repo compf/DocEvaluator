@@ -1,6 +1,5 @@
 import fs from "fs"
 import path from "path";
-import jest from "jest";
 import { DirectoryTraverser } from "../../src/directory_traverser/directory_traverser";
 import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
 
