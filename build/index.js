@@ -28843,7 +28843,6 @@ class NLP_Helper {
     getRelevantVariables(text) {
         let corpus = (0, compromise_1.default)(text);
         compromise_1.default.extend(__nccwpck_require__(1534));
-        //console.log(text);
         const sent = corpus.sentences();
         /* Somehow typescript thinks this a method but it is a property
         and this strange conversion needs to be done
@@ -28851,7 +28850,6 @@ class NLP_Helper {
         const numSentences = sent.length;
         const numWords = corpus.wordCount();
         let s = corpus.terms().syllables();
-        //console.log("syllable",s)
         const numSyllables = this.countSyllables(s);
         return { numSentences, numWords, numSyllables };
     }
@@ -28932,8 +28930,7 @@ class FileAnalyzer {
         something
         */
         if (component instanceof hierarchical_component_1.HierarchicalComponent && ignoreTag != IgnoreTags.IGNORE_NODE) {
-            let hierarchical = component;
-            for (let c of hierarchical.getChildren()) {
+            for (let c of component.getChildren()) {
                 this.analyzeComponent(c, builder, analyzer, langSpec);
             }
         }
@@ -29803,12 +29800,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         return textsToConsider;
     }
     calcFleshKincaid(vars) {
-        let result = 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
-        /*console.log("num words",vars.numWords);
-        console.log("num sentences",vars.numSentences);
-        console.log("num syl",vars.numSyllables);
-        console.log("flesh",result)*/
-        return result;
+        return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
 }
 exports.FleschMetric = FleschMetric;
@@ -29825,13 +29817,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.IgnoreGetterSetterMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
 /**
- * This metric works the same as the simple comment present metric but ignores getter/setters
+ * This class expose a shallConsider method to ignore getters and setters
  */
 class IgnoreGetterSetterMetric {
     shallConsider(component, params) {
         if (component instanceof method_component_1.MethodComponent) {
-            let method = component;
-            return !this.isGetter(method, params) && !this.isSetter(method, params);
+            return !this.isGetter(component, params) && !this.isSetter(component, params);
         }
         else {
             return true;
