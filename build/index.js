@@ -42344,8 +42344,6 @@ const JavaMethodData_1 = __nccwpck_require__(5416);
 const grouped_member_component_1 = __nccwpck_require__(7869);
 const Interval_1 = __nccwpck_require__(9614);
 const file_component_1 = __nccwpck_require__(1259);
-//import { JavadocLexer } from "./antlr_files/javadoc/JavadocLexer";
-//import { DescriptionContext, JavadocParser } from "./antlr_files/javadoc/JavadocParser";
 class JavaParser extends base_parser_1.BaseParser {
     /**
     * Reads all tokens from the source code file
@@ -42371,18 +42369,6 @@ class JavaParser extends base_parser_1.BaseParser {
     }
 }
 exports.JavaParser = JavaParser;
-/*class JavaDocVisitor extends AbstractParseTreeVisitor<StructuredComment|null>{
-    protected defaultResult(): StructuredComment | null {
-        return null;
-    }
-    private description:string=""
-    private tags:StructuredCommentTag[]=[]
-    visitDescription(ctx:DescriptionContext){
-        this.description=ctx.text;
-    }
-    
-
-}*/
 class FieldDecVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor(parent, comment, meta) {
         super();
@@ -42423,6 +42409,12 @@ class FieldDecVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisito
         return null;
     }
 }
+function addSuperTypes(superTypes, ctx) {
+    let splitted = ctx.getChild(1).text.split(",");
+    for (let s of splitted) {
+        superTypes.push(s);
+    }
+}
 class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor() {
         super(...arguments);
@@ -42432,10 +42424,7 @@ class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor_1.Abstract
         return [];
     }
     visitImplementInterfaces(ctx) {
-        let splitted = ctx.getChild(1).text.split(",");
-        for (let s of splitted) {
-            this.superTypes.push(s);
-        }
+        addSuperTypes(this.superTypes, ctx);
     }
     visitExtendClass(ctx) {
         this.superTypes.push(ctx.getChild(1).text);
@@ -42454,10 +42443,7 @@ class InterfaceExtendVisitor extends AbstractParseTreeVisitor_1.AbstractParseTre
         return [];
     }
     visitExtendInterface(ctx) {
-        let splitted = ctx.getChild(1).text.split(",");
-        for (let s of splitted) {
-            this.superTypes.push(s);
-        }
+        addSuperTypes(this.superTypes, ctx);
     }
     visit(ctx) {
         super.visit(ctx);
@@ -42721,6 +42707,7 @@ class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor 
         this.isOverriding = isOverriding;
     }
     defaultResult() {
+        // do nothing
     }
     visitMethodDeclaration(ctx) {
         this.lineNumber = ctx.start.line;
