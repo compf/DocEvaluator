@@ -12,8 +12,6 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
     public getRelevantVariables(text: string): RelevantVariables {
         let corpus = nlp(text);
         nlp.extend(require('compromise-syllables'));
-
-        //console.log(text);
         const sent = corpus.sentences();
         /* Somehow typescript thinks this a method but it is a property 
         and this strange conversion needs to be done
@@ -21,7 +19,6 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
         const numSentences = (sent.length as unknown) as number;
         const numWords = corpus.wordCount();
         let s=(corpus.terms() as any).syllables()
-        //console.log("syllable",s)
         const numSyllables =this.countSyllables(s)
         return { numSentences, numWords, numSyllables };
     }

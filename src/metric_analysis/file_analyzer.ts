@@ -1,11 +1,9 @@
-import { EvaluatorConf } from "../conf/EvaluatorConf";
 import { Component } from "../parser/parse_result/component";
 import { HierarchicalComponent } from "../parser/parse_result/hierarchical_component";
 import { ParseResult } from "../parser/parse_result/parse_result";
 import { AbstractMetricBuilder } from "./abstract_metric_builder";
 import { LanguageSpecificHelper } from "./language_specific/language_specific_helper";
 import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
-import { MetricResultBuilder } from "./metric_result_builder";
 
 enum IgnoreTags{IGNORE_THIS="%ignore_this%",IGNORE_NODE="%ignore_node%"}
 export class FileAnalyzer {
@@ -36,8 +34,7 @@ export class FileAnalyzer {
         something
         */
         if (component instanceof HierarchicalComponent && ignoreTag!=IgnoreTags.IGNORE_NODE) {
-            let hierarchical = component as HierarchicalComponent;
-            for (let c of hierarchical.getChildren()) {
+            for (let c of component.getChildren()) {
                 this.analyzeComponent(c, builder, analyzer,langSpec);
             }
         }

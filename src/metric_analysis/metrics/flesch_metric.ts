@@ -1,12 +1,8 @@
 import { Component } from "../../parser/parse_result/component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
-import { LogMessage } from "../log_message";
-import { MetricResult } from "../metric_result";
-import { MetricResultBuilder } from "../metric_result_builder";
 import { NLP_Helper, RelevantVariables } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
-import { MIN_SCORE } from "./documentation_analysis_metric";
 interface ParamsType{consider_tags:boolean}
 /**
  * This metric calculate the flesh score which describes the readability of a text
@@ -66,12 +62,7 @@ export class FleschMetric extends ComponentBasedMetric {
         return textsToConsider;
     }
     private calcFleshKincaid(vars: RelevantVariables): number {
-        let result = 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
-        /*console.log("num words",vars.numWords);
-        console.log("num sentences",vars.numSentences);
-        console.log("num syl",vars.numSyllables);
-        console.log("flesh",result)*/
-        return result;
+        return  206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
     
 

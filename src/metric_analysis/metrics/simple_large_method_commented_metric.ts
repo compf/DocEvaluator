@@ -2,11 +2,8 @@ import { Component } from "../../parser/parse_result/component";
 import { MethodComponent } from "../../parser/parse_result/method_component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
-import { LogMessage } from "../log_message";
-import { MetricResult } from "../metric_result";
-import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
-import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
+import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
 interface ParamsType{k:number,ignore_lines:string[]}
 /**

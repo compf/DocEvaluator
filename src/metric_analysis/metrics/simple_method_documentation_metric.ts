@@ -4,10 +4,8 @@ import { StructuredCommentTagKind } from "../../parser/parse_result/structured_c
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { LogMessage } from "../log_message";
-import { MetricResult } from "../metric_result";
-import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
-import { DocumentationAnalysisMetric, MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
+import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 
 /**
  * This metric checks whether the return value and all parameters of a method are documented

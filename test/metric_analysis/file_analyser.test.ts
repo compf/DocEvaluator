@@ -1,10 +1,5 @@
-import exp from "constants";
-import { stringify } from "querystring";
-import { EvaluatorConf } from "../../src/conf/EvaluatorConf";
 import { CommentedLinesRatioMetric } from "../../src/metric_analysis/metrics/commented_lines_ratio_metric";
-import { DocumentationAnalysisMetric } from "../../src/metric_analysis/metrics/documentation_analysis_metric";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
-import { IgnoreGetterSetterMetric } from "../../src/metric_analysis/metrics/ignore_getters_setter_metric";
 import { MedianResultBuilder } from "../../src/metric_analysis/median_result_builder";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResult } from "../../src/metric_analysis/metric_result";
@@ -17,7 +12,6 @@ import { WeightedMedianResultBuilder } from "../../src/metric_analysis/weighted_
 import { WeightedMetricResultBuilder } from "../../src/metric_analysis/weighted_metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
-import { MethodComponent } from "../../src/parser/parse_result/method_component";
 import { PathWeightResolver, SimpleWeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 const path = "testDir/commented_class.java";
