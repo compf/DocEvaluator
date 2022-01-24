@@ -8,7 +8,7 @@ lerna-debug.log*
 .pnpm-debug.log*
 push_all.sh
 stuff
-
+testDir/traverserTest
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
