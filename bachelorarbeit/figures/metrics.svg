@@ -3,7 +3,7 @@
    
     </style>
     <defs >
-    <g id="file"  style="fill:white;stroke:black">
+    <g id="file"  style="fill:white;stroke:inherit">
         <rect  x="0" width="40" y="0" height="80"></rect> 
         <rect x="10" y="10" width="20" height="20"></rect> 
         <rect x="10" y="50" width="10" height="10"></rect> 
@@ -35,11 +35,11 @@
     <g class="pict" id="picture" transform="translate(0,50)" >
         <rect stroke-dasharray="4" x="10" y="-20" width="600" height="550" stroke="black" fill="none"/>
         <ellipse cx="300" cy="90" rx="70" ry="30" fill="none" stroke="black" />
-        <use xlink:href="#same_files_one_metric"/>
+        <use xlink:href="#same_files_one_metric" style="stroke:red"/>
         <line x1="250" x2="155" y1="115" y2="155" fill="none"  marker-start="url(#arrow)" stroke="black"/>
         <line x1="350" x2="450" y1="115" y2="155" fill="none"  marker-start="url(#arrow)" stroke="black"/>
         
-        <use x="350" xlink:href="#same_files_one_metric" />
+        <use x="350" xlink:href="#same_files_one_metric"  style="stroke:green"/>
 
         <use xlink:href="#rhombus" x="300" y="-20"/>
         <line x1="300" x2="300" marker-start="url(#arrow)" y1="40" y2="55" stroke="black"/>
@@ -61,7 +61,7 @@
             <text y="30" x="40">MetricResultBuilder</text>
             <use y="60" xlink:href="#rhombus" />
             <text y="90" x="40">MetricResult</text>
-            <use xlink:href="#file" y="140" x="-20"/>
+            <use style="stroke:black" xlink:href="#file" y="140" x="-20"/>
             <text y="180" x="50">Datei</text>
         </g>
         
