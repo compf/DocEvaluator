@@ -13,6 +13,7 @@ import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documenta
 import { StateManagerFactory } from "./conf/state_manager_factory";
 import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
 import { LanguageSpecificHelper } from "./metric_analysis/language_specific/language_specific_helper";
+import { LogMessage } from "./metric_analysis/log_message";
 interface Parameters{
   
      parser:BaseParser,
@@ -33,15 +34,17 @@ function main(args: Array<string>) {
     else {
         workingDirectory = args[0];
     }
+    LogMessage.BasePath=workingDirectory; //TODO don't use global variables
     let conf = loadConf(workingDirectory);
     let traverser = new DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
 
-    let weightMap=new Map<any,number>();
+    let weightMap=new Map<string,number>();
     let metrics = conf.metrics.map((m)=>MetricManager.createMetricByName(m.metric_name,m.unique_name,m.params));
     for(let m of conf.metrics){
-        weightMap.set(MetricManager.getMetricByUniqueName(m.unique_name),m.weight);
+        weightMap.set(m.unique_name,m.weight);
     }
+    console.log(weightMap)
     let languageHelper=LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
