@@ -57,8 +57,10 @@ export namespace MetricManager {
      */
     export function createMetricByType(type:new (name: string, params: any) => DocumentationAnalysisMetric,uniqueName:string,params:any): DocumentationAnalysisMetric {
         let defaultParams=MetricManager.getDefaultMetricParam(getMetricName(type));
-        let instance=   new type(uniqueName,params);
+        
         Object.assign(defaultParams,params);
+        params=defaultParams;
+        let instance=   new type(uniqueName,params);
         allMetrics.set(uniqueName,instance);
         return instance;
     }

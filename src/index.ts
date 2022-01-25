@@ -44,7 +44,6 @@ function main(args: Array<string>) {
     for(let m of conf.metrics){
         weightMap.set(m.unique_name,m.weight);
     }
-    console.log(weightMap)
     let languageHelper=LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver=new SimpleWeightResolver(weightMap);
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);

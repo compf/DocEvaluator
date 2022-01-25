@@ -23,7 +23,8 @@ export class SimpleCommentPresentMetric extends ComponentBasedMetric {
         this.pushResult(builder, score, this.createLogMessages(logMessages, component));
     }
     protected processResult(result: number, logMessages: string[]): number {
-        logMessages.push("Component has no documentation")
+        if(result==MIN_SCORE)
+            logMessages.push("Component has no documentation")
         return result;
 
     }

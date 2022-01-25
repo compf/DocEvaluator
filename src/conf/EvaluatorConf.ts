@@ -89,6 +89,17 @@ export function loadConf(basePath: string): EvaluatorConf {
     for (let loader of loaders) {
         loader.updateConf(conf);
     }
+    return sanitize(conf);
+}
+function sanitize(conf:EvaluatorConf):EvaluatorConf{
+    for(let m of conf.metrics){
+        if(m.unique_name==undefined){
+            m.unique_name=MetricManager.getUniqueName(m.metric_name);
+        }
+        if(m.params==undefined){
+            m.params=MetricManager.getDefaultMetricParam(m.metric_name);
+        }
+    }
     return conf;
 }
 export interface ConfLoader {
