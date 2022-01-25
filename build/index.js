@@ -28740,6 +28740,7 @@ const parser_factory_1 = __nccwpck_require__(8799);
 const weight_resolver_1 = __nccwpck_require__(3910);
 const state_manager_factory_1 = __nccwpck_require__(5253);
 const language_specific_helper_factory_1 = __nccwpck_require__(6035);
+const log_message_1 = __nccwpck_require__(4938);
 function main(args) {
     var workingDirectory = "";
     if (args.length < 1) {
@@ -28749,14 +28750,16 @@ function main(args) {
     else {
         workingDirectory = args[0];
     }
+    log_message_1.LogMessage.BasePath = workingDirectory; //TODO don't use global variables
     let conf = (0, EvaluatorConf_1.loadConf)(workingDirectory);
     let traverser = new directory_traverser_1.DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
     let weightMap = new Map();
     let metrics = conf.metrics.map((m) => metric_manager_1.MetricManager.createMetricByName(m.metric_name, m.unique_name, m.params));
     for (let m of conf.metrics) {
-        weightMap.set(metric_manager_1.MetricManager.getMetricByUniqueName(m.unique_name), m.weight);
+        weightMap.set(m.unique_name, m.weight);
     }
+    console.log(weightMap);
     let languageHelper = language_specific_helper_factory_1.LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
@@ -29050,12 +29053,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LogMessage = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(6504));
+const path_1 = __importDefault(__nccwpck_require__(1017));
 class LogMessage {
     constructor(msg, component) {
-        let path = chalk_1.default.green(component.getTopParent().getName());
+        let p = chalk_1.default.green(path_1.default.relative(LogMessage.BasePath, component.getTopParent().getName()));
         let qualifiedName = chalk_1.default.yellow(component.getQualifiedName());
-        let prefix = path + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
-        this.msg = msg;
+        let prefix = p + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
+        this.msg = prefix + msg;
     }
     /**
      * Log the message to the console
