@@ -8,7 +8,7 @@ import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
-import { PathWeightResolver, SimpleWeightResolver } from "./metric_analysis/weight_resolver";
+import { PathWeightResolver, SimpleWeightResolver, StubResolver } from "./metric_analysis/weight_resolver";
 import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
 import { StateManagerFactory } from "./conf/state_manager_factory";
 import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
@@ -50,7 +50,7 @@ function main(args: Array<string>) {
     let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
     let parser = ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,metricWeightResolver);
+    let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,new StubResolver());
     let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,filesWeightResolver);
     let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,metricWeightResolver)
     let resultByMetric:Map<string,MetricResultBuilder>=new Map();

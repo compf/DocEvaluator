@@ -45,6 +45,14 @@ export class PathWeightResolver implements WeightResolver{
         }
         return this.defaultWeight;
 
+    }   
+}
+/**
+ * Stub class that always returns 1, regardless of the key
+ */
+export class StubResolver implements WeightResolver{
+    resolveWeight(key: string): number {
+        return 1;
     }
-    
+
 }

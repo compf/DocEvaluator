@@ -18,7 +18,7 @@ export class MedianResultBuilder extends MetricResultBuilder {
         for (let partialResult of this.resultList) {
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
-        return new MetricResult(median, allLogMessages, this.resolveCreator(creator));
+        return new MetricResult(median, allLogMessages, creator);
 
 
     }

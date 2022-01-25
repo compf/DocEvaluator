@@ -14,7 +14,6 @@ export class WeightedMetricResultBuilder extends MetricResultBuilder {
         let resultSum = 0;
         let weightSum = 0;
         let allLogMessages: LogMessage[] = [];
-        creator=this.resolveCreator(creator);
         for (let partialResult of this.resultList) {
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator())!;
             resultSum += (partialResult.getResult() * weight);
