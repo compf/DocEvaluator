@@ -28765,7 +28765,7 @@ function main(args) {
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
-    let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, metricWeightResolver);
+    let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, new weight_resolver_1.StubResolver());
     let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
     let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
     let resultByMetric = new Map();
@@ -29076,6 +29076,7 @@ class LogMessage {
     }
 }
 exports.LogMessage = LogMessage;
+LogMessage.BasePath = ".";
 
 
 /***/ }),
@@ -29105,7 +29106,7 @@ class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
         for (let partialResult of this.resultList) {
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
-        return new metric_result_1.MetricResult(median, allLogMessages, this.resolveCreator(creator));
+        return new metric_result_1.MetricResult(median, allLogMessages, creator);
     }
 }
 exports.MedianResultBuilder = MedianResultBuilder;
@@ -29380,25 +29381,6 @@ class MetricResultBuilder extends abstract_metric_builder_1.AbstractMetricBuilde
     putAllLogMessages(src, dest) {
         for (let item of src) {
             dest.push(item);
-        }
-    }
-    /**
-     * Find the creator of all results
-     * If the there is only one unqie creator in the resultList, this will be the creator
-     * Otherwise the creator given will be used
-     * @param creator the creator to be used if there are different creators in the resultList
-     * @returns a valid creator
-     */
-    resolveCreator(creator) {
-        let result_creator_set = new Set(this.resultList.map((r) => r.getCreator()));
-        if (result_creator_set.size > 1) {
-            return creator;
-        }
-        else {
-            for (let s of result_creator_set) {
-                return s;
-            }
-            return "";
         }
     }
     /**
@@ -30097,7 +30079,7 @@ var Utils;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PathWeightResolver = exports.SimpleWeightResolver = void 0;
+exports.StubResolver = exports.PathWeightResolver = exports.SimpleWeightResolver = void 0;
 const minimatch_1 = __nccwpck_require__(1268);
 const EvaluatorConf_1 = __nccwpck_require__(6410);
 /**
@@ -30135,6 +30117,15 @@ class PathWeightResolver {
     }
 }
 exports.PathWeightResolver = PathWeightResolver;
+/**
+ * Stub class that always returns 1, regardless of the key
+ */
+class StubResolver {
+    resolveWeight(key) {
+        return 1;
+    }
+}
+exports.StubResolver = StubResolver;
 
 
 /***/ }),
@@ -30153,7 +30144,6 @@ class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.Weigh
         let weightResultList = [];
         let weightSum = 0;
         let allLogMessages = [];
-        creator = this.resolveCreator(creator);
         for (let partialResult of this.resultList) {
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             weightResultList.push({ weight: weight, result: partialResult.getResult() });
@@ -30194,7 +30184,6 @@ class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBu
         let resultSum = 0;
         let weightSum = 0;
         let allLogMessages = [];
-        creator = this.resolveCreator(creator);
         for (let partialResult of this.resultList) {
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             resultSum += (partialResult.getResult() * weight);
