@@ -28501,9 +28501,20 @@ function loadConf(basePath) {
     for (let loader of loaders) {
         loader.updateConf(conf);
     }
-    return conf;
+    return sanitize(conf);
 }
 exports.loadConf = loadConf;
+function sanitize(conf) {
+    for (let m of conf.metrics) {
+        if (m.unique_name == undefined) {
+            m.unique_name = metric_manager_1.MetricManager.getUniqueName(m.metric_name);
+        }
+        if (m.params == undefined) {
+            m.params = metric_manager_1.MetricManager.getDefaultMetricParam(m.metric_name);
+        }
+    }
+    return conf;
+}
 class JSONCommentConfLoader {
     constructor(basePath) {
         this.basePath = basePath;
@@ -28759,7 +28770,6 @@ function main(args) {
     for (let m of conf.metrics) {
         weightMap.set(m.unique_name, m.weight);
     }
-    console.log(weightMap);
     let languageHelper = language_specific_helper_factory_1.LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
@@ -29180,8 +29190,9 @@ var MetricManager;
      */
     function createMetricByType(type, uniqueName, params) {
         let defaultParams = MetricManager.getDefaultMetricParam(getMetricName(type));
-        let instance = new type(uniqueName, params);
         Object.assign(defaultParams, params);
+        params = defaultParams;
+        let instance = new type(uniqueName, params);
         allMetrics.set(uniqueName, instance);
         return instance;
     }
@@ -29865,7 +29876,8 @@ class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBase
         this.pushResult(builder, score, this.createLogMessages(logMessages, component));
     }
     processResult(result, logMessages) {
-        logMessages.push("Component has no documentation");
+        if (result == documentation_analysis_metric_1.MIN_SCORE)
+            logMessages.push("Component has no documentation");
         return result;
     }
     shallConsider(component) {
@@ -30034,6 +30046,7 @@ exports.SimpleMethodDocumentationMetric = SimpleMethodDocumentationMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SimplePublicMembersOnlyMetric = void 0;
+const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 const simple_comment_present_metric_1 = __nccwpck_require__(4913);
 /**
  * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
@@ -30043,7 +30056,8 @@ class SimplePublicMembersOnlyMetric extends simple_comment_present_metric_1.Simp
         return component.getComponentMetaInformation().isPublic() && super.shallConsider(component);
     }
     processResult(result, logMessages) {
-        logMessages.push("Public member has no documentation");
+        if (result == documentation_analysis_metric_1.MIN_SCORE)
+            logMessages.push("Public member has no documentation");
         return result;
     }
 }
