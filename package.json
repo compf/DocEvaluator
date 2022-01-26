@@ -1,5 +1,5 @@
 {
-  "name": "javadoc_evaluator",
+  "name": "doc_evaluator",
   "version": "3.0.0",
   "description": "A tool to evaluate the documentation of source code",
   "type": "commonjs",
@@ -12,8 +12,9 @@
   },
   "keywords": [
     "documentation",
-    "javadoc",
-    "comments"
+    "evaluation",
+    "comments",
+    "comment metrics"
   ],
   "bin": "./build/src/index.js",
   "main": "./build/src/index.js",
