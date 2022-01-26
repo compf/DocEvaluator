@@ -44,7 +44,7 @@ export class EvaluatorConf {
     files_result_builder: string = "default_builder";
 
     /**
-     * The result builder for the files
+     * The result builder for a single file with its component
      */
     single_file_result_builder: string = "default_builder";
 
