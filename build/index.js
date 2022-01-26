@@ -28462,7 +28462,7 @@ class EvaluatorConf {
      */
         this.files_result_builder = "default_builder";
         /**
-         * The result builder for the files
+         * The result builder for a single file with its component
          */
         this.single_file_result_builder = "default_builder";
         /**
