@@ -7,7 +7,7 @@ Mehrzeilige Kommentare könnten theoretisch auch berücksichtigt werden, da eini
 
 Mehr Änderungen müssen an der entsprechenden Parser-Datei \textit{JavaParser.g4} durchgeführt werden.  Da diese Änderungen für die eigentliche Thematik dieser Bachelorarbeit nur eine untergeordnete Rolle spielen, wird hier nicht jede Änderung genauer erklärt. Tabelle \ref{tab:parser_changes} im Anhang listet alle Änderungen an der Parserdatei auf. 
 
-\section{Konfiguration des Tools}
+\section{Konfiguration des Tools}\label{chapter:conf}
 Zur Nutzung des Tools werden bestimmte Informationen benötigt, die aus verschiedenen Quellen bezogen werden. Zunächst benötigt das Tool den Pfad, der die Quelldateien enthält, die nach Kapitel \ref{chapter:traversing} traversiert werden sollen. Dieser wird als namenloser Parameter über die Kommandozeile übergeben. Er ist optional, da bei dessen Fehlen das aktuelle Arbeitsverzeichnis genommen wird. Die weiteren Information werden aus zwei Quellen bezogen. Die erste Quelle ist eine \ac{JSON}-Datei namens \enquote{comment\_conf.json},welche als notwendige Daten für die Arbeit des Programms dienen. Listing \ref{lst:example_conf} zeigt eine beispielhafte \ac{JSON}-Datei:
 
 \begin{figure} [htbp]
@@ -35,6 +35,21 @@ Neben der bereits erwähnten Möglichkeit, einen absoluten Grenzwert für die Do
 
 Der Ort zur Speicherung des letzten Wertes ist dabei flexibel. Standardmäßig wird der Wert in einer Datei namens \enquote{.evaluator\_last\_state.txt} gespeichert. Falls das Programm im Kontext von GitHub Actions ausgeführt wird, sollte allerdings beachtet werden, das diese Datei zwischen nach der Beendingung des Workflows gelöscht wird. Dieses Problem kann dadurch gelöst werden, dass die geänderte Datei im Repository des zu analysierenden Projektes hochgeladen wird. Dies kann beispielsweise mit dem Tool \footnote{\href{https://github.com/EndBug/add-and-commit}{Add and Commit (besucht am 26.01.2022 }} erledigt werden. Nachteilhaft an diesem Vorgehen allerdings, dass hierdurch der Commit-Verlauf mit automatisierten Commits überflutet wird, sodass der Überblick verloren gehen kann.  Eine weitere Möglichkeit zur Speicherung des Wertes wäre es, den Wert an einem externen Server zu senden und bei einem erneuten Start diesen Wert abzurufen. 
 
+\subsection{Ausführung des Programms}
+In diesem Unterabschnitt wird beschrieben wie das Programm die in Kapitel \ref{chapter_conception}
+beschriebenen Arbeitspakete nutzt, um die Qualität der Softwaredokumentation zu bewerten. 
+
+Im ersten Schritt  muss die die Konfiguration des Programms geladen werden. Dazu wird das Arbeitsverzeichnis von der Kommandozeile gelesen. Basierend auf das Arbeitsverzeichnis kann dann die Konfiguration des Tools geladen werden, wie es in Kapitel \ref{chapter:conf} beschrieben ist.  
+
+Anschließend müssen einige Objekte  initialisiert werden. Hierzu werden die Werte aus der Konfiguration (z.~B. der Konfigurationsdatei) verwendet. Beispielsweise kann durch \textit{metric\_result\_builder} der Algorithmus festgelegt werden, der die Einzelergebnisse der einzelnen Metriken zu einem Gesamtresultat kombiniert. Dazu wird das Factory-Pattern verwendet, da damit die Konstruktion eines Objektes aus einer Zeichenkette möglich ist und somit der Anwender in der Konfiguration nur eine bestimmte Zeichenkette oder ID zur Konstruktion eines komplexeren Objektes angeben muss \cite[S. 149 1-161]{gamma2015design}. Zudem werden die Metriken, die zur Analyse verwendet werden sollen, durch den Metrikmanager registriert.
+
+Außerdem wird eine assoziative Liste für die Dateien und die Metriken erstellt, die den eindeutigen Metriknamen bzw. ein Wildcard-Pattern einer Datei ein Gewicht zugeordnet. Damit kann ein entsprechender \textit{MetricResultBuilder} erzeugt werden. Falls dieser keine Gewichtung benötigt, werden diese Informationen ignoriert. 
+
+In nächsten Schritt muss jede Datei mit jeder Metrik geprüft werden und die Ergebnisse gesammelt werden. Hierzu wird eine verschachtelte For-Schleife verwendet. Dabei gibt es zwei Möglichkeiten zur Verschachtelung. Im ersten Fall könnte in der äußeren Schleife jede Datei Metrik durchlaufen werden. Alternativ könnte auch die innere und äußere Schleife vertauscht werden. Der erste Ansatz hat den Vorteil, dass jede Datei nur einmal geladen werden muss, was einen Geschwindigkeitsvorteil bringen kann, deshalb wurde dieses Verfahren auch gewählt. In jedem Falle muss nach einer Iteration einer inneren oder äußeren Schleife das aggregierte Ergebnis abgerufen und mittels eines \textit{MetricResultBuilder} verarbeitet werden. 
+
+Zum Schluss steht dann das Gesamtergebnis zur Verfügung und kann genutzt werden, um die Qualität der Dokumentation mit dem Grenzwert bzw. den letzten Wert zu vergleichen. 
+
+Im nächsten Schritt müssen die relevanten Dateien gefunden werden. Dazu werden dem Traversierer (siehe Kapitel \ref{chapter:traversing}) die Wildcard-Pattern der zu inkludierenden Dateien und der auszuschließenden Dateien übergeben. Mit der Methode \textit{getRelevantFiles} werden dann alle notwendigen Dateien zurückgegeben  
 \subsection{Einbindung in GitHub Actions}\label{chapter:github_actions_impl}
 Um das Tool in GitHub Actions einzubinden, müssen einige Schritte erfolgen. Zunächst muss eine \enquote{action.yaml} geschrieben werden, die das GitHub-Repository als Aktion markiert und die notwendige Befehle für die Ausführung enthält. Listing  \ref{lst:action} zeigt den kompletten Code einer Aktion:
 \begin{figure} [htbp]
