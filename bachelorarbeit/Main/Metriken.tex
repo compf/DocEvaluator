@@ -43,7 +43,7 @@ Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung 
 \begin{itemize}
     \item \textit{consider\_tags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
 \end{itemize}
-\subsection{Metrik:Kohärenz zwischen Kommentar und Komponentenname}
+\subsection{Metrik:Kohärenz zwischen Kommentar und Komponentenname}\label{chapter:metrics_coherence}
 Die Dokumentation einer Komponente sollte einen Mehrwert bieten und nicht nur den Namen der Komponente wiederholen  Gleichzeitig sollte es einen Zusammenhang zwischen den Namen einer Komponente und dessen Dokumentation geben, da ansonsten keine gute Beziehung hergestellt werden kann\cite[S. 86-87]{Qualityanalysisofsourcecodecomments}. Um diese Beziehung mittels einer Metrik bewerten zu können, kann die Anzahl der Wörter bestimmt werden, die sowohl im Komponentennamen als auch in der Dokumentation auftauchen. Durch Division dieser Anzahl durch die Gesamtzahl der Wörter wird der \textbf{Koheränzkoeffizient} berechnet. Die Autoren in \cite[S. 86-87]{Qualityanalysisofsourcecodecomments} wenden diesen Koeffizienten nur auf Methodennamen an und vertreten die Auffassung, dass ein Koheränzkoeffizient von 0 bzw. über 0.5 auf eine schlechte Dokumentierung hindeuten, da im ersten Fall es keine Verbindung zwischen den Kommentar und der Komponente gibt und im zweiten Fall zu viele Gemeinsamkeiten existieren. Diese Metrik nutzt die ermittelten Ober- und Untergrenze des Koheränzkoeffizienten für alle Komponenten, da die Beschränkung auf Methoden nicht sinnvoll ist und auch andere Komponenten einen nicht repetitiven Kommentar haben sollten. Außerdem sind die Grenzen hier parametrisierbar, um die Handhabung der Metrik auf unterschiedliche Situationen zu erleichtern. Komponenten ohne Dokumentation werden hier vollstädnig ignoriert. 
 
 Um die Zahl der  gemeinsamen Wörter zwischen Komponentenname und Dokumentation zu ermitteln, wird der Name der Komponente nach den zwei üblichen Namenskonventionen zerlegt( Trennung bei Unterstrich und beim Aufeinanderfolgen von Klein- und Großbuchstaben (Pascal-Case)). Eine Komponente \textit{getText} würde in die Wörter \textit{get} und \textit{Text} aufgespalten werden. Ebenso würde der Name \textit{get\_text} in  \textit{get} und \textit{text} zerlegt werden. Zur Vereinfachung werden alle Wörter in Kleinbuchstaben konvertiert. 
@@ -60,7 +60,7 @@ Mit dieser Metrik können Entwickler dazu angeregt werden, informative Kommentar
     \item \textit{upper\_threshold} minimaler Wert für den  Koheränzkoeffizienten, bei dem ein zu großer Zusammenhang vermutet wird und daher mit null Punkten bewertet wird
 \item \textit{levenshtein\_distance} maximale Levenshtein-Distanz, bei denen zwei Wörter als ähnlich angesehen werden. 
  \end{itemize}
-\subsection{Metrik: Verwendung bestimmter Wörter bestrafen}\label{chapter:certain_words}
+\subsection{Metrik: Verwendung bestimmter Wörter bestrafen}\label{chapter:metric_certain_words}
 Nach \cite{HowtoWriteDocCommentsfortheJavadocTool} sollte ein Kommentar keine lateinischen Ausdrücke verwendet werden. So sollten beispielsweise die folgenden Ausdrücke geändert werden
 \begin{itemize}
     \item {e.g.} durch \enquote{for example}
@@ -93,7 +93,7 @@ Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und lä
  
  Dennoch wird diese Empfehlung nicht immer befolgt. Im Kontext der Softwaredokumentation sollten diese größeren Methoden allerdings umso eher dokumentiert werden, da es ansonsten schwieriger ist, die Bedeutung der verschiedenen Parameter, des Rückgabewertes und allgemeinen Rolle der Funktion zu erfassen. Daher macht es Sinn undokumentierte Methoden mit vielen Codezeilen schlechter zu bewerten.
  
- Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information an eine beschränkt wachsende Funktion (siehe Kapitel \ref{chapter:certain_word}) übergeben, um so einen Wert zwischen 0 bis 100 zu ermitteln. 
+ Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information an eine beschränkt wachsende Funktion (siehe Kapitel \ref{chapter:metric_certain_words}) übergeben, um so einen Wert zwischen 0 bis 100 zu ermitteln. 
   Um lange undokumentierte Methoden besser bestrafen zu können, wird eine Fallunterscheidung vorgenommen.
  
  Bei kurzen Methoden unter zehn Zeilen beträgt die untere Schranke der Funktion 90, da kurze Methoden nicht allzu schlecht bewertet werden sollen. Für Methoden mit mindestens zehn Zeilen sollte eine strengere Bewertung existieren, da diese wahrscheinlich unübersichtlicher sind. Aus diesem Grund werden längere Methoden mit nicht mehr als 90 Punkten und minimal null Punkten bewertet, sodass die Spannweite größer ist und die Bewertung schneller gegen null tendiert.

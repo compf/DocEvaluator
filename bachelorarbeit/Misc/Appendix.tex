@@ -63,5 +63,23 @@
     \caption{Parameter zur Konfiguration des Tools}
     \label{tab:tool_javadoc_conf}
 \end{table}
+\chapter{Implementierte Metriken}
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c|c}
+        Metrikname & Klassenname & Erklärt in (Kapitel)  \\\hline
+          simple\_comment & SimpleCommentPresentMetric & \ref{chapter:metrics_simple_comment}\\\hline
+        public\_members\_only & SimplePublicMembersOnlyMetric &  \ref{chapter:public_members}\\\hline
+        large\_method\_commented & SimpleLargeMethodCommentedMetric & \ref{chapter:method_long}\\\hline
+     method\_fully\_documented & SimpleMethodDocumentationMetric & \ref{chapter:method_doc}\\\hline
+       commented\_lines\_ratio& CommentedLinesRatioMetric & \ref{chapter:metrics_loc_ratio}\\\hline
+       flesch& FleschMetric & \ref{chapter:metrics_flesh}\\\hline
+        comment\_name\_coherence&CommentNameCoherenceMetric & \ref{chapter:metrics_coherence}\\\hline
+     certain\_terms&CertainTermCountMetric & \ref{chapter:metric_certain_words}\\\hline
+    \end{tabular}
+    \caption{Alle implementierten Metriken}
+    \label{table:metrics_name}
+\end{table}
+
 \end{appendices}
 	
