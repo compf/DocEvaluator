@@ -28984,7 +28984,8 @@ exports.JavaSpecificHelper = void 0;
 const method_component_1 = __nccwpck_require__(4725);
 const log_message_1 = __nccwpck_require__(4938);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
-class JavaSpecificHelper {
+const language_specific_helper_1 = __nccwpck_require__(8142);
+class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelper {
     rateDocumentationCompatibility(component, results, logMessages) {
         var _a;
         let methodData = component.getComponentMetaInformation();
@@ -29014,6 +29015,40 @@ exports.JavaSpecificHelper = JavaSpecificHelper;
 
 /***/ }),
 
+/***/ 8142:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.LanguageSpecificHelper = void 0;
+/**
+ * This interface helps metric to deal with language specific stuff
+ * For instance, don't check overriden methods or check additional tags
+ */
+class LanguageSpecificHelper {
+    /**
+     * checks whether the documentation is complete by checking additional tags
+     * @param component any component
+     * @param results all numeric results will be pushed there
+     * @param logMessages all log messages will be pushed there
+     */
+    rateDocumentationCompatibility(component, results, logMessages) {
+    }
+    /**
+     * Check whether the component should be analyzed
+     * For instance, return false if the component is overriden
+     * @param component a component to check
+     */
+    shallConsider(component) {
+        return true;
+    }
+}
+exports.LanguageSpecificHelper = LanguageSpecificHelper;
+
+
+/***/ }),
+
 /***/ 6035:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -29022,6 +29057,7 @@ exports.JavaSpecificHelper = JavaSpecificHelper;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LanguageSpecificHelperFactory = void 0;
 const java_specific_helper_1 = __nccwpck_require__(5715);
+const language_specific_helper_1 = __nccwpck_require__(8142);
 /**
  * Creates a Language Specific helper based on a string
  */
@@ -29032,21 +29068,10 @@ var LanguageSpecificHelperFactory;
             case "java":
                 return new java_specific_helper_1.JavaSpecificHelper();
             default:
-                return new EmptyHelper();
+                return new language_specific_helper_1.LanguageSpecificHelper();
         }
     }
     LanguageSpecificHelperFactory.loadHelper = loadHelper;
-    /**
-     * Stub class so that not every language need a specific helper
-     */
-    class EmptyHelper {
-        rateDocumentationCompatibility(component, results, logMessages) {
-            return;
-        }
-        shallConsider(component) {
-            return true;
-        }
-    }
 })(LanguageSpecificHelperFactory = exports.LanguageSpecificHelperFactory || (exports.LanguageSpecificHelperFactory = {}));
 
 
