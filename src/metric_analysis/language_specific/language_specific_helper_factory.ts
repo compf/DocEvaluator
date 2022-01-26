@@ -11,19 +11,8 @@ export namespace LanguageSpecificHelperFactory{
             case "java":
                 return new JavaSpecificHelper();
             default:
-                return new EmptyHelper();
+                return new LanguageSpecificHelper();
         }
     }
-    /**
-     * Stub class so that not every language need a specific helper
-     */
-    class EmptyHelper implements LanguageSpecificHelper{
-        rateDocumentationCompatibility(component: Component,results:number[],logMessages: LogMessage[]):void {
-            return ;
-        }
-        shallConsider(component: Component): boolean {
-            return true;
-        }
-        
-    }
+   
 }

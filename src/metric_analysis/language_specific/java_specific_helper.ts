@@ -5,7 +5,7 @@ import { LogMessage } from "../log_message";
 import { MAX_SCORE, MIN_SCORE } from "../metrics/documentation_analysis_metric";
 import { LanguageSpecificHelper } from "./language_specific_helper";
 
-export class JavaSpecificHelper implements LanguageSpecificHelper{
+export class JavaSpecificHelper extends LanguageSpecificHelper{
     rateDocumentationCompatibility(component: Component,results:number[],logMessages: LogMessage[]):void {       let methodData=component.getComponentMetaInformation() as JavaMethodData;
         let throwTags=component.getComment()?.getTags().filter((x)=>x.getKind()=="@throws");
         let throwParamInComment=new Set(throwTags?.map((x)=>x.getParam()));
