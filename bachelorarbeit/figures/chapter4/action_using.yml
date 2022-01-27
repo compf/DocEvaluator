@@ -1,0 +1,3 @@
+ uses: compf/JavaDocEvaluator@action
+        with:
+          global_threshold: 20

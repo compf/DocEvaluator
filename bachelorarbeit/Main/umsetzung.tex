@@ -31,7 +31,7 @@ Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile a
 			[caption={Beispielhafte Syntax vom Lexer},
 			label={lst:lexer_example},
 			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/lexer_example.g4}
+			{figures/chapter4/lexer_example.g4}
 		\end{figure}
 
 Eine Zeile in der Lexer-Grammatik beginnt mit den Namen eines Tokens, gefolgt von einem Doppelpunkt und dann einem regulären Ausdruck, der dieses Token beschreibt. In der beispielhaften Lexer-Grammatik wird ein Javadoc-Kommentar definiert, das mit \enquote{/**} beginnt, dann folgen beliebige Zeichen und endet mit \enquote{*/}. Per Konvention haben die Bezeichner der Tokens nur Großbuchstaben, sie müssen auf jeden Fall mit einem Großbuchstaben beginnen \cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. 
@@ -44,7 +44,7 @@ So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren
 			[caption={Beispielhafte Syntax vom Parser},
 			label={lst:parser_example},
 			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/parser_example.g4}
+			{figures/chapter4/parser_example.g4}
 		\end{figure}
 		
 Listing \ref{lst:parser_example} beschreibt die notwendigen Regeln, um Methodenparameter zu parsen. Ein Methodenparameter (Z. 1) kann keinen, einen oder mehrere  Modifizierer (Z. 2) enthalten, die ihrerseits eine Java-Annotation oder das Schlüsselwort\textit{final}  sein können (Z. 6-7). Anschließend (Zeile 3) muss ein Datentyp (Z. 9) erfolgen, der wiederum aus einer Annotation bestehen kann (Z. 10), gefolgt von entweder einem primitiven Datentyp oder einem Klassen bzw. Schnittstellentyp (Z.11). Auch die üblichen eckigen Klammern für Arrays in Java können nach diesem Datentyp folgen (Z. 12). Die letzte Voraussetzung für einen gültigen Methodenparameter ist ein valider Bezeichner (Z. 4), der in Zeile 14-16 genauer definiert wird. 
@@ -60,7 +60,7 @@ Dies ist relativ leicht mit dem Visitor-Pattern möglich, da so nur die relevant
 			[caption={Codeauschnitt aus  Methoden-Visitor},
 			label={lst:visit_method_example},
 			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/visit_method_example.java}
+			{figures/chapter4/visit_method_example.java}
 		\end{figure}
 Das Listing \ref{lst:visit_method_example} zeigt einen Ausschnitt vom Visitor für Methodendeklarationen. Hier ist die Baumstruktur leicht sichtbar. Alle Einzelbestandteile einer Methode wie z. B. Bezeichner, Rückgabetyp etc. sind Kindknoten des \textit{RuleContext} und können über die Methode \textit{getChild} abgerufen werden. So werden sowohl der Bezeichner als auch der Rückgabetyp direkt als Text abgerufen. Diese  beiden Bestandteile bestehen wiederum auch aus weiteren Kindknoten, doch eine weitergehende Betrachtung ist nicht nötig, da nur die Bezeichnung als Zeichenkette benötigt wird. Andere Bestandteile wie die Methodenparameter sind jedoch komplexer, aus diesem Grund werden sie von separaten Visitors betrachtet.
 
@@ -79,7 +79,7 @@ Zur Nutzung des Tools werden bestimmte Informationen benötigt, die aus verschie
 [caption={Beispielhafte Konfigurationsdatei für das Tool},
 label={lst:example_conf},
 captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-{figures/example_conf.json}
+{figures/chapter4/example_conf.json}
 \end{figure}
 
 In dieser Beispieldatei  werden alle Dateien mit der Dateieendung \enquote{.java} bei der Traversierung betrachtet (Z. 1). Außerdem werden dabei keine Datei bei der ausgeschlossen (Z. 2). Diese beiden Werte entsprechend dabei ihre Standardwerte. Sie könnten also bei dieser Konfigurationsdatei weggelassen werden und das Programmverhalten würde sich nicht ändern.
@@ -107,7 +107,7 @@ Um das Tool in GitHub Actions einzubinden, müssen einige Schritte erfolgen. Zun
 [caption={Beispielhafte Action-Datei für das Tool},
 label={lst:action},
 captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-{figures/action.yml}
+{figures/chapter4/action.yml}
 \end{figure}
 
 In den ersten beiden Zeilen werden Attribute wie der Name und eine Beschreibung gesetzt. Danach (Z. 4-7) wird der Eingabeparameter für die minimal erlaubte Bewertung für die Dokumentationsqualität definiert, damit dieser von den Nutzern der Aktion verändert werden kann.  Außerdem werden noch ein Icon und eine Farbe gesetzt (Z. 8-10), da dies von GitHub Actions vorgeschrieben ist. In den Zeilen 11 bis 13 ist der wichtige Programmcode enthalten, in denen die Aktion als JavaScript-Aktion mit der Node-Version 16 festgelegt wird. Zudem enthält die letzte Zeile auch den Pfad zur Quellcodedatei, mit dem das Programm gestartet werden soll. 
@@ -130,7 +130,7 @@ Die oben erstellte Aktion kann nun von jedem GitHub-Repository verwendet werden.
 [caption={Verwendung der Aktion in einem Workflow},
 label={lst:action_using},
 captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-{figures/action_using.yml}
+{figures/chapter4/action_using.yml}
 \end{figure}
 
 Hier wird die aktuelle Version des JavadocEvaluators aus der Branch \textit{action} heruntergeladen und automatisch ausgeführt. Als Parameter wird beispielsweise ein Grenzwert von 20 übergeben, der jedoch nach Belieben angepasst werden kann. Wenn das entsprechende Ereignis des Workflow eintritt (z. B. ein Push-Ereignis), wird der JavadocEvaluator mit dem Parameter aufgerufen und zeigt unter der Registerkarte \textit{Actions} eine Fehlermeldung an, wenn die Dokumentationsqualität den Grenzwert unterschreitet und somit nicht ausreichend ist.
