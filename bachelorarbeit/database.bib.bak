@@ -1057,7 +1057,7 @@ facilitating its maintenance.},
   pages     = {519-528},
 }
 
-@Article{4160958,
+@Article{ANormalizedLevenshteinDistanceMetric,
   author  = {Yujian, Li and Bo, Liu},
   title   = {A Normalized Levenshtein Distance Metric},
   journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
