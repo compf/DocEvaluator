@@ -28691,9 +28691,9 @@ class DirectoryTraverser {
      * @returns A set of all absolute filenames of all relevant files
      */
     getRelevantFiles() {
-        let resultSet = new Set();
-        this.getRelevantFilesRec(this.basePath, resultSet);
-        return resultSet;
+        let resultArray = [];
+        this.getRelevantFilesRec(this.basePath, resultArray);
+        return resultArray;
     }
     /**
      * Determine if a file should be ignored
@@ -28708,21 +28708,21 @@ class DirectoryTraverser {
     /**
      * Recursively traverse through the directory and find all relavant files
      * @param baseDir the current directory to enumerate the files there
-     * @param resultSet will be filled during the recursion to store all relevant files
+     * @param resultArray will be filled during the recursion to store all relevant files
      */
-    getRelevantFilesRec(baseDir, resultSet) {
+    getRelevantFilesRec(baseDir, resultArray) {
         let entries = fs_1.default.readdirSync(baseDir, { withFileTypes: true });
         for (let entry of entries) {
             let fullname = path_1.default.join(baseDir, entry.name);
             let relName = path_1.default.relative(this.basePath, fullname);
             if (entry.isDirectory()) {
-                this.getRelevantFilesRec(fullname, resultSet);
+                this.getRelevantFilesRec(fullname, resultArray);
             }
             else {
                 if (this.shallIgnore(relName)) {
                     continue;
                 }
-                resultSet.add(fullname);
+                resultArray.push(fullname);
             }
         }
     }
@@ -28741,6 +28741,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.main = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(6504));
 const directory_traverser_1 = __nccwpck_require__(70);
 const metric_manager_1 = __nccwpck_require__(2217);
@@ -28770,6 +28771,7 @@ function main(args) {
         throw new Error("Difference from last run is too high");
     }
 }
+exports.main = main;
 function printResultByMetric(objects) {
     console.log("Results by metric:");
     for (let m of objects.resultByMetric) {
@@ -28842,7 +28844,9 @@ function processByFile(relevantFile, objects) {
     objects.metricBuilder.reset();
     objects.allFilesResultBulder.processResult(metricResult);
 }
-main(process.argv.slice(2));
+if (require.main === require.cache[eval('__filename')]) {
+    main(process.argv.slice(2));
+}
 
 
 /***/ }),
