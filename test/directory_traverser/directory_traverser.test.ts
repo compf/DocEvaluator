@@ -43,7 +43,7 @@ test("Test default configuration", () => {
     let traverser = new DirectoryTraverser(basePath, new EvaluatorConf());
     const expectedFileCount = 10;
     let files = traverser.getRelevantFiles();
-    let actualCount = files.size;
+    let actualCount = files.length;
     expect(actualCount).toBe(expectedFileCount);
 });
 test("test configuration with test files excluded", () => {
@@ -51,7 +51,7 @@ test("test configuration with test files excluded", () => {
     const rule = { exclude: ["*test*", "*Test*"], include: ["*java"] };
     let traverser = new DirectoryTraverser(basePath, rule);
     const expectedFileCount = 8;
-    let actualCount = traverser.getRelevantFiles().size;
+    let actualCount = traverser.getRelevantFiles().length;
     expect(actualCount).toBe(expectedFileCount);
 });
 test("test configuration with dir excluded", () => {
@@ -60,7 +60,7 @@ test("test configuration with dir excluded", () => {
     let traverser = new DirectoryTraverser(basePath, rule);
     const expectedFileCount = 7;
     let files = traverser.getRelevantFiles();
-    let actualCount = files.size;
+    let actualCount = files.length;
     expect(actualCount).toBe(expectedFileCount);
 })
 

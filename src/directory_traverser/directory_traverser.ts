@@ -38,10 +38,10 @@ export class DirectoryTraverser {
      * Traverse the directory and return all relevant files recursively
      * @returns A set of all absolute filenames of all relevant files
      */
-    public getRelevantFiles(): Set<string> {
-        let resultSet = new Set<string>();
-        this.getRelevantFilesRec(this.basePath, resultSet);
-        return resultSet;
+    public getRelevantFiles(): string[] {
+        let resultArray:string[] =[];
+        this.getRelevantFilesRec(this.basePath, resultArray);
+        return resultArray;
     }
     private excludeItems: IMinimatch[] = []
     private includeItems: IMinimatch[] = []
@@ -58,21 +58,21 @@ export class DirectoryTraverser {
     /**
      * Recursively traverse through the directory and find all relavant files
      * @param baseDir the current directory to enumerate the files there
-     * @param resultSet will be filled during the recursion to store all relevant files
+     * @param resultArray will be filled during the recursion to store all relevant files
      */
-    private getRelevantFilesRec(baseDir: string, resultSet: Set<string>): void {
+    private getRelevantFilesRec(baseDir: string, resultArray: string[]): void {
         let entries = fs.readdirSync(baseDir, { withFileTypes: true });
         for (let entry of entries) {
             let fullname = path.join(baseDir, entry.name);
             let relName = path.relative(this.basePath, fullname);
             if (entry.isDirectory()) {
-                this.getRelevantFilesRec(fullname, resultSet);
+                this.getRelevantFilesRec(fullname, resultArray);
             }
             else {
                 if (this.shallIgnore(relName)) {
                     continue;
                 }
-                resultSet.add(fullname);
+                resultArray.push(fullname);
             }
         }
 
