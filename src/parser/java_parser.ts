@@ -218,8 +218,8 @@ export class JavadocParser {
         }
         else return null;
     }
-    private splitWithRemainder(str: string, delim: string, max: number) {
-        let splitted = str.split(delim);
+    private splitWithRemainder(str: string, delim: RegExp, max: number) {
+        let splitted = str.split(delim).filter((c)=>c!="");
         let result = []
         let last = "";
         for (let i = 0; i < splitted.length; i++) {
@@ -237,7 +237,7 @@ export class JavadocParser {
     parseTag(line: string): StructuredCommentTag {
         let splitted: string[] = []
         if (this.hasParam(line)) {
-            splitted = this.splitWithRemainder(line, " ", 3);
+            splitted = this.splitWithRemainder(line, /\s/, 3);
 
             let tag = this.getElementOrDefault(splitted, 0)!!
             let param = this.getElementOrDefault(splitted, 1)
@@ -245,7 +245,7 @@ export class JavadocParser {
             return new StructuredCommentTag(tag, param, descr);
         }
         else {
-            splitted = this.splitWithRemainder(line, " ", 2);
+            splitted = this.splitWithRemainder(line, /\s/, 2);
             let tag = this.getElementOrDefault(splitted, 0)!!
             let descr = this.getElementOrDefault(splitted, 1)
             return new StructuredCommentTag(tag, null, descr);
