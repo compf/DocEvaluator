@@ -6,7 +6,7 @@ import { ParseResult } from "./parser/parse_result/parse_result";
 import { MetricManager } from "./metric_analysis/metric_manager";
 import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
-import { loadConf } from "./conf/EvaluatorConf";
+import { EvaluatorConf, loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
 import { PathWeightResolver, SimpleWeightResolver, StubResolver } from "./metric_analysis/weight_resolver";
 import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
@@ -14,100 +14,120 @@ import { StateManagerFactory } from "./conf/state_manager_factory";
 import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
 import { LanguageSpecificHelper } from "./metric_analysis/language_specific/language_specific_helper";
 import { LogMessage } from "./metric_analysis/log_message";
-interface Parameters{
-  
-     parser:BaseParser,
-     fileAnalyzer: FileAnalyzer,
-     singleFileResultBuilder:MetricResultBuilder,
-     allFilesResultBulder:MetricResultBuilder,
-     metricBuilder :MetricResultBuilder,
-     metrics:DocumentationAnalysisMetric[],
-     resultByMetric:Map<string,MetricResultBuilder>,
-     languageHelper:LanguageSpecificHelper
-} 
-function main(args: Array<string>) {
-    var workingDirectory = "";
-    if (args.length < 1) {
-        console.log(chalk.yellow("No directory provided. Using current directory"));
-        workingDirectory = ".";
-    }
-    else {
-        workingDirectory = args[0];
-    }
-    LogMessage.BasePath=workingDirectory; //TODO don't use global variables
+import { StateManager } from "./conf/state_manager";
+import { MetricResult } from "./metric_analysis/metric_result";
+/**
+ * Describes a tuple  of objects that are shared and can be initialized at once
+ */
+interface SharedObjects {
+
+    parser: BaseParser,
+    fileAnalyzer: FileAnalyzer,
+    singleFileResultBuilder: MetricResultBuilder,
+    allFilesResultBulder: MetricResultBuilder,
+    metricBuilder: MetricResultBuilder,
+    metrics: DocumentationAnalysisMetric[],
+    resultByMetric: Map<string, MetricResultBuilder>,
+    languageHelper: LanguageSpecificHelper,
+    stateManager:StateManager
+}
+function main(args: string[]) {
+    let workingDirectory=getWorkingDirectory(args);
+    
+    LogMessage.BasePath = workingDirectory; //TODO don't use global variables
     let conf = loadConf(workingDirectory);
-    let traverser = new DirectoryTraverser(workingDirectory, conf);
-    const relevantFiles = traverser.getRelevantFiles();
+    let objects=initializeObjects(conf,workingDirectory);
+    let lastResult = objects.stateManager.load();
+    
 
-    let weightMap=new Map<string,number>();
-    let metrics = conf.metrics.map((m)=>MetricManager.createMetricByName(m.metric_name,m.unique_name,m.params));
-    for(let m of conf.metrics){
-        weightMap.set(m.unique_name,m.weight);
-    }
-    let languageHelper=LanguageSpecificHelperFactory.loadHelper(conf.parser);
-    let metricWeightResolver=new SimpleWeightResolver(weightMap);
-    let filesWeightResolver=new PathWeightResolver(conf.path_weights,conf.default_path_weight);
-    let parser = ParserFactory.createParser(conf.parser);
-    let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder =MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder,new StubResolver());
-    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder,filesWeightResolver);
-    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder,metricWeightResolver)
-    let resultByMetric:Map<string,MetricResultBuilder>=new Map();
-    let stateManager=StateManagerFactory.load(conf.state_manager,workingDirectory);
-    let lastResult=stateManager.load();
-    console.log("last result",lastResult);
+    let finalResult=calculateResult(workingDirectory,conf,objects);
+    printLogsMessages(finalResult.getLogMessages());
+    printResultByMetric(objects);
+    console.log("The result was " + finalResult.getResult());
+    objects.stateManager.save(finalResult.getResult());
 
-    let params:Parameters={parser,fileAnalyzer,singleFileResultBuilder,allFilesResultBulder,metricBuilder,metrics,resultByMetric,languageHelper};
-    for (let relevantFile of relevantFiles)
-     {   
-        processByFile(relevantFile,params);
-    }
-    let result = allFilesResultBulder.getAggregatedResult("");
-    for (let log of result.getLogMessages()) {
-        log.log();
-    }
-    metricBuilder.reset();
-    console.log("Results by metric:");
-    for(let m of params.resultByMetric){
-       let res= m[1].getAggregatedResult("").getResult();
-       console.log(m[0],res);
-    }
-    console.log("The result was " + result.getResult());
-    stateManager.save(result.getResult());
-    if (result.getResult() < conf.global_threshold) {
+    if (finalResult.getResult() < conf.global_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if( lastResult!=null && lastResult>result.getResult() && Math.abs(lastResult-result.getResult())>=conf.max_diff_last_run){
+    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.max_diff_last_run) {
         throw new Error("Difference from last run is too high");
 
     }
 }
-function processByMetric(root:ParseResult,metric:DocumentationAnalysisMetric, params:Parameters){
-    console.log("Using metric", metric.getUniqueName())
-           
-    params.fileAnalyzer.analyze(root, metric, params.singleFileResultBuilder,params.languageHelper);
-    let partialResult = params.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
-    if(!params.resultByMetric.has(metric.getUniqueName())){
-        params.resultByMetric.set(metric.getUniqueName(),new MetricResultBuilder());
+function printResultByMetric(objects: SharedObjects) {
+    console.log("Results by metric:");
+    for (let m of objects.resultByMetric) {
+        let res = m[1].getAggregatedResult("").getResult();
+        console.log(m[0], res);
     }
-    params.resultByMetric.get(metric.getUniqueName())?.processResult(partialResult);
+}
+function calculateResult(workingDirectory:string,conf:EvaluatorConf,objects:SharedObjects):MetricResult{
+    let traverser = new DirectoryTraverser(workingDirectory, conf);
+    const relevantFiles = traverser.getRelevantFiles();
+    for (let relevantFile of relevantFiles) {
+        processByFile(relevantFile, objects);
+    }
+
+    return objects.allFilesResultBulder.getAggregatedResult("");
+}
+function getWorkingDirectory(args:string[]):string{
+    if (args.length < 1) {
+        console.log(chalk.yellow("No directory provided. Using current directory"));
+        return ".";
+    }
+    else {
+        return args[0];
+    }
+}
+function initializeObjects(conf: EvaluatorConf,workingDirectory:string):SharedObjects {
+    let weightMap = new Map<string, number>();
+    let metrics = conf.metrics.map((m) => MetricManager.createMetricByName(m.metric_name, m.unique_name, m.params));
+    for (let m of conf.metrics) {
+        weightMap.set(m.unique_name, m.weight);
+    }
+    let languageHelper = LanguageSpecificHelperFactory.loadHelper(conf.parser);
+    let metricWeightResolver = new SimpleWeightResolver(weightMap);
+    let filesWeightResolver = new PathWeightResolver(conf.path_weights, conf.default_path_weight);
+    let parser = ParserFactory.createParser(conf.parser);
+    let fileAnalyzer = new FileAnalyzer();
+    let singleFileResultBuilder = MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, new StubResolver());
+    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
+    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver)
+    let resultByMetric: Map<string, MetricResultBuilder> = new Map();
+    let stateManager = StateManagerFactory.load(conf.state_manager, workingDirectory);
+
+    return { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper,stateManager };
+}
+function printLogsMessages(logMessages:LogMessage[]){
+    for (let log of logMessages) {
+        log.log();
+    }
+}
+function processByMetric(root: ParseResult, metric: DocumentationAnalysisMetric, objects: SharedObjects) {
+    console.log("Using metric", metric.getUniqueName())
+
+    objects.fileAnalyzer.analyze(root, metric, objects.singleFileResultBuilder, objects.languageHelper);
+    let partialResult = objects.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
+    if (!objects.resultByMetric.has(metric.getUniqueName())) {
+        objects.resultByMetric.set(metric.getUniqueName(), new MetricResultBuilder());
+    }
+    objects.resultByMetric.get(metric.getUniqueName())?.processResult(partialResult);
     console.log("Partial result", partialResult.getResult());
 
-    params.metricBuilder.processResult(partialResult);
-    params.singleFileResultBuilder.reset();
+    objects.metricBuilder.processResult(partialResult);
+    objects.singleFileResultBuilder.reset();
     console.log();
 }
-function processByFile(relevantFile:string,params:Parameters){
-    var root: ParseResult = { root: params.parser.parse(relevantFile), path: relevantFile };
-    console.log("Looking at " + root.path)       
-    for (let metric of params.metrics)
-     {
-        processByMetric(root,metric,params)
+function processByFile(relevantFile: string, objects: SharedObjects) {
+    var root: ParseResult = { root: objects.parser.parse(relevantFile), path: relevantFile };
+    console.log("Looking at " + root.path)
+    for (let metric of objects.metrics) {
+        processByMetric(root, metric, objects)
     }
 
     console.log();
-    let metricResult = params.metricBuilder.getAggregatedResult(root.path);
-    params.metricBuilder.reset();
-    params.allFilesResultBulder.processResult(metricResult);
+    let metricResult = objects.metricBuilder.getAggregatedResult(root.path);
+    objects.metricBuilder.reset();
+    objects.allFilesResultBulder.processResult(metricResult);
 }
 main(process.argv.slice(2))
