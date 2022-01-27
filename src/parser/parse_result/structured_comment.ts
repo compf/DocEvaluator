@@ -27,6 +27,7 @@ export class StructuredComment {
 export enum StructuredCommentTagKind {
     PARAM = "@param",
     RETURN = "@return",
+    THROWS="@throws"
 }
 /**
  * This class contains a single tag of the documentation
