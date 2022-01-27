@@ -256,6 +256,10 @@ export class JavadocParser {
         let tagsWithParams = ["@param", "@throws"];
         return tagsWithParams.some((t) => line.startsWith(t));
     }
+    startsWithTag(line:string):boolean{
+        let tags = ["@param", "@throws","@return"];
+        return tags.some((t)=>line.startsWith(t));
+    }
     parseCommentText(text: string): StructuredComment {
         let lines = text.split("\n");
         let toReplace = ["/**", "*/", "*"]
@@ -272,7 +276,7 @@ export class JavadocParser {
         let tags: StructuredCommentTag[] = []
         let foundTag = false;
         for (let line of lines) {
-            if (line.startsWith("@")) {
+            if (this.startsWithTag(line)) {
                 let tag = this.parseTag(line);
                 tags.push(tag);
                 foundTag = true;
