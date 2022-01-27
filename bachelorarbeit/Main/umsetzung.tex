@@ -71,7 +71,7 @@ Mehrzeilige Kommentare könnten theoretisch auch berücksichtigt werden, da eini
 
 Mehr Änderungen müssen an der entsprechenden Parser-Datei \textit{JavaParser.g4} durchgeführt werden.  Da diese Änderungen für die eigentliche Thematik dieser Bachelorarbeit nur eine untergeordnete Rolle spielen, wird hier nicht jede Änderung genauer erklärt. Tabelle \ref{tab:parser_changes} im Anhang listet alle Änderungen an der Parserdatei auf. 
 \section{Parsen der strukturierten Kommentare}
-Um die strukturierten Kommentare in das Format nach Kapitel \ref{chapter:structured_comments} zu bringen, wird eine simple Heuristik verwendet. es werden soviele Zeilen als allgemeine Beschreibung gezählt bis die eine Zeile auftaucht, die mit einem gültigen Tag wie z.~B. \enquote{@param} beginnt.
+Um die strukturierten Kommentare in das Format nach Kapitel \ref{chapter:structured_comments} zu bringen, wird eine simple Heuristik verwendet. es werden soviele Zeilen als allgemeine Beschreibung gezählt bis die eine Zeile auftaucht, die mit einem Tag wie z.~B. \enquote{@param} beginnt, der den allgemeinen Teil beendet.
 
 Anschließend werden diese Tags verarbeitet. Benötigt ein Tag einen Parameter, so wird die Zeile in drei Teilen an den Leerzeichen aufgetrennt. Dabei ist der erste Teil der Typ des Tags, der zweite Teil der Parameter und der Rest (mit allen übrigen Leerzeichen) die Beschreibung des Tags.
 Bei einem Tag ohne Parameter wird die Zeile in zwei Teile getrennt, wobei hier der der erste Teil der Typ des Tags und der letzte Teil die Beschreibung ist.
