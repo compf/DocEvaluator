@@ -31,7 +31,7 @@ interface SharedObjects {
     languageHelper: LanguageSpecificHelper,
     stateManager:StateManager
 }
-function main(args: string[]) {
+export function main(args: string[]) {
     let workingDirectory=getWorkingDirectory(args);
     
     LogMessage.BasePath = workingDirectory; //TODO don't use global variables
@@ -130,4 +130,6 @@ function processByFile(relevantFile: string, objects: SharedObjects) {
     objects.metricBuilder.reset();
     objects.allFilesResultBulder.processResult(metricResult);
 }
-main(process.argv.slice(2))
+if(require.main===module){
+    main(process.argv.slice(2))
+}

@@ -4,6 +4,9 @@ import { SimpleCommentPresentMetric } from "../src/metric_analysis/metrics/simpl
 import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/metrics/simple_method_documentation_metric";
 import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_median_result_builder";
 import { WeightResolver } from "../src/metric_analysis/weight_resolver";
+import { main } from "../src";
+import { readFileSync } from "fs";
+
 
 class BaseClass {
 
@@ -46,5 +49,11 @@ test("test unique name from MetricManager",()=>{
         expect(receivedName).toBe(expectedName);
     }
 });
+test("normal main program works",()=>{
 
+    main(["testDir/expr"])
+    let actual=parseFloat(readFileSync("testDir/expr/.evaluator_last_state.txt").toString());
+    const expected=43.5895;
+    expect(actual).toBeCloseTo(actual,3);
+});
 
