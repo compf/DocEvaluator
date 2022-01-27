@@ -1,4 +1,4 @@
-\chapter{Umsetzung}
+\chapter{Umsetzung}\label{chapter:program}
 In diesem Kapitel wird auf die Umsetzung der in Kapitel \ref{chapter_conception} beschriebene Architektur eingegangen. Dazu werden Informationen über die Einrichtung und Konfiguration des Tools gegeben.
 \section{Ausführung des Programms}
 In diesem Unterabschnitt wird beschrieben wie das Programm die in Kapitel \ref{chapter_conception}
@@ -22,7 +22,7 @@ Um die Java-Dateien zu parsen, wird die Bibliothek ANTLR4\footnote{\href{https:/
 
 Eine andere Möglichkeit zum Parsen der Java-Dateien ist die NPM-Bibliothek \enquote{java-parser} \footnote{\href{https://www.npmjs.com/package/java-parser}{Java-Parser (besucht 07.01.2022)}}. Dies hätte den Vorteil, dass das Parsen, welches nicht der Hauptfokus dieser Bachelorarbeit ist, ausgelagert wird und so Fehler vermieden werden. Allerdings kann diese Bibliothek nicht die Verbindung zwischen einer Komponente und der dazugehörigen Javadoc herstellen, sodass eine Benutzung dieser Bibliothek die Arbeit deutlich erschwert hätte. Daher fiel die Wahl auf \textit{ANTLR4}. Außerdem besteht die Möglichkeit, eine eigene Grammatik für Java zu schreiben, da die originale Grammatik für Java sämtliche Kommentare ignoriert. Da dies jedoch deutlich komplizierter war als erwartet, wurde dennoch entschieden, die von vielen Entwicklern geschriebene Grammatik zu verwenden (siehe Kapitel \ref{chapter:antlr4_impl}).
 
-\section{Lexer und Parser}
+\subsection{Lexer und Parser}
 Eine Grammatik für Programmiersprachen besteht immer aus einer Lexer-Grammatik und eine Parser-Grammatik, die jeweils vom Lexer bzw. Parser in dieser Reihenfolge verarbeitet werden, um so eine Baumstruktur einer Quellcodedatei zu erhalten. Der Lexer erstellt aus einer Quellcodedatei eine Liste von Tokens. Dabei ist ein Token eine Gruppierung von einem oder mehreren Zeichen, die eine weitergehende Bedeutung haben. Beispielsweise können Schlüsselwörter einer Programmiersprache oder Operatoren als Token klassifiziert werden. Diese Tokens sind grundsätzlich kontextunabhängig, das heißt für die gleiche Zeichenkette wird das gleiche Token verwendet. Jeder Token wird durch seine Zeichenkette und den Tokentyp klassifiziert
 
 Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
@@ -64,7 +64,7 @@ Dies ist relativ leicht mit dem Visitor-Pattern möglich, da so nur die relevant
 		\end{figure}
 Das Listing \ref{lst:visit_method_example} zeigt einen Ausschnitt vom Visitor für Methodendeklarationen. Hier ist die Baumstruktur leicht sichtbar. Alle Einzelbestandteile einer Methode wie z. B. Bezeichner, Rückgabetyp etc. sind Kindknoten des \textit{RuleContext} und können über die Methode \textit{getChild} abgerufen werden. So werden sowohl der Bezeichner als auch der Rückgabetyp direkt als Text abgerufen. Diese  beiden Bestandteile bestehen wiederum auch aus weiteren Kindknoten, doch eine weitergehende Betrachtung ist nicht nötig, da nur die Bezeichnung als Zeichenkette benötigt wird. Andere Bestandteile wie die Methodenparameter sind jedoch komplexer, aus diesem Grund werden sie von separaten Visitors betrachtet.
 
-\section{Implementierung von ANTLR4}\label{chapter:antlr4_impl}
+\subsection{Implementierung von ANTLR4}\label{chapter:antlr4_impl}
 Für die Programmiersprache Java steht eine Grammatik, die auf Github unter der BSD-Lizenz angeboten wird ist, zur Verfügung\footnote{\href{https://github.com/antlr/grammars-v4/tree/master/java/java}{Grammatik-Dateien für Java (besucht 07.01.2022)}}, allerdings ignoriert diese Grammatik alle Kommentare. Daher müssen einige Änderungen sowohl am Lexer als auch am Parser vorgenommen werden. Im Lexer werden standardmäßig alle Tokens in einem Kommentar in einen versteckten Kanal gespeichert, was dazu führt, dass diese Tokens vom Parser ignoriert werden. Daher wird dieses Verhalten durch Definition eines neuen Tokens so geändert, dass Javadoc-Kommentare auch vom Parser verarbeitet werden können, aber mehrzeilige und einzeilige Kommentare weiterhin ignoriert werden. Einzeilige Kommentare sind hier nicht relevant, da sie kein Javadoc enthalten.
 
 Mehrzeilige Kommentare könnten theoretisch auch berücksichtigt werden, da einige Entwickler diese anstelle von Javadoc benutzen. Allerdings werden solche mehrzeilige Kommentare vor Komponenten nicht von Tools erkannt und haben daher einen geringeren, aber durchaus vorhandenen Nutzen \cite[S. 4]{HowDocumentationEvolvesoverTime}. Deshalb werden Komponenten, die zwar mit mehrzeiligen Kommentaren aber nicht mit Javadoc dokumentiert sind, wie undokumentierte Komponenten betrachtet. Für einen Entwickler sollte es so schnell möglich sein, solche nicht korrekt dokumentierten Komponenten zu identifizieren und deren mehrzeilige Kommentare in gültige Javadoc-Kommentare umzuwandeln und so die Qualität der Dokumentation zu erhöhen. Für andere Programmiersprachen können jedoch normale mehrzeilige wie strukturierte Kommentare betrachtet werden, wenn dies für sinnvollerer erachtet wird.
@@ -94,13 +94,13 @@ Die zweite Quelle für die Informationen sind die Eingabeparameter aus GitHub Ac
 
 Da es durchaus sein kann, dass sowohl eine Konfigurationsdatei als auch die Umgebungsvariablen gesetzt sind, muss klar festgelegt werden, welcher Wert eines Parameters am Ende genommen wird. Bei dem Tool haben die von GitHub Actions erzeugten Umgebungsvariablen  Vorrang, da das Tool für die Verwendung in GitHub Actions konzipiert wurde. 
 
-\subsection{Speicherung des letzten Ergebnisses}\label{chapter:saving}
+\section{Speicherung des letzten Ergebnisses}\label{chapter:saving}
 Neben der bereits erwähnten Möglichkeit, einen absoluten Grenzwert für die Dokumentationsqualität zu definieren, ist auch ein inkrementeller Vergleich interessant. Dabei wird das Ergebnis der Dokumentationsqualität zwischengespeichert. Bei einem neuen Start des Tools kann das alte Ergebnis mit dem neuen Ergebnis verglichen werden. Verschlechtert sich das Ergebnis über einen gewissen Schwellwert hinaus, so sollten der Entwickler ebenfalls gewarnt werden, selbst wenn die Dokumentationsqualität noch über der absoluten Grenze liegt. Schließlich kann dies ein Trend sein, der zum baldigen Unterschreiten des Grenzwertes führen kann. 
 
 Der Ort zur Speicherung des letzten Wertes ist dabei flexibel. Standardmäßig wird der Wert in einer Datei namens \enquote{.evaluator\_last\_state.txt} gespeichert. Falls das Programm im Kontext von GitHub Actions ausgeführt wird, sollte allerdings beachtet werden, das diese Datei zwischen nach der Beendingung des Workflows gelöscht wird. Dieses Problem kann dadurch gelöst werden, dass die geänderte Datei im Repository des zu analysierenden Projektes hochgeladen wird. Dies kann beispielsweise mit dem Tool \footnote{\href{https://github.com/EndBug/add-and-commit}{Add and Commit (besucht am 26.01.2022 }} erledigt werden. Nachteilhaft an diesem Vorgehen allerdings, dass hierdurch der Commit-Verlauf mit automatisierten Commits überflutet wird, sodass der Überblick verloren gehen kann.  Eine weitere Möglichkeit zur Speicherung des Wertes wäre es, den Wert an einem externen Server zu senden und bei einem erneuten Start diesen Wert abzurufen. 
 
   
-\subsection{Einbindung in GitHub Actions}\label{chapter:github_actions_impl}
+\section{Einbindung in GitHub Actions}\label{chapter:github_actions_impl}
 Um das Tool in GitHub Actions einzubinden, müssen einige Schritte erfolgen. Zunächst muss eine \enquote{action.yaml} geschrieben werden, die das GitHub-Repository als Aktion markiert und die notwendige Befehle für die Ausführung enthält. Listing  \ref{lst:action} zeigt den kompletten Code einer Aktion:
 \begin{figure} [htbp]
 \lstinputlisting
