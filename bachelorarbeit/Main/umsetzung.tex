@@ -1,5 +1,69 @@
 \chapter{Umsetzung}
 In diesem Kapitel wird auf die Umsetzung der in Kapitel \ref{chapter_conception} beschriebene Architektur eingegangen. Dazu werden Informationen über die Einrichtung und Konfiguration des Tools gegeben.
+\section{Ausführung des Programms}
+In diesem Unterabschnitt wird beschrieben wie das Programm die in Kapitel \ref{chapter_conception}
+beschriebenen Arbeitspakete nutzt, um die Qualität der Softwaredokumentation zu bewerten. 
+
+Die Koordination des Programms wird in der Datei \enquote{index.ts} durchgeführt, die als Einstiegspunkt des Programms verstanden werden kann. In dieser Datei werden die einzelne Module des Programms in der richtigen Reihenfolge aufgerufen und die Ergebnisse eines Moduls werden durch die \enquote{index.ts}-Datei an das folgende Modul/Arbeitspaket übergeben, soweit sie dort benötigt werden. Dadurch sind die Module voneinander entkoppelt und greifen nicht direkt aufeinander zu. 
+
+Im ersten Schritt  muss die die Konfiguration des Programms geladen werden. Dazu wird das Arbeitsverzeichnis von der Kommandozeile gelesen. Basierend auf das Arbeitsverzeichnis kann dann die Konfiguration des Tools geladen werden, wie es in Kapitel \ref{chapter:conf} beschrieben ist.  
+
+Anschließend müssen einige Objekte  initialisiert werden. Hierzu werden die Werte aus der Konfiguration (z.~B. der Konfigurationsdatei) verwendet. Beispielsweise kann durch \textit{metric\_result\_builder} der Algorithmus festgelegt werden, der die Einzelergebnisse der einzelnen Metriken zu einem Gesamtresultat kombiniert. Dazu wird das Factory-Pattern verwendet, da damit die Konstruktion eines Objektes aus einer Zeichenkette möglich ist und somit der Anwender in der Konfiguration nur eine bestimmte Zeichenkette oder ID zur Konstruktion eines komplexeren Objektes angeben muss \cite[S. 149 1-161]{gamma2015design}. Zudem werden die Metriken, die zur Analyse verwendet werden sollen, durch den Metrikmanager registriert.
+
+Außerdem wird eine assoziative Liste für die Dateien und die Metriken erstellt, die den eindeutigen Metriknamen bzw. ein Wildcard-Pattern einer Datei ein Gewicht zugeordnet. Damit kann ein entsprechender \textit{MetricResultBuilder} erzeugt werden. Falls dieser keine Gewichtung benötigt, werden diese Informationen ignoriert. 
+
+In nächsten Schritt muss jede Datei mit jeder Metrik geprüft werden und die Ergebnisse gesammelt werden. Hierzu wird eine verschachtelte For-Schleife verwendet. Dabei gibt es zwei Möglichkeiten zur Verschachtelung. Im ersten Fall könnte in der äußeren Schleife jede Datei und in der inneren jede Metrik durchlaufen werden. Alternativ könnte auch die innere und äußere Schleife vertauscht werden. Der erste Ansatz hat den Vorteil, dass jede Datei nur einmal geladen werden muss, was einen Geschwindigkeitsvorteil bringen kann, deshalb wurde dieses Verfahren auch gewählt. Pro Iteration der inneren Schleife  wird das Ergebnis einem \textit{MetricResultBuilder} mit dem Bezeichner \textit{metricBuilder}  übergeben. Pro Iteration der äußere Schleife wird das aggregierte Ergebnis in \textit{metricBuilder} dem Objekt \textit{allFilesResultBulder} übergeben, der die Ergebnisse aller Dateien sammelt. 
+
+Nach Abschluss der beiden Schleifen kann das Ergebnis durch Aggregation der Resultate in \textit{allFilesResultBulder} zur Verfügung und kann genutzt werden, um die Qualität der Dokumentation mit dem Grenzwert bzw. den letzten Wert zu vergleichen. 
+
+Im nächsten Schritt müssen die relevanten Dateien gefunden werden. Dazu werden dem Traversierer (siehe Kapitel \ref{chapter:traversing}) die Wildcard-Pattern der zu inkludierenden Dateien und der auszuschließenden Dateien übergeben. Mit der Methode \textit{getRelevantFiles} werden dann alle notwendigen Dateien zurückgegeben.
+\section{ANTLR4}
+Um die Java-Dateien zu parsen, wird die Bibliothek ANTLR4\footnote{\href{https://www.antlr.org/}{ANTLR Website (besucht 07.01.2022)}} verwendet, die kostenlos verfügbar ist. Diese Bibliothek kann nicht nur viele Programmiersprachen, sondern auch selbst geschriebene Sprachen parsen, sofern eine passende Grammatik verfügbar ist. Daneben gibt es noch Bibliotheken wie Bison, PEG.JS, die ebenfalls eine ähnliche Aufgabe erfüllen können. Allerdings gibt es bereits vordefinierte Grammatiken für ANTLR4, sodass ein erheblicher Aufwand gespart werden konnte.  
+
+Eine andere Möglichkeit zum Parsen der Java-Dateien ist die NPM-Bibliothek \enquote{java-parser} \footnote{\href{https://www.npmjs.com/package/java-parser}{Java-Parser (besucht 07.01.2022)}}. Dies hätte den Vorteil, dass das Parsen, welches nicht der Hauptfokus dieser Bachelorarbeit ist, ausgelagert wird und so Fehler vermieden werden. Allerdings kann diese Bibliothek nicht die Verbindung zwischen einer Komponente und der dazugehörigen Javadoc herstellen, sodass eine Benutzung dieser Bibliothek die Arbeit deutlich erschwert hätte. Daher fiel die Wahl auf \textit{ANTLR4}. Außerdem besteht die Möglichkeit, eine eigene Grammatik für Java zu schreiben, da die originale Grammatik für Java sämtliche Kommentare ignoriert. Da dies jedoch deutlich komplizierter war als erwartet, wurde dennoch entschieden, die von vielen Entwicklern geschriebene Grammatik zu verwenden (siehe Kapitel \ref{chapter:antlr4_impl}).
+
+\section{Lexer und Parser}
+Eine Grammatik für Programmiersprachen besteht immer aus einer Lexer-Grammatik und eine Parser-Grammatik, die jeweils vom Lexer bzw. Parser in dieser Reihenfolge verarbeitet werden, um so eine Baumstruktur einer Quellcodedatei zu erhalten. Der Lexer erstellt aus einer Quellcodedatei eine Liste von Tokens. Dabei ist ein Token eine Gruppierung von einem oder mehreren Zeichen, die eine weitergehende Bedeutung haben. Beispielsweise können Schlüsselwörter einer Programmiersprache oder Operatoren als Token klassifiziert werden. Diese Tokens sind grundsätzlich kontextunabhängig, das heißt für die gleiche Zeichenkette wird das gleiche Token verwendet. Jeder Token wird durch seine Zeichenkette und den Tokentyp klassifiziert
+
+Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
+		\begin{figure} [htbp]
+			\lstinputlisting
+			[caption={Beispielhafte Syntax vom Lexer},
+			label={lst:lexer_example},
+			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+			{figures/lexer_example.g4}
+		\end{figure}
+
+Eine Zeile in der Lexer-Grammatik beginnt mit den Namen eines Tokens, gefolgt von einem Doppelpunkt und dann einem regulären Ausdruck, der dieses Token beschreibt. In der beispielhaften Lexer-Grammatik wird ein Javadoc-Kommentar definiert, das mit \enquote{/**} beginnt, dann folgen beliebige Zeichen und endet mit \enquote{*/}. Per Konvention haben die Bezeichner der Tokens nur Großbuchstaben, sie müssen auf jeden Fall mit einem Großbuchstaben beginnen \cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. 
+
+Der nächste Schritt ist das  Parsen. Dabei werden die im vorherigen Schritt generierten Tokens, die als Liste vorliegen, genommen und in eine hierarchische Baumstruktur umgewandelt, wobei hier der Kontext die entscheidende Rolle spielt. ANTLR4 lädt ein Token nach dem anderen und prüft ob es, basierend auf der aktuellen Position in der Baumstruktur, eine Regel gibt, die durch diesen Token erfüllt wird. Wenn es mehrere mögliche Pfade gibt, lädt ANTLR4 so viele Tokens bis die nächste Regel eindeutig feststeht. Gibt es dennoch Uneindeutigkeiten, so wird die Regel genommen, die als erstes in der Parser-Datei geschrieben wurde.\cite[S. 10ff.]{TheDefinitiveANTLR4Reference}
+
+So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren, der eine generelle Methode beschreibt. Eine Methode besteht aus Rückgabetyp, Bezeichner und Parameterliste. Die Parameterliste kann dann als eine Liste von Datentyp-Bezeichner-Paare aufgelöst werden. Der Rückgabetyp einer Methode ist allerdings anders zu verstehen als der Datentyp eines Parameters, da jeder Datentyp eines Parameters auch ein gültiger Rückgabetyp ist, was jedoch nicht umgekehrt der Fall ist; so ist \textit{}{void} ein gültiger Rückgabetyp, aber kein Datentyp. Listing \ref{lst:parser_example} zeigt einen typischen Ausschnitt aus einer Parser-Grammatik, wobei zur Übersichtlichkeit nicht alle Regeln und Tokens aufgelistet sind:
+		\begin{figure} [htbp]
+			\lstinputlisting
+			[caption={Beispielhafte Syntax vom Parser},
+			label={lst:parser_example},
+			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+			{figures/parser_example.g4}
+		\end{figure}
+		
+Listing \ref{lst:parser_example} beschreibt die notwendigen Regeln, um Methodenparameter zu parsen. Ein Methodenparameter (Z. 1) kann keinen, einen oder mehrere  Modifizierer (Z. 2) enthalten, die ihrerseits eine Java-Annotation oder das Schlüsselwort\textit{final}  sein können (Z. 6-7). Anschließend (Zeile 3) muss ein Datentyp (Z. 9) erfolgen, der wiederum aus einer Annotation bestehen kann (Z. 10), gefolgt von entweder einem primitiven Datentyp oder einem Klassen bzw. Schnittstellentyp (Z.11). Auch die üblichen eckigen Klammern für Arrays in Java können nach diesem Datentyp folgen (Z. 12). Die letzte Voraussetzung für einen gültigen Methodenparameter ist ein valider Bezeichner (Z. 4), der in Zeile 14-16 genauer definiert wird. 
+
+Die Parser-Grammatik ist ähnlich wie die der Lexer-Grammatik aufgebaut. Auch hier wird eine Variante der regulären Ausdrücken verwendet, wobei hier die reguläre Grammatik auf die Tokens angewendet wird. Anstelle des Namens des Tokens kann alternativ auch die Zeichenkette des Tokens verwendet werden (bspw. \enquote{+} statt \enquote{ADD}). Im Gegensatz zum Lexer muss der Bezeichner einer Parser-Regel mit einem Kleinbuchstaben beginnen\cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. So ist eine Unterscheidung zwischen Tokens und den Parserregeln stets möglich. 
+
+
+Basierend auf dieser Baumstruktur des Parsers kann eine Quellcodedatei analysiert werden und so alle relevanten Informationen gesammelt werden. 
+Dies ist relativ leicht mit dem Visitor-Pattern möglich, da so nur die relevanten  Komponenten genauer betrachtet werden müssen und alle uninteressanten Komponenten automatisiert durchlaufen werden, bis eine relevante Komponente gefunden wird.
+
+		\begin{figure} [htbp]
+			\lstinputlisting
+			[caption={Codeauschnitt aus  Methoden-Visitor},
+			label={lst:visit_method_example},
+			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+			{figures/visit_method_example.java}
+		\end{figure}
+Das Listing \ref{lst:visit_method_example} zeigt einen Ausschnitt vom Visitor für Methodendeklarationen. Hier ist die Baumstruktur leicht sichtbar. Alle Einzelbestandteile einer Methode wie z. B. Bezeichner, Rückgabetyp etc. sind Kindknoten des \textit{RuleContext} und können über die Methode \textit{getChild} abgerufen werden. So werden sowohl der Bezeichner als auch der Rückgabetyp direkt als Text abgerufen. Diese  beiden Bestandteile bestehen wiederum auch aus weiteren Kindknoten, doch eine weitergehende Betrachtung ist nicht nötig, da nur die Bezeichnung als Zeichenkette benötigt wird. Andere Bestandteile wie die Methodenparameter sind jedoch komplexer, aus diesem Grund werden sie von separaten Visitors betrachtet.
+
 \section{Implementierung von ANTLR4}\label{chapter:antlr4_impl}
 Für die Programmiersprache Java steht eine Grammatik, die auf Github unter der BSD-Lizenz angeboten wird ist, zur Verfügung\footnote{\href{https://github.com/antlr/grammars-v4/tree/master/java/java}{Grammatik-Dateien für Java (besucht 07.01.2022)}}, allerdings ignoriert diese Grammatik alle Kommentare. Daher müssen einige Änderungen sowohl am Lexer als auch am Parser vorgenommen werden. Im Lexer werden standardmäßig alle Tokens in einem Kommentar in einen versteckten Kanal gespeichert, was dazu führt, dass diese Tokens vom Parser ignoriert werden. Daher wird dieses Verhalten durch Definition eines neuen Tokens so geändert, dass Javadoc-Kommentare auch vom Parser verarbeitet werden können, aber mehrzeilige und einzeilige Kommentare weiterhin ignoriert werden. Einzeilige Kommentare sind hier nicht relevant, da sie kein Javadoc enthalten.
 
@@ -35,21 +99,7 @@ Neben der bereits erwähnten Möglichkeit, einen absoluten Grenzwert für die Do
 
 Der Ort zur Speicherung des letzten Wertes ist dabei flexibel. Standardmäßig wird der Wert in einer Datei namens \enquote{.evaluator\_last\_state.txt} gespeichert. Falls das Programm im Kontext von GitHub Actions ausgeführt wird, sollte allerdings beachtet werden, das diese Datei zwischen nach der Beendingung des Workflows gelöscht wird. Dieses Problem kann dadurch gelöst werden, dass die geänderte Datei im Repository des zu analysierenden Projektes hochgeladen wird. Dies kann beispielsweise mit dem Tool \footnote{\href{https://github.com/EndBug/add-and-commit}{Add and Commit (besucht am 26.01.2022 }} erledigt werden. Nachteilhaft an diesem Vorgehen allerdings, dass hierdurch der Commit-Verlauf mit automatisierten Commits überflutet wird, sodass der Überblick verloren gehen kann.  Eine weitere Möglichkeit zur Speicherung des Wertes wäre es, den Wert an einem externen Server zu senden und bei einem erneuten Start diesen Wert abzurufen. 
 
-\subsection{Ausführung des Programms}
-In diesem Unterabschnitt wird beschrieben wie das Programm die in Kapitel \ref{chapter_conception}
-beschriebenen Arbeitspakete nutzt, um die Qualität der Softwaredokumentation zu bewerten. 
-
-Im ersten Schritt  muss die die Konfiguration des Programms geladen werden. Dazu wird das Arbeitsverzeichnis von der Kommandozeile gelesen. Basierend auf das Arbeitsverzeichnis kann dann die Konfiguration des Tools geladen werden, wie es in Kapitel \ref{chapter:conf} beschrieben ist.  
-
-Anschließend müssen einige Objekte  initialisiert werden. Hierzu werden die Werte aus der Konfiguration (z.~B. der Konfigurationsdatei) verwendet. Beispielsweise kann durch \textit{metric\_result\_builder} der Algorithmus festgelegt werden, der die Einzelergebnisse der einzelnen Metriken zu einem Gesamtresultat kombiniert. Dazu wird das Factory-Pattern verwendet, da damit die Konstruktion eines Objektes aus einer Zeichenkette möglich ist und somit der Anwender in der Konfiguration nur eine bestimmte Zeichenkette oder ID zur Konstruktion eines komplexeren Objektes angeben muss \cite[S. 149 1-161]{gamma2015design}. Zudem werden die Metriken, die zur Analyse verwendet werden sollen, durch den Metrikmanager registriert.
-
-Außerdem wird eine assoziative Liste für die Dateien und die Metriken erstellt, die den eindeutigen Metriknamen bzw. ein Wildcard-Pattern einer Datei ein Gewicht zugeordnet. Damit kann ein entsprechender \textit{MetricResultBuilder} erzeugt werden. Falls dieser keine Gewichtung benötigt, werden diese Informationen ignoriert. 
-
-In nächsten Schritt muss jede Datei mit jeder Metrik geprüft werden und die Ergebnisse gesammelt werden. Hierzu wird eine verschachtelte For-Schleife verwendet. Dabei gibt es zwei Möglichkeiten zur Verschachtelung. Im ersten Fall könnte in der äußeren Schleife jede Datei Metrik durchlaufen werden. Alternativ könnte auch die innere und äußere Schleife vertauscht werden. Der erste Ansatz hat den Vorteil, dass jede Datei nur einmal geladen werden muss, was einen Geschwindigkeitsvorteil bringen kann, deshalb wurde dieses Verfahren auch gewählt. In jedem Falle muss nach einer Iteration einer inneren oder äußeren Schleife das aggregierte Ergebnis abgerufen und mittels eines \textit{MetricResultBuilder} verarbeitet werden. 
-
-Zum Schluss steht dann das Gesamtergebnis zur Verfügung und kann genutzt werden, um die Qualität der Dokumentation mit dem Grenzwert bzw. den letzten Wert zu vergleichen. 
-
-Im nächsten Schritt müssen die relevanten Dateien gefunden werden. Dazu werden dem Traversierer (siehe Kapitel \ref{chapter:traversing}) die Wildcard-Pattern der zu inkludierenden Dateien und der auszuschließenden Dateien übergeben. Mit der Methode \textit{getRelevantFiles} werden dann alle notwendigen Dateien zurückgegeben  
+  
 \subsection{Einbindung in GitHub Actions}\label{chapter:github_actions_impl}
 Um das Tool in GitHub Actions einzubinden, müssen einige Schritte erfolgen. Zunächst muss eine \enquote{action.yaml} geschrieben werden, die das GitHub-Repository als Aktion markiert und die notwendige Befehle für die Ausführung enthält. Listing  \ref{lst:action} zeigt den kompletten Code einer Aktion:
 \begin{figure} [htbp]

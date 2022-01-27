@@ -28,37 +28,16 @@ Javadoc \cite{HowtoWriteDocCommentsfortheJavadocTool} ist ein Tool zur Generieru
 		\end{figure}
 Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente geschrieben werden. Danach können sogenannte Tags (z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
 
+In der folgenden Auflistung werden beispielhaft einige Javadoc-Tags aufgelistet und beschrieben:
+\begin{description}
+         \item[@param]  Beschreibt einen Parameter, benötigt den Parametername als Argument
+         \item[@return]  Beschreibt den Rückgabewert der Methode, sofern er existiert 
+         \item[@throws] Beschreibt welche Exceptions diese Methode werfen kann und möglichst unter welchen Umständen dies passiert, benötigt die Namen der Exception. Für mehrere Exception sollte dieser Tag entsprechend wiederholt werden 
+         \item[@deprecrated] Falls diese Methode veraltet ist und nicht mehr verwendet werden sollte, kann hier eine Alternative beschrieben werden. 
+        
+\end{description}
+
 Quelltext \ref{lst:simple_javadoc} zeigt ein Beispiel für eine gelungene Verwendung von Javadoc. Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert. Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes, welche am besten auch jeden möglichen Fall abdeckt. Mit \enquote{{@code ...}} kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
-
-
-
-Tabelle \ref{tab:table_javadoc_method} beschreibt einige Tags für Java-Methoden:
-\begin{table}[h]
-    \centering
-    \begin{tabular}{m{4cm}|m{4cm}|m{7cm}}
-    Tag & zusätzliche Parameter &Beschreibung\\
-    \hline
-        @param  & Paramatername & Beschreibt einen Methodenparameter\\
-        \hline
-         @return & & Beschreibt den Rückgabewert der Methode, sofern er existiert \\
-         \hline
-         @throws &Exception & Beschreibt welche Exceptions diese Methode werfen kann und möglichst unter welchen Umständen dies passiert \\
-           \hline
-         @deprecrated & & Falls diese Methode veraltet ist und nicht mehr verwendet werden sollte, kann hier eine Alternative beschrieben werden. \\
-           \hline
-         
-           \hline
-         
-         
-         
-         
-    \end{tabular}
-    \caption{Wichtige Javadoc-Tags}
-    \label{tab:table_javadoc_method}
-\end{table}
-
-
-
 
 Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite \cite{HowtoWriteDocCommentsfortheJavadocTool}:
 \begin{itemize}
@@ -66,19 +45,14 @@ Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite \c
     \item In der dritten und nicht in der zweiten Person schreiben
     \item Nicht repetitiv sein. Ein Kommentar, der im Wesentlichen nur den Namen einer Komponente wiedergibt, hat keinen Mehrwert
     \item  Beschreibungen von Methoden sollten mit einem Verb beginnen
+    \item keine lateinischen Ausdrücke wie \enquote{e.g}, \enquote{aka} oder \enquote{i.e} verwenden
     \item bei einem Verweis auf das aktuelle Objekt sollte das spezifische \textit{this} statt des allgemeineren \textit{the} verwendet werden, bspw. \enquote{opens the connection of \textbf{this} object} statt \enquote{opens the connection of \textbf{the} object}
     \item Bezeichner sollten in mit \textit{<code></code>} umschlossen werden, um deutlich zu machen, dass dies eine andere Komponente ist
     \item Der Kommentar sollte eventuelle Unterschiede unter verschiedene Plattformen erläutern
     \item Die Dokumentation sollte erläutern, wie sich die Komponente in Randfällen verhält
     
 \end{itemize}
-Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. Abbildung \ref{fig:javadoc_example_screenshot} zeigt, wie eine Methode mittels Javadoc in gerendertes HTML beschrieben wird. 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=\columnwidth]{figures/javadoc_screenshot.png}
-    \caption{Gerenderte HTML-Ausgabe von Javadoc}
-    \label{fig:javadoc_example_screenshot}
-\end{figure}
+Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. 
 
 Eine \ac{IDE} kann die Informationen auslesen und dann beispielsweise bei der Autovervollständigung nutzen, um den Entwickler beim Schreiben des Programmcodes unterstützen. So kann sich ein Programmierer auch in einer fremden \ac{API} leichter zurechtfinden.
 
@@ -90,17 +64,17 @@ Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche F
 \section{Javascript, Node und Typescript}
 Das Tool wird mittels der \textit{Node.js}-Bibliothek und TypeScript entwickelt.
 In diesem Abschnitt werden daher die grundlegenden Programmiersprachen und Bibliotheken vorgestellt, die zur Entwicklung des Tools als Desktopanwendung notwendig sind. Außerdem wird begründet, warum TypeScript und \enquote{Node.js} für die Entwicklung des Tools verwendet wurden. 
-\subsection{JavaScript}
+\subsubsection{JavaScript}
 JavaScript ist eine dynamisch typisierte Programmiersprache, die sich als de-facto Standard  für Browserskripte etabliert hat, die auf dem Client (z.~dt. Klienten) ausgeführt werden. Zum Beispiel lassen sich mittels JavaScript Webseiten dynamisieren, Eingaben von Formularen validieren oder nachträglich Daten von anderen Servern laden. 
 
 Die Syntax von JavaScript basiert wie bei der Programmiersprache Java auf C, dennoch sollten Java und JavaScript nicht verwechselt werden. Die eingangs erwähnte dynamische Typisierung bedeutet im Gegensatz zur statischen Typisierung, dass eine Variable anders als in Java keinen fixen Datentyp hat, sondern der Datentyp sich stets nach den aktuellen Wert richtet. Eine Variable \textit{foo} kann mit dem Befehl \textit{ let foo = true} deklariert werden und ist dann vom Datentyp \textit{Bool}. Daraufhin kann der gleichen Variable eine Zeichenkette zugewiesen werden, sodass die Variable nun vom Datentyp \textit{String} ist. Durch die dynamische Typisierung ist der Programmier flexibler, jedoch zeigt eine Studie, dass die Softwarequalität bei Projekten mit statischer Typisierung etwas besser ist als mit dynamischer Typisierung\cite[S. 155ff.]{Ray2014}.
 
-\subsection{TypeScript}
+\subsubsection{TypeScript}
 TypeScript ist eine auf JavaScript aufbauende Programmiersprache, die JavaScript um statische Typisierung ergänzt. Jeder JavaScript-Code ist gültiger TypeScript-Code, sodass TypeScript als Obermenge von JavaScript angesehen werden kann. Der TypeScript-Code kann nicht direkt ausgeführt werden, sondern wird in gültiges JavaScript transkribiert, sodass er von einem Client mit JavaScript-Unterstützung ausgeführt werden kann. 
 
 In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variable festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wurde TypeScript gewählt, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
 
-\subsection{ \textit{Node.js}}
+\subsubsection{ Node.js}
 Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen; folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
 
 \section{GitHub Actions}\label{chapter:github_actions}
