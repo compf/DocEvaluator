@@ -42597,6 +42597,10 @@ class JavadocParser {
         let tagsWithParams = ["@param", "@throws"];
         return tagsWithParams.some((t) => line.startsWith(t));
     }
+    startsWithTag(line) {
+        let tags = ["@param", "@throws", "@return"];
+        return tags.some((t) => line.startsWith(t));
+    }
     parseCommentText(text) {
         var _a;
         let lines = text.split("\n");
@@ -42614,7 +42618,7 @@ class JavadocParser {
         let tags = [];
         let foundTag = false;
         for (let line of lines) {
-            if (line.startsWith("@")) {
+            if (this.startsWithTag(line)) {
                 let tag = this.parseTag(line);
                 tags.push(tag);
                 foundTag = true;
@@ -43173,6 +43177,7 @@ var StructuredCommentTagKind;
 (function (StructuredCommentTagKind) {
     StructuredCommentTagKind["PARAM"] = "@param";
     StructuredCommentTagKind["RETURN"] = "@return";
+    StructuredCommentTagKind["THROWS"] = "@throws";
 })(StructuredCommentTagKind = exports.StructuredCommentTagKind || (exports.StructuredCommentTagKind = {}));
 /**
  * This class contains a single tag of the documentation
