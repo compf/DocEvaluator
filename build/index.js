@@ -42563,7 +42563,7 @@ class JavadocParser {
             return null;
     }
     splitWithRemainder(str, delim, max) {
-        let splitted = str.split(delim);
+        let splitted = str.split(delim).filter((c) => c != "");
         let result = [];
         let last = "";
         for (let i = 0; i < splitted.length; i++) {
@@ -42580,14 +42580,14 @@ class JavadocParser {
     parseTag(line) {
         let splitted = [];
         if (this.hasParam(line)) {
-            splitted = this.splitWithRemainder(line, " ", 3);
+            splitted = this.splitWithRemainder(line, /\s/, 3);
             let tag = this.getElementOrDefault(splitted, 0);
             let param = this.getElementOrDefault(splitted, 1);
             let descr = this.getElementOrDefault(splitted, 2);
             return new structured_comment_1.StructuredCommentTag(tag, param, descr);
         }
         else {
-            splitted = this.splitWithRemainder(line, " ", 2);
+            splitted = this.splitWithRemainder(line, /\s/, 2);
             let tag = this.getElementOrDefault(splitted, 0);
             let descr = this.getElementOrDefault(splitted, 1);
             return new structured_comment_1.StructuredCommentTag(tag, null, descr);
