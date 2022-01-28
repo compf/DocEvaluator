@@ -22,4 +22,20 @@ export class LanguageSpecificHelper{
     shallConsider(component:Component):boolean{
         return true;
     }
+    /**
+     *  finds special elements of the documentation languages
+     * examples would be {@ link }} (without stapces" in java
+     * @param text the text to search
+     */
+    findSpecialElements(text:string):string[]{
+        return [];
+    }
+    /**
+     * determines qwhether a tag is valid
+     * @param tag a tag name
+     * @returns true if the tag is valid
+     */
+    isValidTag(tag:string):boolean{
+        return true;
+    }
 }

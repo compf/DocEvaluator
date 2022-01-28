@@ -14,6 +14,7 @@ import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 import { PathWeightResolver, SimpleWeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
+import { FormattingGoodMetric } from "../../src/metric_analysis/metrics/formatting_good_metric";
 const path = "testDir/commented_class.java";
 const languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
 function getCommentedClassRoot(): HierarchicalComponent {
@@ -235,6 +236,36 @@ test("test overriding and java throws",()=>{
     fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
     let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
     const expectedResult=80;
+    expect(finalResult).toBeCloseTo(expectedResult);
+});
+test("test good formatting",()=>{
+    const path="testDir/GoodFormattingTest.java";
+    let parser=new JavaParser();
+    let root=parser.parse(path);
+    let result={path,root};
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.formatting_good);
+    let doc=MetricManager.createMetricByType(FormattingGoodMetric,"doc2",params);
+    let fileAnalyzer=new FileAnalyzer();
+    let singleFileResultBuilder=new MetricResultBuilder();
+    fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
+    let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
+    const expectedResult=87.9153;
+    ;
+    expect(finalResult).toBeCloseTo(expectedResult);
+});
+test("test no formatting",()=>{
+    const path="testDir/NoFormattingTest.java";
+    let parser=new JavaParser();
+    let root=parser.parse(path);
+    let result={path,root};
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.formatting_good);
+    params.accept_no_formatting=false;
+    let doc=MetricManager.createMetricByType(FormattingGoodMetric,"doc2",params);
+    let fileAnalyzer=new FileAnalyzer();
+    let singleFileResultBuilder=new MetricResultBuilder();
+    fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
+    let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
+    const expectedResult=13.533    ;
     expect(finalResult).toBeCloseTo(expectedResult);
 });
 
