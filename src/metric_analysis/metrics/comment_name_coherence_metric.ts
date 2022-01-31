@@ -27,7 +27,7 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric{
         }
         let messages: string[]=[];
         let result=this.processResult(similarWordsCount/commentWords.length,messages);
-       this.pushResult(builder,result,this.createLogMessages(messages,component));
+       this.pushResult(builder,result,this.createLogMessages(messages,component),component);
 
     }
     public override processResult(result:number,messages:string[]):number{

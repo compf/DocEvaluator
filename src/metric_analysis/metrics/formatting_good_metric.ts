@@ -34,7 +34,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
                 logMessages.push(t.getParam()+ " is not a valid tag");
             }
        }
-       this.pushResult(builder,this.processResult(errorCount,logMessages),this.createLogMessages(logMessages,component));
+       this.pushResult(builder,this.processResult(errorCount,logMessages),this.createLogMessages(logMessages,component),component);
 
     }
     protected processResult(result: number, logMessages: string[]): number {

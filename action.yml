@@ -22,11 +22,11 @@ inputs:
   metric_result_builder:
     description: "The result builder for the metrics"
     required: false
-  files_result_builder:
+  file_result_builder:
     description: "The result builder for the files"
     required: false
-  single_file_builder:
-    description: "The result builder for a single file with its component"
+  component_file_builder:
+    description: "The result builder for a the components"
     required: false
   parser:
     description: "the parser to be used/ the programming languages to be analyzed"
@@ -42,6 +42,9 @@ inputs:
     required: false
   max_diff_last_run:
     description: "max tolerable absolute difference from current to last run"
+    required: false
+  default_component_weight:
+    description: "The default weight for a given component"
     required: false
 
 #branding:

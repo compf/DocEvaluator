@@ -46,8 +46,8 @@ export  abstract class DocumentationAnalysisMetric {
     protected processResult(result:number,logMessages:string[]):number{
         return result;
     }
-    protected pushResult(builder:AbstractMetricBuilder,score:number,logMessages:LogMessage[]){
-        builder.processResult(new MetricResult(score,logMessages,this.getUniqueName()));
+    protected pushResult(builder:AbstractMetricBuilder,score:number,logMessages:LogMessage[],component:Component){
+        builder.processResult(new MetricResult(score,logMessages,component.constructor.name));
     }
     protected pushLogMessage(component:Component,msg:string,logMessages:LogMessage[]){
        

@@ -12,7 +12,7 @@ import { WeightedMedianResultBuilder } from "../../src/metric_analysis/weighted_
 import { WeightedMetricResultBuilder } from "../../src/metric_analysis/weighted_metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
-import { PathWeightResolver, SimpleWeightResolver } from "../../src/metric_analysis/weight_resolver";
+import { PathWeightResolver, SimpleWeightResolver,WeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { FormattingGoodMetric } from "../../src/metric_analysis/metrics/formatting_good_metric";
 const path = "testDir/commented_class.java";
@@ -266,6 +266,37 @@ test("test no formatting",()=>{
     fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
     let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
     const expectedResult=13.533    ;
+    expect(finalResult).toBeCloseTo(expectedResult);
+});
+
+class ComponentWeight implements WeightResolver{
+    resolveWeight(key: string): number {
+        switch(key){
+            case "ClassComponent":
+                return 5;
+            case "MethodComponent":
+                return 1;
+            default:
+                return 1;
+        }
+    }
+
+}
+test("test component weighting",()=>{
+    const path="testDir/CertainWordsTest.java";
+    let parser=new JavaParser();
+    let root=parser.parse(path);
+    let result={path,root};
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.simple_comment);
+    let doc=MetricManager.createMetricByType(SimpleCommentPresentMetric,"simple",params);
+    let fileAnalyzer=new FileAnalyzer();
+
+
+    
+    let singleFileResultBuilder=new WeightedMetricResultBuilder(new ComponentWeight());
+    fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
+    let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
+    const expectedResult=87.5    ;
     expect(finalResult).toBeCloseTo(expectedResult);
 });
 

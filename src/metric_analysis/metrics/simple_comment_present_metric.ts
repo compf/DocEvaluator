@@ -20,7 +20,7 @@ export class SimpleCommentPresentMetric extends ComponentBasedMetric {
             score = MIN_SCORE;
         }
         score = this.processResult(score, logMessages)
-        this.pushResult(builder, score, this.createLogMessages(logMessages, component));
+        this.pushResult(builder, score, this.createLogMessages(logMessages, component),component);
     }
     protected processResult(result: number, logMessages: string[]): number {
         if(result==MIN_SCORE)

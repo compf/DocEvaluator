@@ -29,7 +29,7 @@ export class CertainTermCountMetric extends ComponentBasedMetric {
         }
         let logMessages:string[]=[];
         let score=this.processResult(termCount,logMessages);
-        this.pushResult(builder,score,this.createLogMessages(logMessages,component));
+        this.pushResult(builder,score,this.createLogMessages(logMessages,component),component);
 
     }
     constructor(uniqueName:string,params:any){

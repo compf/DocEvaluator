@@ -23,7 +23,7 @@ export class FleschMetric extends ComponentBasedMetric {
         let score = sum / textsToConsider.length;
         let finalScore = this.processResult(score,msgs);
         
-        this.pushResult(builder,finalScore,this.createLogMessages(msgs,component))
+        this.pushResult(builder,finalScore,this.createLogMessages(msgs,component),component)
     }
     public override  processResult(score: number,msgs:string[]): number {
         let finalScore=0;

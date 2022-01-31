@@ -56,3 +56,23 @@ export class StubResolver implements WeightResolver{
     }
 
 }
+export class DefaultFallbackResolver implements WeightResolver{
+    private defaultWeight:number;
+    private map:Map<string,number>
+    public constructor(map:{name:string,weight:number}[],defaultWeight:number){
+        this.defaultWeight=defaultWeight;
+        this.map=new Map();
+        for(let o of map){
+            this.map.set(o.name,o.weight);
+        }
+    }
+    resolveWeight(key: string): number {
+        if(this.map.has(key)){
+            return this.map.get(key)!;
+        }
+        else{
+            return this.defaultWeight;
+        }
+    }
+    
+}

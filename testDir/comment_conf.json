@@ -2,6 +2,6 @@
     "metrics":[{"metric_name":"simple_comment","weight":1,"unique_name":"test_metric"}],
     "path_weights":[{"path":"*Class.java","weight":5},{"path":"*_class.java","weight":5}],
     "include":["*Class.java","weight","*_class.java","GetterSetter.java","LargeM*.java"],
-    "files_result_builder":"weighted_mean_builder"
+    "file_result_builder":"weighted_mean_builder"
 
 }

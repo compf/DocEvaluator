@@ -32,7 +32,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
            }
            score=sum/results.length;
         }
-       this.pushResult(builder,score,logMessages);
+       this.pushResult(builder,score,logMessages,component);
 
     }
     private checkNonExistingDocumentedParameters(method: MethodComponent, logMessages: LogMessage[]): number {

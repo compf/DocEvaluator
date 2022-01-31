@@ -26,7 +26,7 @@ export class EvaluatorConf {
     /**
      * define all metrics and their respective weights here
      */
-    metrics: { weight: number, metric_name: MetricManager.MetricNames, params: any,unique_name:string }[] = [];
+    metrics: { weight: number, metric_name: MetricManager.MetricNames, params: any, unique_name: string }[] = [];
 
     /**
      * the global threshold that the average of all metrics should meet to pass the documentation check
@@ -38,40 +38,53 @@ export class EvaluatorConf {
      */
     metric_result_builder: string = "default_builder";
 
-        /**
-     * The result builder for the files
-     */
-    files_result_builder: string = "default_builder";
+    /**
+ * The result builder for the files
+ */
+    file_result_builder: string = "default_builder";
 
     /**
-     * The result builder for a single file with its component
+     * The result builder for the components
      */
-    single_file_result_builder: string = "default_builder";
+    component_result_builder: string = "default_builder";
 
     /**
      * the parser to be used/ the programming languages to be analyzed
      */
     parser: string = "java";
     /**
-     * An array of pairs of a glob pattern and a weight that will be used to make some paths more important for evaluation
+     * An array of pairs of a glob pattern and a weight that will be used to make some paths more or less important for evaluation
      */
-    path_weights:{path:string,weight:number}[]=[];
+    path_weights: { path: string, weight: number }[] = [];
+
+
+    /**
+ * An array of pairs of the component  class name (for example MethodComponent) and a weight that will be used to make some components more  or less important for evaluation
+ */
+    component_weights: { name: string, weight: number }[] = [];
+
     /**
      * The default weight for a given path
      */
-    default_path_weight:number=1;
+    default_path_weight: number = 1;
+
+    /**
+     * The default weight for a given component
+     */
+    default_component_weight: number = 1;
+
 
     /**
      * The state manager to store the result of the last run
      */
-    state_manager:string="file";
+    state_manager: string = "file";
     /**
      * max tolerable absolute difference from current to last run
      */
-    max_diff_last_run:number=30;
+    max_diff_last_run: number = 30;
     constructor() {
         for (let s of defaultMetrics) {
-            this.metrics.push({ weight: 1.0, metric_name : s as MetricManager.MetricNames, params: MetricManager.getDefaultMetricParam(s as  MetricManager.MetricNames),unique_name:MetricManager.getUniqueName(s) })
+            this.metrics.push({ weight: 1.0, metric_name: s as MetricManager.MetricNames, params: MetricManager.getDefaultMetricParam(s as MetricManager.MetricNames), unique_name: MetricManager.getUniqueName(s) })
         }
     }
 
@@ -91,13 +104,13 @@ export function loadConf(basePath: string): EvaluatorConf {
     }
     return sanitize(conf);
 }
-function sanitize(conf:EvaluatorConf):EvaluatorConf{
-    for(let m of conf.metrics){
-        if(m.unique_name==undefined){
-            m.unique_name=MetricManager.getUniqueName(m.metric_name);
+function sanitize(conf: EvaluatorConf): EvaluatorConf {
+    for (let m of conf.metrics) {
+        if (m.unique_name == undefined) {
+            m.unique_name = MetricManager.getUniqueName(m.metric_name);
         }
-        if(m.params==undefined){
-            m.params=MetricManager.getDefaultMetricParam(m.metric_name);
+        if (m.params == undefined) {
+            m.params = MetricManager.getDefaultMetricParam(m.metric_name);
         }
     }
     return conf;
@@ -144,17 +157,20 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_METRIC_RESULT_BUILDER) {
             conf.metric_result_builder = JSON.parse(env.INPUT_METRIC_RESULT_BUILDER)
         }
-        if (env.INPUT_SINGLE_FILE_RESULT_BUILDER) {
-            conf.single_file_result_builder = JSON.parse(env.INPUT_SINGLE_FILE_RESULT_BUILDER)
+        if (env.INPUT_COMPONENT_RESULT_BUILDER) {
+            conf.component_result_builder = JSON.parse(env.INPUT_COMPONENT_RESULT_BUILDER)
         }
-        if (env.INPUT_FILES_RESULT_BUILDER) {
-            conf.files_result_builder = JSON.parse(env.INPUT_FILES_RESULT_BUILDER)
+        if (env.INPUT_FILE_RESULT_BUILDER) {
+            conf.file_result_builder = JSON.parse(env.INPUT_FILE_RESULT_BUILDER)
         }
         if (env.INPUT_PARSER) {
             conf.parser = (env.INPUT_PARSER)
         }
         if (env.INPUT_PATH_WEIGHTS) {
             conf.path_weights = JSON.parse(env.INPUT_PATH_WEIGHTS)
+        }
+        if (env.INPUT_COMPONENT_WEIGHTS) {
+            conf.component_weights = JSON.parse(env.INPUT_COMPONENT_WEIGHTS)
         }
         if (env.INPUT_DEFAULT_PATH_WEIGHT) {
             conf.default_path_weight = parseFloat(env.INPUT_DEFAULT_PATH_WEIGHT)
@@ -165,6 +181,10 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_MAX_DIFF_LAST_RUN) {
             conf.max_diff_last_run = parseFloat(env.INPUT_MAX_DIFF_LAST_RUN)
         }
+        if (env.INPUT_DEFAULT_COMPONENT_WEIGHT) {
+            conf.default_component_weight = parseFloat(env.INPUT_DEFAULT_COMPONENT_WEIGHT)
+        }
+
 
     }
 

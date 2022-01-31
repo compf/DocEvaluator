@@ -8,7 +8,7 @@ import { MetricResultBuilder } from "./metric_analysis/metric_result_builder";
 import { FileAnalyzer } from "./metric_analysis/file_analyzer";
 import { EvaluatorConf, loadConf } from "./conf/EvaluatorConf";
 import { ParserFactory } from "./parser/parser_factory";
-import { PathWeightResolver, SimpleWeightResolver, StubResolver } from "./metric_analysis/weight_resolver";
+import { DefaultFallbackResolver, PathWeightResolver, SimpleWeightResolver, StubResolver } from "./metric_analysis/weight_resolver";
 import { DocumentationAnalysisMetric } from "./metric_analysis/metrics/documentation_analysis_metric";
 import { StateManagerFactory } from "./conf/state_manager_factory";
 import { LanguageSpecificHelperFactory } from "./metric_analysis/language_specific/language_specific_helper_factory";
@@ -23,7 +23,7 @@ interface SharedObjects {
 
     parser: BaseParser,
     fileAnalyzer: FileAnalyzer,
-    singleFileResultBuilder: MetricResultBuilder,
+    componentResultBuilder: MetricResultBuilder,
     allFilesResultBulder: MetricResultBuilder,
     metricBuilder: MetricResultBuilder,
     metrics: DocumentationAnalysisMetric[],
@@ -90,13 +90,13 @@ function initializeObjects(conf: EvaluatorConf,workingDirectory:string):SharedOb
     let filesWeightResolver = new PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder = MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, new StubResolver());
-    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
+    let componentResultBuilder = MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new DefaultFallbackResolver(conf.component_weights,conf.default_component_weight));
+    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver);
     let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver)
     let resultByMetric: Map<string, MetricResultBuilder> = new Map();
     let stateManager = StateManagerFactory.load(conf.state_manager, workingDirectory);
 
-    return { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper,stateManager };
+    return { parser, fileAnalyzer, componentResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper,stateManager };
 }
 function printLogsMessages(logMessages:LogMessage[]){
     for (let log of logMessages) {
@@ -106,8 +106,8 @@ function printLogsMessages(logMessages:LogMessage[]){
 function processByMetric(root: ParseResult, metric: DocumentationAnalysisMetric, objects: SharedObjects) {
     console.log("Using metric", metric.getUniqueName())
 
-    objects.fileAnalyzer.analyze(root, metric, objects.singleFileResultBuilder, objects.languageHelper);
-    let partialResult = objects.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
+    objects.fileAnalyzer.analyze(root, metric, objects.componentResultBuilder, objects.languageHelper);
+    let partialResult = objects.componentResultBuilder.getAggregatedResult(metric.getUniqueName());
     if (!objects.resultByMetric.has(metric.getUniqueName())) {
         objects.resultByMetric.set(metric.getUniqueName(), new MetricResultBuilder());
     }
@@ -115,7 +115,7 @@ function processByMetric(root: ParseResult, metric: DocumentationAnalysisMetric,
     console.log("Partial result", partialResult.getResult());
 
     objects.metricBuilder.processResult(partialResult);
-    objects.singleFileResultBuilder.reset();
+    objects.componentResultBuilder.reset();
     console.log();
 }
 function processByFile(relevantFile: string, objects: SharedObjects) {
