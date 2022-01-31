@@ -68158,7 +68158,7 @@ class MethodBodyTextVisitor extends AbstractParseTreeVisitor_1.AbstractParseTree
     defaultResult() {
         return "";
     }
-    visitMethodBody(ctx) {
+    visitBlock(ctx) {
         var _a, _b, _c;
         return (_a = ctx.start.inputStream) === null || _a === void 0 ? void 0 : _a.getText(Interval_1.Interval.of(ctx.start.startIndex, (_c = (_b = ctx.stop) === null || _b === void 0 ? void 0 : _b.stopIndex) !== null && _c !== void 0 ? _c : 0));
     }
@@ -68198,6 +68198,7 @@ class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor 
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
+        this.methodBody = new MethodBodyTextVisitor().visit(ctx);
     }
     visitMethod(ctx) {
         this.returnType = ctx.getChild(0).text;
