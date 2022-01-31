@@ -53750,23 +53750,31 @@ class EvaluatorConf {
         /**
      * The result builder for the files
      */
-        this.files_result_builder = "default_builder";
+        this.file_result_builder = "default_builder";
         /**
-         * The result builder for a single file with its component
+         * The result builder for the components
          */
-        this.single_file_result_builder = "default_builder";
+        this.component_result_builder = "default_builder";
         /**
          * the parser to be used/ the programming languages to be analyzed
          */
         this.parser = "java";
         /**
-         * An array of pairs of a glob pattern and a weight that will be used to make some paths more important for evaluation
+         * An array of pairs of a glob pattern and a weight that will be used to make some paths more or less important for evaluation
          */
         this.path_weights = [];
+        /**
+     * An array of pairs of the component  class name (for example MethodComponent) and a weight that will be used to make some components more  or less important for evaluation
+     */
+        this.component_weights = [];
         /**
          * The default weight for a given path
          */
         this.default_path_weight = 1;
+        /**
+         * The default weight for a given component
+         */
+        this.default_component_weight = 1;
         /**
          * The state manager to store the result of the last run
          */
@@ -53842,17 +53850,20 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_METRIC_RESULT_BUILDER) {
             conf.metric_result_builder = JSON.parse(process_1.env.INPUT_METRIC_RESULT_BUILDER);
         }
-        if (process_1.env.INPUT_SINGLE_FILE_RESULT_BUILDER) {
-            conf.single_file_result_builder = JSON.parse(process_1.env.INPUT_SINGLE_FILE_RESULT_BUILDER);
+        if (process_1.env.INPUT_COMPONENT_RESULT_BUILDER) {
+            conf.component_result_builder = JSON.parse(process_1.env.INPUT_COMPONENT_RESULT_BUILDER);
         }
-        if (process_1.env.INPUT_FILES_RESULT_BUILDER) {
-            conf.files_result_builder = JSON.parse(process_1.env.INPUT_FILES_RESULT_BUILDER);
+        if (process_1.env.INPUT_FILE_RESULT_BUILDER) {
+            conf.file_result_builder = JSON.parse(process_1.env.INPUT_FILE_RESULT_BUILDER);
         }
         if (process_1.env.INPUT_PARSER) {
             conf.parser = (process_1.env.INPUT_PARSER);
         }
         if (process_1.env.INPUT_PATH_WEIGHTS) {
             conf.path_weights = JSON.parse(process_1.env.INPUT_PATH_WEIGHTS);
+        }
+        if (process_1.env.INPUT_COMPONENT_WEIGHTS) {
+            conf.component_weights = JSON.parse(process_1.env.INPUT_COMPONENT_WEIGHTS);
         }
         if (process_1.env.INPUT_DEFAULT_PATH_WEIGHT) {
             conf.default_path_weight = parseFloat(process_1.env.INPUT_DEFAULT_PATH_WEIGHT);
@@ -53862,6 +53873,9 @@ class EnvCommentConfLoader {
         }
         if (process_1.env.INPUT_MAX_DIFF_LAST_RUN) {
             conf.max_diff_last_run = parseFloat(process_1.env.INPUT_MAX_DIFF_LAST_RUN);
+        }
+        if (process_1.env.INPUT_DEFAULT_COMPONENT_WEIGHT) {
+            conf.default_component_weight = parseFloat(process_1.env.INPUT_DEFAULT_COMPONENT_WEIGHT);
         }
     }
 }
@@ -54097,12 +54111,12 @@ function initializeObjects(conf, workingDirectory) {
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
-    let singleFileResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.single_file_result_builder, new weight_resolver_1.StubResolver());
-    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.files_result_builder, filesWeightResolver);
+    let componentResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new weight_resolver_1.DefaultFallbackResolver(conf.component_weights, conf.default_component_weight));
+    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver);
     let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
     let resultByMetric = new Map();
     let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
-    return { parser, fileAnalyzer, singleFileResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper, stateManager };
+    return { parser, fileAnalyzer, componentResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages) {
     for (let log of logMessages) {
@@ -54112,15 +54126,15 @@ function printLogsMessages(logMessages) {
 function processByMetric(root, metric, objects) {
     var _a;
     console.log("Using metric", metric.getUniqueName());
-    objects.fileAnalyzer.analyze(root, metric, objects.singleFileResultBuilder, objects.languageHelper);
-    let partialResult = objects.singleFileResultBuilder.getAggregatedResult(metric.getUniqueName());
+    objects.fileAnalyzer.analyze(root, metric, objects.componentResultBuilder, objects.languageHelper);
+    let partialResult = objects.componentResultBuilder.getAggregatedResult(metric.getUniqueName());
     if (!objects.resultByMetric.has(metric.getUniqueName())) {
         objects.resultByMetric.set(metric.getUniqueName(), new metric_result_builder_1.MetricResultBuilder());
     }
     (_a = objects.resultByMetric.get(metric.getUniqueName())) === null || _a === void 0 ? void 0 : _a.processResult(partialResult);
     console.log("Partial result", partialResult.getResult());
     objects.metricBuilder.processResult(partialResult);
-    objects.singleFileResultBuilder.reset();
+    objects.componentResultBuilder.reset();
     console.log();
 }
 function processByFile(relevantFile, objects) {
@@ -54845,7 +54859,7 @@ class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMet
         }
         let logMessages = [];
         let score = this.processResult(termCount, logMessages);
-        this.pushResult(builder, score, this.createLogMessages(logMessages, component));
+        this.pushResult(builder, score, this.createLogMessages(logMessages, component), component);
     }
     countSimilarTerms(text) {
         let params = this.getParams();
@@ -54933,7 +54947,7 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
         }
         let messages = [];
         let result = this.processResult(similarWordsCount / commentWords.length, messages);
-        this.pushResult(builder, result, this.createLogMessages(messages, component));
+        this.pushResult(builder, result, this.createLogMessages(messages, component), component);
     }
     processResult(result, messages) {
         let params = this.getParams();
@@ -55021,7 +55035,7 @@ class CommentedLinesRatioMetric extends children_based_metric_1.ChildrenBasedMet
         }
         let perc = commentedLOC / (commentedLOC + unCommentedLOC);
         let result = documentation_analysis_metric_1.MIN_SCORE + (documentation_analysis_metric_1.MAX_SCORE - documentation_analysis_metric_1.MIN_SCORE) * perc;
-        this.pushResult(builder, this.processResult(result, []), []);
+        this.pushResult(builder, this.processResult(result, []), [], component);
     }
     shallConsider(component) {
         return super.shallConsider(component) && component.getChildren().filter((c) => c instanceof method_component_1.MethodComponent).length > 0;
@@ -55089,8 +55103,8 @@ class DocumentationAnalysisMetric {
     processResult(result, logMessages) {
         return result;
     }
-    pushResult(builder, score, logMessages) {
-        builder.processResult(new metric_result_1.MetricResult(score, logMessages, this.getUniqueName()));
+    pushResult(builder, score, logMessages, component) {
+        builder.processResult(new metric_result_1.MetricResult(score, logMessages, component.constructor.name));
     }
     pushLogMessage(component, msg, logMessages) {
         logMessages.push(new log_message_1.LogMessage(msg, component));
@@ -55134,7 +55148,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         let msgs = [];
         let score = sum / textsToConsider.length;
         let finalScore = this.processResult(score, msgs);
-        this.pushResult(builder, finalScore, this.createLogMessages(msgs, component));
+        this.pushResult(builder, finalScore, this.createLogMessages(msgs, component), component);
     }
     processResult(score, msgs) {
         let finalScore = 0;
@@ -55214,7 +55228,7 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
                 logMessages.push(t.getParam() + " is not a valid tag");
             }
         }
-        this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component));
+        this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component), component);
     }
     processResult(result, logMessages) {
         let params = this.getParams();
@@ -55313,7 +55327,7 @@ class SimpleCommentPresentMetric extends component_based__metric_1.ComponentBase
             score = documentation_analysis_metric_1.MIN_SCORE;
         }
         score = this.processResult(score, logMessages);
-        this.pushResult(builder, score, this.createLogMessages(logMessages, component));
+        this.pushResult(builder, score, this.createLogMessages(logMessages, component), component);
     }
     processResult(result, logMessages) {
         if (result == documentation_analysis_metric_1.MIN_SCORE)
@@ -55391,7 +55405,7 @@ class SimpleLargeMethodCommentedMetric extends component_based__metric_1.Compone
         else {
             result = documentation_analysis_metric_1.MAX_SCORE;
         }
-        this.pushResult(builder, result, this.createLogMessages(logMessages, component));
+        this.pushResult(builder, result, this.createLogMessages(logMessages, component), component);
     }
 }
 exports.SimpleLargeMethodCommentedMetric = SimpleLargeMethodCommentedMetric;
@@ -55435,7 +55449,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             }
             score = sum / results.length;
         }
-        this.pushResult(builder, score, logMessages);
+        this.pushResult(builder, score, logMessages, component);
     }
     checkNonExistingDocumentedParameters(method, logMessages) {
         var _a;
@@ -55533,7 +55547,7 @@ var Utils;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.StubResolver = exports.PathWeightResolver = exports.SimpleWeightResolver = void 0;
+exports.DefaultFallbackResolver = exports.StubResolver = exports.PathWeightResolver = exports.SimpleWeightResolver = void 0;
 const minimatch_1 = __nccwpck_require__(1268);
 const EvaluatorConf_1 = __nccwpck_require__(6410);
 /**
@@ -55580,6 +55594,24 @@ class StubResolver {
     }
 }
 exports.StubResolver = StubResolver;
+class DefaultFallbackResolver {
+    constructor(map, defaultWeight) {
+        this.defaultWeight = defaultWeight;
+        this.map = new Map();
+        for (let o of map) {
+            this.map.set(o.name, o.weight);
+        }
+    }
+    resolveWeight(key) {
+        if (this.map.has(key)) {
+            return this.map.get(key);
+        }
+        else {
+            return this.defaultWeight;
+        }
+    }
+}
+exports.DefaultFallbackResolver = DefaultFallbackResolver;
 
 
 /***/ }),
