@@ -3,7 +3,7 @@ var JavaLexer = require("./antlr_files/java/JavaLexer").JavaLexer;
 import { CharStreams, CommonTokenStream, ParserRuleContext, RuleContext } from 'antlr4ts';
 import { JavaParserVisitor } from "./antlr_files/java/JavaParserVisitor";
 import { Component } from "./parse_result/component";
-import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext, MethodBodyContext } from "./antlr_files/java/JavaParser";
+import { CommentContext, JavaParser as Antlr_JavaParser, TypeDeclarationContext, ClassDeclarationContext, MethodDeclarationContext, FieldDeclarationContext, ClassOrInterfaceModifierContext, TypeTypeContext, VariableDeclaratorsContext, ThrowListContext, ImplementInterfacesContext, ExtendClassContext, InterfaceDeclarationContext, ExtendInterfaceContext, InterfaceMethodDeclarationContext, ConstructorDeclarationContext, FormalParameterContext, LastFormalParameterContext, MethodBodyContext, BlockContext } from "./antlr_files/java/JavaParser";
 import { AbstractParseTreeVisitor } from 'antlr4ts/tree/AbstractParseTreeVisitor'
 import { StructuredComment, StructuredCommentTag } from "./parse_result/structured_comment";
 import { HierarchicalComponent } from "./parse_result/hierarchical_component";
@@ -387,7 +387,7 @@ class MethodBodyTextVisitor extends AbstractParseTreeVisitor<string>{
     protected defaultResult(): string {
         return "";
     }
-    visitMethodBody(ctx: MethodBodyContext) {
+    visitBlock(ctx: BlockContext) {
         return ctx.start.inputStream?.getText(Interval.of(ctx.start.startIndex, ctx.stop?.stopIndex ?? 0));
     }
 
@@ -434,6 +434,7 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         let paramsThrow = visitor.visit(ctx);
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
+        this.methodBody = new MethodBodyTextVisitor().visit(ctx)
 
     }
     private visitMethod(ctx: RuleContext) {
