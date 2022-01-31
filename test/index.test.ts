@@ -53,7 +53,7 @@ test("normal main program works",()=>{
     if(existsSync("test_main.txt")){
         main(["testDir/expr"])
         let actual=parseFloat(readFileSync("testDir/expr/.evaluator_last_state.txt").toString());
-        const expected=43.5895;
+        const expected=44.669;
         expect(actual).toBeCloseTo(expected,3);
     }
    

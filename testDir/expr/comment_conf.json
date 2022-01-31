@@ -10,8 +10,26 @@
         {"metric_name":"public_members_only","weight":5,"unique_name":"m2"},
         {"metric_name":"large_method_commented","weight":1,"unique_name":"m3"}
     ],
-    "global_threshold":40,
+    "global_threshold":15,
     "metric_result_builder":"weighted_mean_builder",
-    "files_result_builder":"default_builder",
-    "max_diff_last_run":30
+    "file_result_builder":"weighted_mean_builder",
+    "component_result_builder":"weighted_mean_builder",
+    "component_weights":[
+        {
+            "name":"ClassComponent",
+            "weight":5
+        },
+        {
+            "name":"SingleMemberComponent",
+            "weight":2
+        }
+    ],
+    "path_weights":[
+        {
+            "path":"*commented_class.*","weight":4
+        }
+        
+    ],
+
+    "max_diff_last_run":100
 }
