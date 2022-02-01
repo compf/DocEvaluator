@@ -29983,11 +29983,37 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
         return messages.filter((m) => !this.needNotToBeClosed(m));
     }
     findHtmlErrors(text) {
+        let regex = /<\/?\w+/g;
+        let stack = [];
+        let matches = text.match(regex);
         let messages = [];
-        return messages;
+        if (matches != null) {
+            for (let m of matches) {
+                let isEndTag = m.includes("/");
+                let tagName = isEndTag ? m.substring(2) : m.substring(1);
+                if (isEndTag) {
+                    let removed = stack.pop();
+                    while (removed != undefined && removed != tagName) {
+                        if (!this.needNotToBeClosed(removed)) {
+                            messages.push("Tag " + removed + "not closed");
+                        }
+                        removed = stack.pop();
+                    }
+                }
+                else {
+                    stack.push(tagName);
+                }
+            }
+            while (stack.length > 0) {
+                let removed = stack.pop();
+                messages.push("Tag " + removed + "not closed");
+            }
+            return messages;
+        }
+        return [];
     }
     needNotToBeClosed(tag) {
-        return tag.includes("</p") || tag.includes("</li");
+        return tag.includes("p") || tag.includes("li");
     }
 }
 exports.FormattingGoodMetric = FormattingGoodMetric;
