@@ -114,4 +114,28 @@ Diese Metrik ist relativ ähnlich zu der vorherigen Metrik. Allerdings arbeitet 
   \begin{itemize}
      \item \textit{ignore\_lines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
  \end{itemize}
+ \subsection{Metrik: Bewertung der Formatierung}
  
+Die strukturierte Dokumentation kann in vielen Fällen auch bestimmte Elemente enthalten, die zusätzliche Informationen enthalten oder bestimmte Informationen ansprechender formatieren. Beispielsweise ermöglicht der \textit{@author}-Tag, einen Autor für diese Komponente festzulegen. Mit \textit{\{@see ...\}} können in Javadoc Verweise auf andere Komponenten gelegt werden. Außerdem lassen sich bestimmte \ac{HTML}-Inhalte verwenden, die beim Rendern im Browser die Dokumentation aufwerten können \cite{HowtoWriteDocCommentsfortheJavadocTool}. 
+
+Diese Metrik versucht die Formatierung der Dokumentation zu bewerten. Dazu werden verschiedene Kriterien ausgewertet und Fehlerpunkte vergeben. Diese Fehlerpunkte werden dann aufaddiert. 
+
+Zuerst wird überprüft, ob die Dokumentation gültiges \ac{HTML} enthält und zählt alle gefundenen Fehler, die mit HTML zu tun haben, auf. Dabei wird die Bibliothek \enquote{html-validate}\footnote{\href{HTML-Validate}{https://html-validate.org/} (Abruf am 01.02.2022)} verwendet, welches Fehler in \ac{HTML} finden kann. In einigen Fällen identifiziert diese Bibliothek Fehler, die in Javadoc tolerierbar sind. Beispielsweise müssen \textit{<p>}-Tags in Javadoc nicht zwingend geschlossen werden, da Javadoc trotz dieser Fehler die Inhalte korrekt verarbeitet. Das Schließen dieser Tags könnte zudem die Lesbarkeit verschlechtern  \cite{javadoc_coding_standards}.
+Daher werden von den gefunden Fehler einige Fehler herausgefiltert, die für Javadoc nicht relevant sind. 
+
+Außerdem werden alle Tags gezählt, die nicht in der Javadoc-Dokumentation spezifiziert sind, da diese keinen Mehrwert  bieten oder verwirrend sein können. Ein Benutzer wird so dazu aufgefordert die standardisierten Tags zu verwenden. Es können aber bestimmte Tags erlaubt werden, wenn diese tatsächlich bei der Softwareentwicklung benötigt werden.
+
+Zuletzt bietet die Metrik die Möglichkeit, komplett unformatierte Kommentare zu bestrafen, wenn sie eine bestimmte Länge überschreiten. Desto länger ein Kommentar ist, desto wahrscheinlicher ist es, dass der Kommentar komplexer ist und eine vernünftige Formatierung hilfreich ist. Falls also überhaupt keine Formatierung wird, werden die Zeilen im allgemeinen Teil des Kommentars gezählt. Dabei wird  eine gewisse Anzahl an Zeilen abgezogen, die als Schwelle zwischen relativ kurzen Kommentar und zu langem Kommentar dient. 
+
+Die Summe der Fehlerpunkte wird dann einer beschränkt wachsende Funktion (siehe Kapitel \ref{chapter:metric_certain_words}) übergeben, die somit eine hohe Anzahl an Fehlern hart bestraft.
+
+Diese Metrik hilft dabei, Fehler bei der Formatierung der Dokumentation zu verhindern und ermöglicht somit eine Dokumentation, die besser verarbeitet werden kann und so hilfreicher ist. Zudem können Entwickler mit dieser Metrik Kommentare vermeiden, die sehr lang sind aber unformatiert sind. Dadurch kann die Verständlichkeit der Dokumentation verbessert werden, da so bestimmte Informationen hervorgehoben werden oder besser strukturiert sind. Auf der anderen Seite hilft diese Formatierung eher bei dem gerenderten \ac{HTML} und können im Quellcode unübersichtlich oder schwer lesbar sein. 
+
+ \begin{itemize}
+    \item \textit{accept\_no\_formatting} Falls \textit{true}, werden unformatierte lange Kommentare bestraft
+    \textit{onl\_public} Falls true, berücksichtigt nur öffentliche Element,
+    \item \textit{k} Die Wachstumsrate des beschränktes Wachstum
+     \item \textit{allowed\_tags} Tags, die obwohl nicht standardisiert trotzdem akzeptiert werden,
+    \item \textit{max\_lines\_no\_formatting} Anzahl der Zeilen, die zur Tolerierung von unformatierten langen Kommentaren  
+ \end{itemize}
+     
