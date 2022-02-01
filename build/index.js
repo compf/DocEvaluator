@@ -55220,7 +55220,7 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
         let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null;
         if (!params.accept_no_formatting && linksCount == 0 && !htmlPresent) {
             logMessages.push("Documentation contains no formation like links or html");
-            errorCount += 10;
+            errorCount += text.split("\n").length;
         }
         for (let t of component.getComment().getTags()) {
             if (!langSpec.isValidTag(t.getKind()) && !params.allowed_tags.includes(t.getKind())) {
