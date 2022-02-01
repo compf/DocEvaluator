@@ -46,5 +46,8 @@
     "levenshtein": "^1.0.5",
     "minimatch": "^3.0.4",
     "spellchecker": "^3.7.1"
+  },
+  "optionalDependencies": {
+    "fsevents":"^2.3.2"
   }
 }
