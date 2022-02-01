@@ -54703,7 +54703,8 @@ var MetricManager;
                     accept_no_formatting: true,
                     only_public: true,
                     k: 0.2,
-                    allowed_tags: []
+                    allowed_tags: [],
+                    max_lines_no_formatting: 2
                 };
             default:
                 return {};
@@ -55220,7 +55221,7 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
         let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null;
         if (!params.accept_no_formatting && linksCount == 0 && !htmlPresent) {
             logMessages.push("Documentation contains no formation like links or html");
-            errorCount += text.split("\n").length;
+            errorCount += Math.max(text.split("\n").length - params.max_lines_no_formatting, 0);
         }
         for (let t of component.getComment().getTags()) {
             if (!langSpec.isValidTag(t.getKind()) && !params.allowed_tags.includes(t.getKind())) {
