@@ -47,8 +47,9 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
     }
     private getInvalidInlineTagCount(inlineTags: string[], langSpec: LanguageSpecificHelper, logMessages: string[]) {
         let errorCount=0;
+        let params=this.getParams() as ParamType;
         for (let tag of inlineTags) {
-            if (!langSpec.isValidInlineTag(tag)) {
+            if (!langSpec.isValidInlineTag(tag) && !params.allowed_tags.some((t)=>tag.startsWith(t))) {
                 errorCount++;
                 logMessages.push(tag + " is not a valid inline tag");
             }
