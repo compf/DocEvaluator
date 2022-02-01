@@ -54308,7 +54308,9 @@ const language_specific_helper_1 = __nccwpck_require__(8142);
 class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelper {
     constructor() {
         super(...arguments);
-        this.tags = ["@author", "@version", "@param", "@return", "@deprecated", "@since", "@throws", "@exception", "@see", "@serial", "@serialField", "@serialData", "{@link}"];
+        this.blockTags = ["@author", "@version", "@param", "@return", "@deprecated", "@since", "@throws", "@exception", "@see", "@serial", "@serialField", "@serialData"];
+        // thes inline tags do not contain the cloding "}" because it might be missing
+        this.inlineTags = ["{@code", "{@docRoot", "{@inheritDoc", "{@link", "{@linkplain", "{@literal"];
     }
     rateDocumentationCompatibility(component, results, logMessages) {
         var _a;
@@ -54333,20 +54335,14 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
         }
         return true;
     }
-    findSpecialElements(text) {
-        const regex = /\{@(link|code) \w*\}?/g;
-        let matches = text.match(regex);
-        let result = [];
-        if (matches != null) {
-            for (let m of matches) {
-                result.push(m);
-            }
-            return result;
-        }
-        return [];
+    getInlineTagRegex() {
+        return /\{@\w+ \w*\}?/g;
     }
-    isValidTag(tag) {
-        return this.tags.includes(tag);
+    isValidBlockTag(tag) {
+        return this.blockTags.includes(tag);
+    }
+    isValidInlineTag(tag) {
+        return this.inlineTags.some((t) => tag.startsWith(t) && tag.endsWith("}"));
     }
 }
 exports.JavaSpecificHelper = JavaSpecificHelper;
@@ -54383,19 +54379,23 @@ class LanguageSpecificHelper {
         return true;
     }
     /**
-     *  finds special elements of the documentation languages
-     * examples would be {@ link }} (without stapces" in java
+     *  return s aregular expression that will identify inline tag lements
      * @param text the text to search
      */
-    findSpecialElements(text) {
-        return [];
+    getInlineTagRegex() {
+        // from https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
+        // will never match anything
+        return /(?!x)x/;
+    }
+    isValidInlineTag(tagName) {
+        return false;
     }
     /**
-     * determines qwhether a tag is valid
+     * determines whether a tag is valid
      * @param tag a tag name
      * @returns true if the tag is valid
      */
-    isValidTag(tag) {
+    isValidBlockTag(tag) {
         return true;
     }
 }
@@ -55216,24 +55216,58 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
             return;
         let text = component.getComment().getGeneralDescription();
         let logMessages = this.filterTagsNotNeedClose(this.findHtmlErrors(text));
+        // sum up number of error messages about wrong html
         errorCount += logMessages.length;
-        let linksCount = langSpec.findSpecialElements(text).length;
+        // sum up number of error messages about wrong block tags
+        errorCount += this.getInvalidBlockTagCount(text, langSpec, component, params, logMessages);
+        let inlineTags = this.findTags(text, langSpec.getInlineTagRegex());
+        let invalidInlineTagCount = this.getInvalidInlineTagCount(inlineTags, langSpec, logMessages);
+        // sum up number of invalid inline tags
+        errorCount += invalidInlineTagCount;
+        // add number of lines to error count if no formatting is used
+        let validInlineTagCount = inlineTags.length - invalidInlineTagCount;
         let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null;
-        if (!params.accept_no_formatting && linksCount == 0 && !htmlPresent) {
+        if (!params.accept_no_formatting && validInlineTagCount == 0 && !htmlPresent) {
             logMessages.push("Documentation contains no formation like links or html");
+            // add not less than 0 errors to the error count
             errorCount += Math.max(text.split("\n").length - params.max_lines_no_formatting, 0);
         }
-        for (let t of component.getComment().getTags()) {
-            if (!langSpec.isValidTag(t.getKind()) && !params.allowed_tags.includes(t.getKind())) {
+        this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component), component);
+    }
+    getInvalidInlineTagCount(inlineTags, langSpec, logMessages) {
+        let errorCount = 0;
+        for (let tag of inlineTags) {
+            if (!langSpec.isValidInlineTag(tag)) {
                 errorCount++;
-                logMessages.push(t.getParam() + " is not a valid tag");
+                logMessages.push(tag + " is not a valid inline tag");
             }
         }
-        this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component), component);
+        return errorCount;
+    }
+    getInvalidBlockTagCount(text, langSpec, component, params, logMessages) {
+        let errorCount = 0;
+        for (let t of component.getComment().getTags()) {
+            if (!langSpec.isValidBlockTag(t.getKind()) && !params.allowed_tags.includes(t.getKind())) {
+                errorCount++;
+                logMessages.push(t.getKind() + " is not a valid block tag");
+            }
+        }
+        return errorCount;
     }
     processResult(result, logMessages) {
         let params = this.getParams();
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
+    }
+    findTags(text, regex) {
+        let matches = text.match(regex);
+        let result = [];
+        if (matches != null) {
+            for (let m of matches) {
+                result.push(m);
+            }
+            return result;
+        }
+        return [];
     }
     filterTagsNotNeedClose(messages) {
         return messages.filter((m) => !this.needNotToBeClosed(m));
