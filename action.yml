@@ -32,7 +32,10 @@ inputs:
     description: "the parser to be used/ the programming languages to be analyzed"
     required: false
   path_weights:
-    description: "An array of pairs of a glob pattern and a weight that will be used to make some paths more important for evaluation"
+    description: "An array of pairs of a Wildcard pattern and a weight that will be used to make some paths more important for evaluation,{path:string,weight:number}[]"
+    required: false
+  component_weights:
+    description: "An array of pairs of a component class name and a weight that will be used to make some components more important for evaluation, {name:string,weight:number}[]"
     required: false
   default_path_weight:
     description: "The default weight for a given path"
