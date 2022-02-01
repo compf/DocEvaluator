@@ -55236,8 +55236,9 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
     }
     getInvalidInlineTagCount(inlineTags, langSpec, logMessages) {
         let errorCount = 0;
+        let params = this.getParams();
         for (let tag of inlineTags) {
-            if (!langSpec.isValidInlineTag(tag)) {
+            if (!langSpec.isValidInlineTag(tag) && !params.allowed_tags.some((t) => tag.startsWith(t))) {
                 errorCount++;
                 logMessages.push(tag + " is not a valid inline tag");
             }
