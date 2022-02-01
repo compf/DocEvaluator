@@ -8,43 +8,83 @@ import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 interface ParamType {
     accept_no_formatting: boolean,
     only_public: boolean,
-    k:number,
-    allowed_tags:string[],
-    max_lines_no_formatting:number
+    k: number,
+    allowed_tags: string[],
+    max_lines_no_formatting: number
 }
 export class FormattingGoodMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
+        let errorCount = 0;
+        let params = this.getParams() as ParamType;
+        if (component.getComment() == null || component.getComment()?.getGeneralDescription() == null) return;
+
+
+
+        let text = component.getComment()!.getGeneralDescription()!;
+
+        let logMessages = this.filterTagsNotNeedClose(this.findHtmlErrors(text))
+        // sum up number of error messages about wrong html
+        errorCount += logMessages.length;
+        // sum up number of error messages about wrong block tags
+        errorCount += this.getInvalidBlockTagCount(text, langSpec, component, params, logMessages);
+
+
+        let inlineTags = this.findTags(text, langSpec.getInlineTagRegex());
+        let invalidInlineTagCount=this.getInvalidInlineTagCount(inlineTags, langSpec,  logMessages);
+         // sum up number of invalid inline tags
+        errorCount += invalidInlineTagCount;
+
+        // add number of lines to error count if no formatting is used
+        let validInlineTagCount=inlineTags.length-invalidInlineTagCount;
+        let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null
+        if (!params.accept_no_formatting && validInlineTagCount == 0 && !htmlPresent) {
+            logMessages.push("Documentation contains no formation like links or html");
+            // add not less than 0 errors to the error count
+            errorCount += Math.max(text.split("\n").length - params.max_lines_no_formatting, 0);
+        }
+        this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component), component);
+
+    }
+    private getInvalidInlineTagCount(inlineTags: string[], langSpec: LanguageSpecificHelper, logMessages: string[]) {
         let errorCount=0;
-        let params=this.getParams() as ParamType;
-        if(component.getComment()==null || component.getComment()?.getGeneralDescription()==null)return;
-        let text=component.getComment()!.getGeneralDescription()!;
-        let logMessages=this.filterTagsNotNeedClose(this.findHtmlErrors(text))
-
-        errorCount+=logMessages.length;
-
-       let linksCount=langSpec.findSpecialElements(text).length;
-       let htmlPresent=text.match(/<\w+( \w+=".*")*>/)!=null
-       if(!params.accept_no_formatting && linksCount==0 && !htmlPresent)
-       {
-           logMessages.push("Documentation contains no formation like links or html");
-           errorCount+=Math.max(text.split("\n").length-params.max_lines_no_formatting,0);
-       }
-       for(let t of component.getComment()!.getTags()){
-            if(!langSpec.isValidTag(t.getKind()!) && !params.allowed_tags.includes(t.getKind()!)){
+        for (let tag of inlineTags) {
+            if (!langSpec.isValidInlineTag(tag)) {
                 errorCount++;
-                logMessages.push(t.getParam()+ " is not a valid tag");
+                logMessages.push(tag + " is not a valid inline tag");
             }
-       }
-       this.pushResult(builder,this.processResult(errorCount,logMessages),this.createLogMessages(logMessages,component),component);
 
+        }
+        return errorCount;
+    }
+
+    private getInvalidBlockTagCount(text: string, langSpec: LanguageSpecificHelper, component: Component, params: ParamType, logMessages: string[]) {
+        let errorCount = 0;
+        for (let t of component.getComment()!.getTags()) {
+            if (!langSpec.isValidBlockTag(t.getKind()!) && !params.allowed_tags.includes(t.getKind()!)) {
+                errorCount++;
+                logMessages.push(t.getKind() + " is not a valid block tag");
+            }
+        }
+        return errorCount;
     }
     protected processResult(result: number, logMessages: string[]): number {
-    let params=this.getParams() as ParamType;
+        let params = this.getParams() as ParamType;
 
-       return  Utils.boundedGrowth(MIN_SCORE,MAX_SCORE,params.k,result);
+        return Utils.boundedGrowth(MIN_SCORE, MAX_SCORE, params.k, result);
     }
-    private filterTagsNotNeedClose(messages:string[]){
-        return messages.filter((m)=>!this.needNotToBeClosed(m));
+    private findTags(text: string, regex: RegExp): string[] {
+        let matches = text.match(regex);
+        let result: string[] = [];
+        if (matches != null) {
+            for (let m of matches) {
+                result.push(m);
+            }
+            return result;
+        }
+        return [];
+    }
+    private filterTagsNotNeedClose(messages: string[]) {
+        return messages.filter((m) => !this.needNotToBeClosed(m));
     }
     private findHtmlErrors(text: string) {
         const htmlvalidate = new HtmlValidate(
@@ -62,7 +102,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
 
     }
     private needNotToBeClosed(tag: string) {
-        return  tag.includes("</p")|| tag.includes("</li");
+        return tag.includes("</p") || tag.includes("</li");
     }
 
 }

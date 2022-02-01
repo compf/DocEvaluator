@@ -31,22 +31,18 @@ export class JavaSpecificHelper extends LanguageSpecificHelper{
         
         return true;
     }
-    override findSpecialElements(text: string): string[] {
-        const regex=/\{@(link|code) \w*\}?/g;
-        let matches=text.match(regex);
-        let result:string[]=[];
-      if(matches!=null){
-          for (let m of matches){
-              result.push(m);
-          }
-          return result;
-      }
-       return [];
+    override getInlineTagRegex(): RegExp {
+        return /\{@\w+ \w*\}?/g;
+       
     }
-    private  tags=["@author", "@version", "@param", "@return", "@deprecated", "@since", "@throws", "@exception", "@see", "@serial", "@serialField", "@serialData", "{@link}"] ;
-
-    override isValidTag(tag: string): boolean {
-        return this.tags.includes(tag);
+    private  blockTags=["@author", "@version", "@param", "@return", "@deprecated", "@since", "@throws", "@exception", "@see", "@serial", "@serialField", "@serialData"] ;
+    // thes inline tags do not contain the cloding "}" because it might be missing
+    private inlineTags=["{@code","{@docRoot","{@inheritDoc","{@link","{@linkplain","{@literal"]
+    override isValidBlockTag(tag: string): boolean {
+        return this.blockTags.includes(tag);
+    }
+    override isValidInlineTag(tag: string): boolean {
+        return this.inlineTags.some((t)=>tag.startsWith(t) && tag.endsWith("}"));
     }
 
 }

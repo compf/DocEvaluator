@@ -23,19 +23,23 @@ export class LanguageSpecificHelper{
         return true;
     }
     /**
-     *  finds special elements of the documentation languages
-     * examples would be {@ link }} (without stapces" in java
+     *  return s aregular expression that will identify inline tag lements
      * @param text the text to search
      */
-    findSpecialElements(text:string):string[]{
-        return [];
+     getInlineTagRegex():RegExp{
+         // from https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
+         // will never match anything
+        return  /(?!x)x/
+    }
+    isValidInlineTag(tagName:string):boolean{
+        return false;
     }
     /**
-     * determines qwhether a tag is valid
+     * determines whether a tag is valid
      * @param tag a tag name
      * @returns true if the tag is valid
      */
-    isValidTag(tag:string):boolean{
+    isValidBlockTag(tag:string):boolean{
         return true;
     }
 }
