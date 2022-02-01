@@ -6,7 +6,7 @@
   "scripts": {
     "launch": "tsc && node build/src/index.js",
     "test": "tsc && jest",
-    "deploy": "npm i && npm link typescript && ncc build src/index.ts -o build",
+    "deploy": "npm i --no-optional && npm link typescript && ncc build src/index.ts -o build",
     "build": "tsc",
     "prepack": "npm run build"
   },
