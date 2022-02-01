@@ -6,7 +6,7 @@ import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_med
 import { WeightResolver } from "../src/metric_analysis/weight_resolver";
 import { main } from "../src";
 import { existsSync, fstat, readFileSync } from "fs";
-import { HtmlValidate } from "html-validate";
+
 
 class BaseClass {
 

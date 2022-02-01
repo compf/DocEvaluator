@@ -2,7 +2,6 @@ import { Component } from "../../parser/parse_result/component";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ComponentBasedMetric } from "./component_based_,metric";
-import { HtmlValidate } from "html-validate";
 import { Utils } from "./util";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 interface ParamType {
@@ -88,17 +87,9 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
         return messages.filter((m) => !this.needNotToBeClosed(m));
     }
     private findHtmlErrors(text: string) {
-        const htmlvalidate = new HtmlValidate(
-            {
-                extends: ["html-validate:standard"],
-            });
-        let res = htmlvalidate.validateString(text);
-        let messages = [];
-        for (let r of res.results) {
-            for (let m of r.messages) {
-                messages.push(m.message);
-            }
-        }
+       
+    
+        let messages:string[] = [];
         return messages;
 
     }
