@@ -251,7 +251,7 @@ test("test good formatting",()=>{
     let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
     const expectedResult=87.9153;
     ;
-   // expect(finalResult).toBeCloseTo(expectedResult);
+    expect(finalResult).toBeCloseTo(expectedResult);
 });
 test("test no formatting",()=>{
     const path="testDir/NoFormattingTest.java";

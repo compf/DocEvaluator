@@ -88,13 +88,41 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
     }
     private findHtmlErrors(text: string) {
        
-    
-        let messages:string[] = [];
-        return messages;
+        let regex=/<\/?\w+/g;
+        let stack:string[]=[];
+        let matches = text.match(regex);
+        let messages: string[] = [];
+        if (matches != null) {
+            for (let m of matches) {
+                let isEndTag=m.includes("/");
+                let tagName=isEndTag ? m.substring(2):m.substring(1);
+                if(isEndTag){
+                    let removed=stack.pop();
+                    while(removed!=undefined && removed!=tagName ){
+                        if(!this.needNotToBeClosed(removed)){
+                            messages.push("Tag " +removed+ "not closed")
+                        }
+                   
+                    removed=stack.pop();
+                    
+                    }
+                }
+                else{
+                    stack.push(tagName);
+                }
+            }
+            while(stack.length>0){
+                let removed=stack.pop()!;
+                messages.push("Tag " +removed+ "not closed")
+            }
+            return messages;
+        }
+        return [];
+       
 
     }
     private needNotToBeClosed(tag: string) {
-        return tag.includes("</p") || tag.includes("</li");
+        return tag.includes("p") || tag.includes("li");
     }
 
 }
