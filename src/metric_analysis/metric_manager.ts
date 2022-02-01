@@ -189,7 +189,8 @@ export namespace MetricManager {
                     accept_no_formatting: true,
                     only_public: true,
                     k: 0.2,
-                    allowed_tags: []
+                    allowed_tags: [],
+                    max_lines_no_formatting:2
                 };
             default:
                 return {}

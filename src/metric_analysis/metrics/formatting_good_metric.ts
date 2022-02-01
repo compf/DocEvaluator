@@ -9,7 +9,8 @@ interface ParamType {
     accept_no_formatting: boolean,
     only_public: boolean,
     k:number,
-    allowed_tags:string[]
+    allowed_tags:string[],
+    max_lines_no_formatting:number
 }
 export class FormattingGoodMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
@@ -26,7 +27,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
        if(!params.accept_no_formatting && linksCount==0 && !htmlPresent)
        {
            logMessages.push("Documentation contains no formation like links or html");
-           errorCount+=text.split("\n").length;
+           errorCount+=Math.max(text.split("\n").length-params.max_lines_no_formatting,0);
        }
        for(let t of component.getComment()!.getTags()){
             if(!langSpec.isValidTag(t.getKind()!) && !params.allowed_tags.includes(t.getKind()!)){

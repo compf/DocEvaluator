@@ -265,8 +265,7 @@ test("test no formatting",()=>{
     let singleFileResultBuilder=new MetricResultBuilder();
     fileAnalyzer.analyze(result,doc,singleFileResultBuilder,languageHelper);
     let finalResult=singleFileResultBuilder.getAggregatedResult("").getResult();
-    const expectedResult=44.932;
-    ;
+    const expectedResult=67.032;
     expect(finalResult).toBeCloseTo(expectedResult);
 });
 
