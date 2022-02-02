@@ -42,6 +42,7 @@
     "compromise": "^13.11.4",
     "compromise-syllables": "^0.0.6",
     "levenshtein": "^1.0.5",
-    "minimatch": "^3.0.4"
+    "minimatch": "^3.0.4",
+    "simple-spellchecker": "^1.0.2"
   }
 }

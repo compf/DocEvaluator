@@ -14,6 +14,7 @@ import { WeightResolver } from "./weight_resolver";
 import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_metric";
 import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 import { FormattingGoodMetric } from "./metrics/formatting_good_metric";
+import { SpellingMetric } from "./metrics/spelling_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -86,7 +87,8 @@ export namespace MetricManager {
         flesch = "flesch",
         comment_name_coherence = "comment_name_coherence",
         certain_terms = "certain_terms",
-        formatting_good = "formatting_good"
+        formatting_good = "formatting_good",
+        spelling="spelling"
     }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
     const allMetricTypes: BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric> = new BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric>()
@@ -100,6 +102,7 @@ export namespace MetricManager {
         allMetricTypes.add(MetricNames.comment_name_coherence, CommentNameCoherenceMetric);
         allMetricTypes.add(MetricNames.certain_terms, CertainTermCountMetric);
         allMetricTypes.add(MetricNames.formatting_good, FormattingGoodMetric);
+        allMetricTypes.add(MetricNames.spelling,SpellingMetric);
 
     }
     const uniqueNameCountMap: Map<string, number> = new Map<string, number>();
@@ -192,6 +195,8 @@ export namespace MetricManager {
                     allowed_tags: [],
                     max_lines_no_formatting:2
                 };
+            case MetricNames.spelling:
+                return {additional_words:[],k:0.05};
             default:
                 return {}
         }
