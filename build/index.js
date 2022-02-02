@@ -1,6 +1,13 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 2725:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = require(__nccwpck_require__.ab + "build/Release/spellchecker.node")
+
+/***/ }),
+
 /***/ 3726:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -25050,6 +25057,202 @@ exports.XPathWildcardElement = XPathWildcardElement;
 
 /***/ }),
 
+/***/ 2847:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = __nccwpck_require__(2407)().Promise
+
+
+/***/ }),
+
+/***/ 1387:
+/***/ ((module) => {
+
+"use strict";
+
+    // global key for user preferred registration
+var REGISTRATION_KEY = '@@any-promise/REGISTRATION',
+    // Prior registration (preferred or detected)
+    registered = null
+
+/**
+ * Registers the given implementation.  An implementation must
+ * be registered prior to any call to `require("any-promise")`,
+ * typically on application load.
+ *
+ * If called with no arguments, will return registration in
+ * following priority:
+ *
+ * For Node.js:
+ *
+ * 1. Previous registration
+ * 2. global.Promise if node.js version >= 0.12
+ * 3. Auto detected promise based on first sucessful require of
+ *    known promise libraries. Note this is a last resort, as the
+ *    loaded library is non-deterministic. node.js >= 0.12 will
+ *    always use global.Promise over this priority list.
+ * 4. Throws error.
+ *
+ * For Browser:
+ *
+ * 1. Previous registration
+ * 2. window.Promise
+ * 3. Throws error.
+ *
+ * Options:
+ *
+ * Promise: Desired Promise constructor
+ * global: Boolean - Should the registration be cached in a global variable to
+ * allow cross dependency/bundle registration?  (default true)
+ */
+module.exports = function(root, loadImplementation){
+  return function register(implementation, opts){
+    implementation = implementation || null
+    opts = opts || {}
+    // global registration unless explicitly  {global: false} in options (default true)
+    var registerGlobal = opts.global !== false;
+
+    // load any previous global registration
+    if(registered === null && registerGlobal){
+      registered = root[REGISTRATION_KEY] || null
+    }
+
+    if(registered !== null
+        && implementation !== null
+        && registered.implementation !== implementation){
+      // Throw error if attempting to redefine implementation
+      throw new Error('any-promise already defined as "'+registered.implementation+
+        '".  You can only register an implementation before the first '+
+        ' call to require("any-promise") and an implementation cannot be changed')
+    }
+
+    if(registered === null){
+      // use provided implementation
+      if(implementation !== null && typeof opts.Promise !== 'undefined'){
+        registered = {
+          Promise: opts.Promise,
+          implementation: implementation
+        }
+      } else {
+        // require implementation if implementation is specified but not provided
+        registered = loadImplementation(implementation)
+      }
+
+      if(registerGlobal){
+        // register preference globally in case multiple installations
+        root[REGISTRATION_KEY] = registered
+      }
+    }
+
+    return registered
+  }
+}
+
+
+/***/ }),
+
+/***/ 2407:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+module.exports = __nccwpck_require__(1387)(global, loadImplementation);
+
+/**
+ * Node.js version of loadImplementation.
+ *
+ * Requires the given implementation and returns the registration
+ * containing {Promise, implementation}
+ *
+ * If implementation is undefined or global.Promise, loads it
+ * Otherwise uses require
+ */
+function loadImplementation(implementation){
+  var impl = null
+
+  if(shouldPreferGlobalPromise(implementation)){
+    // if no implementation or env specified use global.Promise
+    impl = {
+      Promise: global.Promise,
+      implementation: 'global.Promise'
+    }
+  } else if(implementation){
+    // if implementation specified, require it
+    var lib = require(implementation)
+    impl = {
+      Promise: lib.Promise || lib,
+      implementation: implementation
+    }
+  } else {
+    // try to auto detect implementation. This is non-deterministic
+    // and should prefer other branches, but this is our last chance
+    // to load something without throwing error
+    impl = tryAutoDetect()
+  }
+
+  if(impl === null){
+    throw new Error('Cannot find any-promise implementation nor'+
+      ' global.Promise. You must install polyfill or call'+
+      ' require("any-promise/register") with your preferred'+
+      ' implementation, e.g. require("any-promise/register/bluebird")'+
+      ' on application load prior to any require("any-promise").')
+  }
+
+  return impl
+}
+
+/**
+ * Determines if the global.Promise should be preferred if an implementation
+ * has not been registered.
+ */
+function shouldPreferGlobalPromise(implementation){
+  if(implementation){
+    return implementation === 'global.Promise'
+  } else if(typeof global.Promise !== 'undefined'){
+    // Load global promise if implementation not specified
+    // Versions < 0.11 did not have global Promise
+    // Do not use for version < 0.12 as version 0.11 contained buggy versions
+    var version = (/v(\d+)\.(\d+)\.(\d+)/).exec(process.version)
+    return !(version && +version[1] == 0 && +version[2] < 12)
+  }
+
+  // do not have global.Promise or another implementation was specified
+  return false
+}
+
+/**
+ * Look for common libs as last resort there is no guarantee that
+ * this will return a desired implementation or even be deterministic.
+ * The priority is also nearly arbitrary. We are only doing this
+ * for older versions of Node.js <0.12 that do not have a reasonable
+ * global.Promise implementation and we the user has not registered
+ * the preference. This preserves the behavior of any-promise <= 0.1
+ * and may be deprecated or removed in the future
+ */
+function tryAutoDetect(){
+  var libs = [
+      "es6-promise",
+      "promise",
+      "native-promise-only",
+      "bluebird",
+      "rsvp",
+      "when",
+      "q",
+      "pinkie",
+      "lie",
+      "vow"]
+  var i = 0, len = libs.length
+  for(; i < len; i++){
+    try {
+      return loadImplementation(libs[i])
+    } catch(e){}
+  }
+  return null
+}
+
+
+/***/ }),
+
 /***/ 1198:
 /***/ ((module) => {
 
@@ -28269,6 +28472,123 @@ function regExpEscape (s) {
 
 /***/ }),
 
+/***/ 1852:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+var path = __nccwpck_require__(1017);
+var Promise = __nccwpck_require__(2847);
+var bindings = __nccwpck_require__(2725);
+
+var Spellchecker = bindings.Spellchecker;
+
+var checkSpellingAsyncCb = Spellchecker.prototype.checkSpellingAsync
+
+Spellchecker.prototype.checkSpellingAsync = function (corpus) {
+  return new Promise(function (resolve, reject) {
+    checkSpellingAsyncCb.call(this, corpus, function (err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  }.bind(this));
+};
+
+var defaultSpellcheck = null;
+
+var ensureDefaultSpellCheck = function() {
+  if (defaultSpellcheck) {
+    return;
+  }
+
+  var lang = process.env.LANG;
+  lang = lang ? lang.split('.')[0] : 'en_US';
+  defaultSpellcheck = new Spellchecker();
+
+  setDictionary(lang, getDictionaryPath());
+};
+
+var setDictionary = function(lang, dictPath) {
+  ensureDefaultSpellCheck();
+  return defaultSpellcheck.setDictionary(lang, dictPath);
+};
+
+var isMisspelled = function() {
+  ensureDefaultSpellCheck();
+
+  return defaultSpellcheck.isMisspelled.apply(defaultSpellcheck, arguments);
+};
+
+var checkSpelling = function() {
+  ensureDefaultSpellCheck();
+
+  return defaultSpellcheck.checkSpelling.apply(defaultSpellcheck, arguments);
+};
+
+var checkSpellingAsync = function(corpus) {
+  ensureDefaultSpellCheck();
+
+  return defaultSpellcheck.checkSpellingAsync.apply(defaultSpellcheck, arguments);
+};
+
+var add = function() {
+  ensureDefaultSpellCheck();
+
+  defaultSpellcheck.add.apply(defaultSpellcheck, arguments);
+};
+
+var remove = function() {
+  ensureDefaultSpellCheck();
+
+  defaultSpellcheck.remove.apply(defaultSpellcheck, arguments);
+};
+
+var getCorrectionsForMisspelling = function() {
+  ensureDefaultSpellCheck();
+
+  return defaultSpellcheck.getCorrectionsForMisspelling.apply(defaultSpellcheck, arguments);
+};
+
+var getAvailableDictionaries = function() {
+  ensureDefaultSpellCheck();
+
+  return defaultSpellcheck.getAvailableDictionaries.apply(defaultSpellcheck, arguments);
+};
+
+var getDictionaryPath = function() {
+  var dict = __nccwpck_require__.ab + "hunspell_dictionaries";
+  try {
+    // HACK: Special case being in an asar archive
+    var unpacked = dict.replace('.asar' + path.sep, '.asar.unpacked' + path.sep);
+    if ((__nccwpck_require__(7147).statSync)(unpacked)) {
+      dict = unpacked;
+    }
+  } catch (error) {
+    // When the dictionary isn't contained within an .asar, return the original path.
+  }
+  return __nccwpck_require__.ab + "hunspell_dictionaries";
+}
+
+module.exports = {
+  setDictionary: setDictionary,
+  add: add,
+  remove: remove,
+  isMisspelled: isMisspelled,
+  checkSpelling: checkSpelling,
+  checkSpellingAsync: checkSpellingAsync,
+  getAvailableDictionaries: getAvailableDictionaries,
+  getCorrectionsForMisspelling: getCorrectionsForMisspelling,
+  getDictionaryPath: getDictionaryPath,
+  Spellchecker: Spellchecker,
+  USE_SYSTEM_DEFAULTS: 0,
+  ALWAYS_USE_SYSTEM: 1,
+  ALWAYS_USE_HUNSPELL: 2,
+};
+
+
+/***/ }),
+
 /***/ 5426:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -29054,6 +29374,9 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
     isValidInlineTag(tag) {
         return this.inlineTags.some((t) => tag.startsWith(t) && tag.endsWith("}"));
     }
+    getRawTextRegex() {
+        return /( |^|\.|,|;)\w+}?/g;
+    }
 }
 exports.JavaSpecificHelper = JavaSpecificHelper;
 
@@ -29089,13 +29412,45 @@ class LanguageSpecificHelper {
         return true;
     }
     /**
-     *  return s aregular expression that will identify inline tag lements
+     *  return a aregular expression that will identify inline tag lements
      * @param text the text to search
      */
     getInlineTagRegex() {
+        return this, this.getImpossibleRegex();
+    }
+    /**
+     *
+     * @returns a regex that never match
+     */
+    getImpossibleRegex() {
         // from https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
         // will never match anything
         return /(?!x)x/;
+    }
+    /**
+     *
+     * @returns a regex that match the text without tags or other non-natural things
+     */
+    getRawTextRegex() {
+        return this.getImpossibleRegex();
+    }
+    /**
+     * removes all non-natural things like html tags, inline tags etc from the given text
+     * @param text the text as input
+     * @returns the rat text without these elements
+     */
+    getRawText(text) {
+        const regex = this.getRawTextRegex();
+        let wordMatch = /\w+$/;
+        let words = [];
+        let matches = text.match(regex);
+        if (matches == null)
+            return "";
+        for (let m of matches) {
+            if (m.match(wordMatch) != undefined)
+                words.push(m);
+        }
+        return words.join("");
     }
     isValidInlineTag(tagName) {
         return false;
@@ -29234,6 +29589,7 @@ const flesch_metric_1 = __nccwpck_require__(544);
 const comment_name_coherence_metric_1 = __nccwpck_require__(3970);
 const certain_terms_count_metric_1 = __nccwpck_require__(480);
 const formatting_good_metric_1 = __nccwpck_require__(7658);
+const spelling_metric_1 = __nccwpck_require__(2337);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -29313,6 +29669,7 @@ var MetricManager;
         MetricNames["comment_name_coherence"] = "comment_name_coherence";
         MetricNames["certain_terms"] = "certain_terms";
         MetricNames["formatting_good"] = "formatting_good";
+        MetricNames["spelling"] = "spelling";
     })(MetricNames = MetricManager.MetricNames || (MetricManager.MetricNames = {}));
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
@@ -29326,6 +29683,7 @@ var MetricManager;
         allMetricTypes.add(MetricNames.comment_name_coherence, comment_name_coherence_metric_1.CommentNameCoherenceMetric);
         allMetricTypes.add(MetricNames.certain_terms, certain_terms_count_metric_1.CertainTermCountMetric);
         allMetricTypes.add(MetricNames.formatting_good, formatting_good_metric_1.FormattingGoodMetric);
+        allMetricTypes.add(MetricNames.spelling, spelling_metric_1.SpellingMetric);
     }
     const uniqueNameCountMap = new Map();
     /**
@@ -29416,6 +29774,8 @@ var MetricManager;
                     allowed_tags: [],
                     max_lines_no_formatting: 2
                 };
+            case MetricNames.spelling:
+                return { k: 0.05, additional_words: [] };
             default:
                 return {};
         }
@@ -30278,6 +30638,61 @@ class SimplePublicMembersOnlyMetric extends simple_comment_present_metric_1.Simp
     }
 }
 exports.SimplePublicMembersOnlyMetric = SimplePublicMembersOnlyMetric;
+
+
+/***/ }),
+
+/***/ 2337:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SpellingMetric = void 0;
+const component_based__metric_1 = __nccwpck_require__(5165);
+const spellchecker_1 = __importDefault(__nccwpck_require__(1852));
+const util_1 = __nccwpck_require__(996);
+const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
+    analyze(component, builder, langSpec) {
+        var _a;
+        if (component.getComment() == null)
+            return;
+        let params = this.getParams();
+        for (let word of params.additional_words) {
+            spellchecker_1.default.add(word);
+        }
+        let logMessages = [];
+        let mistakes = 0;
+        if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
+            let text = langSpec.getRawText(component.getComment().getGeneralDescription());
+            mistakes += this.getSpellingErrorsCount(text, logMessages);
+        }
+        for (let tag of component.getComment().getTags()) {
+            if (tag.getDescription() != null) {
+                mistakes += this.getSpellingErrorsCount(tag.getDescription(), logMessages);
+            }
+        }
+        let result = this.processResult(mistakes, logMessages);
+        this.pushResult(builder, result, this.createLogMessages(logMessages, component), component);
+    }
+    processResult(result, logMessages) {
+        let params = this.getParams();
+        return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
+    }
+    getSpellingErrorsCount(text, logMessages) {
+        let mistakes = spellchecker_1.default.checkSpelling(text);
+        for (let range of mistakes) {
+            let word = text.substring(range.start, range.end);
+            logMessages.push("Word " + word + " could be misspelled");
+        }
+        return mistakes.length;
+    }
+}
+exports.SpellingMetric = SpellingMetric;
 
 
 /***/ }),
