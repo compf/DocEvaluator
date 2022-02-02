@@ -43,7 +43,7 @@ export class SpellingMetric extends ComponentBasedMetric{
     }
     constructor(uniqueName:string,params:any){
         super(uniqueName,params);
-        this.additionalWords=new Set(params.additionalWords)
+        this.additionalWords=new Set(params.additional_words)
     }
 
 }
