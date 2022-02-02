@@ -31,5 +31,6 @@ jobs:
         npm i -g @vercel/ncc 
         npm run deploy && git stash
         npm run test
+        node 'build/index.js'
 
     
