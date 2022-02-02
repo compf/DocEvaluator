@@ -55,5 +55,5 @@ inputs:
   #color: 'blue'
 runs:
   using: 'node16'
-  main: 'build/index.js'
+  main: 'build/src/index.js'
   
