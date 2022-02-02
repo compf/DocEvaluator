@@ -26,7 +26,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci
+    - run: npm ci && npm i
     - run: npm i typescript
     - run: npm i -g @vercel/ncc
     - run: npm run deploy
