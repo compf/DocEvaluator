@@ -1,0 +1,59 @@
+name: 'Javadoc_evaluator'
+description: 'A tool to check whether the documentation is sufficient'
+author: 'Timo Schoemaker'
+inputs:
+  include:
+    description: "All file names that should be included in the analysis should be defined here.
+     * Use common Linux syntax (*) to indicate that a filename should start or end with a specific string
+     */"
+    required: false
+  exclude:
+    description: "Similary as include but used to exclude specific files,
+     * should be a subset of include
+     */"
+    required: false
+  metrics:
+    description: "define all metrics and their respective weights here"
+    required: false
+  global_threshold:
+    description: "The global threshold when to fail"
+    required: false
+
+  metric_result_builder:
+    description: "The result builder for the metrics"
+    required: false
+  file_result_builder:
+    description: "The result builder for the files"
+    required: false
+  component_file_builder:
+    description: "The result builder for a the components"
+    required: false
+  parser:
+    description: "the parser to be used/ the programming languages to be analyzed"
+    required: false
+  path_weights:
+    description: "An array of pairs of a Wildcard pattern and a weight that will be used to make some paths more important for evaluation,{path:string,weight:number}[]"
+    required: false
+  component_weights:
+    description: "An array of pairs of a component class name and a weight that will be used to make some components more important for evaluation, {name:string,weight:number}[]"
+    required: false
+  default_path_weight:
+    description: "The default weight for a given path"
+    required: false
+  state_manager:
+    description: "The state manager to store the result of the last run"
+    required: false
+  max_diff_last_run:
+    description: "max tolerable absolute difference from current to last run"
+    required: false
+  default_component_weight:
+    description: "The default weight for a given component"
+    required: false
+
+#branding:
+  #icon: 'check-circle'
+  #color: 'blue'
+runs:
+  using: 'node16'
+  main: 'build/index.js'
+  
