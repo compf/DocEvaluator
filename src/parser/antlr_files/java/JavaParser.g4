@@ -36,15 +36,15 @@ compilationUnit
     ;
 
 packageDeclaration
-    : comment? annotation* PACKAGE qualifiedName ';'
+    : comment* annotation* PACKAGE qualifiedName ';'
     ;
 
 importDeclaration
-    : comment? IMPORT STATIC? qualifiedName ('.' '*')? ';'
+    : comment* IMPORT STATIC? qualifiedName ('.' '*')? ';'
     ;
 
 typeDeclaration
-    : comment? classOrInterfaceModifier*
+    : comment* classOrInterfaceModifier*
       (classDeclaration | enumDeclaration | interfaceDeclaration | annotationTypeDeclaration)
     | ';'
     ;
@@ -102,7 +102,7 @@ enumConstants
     ;
 
 enumConstant
-    : comment? annotation* IDENTIFIER arguments? classBody?
+    : comment* annotation* IDENTIFIER arguments? classBody?
     ;
 
 enumBodyDeclarations
@@ -124,8 +124,8 @@ interfaceBody
 
 classBodyDeclaration
     : ';'
-    | STATIC? block
-    | comment? modifier* memberDeclaration
+    | comment* STATIC? block
+    | comment* modifier* memberDeclaration
     ;
 
 memberDeclaration
@@ -178,7 +178,7 @@ fieldDeclaration
     ;
 
 interfaceBodyDeclaration
-    : comment? modifier* interfaceMemberDeclaration
+    : comment* modifier* interfaceMemberDeclaration
     | ';'
     ;
 

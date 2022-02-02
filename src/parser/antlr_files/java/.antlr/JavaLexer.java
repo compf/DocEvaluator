@@ -1,4 +1,4 @@
-// Generated from /home/compf/data/uni/sem7/javadoc_evaluator/src/parser/antlr_files/java/JavaLexer.g4 by ANTLR 4.8
+// Generated from /home/compf/data/uni/sem7/doc_evaluator/src/parser/antlr_files/java/JavaLexer.g4 by ANTLR 4.8
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

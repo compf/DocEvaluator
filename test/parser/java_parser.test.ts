@@ -180,3 +180,10 @@ test("test javadoc parser", () => {
     expect(throwTag.getParam()).toBe("Exception");
     expect(throwTag.getDescription()).toBe("an exception\nto be thrown");
 });
+test("test multiple javadoc",()=>{
+    let parser=new JavaParser();
+    let res=parser.parse("testDir/MultipleJavadocTest.java");
+    let cls=res.getChildren()[0];
+    expect(cls.getComment()!.getGeneralDescription()).toBe("correct javadoc");
+
+})
