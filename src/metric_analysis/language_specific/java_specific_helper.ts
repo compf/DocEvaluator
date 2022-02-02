@@ -44,5 +44,8 @@ export class JavaSpecificHelper extends LanguageSpecificHelper{
     override isValidInlineTag(tag: string): boolean {
         return this.inlineTags.some((t)=>tag.startsWith(t) && tag.endsWith("}"));
     }
+    override getRawTextRegex(): RegExp {
+        return /( |^|\.|,|;)\w+}?/g;
+    }
 
 }

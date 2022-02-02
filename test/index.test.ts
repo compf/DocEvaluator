@@ -6,6 +6,7 @@ import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_med
 import { WeightResolver } from "../src/metric_analysis/weight_resolver";
 import { main } from "../src";
 import { existsSync, fstat, readFileSync } from "fs";
+import { JavaSpecificHelper } from "../src/metric_analysis/language_specific/java_specific_helper";
 
 
 class BaseClass {
@@ -57,6 +58,13 @@ test("normal main program works",()=>{
         expect(actual).toBeCloseTo(expected,3);
     }
    
+});
+test("test raw text",()=>{
+    const text="this is a test <html> with some {@see test} words";
+    const raw="this is a test with some words";
+    let langSpec=new JavaSpecificHelper();
+    let result=langSpec.getRawText(text);
+    expect(result).toBe(raw);
 });
 
 

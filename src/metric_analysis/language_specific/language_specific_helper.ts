@@ -27,9 +27,7 @@ export class LanguageSpecificHelper{
      * @param text the text to search
      */
      getInlineTagRegex():RegExp{
-         // from https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
-         // will never match anything
-        return  /(?!x)x/
+        return  this.getImpossibleRegex();
     }
     isValidInlineTag(tagName:string):boolean{
         return false;
@@ -41,5 +39,39 @@ export class LanguageSpecificHelper{
      */
     isValidBlockTag(tag:string):boolean{
         return true;
+    }
+    /**
+     *
+     * @returns a regex that never match
+     */
+    getImpossibleRegex() {
+        // from https://stackoverflow.com/questions/1723182/a-regex-that-will-never-be-matched-by-anything
+        // will never match anything
+        return /(?!x)x/;
+    }
+    /**
+     *
+     * @returns a regex that match the text without tags or other non-natural things
+     */
+    getRawTextRegex() {
+        return this.getImpossibleRegex();
+    }
+    /**
+     * removes all non-natural things like html tags, inline tags etc from the given text
+     * @param text the text as input
+     * @returns the rat text without these elements
+     */
+    getRawText(text:string) {
+        const regex = this.getRawTextRegex();
+        let wordMatch = /\w+$/;
+        let words = [];
+        let matches = text.match(regex);
+        if (matches == null)
+            return "";
+        for (let m of matches) {
+            if (m.match(wordMatch) != undefined)
+                words.push(m);
+        }
+        return words.join("");
     }
 }

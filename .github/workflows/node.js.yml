@@ -29,5 +29,5 @@ jobs:
     - run: npm ci
     - run: npm i typescript
     - run: npm i -g @vercel/ncc
-    - run: npm run build --if-present
+    - run: npm run deploy
     - run: npm test
