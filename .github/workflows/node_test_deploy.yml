@@ -30,8 +30,8 @@ jobs:
       run: |
         npm i -g @vercel/ncc 
         npm run deploy
-        node 'build/index.js'
-        npm run test
+       # node 'build/index.js'
+       # npm run test
        
 
     
