@@ -3,10 +3,12 @@ import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/languag
 import { CertainTermCountMetric } from "../../src/metric_analysis/metrics/certain_terms_count_metric";
 import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
+import { SpellingMetric } from "../../src/metric_analysis/metrics/spelling_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
 import { JavaParser } from "../../src/parser/java_parser";
+import { testSimpleFile } from "./shared";
 const languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
 
 beforeAll(()=>{
@@ -103,5 +105,11 @@ test("test certain terms count",()=>{
     analyzer.analyze(res,certain_terms,builder,languageHelper);
     let result=builder.getAggregatedResult("").getResult()
     expect(result).toBeCloseTo(90.7856);
+});
+
+test("test spelling",()=>{
+    testSimpleFile(MetricManager.MetricNames.spelling,"testDir/SpellingTest.java",
+    "spelling1",
+    undefined,90.483,2)
 });
 
