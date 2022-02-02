@@ -12,13 +12,13 @@ export class SpellingMetric extends ComponentBasedMetric{
         if(component.getComment()==null)return;
         let logMessages:string[]=[];
         let errorCount=0;
-        if(component.getComment().getGeneralDescription()!=null){
-            let rawtext=langSpec.getRawText(component.getComment().getGeneralDescription());
+        if(component.getComment()!.getGeneralDescription()!=null){
+            let rawtext=langSpec.getRawText(component.getComment()!.getGeneralDescription()!);
             errorCount+=this.getMisspellingCount(rawtext,logMessages)
         }
-        for(let tag of component.getComment().getTags()){
+        for(let tag of component.getComment()!.getTags()){
             if(tag.getDescription()!=null){
-                errorCount+=this.getMisspellingCount(tag.getDescription(),logMessages);
+                errorCount+=this.getMisspellingCount(tag.getDescription()!,logMessages);
             }
         }
         let result=this.processResult(errorCount,logMessages);
