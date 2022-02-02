@@ -37279,7 +37279,7 @@ const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US");
 class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor(uniqueName, params) {
         super(uniqueName, params);
-        this.additionalWords = new Set(params.additionalWords);
+        this.additionalWords = new Set(params.additional_words);
     }
     analyze(component, builder, langSpec) {
         if (component.getComment() == null)
