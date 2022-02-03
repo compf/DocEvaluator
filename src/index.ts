@@ -46,10 +46,10 @@ export function main(args: string[]) {
     console.log("The result was " + finalResult.getResult());
     objects.stateManager.save(finalResult.getResult());
 
-    if (finalResult.getResult() < conf.global_threshold) {
+    if (finalResult.getResult() < conf.absolute_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.max_diff_last_run) {
+    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.relative_threshold) {
         throw new Error("Difference from last run is too high");
 
     }

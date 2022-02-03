@@ -31,7 +31,7 @@ export class EvaluatorConf {
     /**
      * the global threshold that the average of all metrics should meet to pass the documentation check
      */
-    global_threshold: number = 20.0;
+    absolute_threshold: number = 20.0;
 
     /**
      * The result builder for the metrics
@@ -81,7 +81,7 @@ export class EvaluatorConf {
     /**
      * max tolerable absolute difference from current to last run
      */
-    max_diff_last_run: number = 30;
+    relative_threshold: number = 30;
     constructor() {
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s as MetricManager.MetricNames, params: MetricManager.getDefaultMetricParam(s as MetricManager.MetricNames), unique_name: MetricManager.getUniqueName(s) })
@@ -145,8 +145,8 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_EXCLUDE) {
             conf.exclude = env.INPUT_EXCLUDE.split(",")
         }
-        if (env.INPUT_GLOBAL_THRESHOLD) {
-            conf.global_threshold = parseFloat(env.INPUT_GLOBAL_THRESHOLD);
+        if (env.INPUT_ABSOLUTE_THRESHOLD) {
+            conf.absolute_threshold = parseFloat(env.INPUT_ABSOLUTE_THRESHOLD);
         }
         if (env.INPUT_METRICS) {
             conf.metrics = JSON.parse(env.INPUT_METRICS)
@@ -178,8 +178,8 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_STATE_MANAGER) {
             conf.state_manager = env.INPUT_STATE_MANAGER
         }
-        if (env.INPUT_MAX_DIFF_LAST_RUN) {
-            conf.max_diff_last_run = parseFloat(env.INPUT_MAX_DIFF_LAST_RUN)
+        if (env.INPUT_RELATIVE_THRESHOLD) {
+            conf.relative_threshold = parseFloat(env.INPUT_RELATIVE_THRESHOLD)
         }
         if (env.INPUT_DEFAULT_COMPONENT_WEIGHT) {
             conf.default_component_weight = parseFloat(env.INPUT_DEFAULT_COMPONENT_WEIGHT)
