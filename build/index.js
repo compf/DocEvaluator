@@ -36394,7 +36394,7 @@ var MetricManager;
                     max_lines_no_formatting: 2
                 };
             case MetricNames.spelling:
-                return { additional_words: [], k: 0.05 };
+                return { additional_words: [], k: 0.05, dictionary_path: "" };
             default:
                 return {};
         }
@@ -37271,7 +37271,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SpellingMetric = void 0;
+const fs_1 = __nccwpck_require__(7147);
 const simple_spellchecker_1 = __importDefault(__nccwpck_require__(9042));
+const method_component_1 = __nccwpck_require__(4725);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 const util_1 = __nccwpck_require__(996);
@@ -37279,7 +37281,13 @@ const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US");
 class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor(uniqueName, params) {
         super(uniqueName, params);
-        this.additionalWords = new Set(params.additional_words);
+        let par = params;
+        this.additionalWords = new Set(par.additional_words);
+        if (par.dictionary_path != "") {
+            for (let line of (0, fs_1.readFileSync)(par.dictionary_path).toString().split("\n")) {
+                this.additionalWords.add(line);
+            }
+        }
     }
     analyze(component, builder, langSpec) {
         if (component.getComment() == null)
@@ -37288,11 +37296,11 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         let errorCount = 0;
         if (component.getComment().getGeneralDescription() != null) {
             let rawtext = langSpec.getRawText(component.getComment().getGeneralDescription());
-            errorCount += this.getMisspellingCount(rawtext, logMessages);
+            errorCount += this.getMisspellingCount(rawtext, logMessages, component);
         }
         for (let tag of component.getComment().getTags()) {
             if (tag.getDescription() != null) {
-                errorCount += this.getMisspellingCount(tag.getDescription(), logMessages);
+                errorCount += this.getMisspellingCount(tag.getDescription(), logMessages, component);
             }
         }
         let result = this.processResult(errorCount, logMessages);
@@ -37302,17 +37310,32 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         let params = this.getParams();
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
     }
-    getMisspellingCount(text, logMessages) {
+    getMisspellingCount(text, logMessages, component) {
         let errorCount = 0;
         let params = this.getParams();
         let splitted = text.split(" ");
         for (let word of splitted) {
-            if (!dictionary.spellCheck(word) && !this.additionalWords.has(word)) {
+            if (!dictionary.spellCheck(word) && !this.additionalWords.has(word) && !this.isNameDefinedInContext(word, component)) {
                 errorCount++;
                 logMessages.push("Word " + word + " could be mispelled");
             }
         }
         return errorCount;
+    }
+    isNameDefinedInContext(word, component) {
+        if (component instanceof method_component_1.MethodComponent) {
+            let meth = component;
+            for (let param of meth.getParams()) {
+                if (param.name == word)
+                    return true;
+            }
+        }
+        do {
+            if (component.getName() == word)
+                return true;
+            component = component.getParent();
+        } while (component.getParent() != null);
+        return false;
     }
 }
 exports.SpellingMetric = SpellingMetric;
