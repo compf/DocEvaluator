@@ -51,6 +51,7 @@ export class SpellingMetric extends ComponentBasedMetric{
         return this.isNameDefinedInContextRec(word,topParent);
     }
     isNameDefinedInContextRec(word:string,component:Component):boolean{
+        this.additionalWords.add(component.getName());
         if(component.getName()==word){
             return true;
         }
