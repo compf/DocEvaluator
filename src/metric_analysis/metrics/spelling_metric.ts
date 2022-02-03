@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import SpellChecker from 'simple-spellchecker';
 import { Component } from '../../parser/parse_result/component';
+import { HierarchicalComponent } from '../../parser/parse_result/hierarchical_component';
 import { MethodComponent } from '../../parser/parse_result/method_component';
 import { LanguageSpecificHelper } from '../language_specific/language_specific_helper';
 import { MetricResultBuilder } from '../metric_result_builder';
@@ -45,17 +46,31 @@ export class SpellingMetric extends ComponentBasedMetric{
         return errorCount;
     }
     isNameDefinedInContext(word:string,component:Component):boolean{
-        if(component instanceof MethodComponent ){
+        if(word==component.getName())return true;
+        let topParent=component.getTopParent();
+        return this.isNameDefinedInContextRec(word,topParent);
+    }
+    isNameDefinedInContextRec(word:string,component:Component):boolean{
+        if(component.getName()==word){
+            return true;
+        }
+        else if(component instanceof MethodComponent ){
             let meth=component as MethodComponent;
             for(let param of meth.getParams()){
                 if(param.name==word)return true;
             }
+            return false;
         }
-        do{
-            if(component.getName()==word)return true;
-            component=component.getParent()!;
-        }while(component.getParent()!=null);
-        return false;
+       else if(component instanceof HierarchicalComponent){
+            let hierarch=component as HierarchicalComponent;
+            for(let obj of hierarch.getChildren()){
+                if(this.isNameDefinedInContextRec(word,obj))return true;
+            }
+            return false;
+       }
+       else{
+           return false;
+       }
     }
     constructor(uniqueName:string,params:any){
         super(uniqueName,params);
