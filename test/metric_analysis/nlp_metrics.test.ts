@@ -114,6 +114,7 @@ test("test spelling",()=>{
 });
 test("test spelling with additional words",()=>{
     let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.spelling);
+    params.dictionary_path="testDir/spelling_dictionary.txt";
     params.additional_words.push("clas");
     testSimpleFile(MetricManager.MetricNames.spelling,"testDir/SpellingTestWithAdditional.java",
     "spelling2",

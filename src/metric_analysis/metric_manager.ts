@@ -196,7 +196,7 @@ export namespace MetricManager {
                     max_lines_no_formatting:2
                 };
             case MetricNames.spelling:
-                return {additional_words:[],k:0.05};
+                return {additional_words:[],k:0.05,dictionary_path:""};
             default:
                 return {}
         }
