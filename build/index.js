@@ -37330,6 +37330,7 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         return this.isNameDefinedInContextRec(word, topParent);
     }
     isNameDefinedInContextRec(word, component) {
+        this.additionalWords.add(component.getName());
         if (component.getName() == word) {
             return true;
         }
