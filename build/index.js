@@ -37294,6 +37294,7 @@ function findDictionary() {
     while (!(0, fs_1.existsSync)(path_1.default.join(currPath, "en-US.dic"))) {
         currPath = path_1.default.dirname(currPath);
     }
+    console.log("found dict at", currPath);
     return currPath;
 }
 const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US", findDictionary());
