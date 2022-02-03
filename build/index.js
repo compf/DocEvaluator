@@ -35482,10 +35482,10 @@ class EnvCommentConfLoader {
     updateConf(conf) {
         //TODO make this automatic
         if (process_1.env.INPUT_INCLUDE) {
-            conf.include = process_1.env.INPUT_INCLUDE.split(",");
+            conf.include = JSON.parse(process_1.env.INPUT_INCLUDE);
         }
         if (process_1.env.INPUT_EXCLUDE) {
-            conf.exclude = process_1.env.INPUT_EXCLUDE.split(",");
+            conf.exclude = JSON.parse(process_1.env.INPUT_EXCLUDE);
         }
         if (process_1.env.INPUT_ABSOLUTE_THRESHOLD) {
             conf.absolute_threshold = parseFloat(process_1.env.INPUT_ABSOLUTE_THRESHOLD);
@@ -35494,13 +35494,13 @@ class EnvCommentConfLoader {
             conf.metrics = JSON.parse(process_1.env.INPUT_METRICS);
         }
         if (process_1.env.INPUT_METRIC_RESULT_BUILDER) {
-            conf.metric_result_builder = JSON.parse(process_1.env.INPUT_METRIC_RESULT_BUILDER);
+            conf.metric_result_builder = (process_1.env.INPUT_METRIC_RESULT_BUILDER);
         }
         if (process_1.env.INPUT_COMPONENT_RESULT_BUILDER) {
-            conf.component_result_builder = JSON.parse(process_1.env.INPUT_COMPONENT_RESULT_BUILDER);
+            conf.component_result_builder = (process_1.env.INPUT_COMPONENT_RESULT_BUILDER);
         }
         if (process_1.env.INPUT_FILE_RESULT_BUILDER) {
-            conf.file_result_builder = JSON.parse(process_1.env.INPUT_FILE_RESULT_BUILDER);
+            conf.file_result_builder = (process_1.env.INPUT_FILE_RESULT_BUILDER);
         }
         if (process_1.env.INPUT_PARSER) {
             conf.parser = (process_1.env.INPUT_PARSER);
