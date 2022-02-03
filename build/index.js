@@ -36163,7 +36163,9 @@ const metric_result_1 = __nccwpck_require__(6673);
 const metric_result_builder_1 = __nccwpck_require__(9514);
 class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
     getAggregatedResult(creator) {
-        this.resultList.sort((a, b) => a.getResult() - b.getResult());
+        if (this.resultList.length == 0)
+            return new metric_result_1.InvalidMetricResult();
+        this.resultList.filter((x) => !(x instanceof metric_result_1.InvalidMetricResult)).sort((a, b) => a.getResult() - b.getResult());
         let median = 0;
         if (this.resultList.length % 2 == 0) {
             let middleIndex = Math.floor((this.resultList.length - 1) / 2);
@@ -36409,7 +36411,7 @@ var MetricManager;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.MetricResult = void 0;
+exports.InvalidMetricResult = exports.MetricResult = void 0;
 class MetricResult {
     constructor(res, msgs, creator) {
         this.result = res;
@@ -36440,6 +36442,15 @@ class MetricResult {
     }
 }
 exports.MetricResult = MetricResult;
+/**
+ * A result that is created when no child results are existing
+ */
+class InvalidMetricResult extends MetricResult {
+    constructor() {
+        super(0, [], "");
+    }
+}
+exports.InvalidMetricResult = InvalidMetricResult;
 
 
 /***/ }),
@@ -36479,10 +36490,12 @@ class MetricResultBuilder extends abstract_metric_builder_1.AbstractMetricBuilde
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
         if (numberResults == 0)
-            numberResults = 1;
+            return new metric_result_1.InvalidMetricResult();
         let sum = 0;
         let allLogMessages = [];
         for (let partialResult of this.resultList) {
+            if (partialResult instanceof metric_result_1.InvalidMetricResult)
+                continue;
             sum += partialResult.getResult();
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
@@ -37476,11 +37489,15 @@ class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.Weigh
         let weightSum = 0;
         let allLogMessages = [];
         for (let partialResult of this.resultList) {
+            if (partialResult instanceof metric_result_1.InvalidMetricResult)
+                continue;
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             weightResultList.push({ weight: weight, result: partialResult.getResult() });
             weightSum += weight;
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
+        if (weightSum == 0)
+            return new metric_result_1.InvalidMetricResult();
         weightResultList.sort((a, b) => a.weight - b.weight);
         let sum = 0;
         for (let weight_result of weightResultList) {
@@ -37516,13 +37533,15 @@ class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBu
         let weightSum = 0;
         let allLogMessages = [];
         for (let partialResult of this.resultList) {
+            if (partialResult instanceof metric_result_1.InvalidMetricResult)
+                continue;
             let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
             resultSum += (partialResult.getResult() * weight);
             weightSum += weight;
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
         }
         if (weightSum == 0)
-            weightSum = 1;
+            return new metric_result_1.InvalidMetricResult();
         return new metric_result_1.MetricResult(resultSum / weightSum, allLogMessages, creator);
     }
 }
