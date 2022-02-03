@@ -5,10 +5,10 @@ const fs=require("fs");
 const path=require("path");
 const CONF_FILENAME = "comment_conf.json";
 
-const yaml_template={
+const yamlTemplate={
     name:"Check documentation",
     on:{
-        workflow_dispatch:undefined,
+        workflow_dispatch:{},
         push:{branches:["master","main"]},
         pull_request:{branches:["master","main"]},
     },
@@ -42,7 +42,7 @@ const options=[
 let args=commandLineArgs(options);
 let conf=new EvaluatorConf.EvaluatorConf();
 if(args.type=="yaml"){
-    let confObj=yaml_template.jobs.build.steps[1].with
+    let confObj=yamlTemplate.jobs.build.steps[1].with
     for(let key of Object.keys(conf)){
         if(typeof(conf[key])=="object"){
             confObj[key]=JSON.stringify(conf[key],null,2);
@@ -51,7 +51,7 @@ if(args.type=="yaml"){
             confObj[key]=conf[key];
         }
     }
-   let output= YAML.stringify(yaml_template);
+   let output= YAML.stringify(yamlTemplate);
    let outPath=args.out;
    fs.writeFileSync(outPath,output);
 }

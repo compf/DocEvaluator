@@ -29,6 +29,7 @@ coverage
 # nyc test coverage
 .nyc_output
 *.js
+!create_conf.js
 *.zip
 out.txt
 testDir/.evaluator_last_state.txt
