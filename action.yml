@@ -25,7 +25,7 @@ inputs:
   file_result_builder:
     description: "The result builder for the files"
     required: false
-  component_file_builder:
+  component_result_builder:
     description: "The result builder for a the components"
     required: false
   parser:
