@@ -35,3 +35,11 @@ export class MetricResult {
         return this.creator;
     }
 }
+/**
+ * A result that is created when no child results are existing
+ */
+export class InvalidMetricResult extends MetricResult{
+    constructor(){
+        super(0,[],"");
+    }
+}

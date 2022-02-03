@@ -1,6 +1,6 @@
 import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { LogMessage } from "./log_message";
-import { MetricResult } from "./metric_result";
+import { InvalidMetricResult, MetricResult } from "./metric_result";
 import { AbstractMetricBuilder } from "./abstract_metric_builder";
 /**
  * This class should be called to aggregate many MetricResults and for example an average result
@@ -26,10 +26,11 @@ export class MetricResultBuilder extends AbstractMetricBuilder {
     getAggregatedResult(creator:string): MetricResult {
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
-        if (numberResults == 0) numberResults = 1;
+        if (numberResults == 0) return new InvalidMetricResult()
         let sum = 0;
         let allLogMessages: LogMessage[] = []
         for (let partialResult of this.resultList) {
+            if(partialResult instanceof InvalidMetricResult)continue;
             sum += partialResult.getResult();
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
         }

@@ -1,10 +1,11 @@
 import { LogMessage } from "./log_message";
-import { MetricResult } from "./metric_result";
+import { InvalidMetricResult, MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 
 export class MedianResultBuilder extends MetricResultBuilder {
      override getAggregatedResult(creator:string): MetricResult {
-        this.resultList.sort((a, b) => a.getResult() - b.getResult());
+         if(this.resultList.length==0)return new InvalidMetricResult();
+        this.resultList.filter((x)=>!(x instanceof InvalidMetricResult)).sort((a, b) => a.getResult() - b.getResult());
         let median = 0;
         if (this.resultList.length % 2 == 0) {
             let middleIndex = Math.floor((this.resultList.length - 1) / 2);
