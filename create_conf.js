@@ -26,7 +26,7 @@ const yamlTemplate={
                     name:"Add & commit",
                     if:"always()",
                     uses:"EndBug/add-and-commit@v7.5.0",
-                    with:{add:"evaluator_last_state.txt"}
+                    with:{add:".evaluator_last_state.txt"}
                 }
 
             ]

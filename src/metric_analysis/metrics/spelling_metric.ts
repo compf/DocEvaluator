@@ -14,6 +14,7 @@ function findDictionary(){
     while(!existsSync(path.join(currPath,"en-US.dic"))){
         currPath=path.dirname(currPath);
     }
+    console.log("found dict at",currPath)
     return currPath;
 
 }
