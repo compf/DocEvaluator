@@ -21,6 +21,7 @@ jobs:
         with:
           branch: action
           files: |
-            action.yml
+            ./action.yml
             ./build/index.js
+            ./en-US.dic
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

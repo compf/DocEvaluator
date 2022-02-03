@@ -9,7 +9,7 @@ import { ComponentBasedMetric } from './component_based_,metric';
 import { MAX_SCORE, MIN_SCORE } from './documentation_analysis_metric';
 import { Utils } from './util';
 
-const dictionary=SpellChecker.getDictionarySync("en-US")
+const dictionary=SpellChecker.getDictionarySync("en-US",".")
 interface ParamType{additional_words:string[],k:number,dictionary_path:string}
 export class SpellingMetric extends ComponentBasedMetric{
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
