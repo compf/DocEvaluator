@@ -37273,6 +37273,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SpellingMetric = void 0;
 const fs_1 = __nccwpck_require__(7147);
 const simple_spellchecker_1 = __importDefault(__nccwpck_require__(9042));
+const hierarchical_component_1 = __nccwpck_require__(2960);
 const method_component_1 = __nccwpck_require__(4725);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
@@ -37323,19 +37324,34 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         return errorCount;
     }
     isNameDefinedInContext(word, component) {
-        if (component instanceof method_component_1.MethodComponent) {
+        if (word == component.getName())
+            return true;
+        let topParent = component.getTopParent();
+        return this.isNameDefinedInContextRec(word, topParent);
+    }
+    isNameDefinedInContextRec(word, component) {
+        if (component.getName() == word) {
+            return true;
+        }
+        else if (component instanceof method_component_1.MethodComponent) {
             let meth = component;
             for (let param of meth.getParams()) {
                 if (param.name == word)
                     return true;
             }
+            return false;
         }
-        do {
-            if (component.getName() == word)
-                return true;
-            component = component.getParent();
-        } while (component.getParent() != null);
-        return false;
+        else if (component instanceof hierarchical_component_1.HierarchicalComponent) {
+            let hierarch = component;
+            for (let obj of hierarch.getChildren()) {
+                if (this.isNameDefinedInContextRec(word, obj))
+                    return true;
+            }
+            return false;
+        }
+        else {
+            return false;
+        }
     }
 }
 exports.SpellingMetric = SpellingMetric;
