@@ -151,9 +151,6 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_METRICS) {
             conf.metrics = JSON.parse(env.INPUT_METRICS)
         }
-        if (env.INPUT_PARSER) {
-            conf.parser = JSON.parse(env.INPUT_PARSER)
-        }
         if (env.INPUT_METRIC_RESULT_BUILDER) {
             conf.metric_result_builder = JSON.parse(env.INPUT_METRIC_RESULT_BUILDER)
         }
