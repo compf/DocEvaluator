@@ -6,7 +6,7 @@
     <g id="file"  style="fill:white;stroke:inherit">
         <rect  x="0" width="40" y="0" height="80"></rect> 
         <rect x="10" y="10" width="20" height="20"></rect> 
-        <rect x="10" y="50" width="10" height="10"></rect> 
+        <polygon  points="5,50 30,50 17.5,70"></polygon> 
     </g>
     <g id="rhombus" style="fill:white;stroke:black">
         <rect transform="rotate(45)" width="40" height="40"/>
@@ -18,9 +18,12 @@
   <path d="M 0 0 L 10 5 L 0 10 z" />
     </marker>
     <g id="file_result">
-        <use xlink:href="#file" x="60" y="180" />
+        <use xlink:href="#file" x="60" y="200" />
         <use xlink:href="#rhombus" x="80" y="55" />
-        <line x1="80" y1= "175" x2="80" y2="115" marker-end="url(#arrow)" stroke="black" fill="none"/>
+         <ellipse  cx="80" cy="160" rx="30" ry="15" fill="none" stroke="black" />
+        <line x1="80" y1= "150" x2="80" y2="115" marker-end="url(#arrow)" stroke="black" fill="none"/>
+         <path d="M80,250 q 60,-40 20,-80" marker-end="url(#arrow)" stroke="black" fill="none"/>
+           <path d="M70,210 q -50,-30 -20,-40" marker-end="url(#arrow)" stroke="black" fill="none"/>
     </g>
     <g id="same_files_one_metric">
         <use xlink:href="#file_result" y="250"/>
@@ -63,6 +66,10 @@
             <text y="90" x="40">MetricResult</text>
             <use style="stroke:black" xlink:href="#file" y="140" x="-20"/>
             <text y="180" x="50">Datei</text>
+            <path   stroke="black" fill="none"  d="M-25,240 h50 l-25,35 l-25,-35"></path> 
+            <text y="260" x="50">MethodComponent</text>
+            <rect x="-20" y="300" style="stroke:black;fill:white" width="40" height="40"/>
+              <text y="320" x="50">ClassComponent</text>
         </g>
         
     </g>
