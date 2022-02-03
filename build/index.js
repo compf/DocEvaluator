@@ -37278,7 +37278,7 @@ const method_component_1 = __nccwpck_require__(4725);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 const util_1 = __nccwpck_require__(996);
-const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US");
+const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US", ".");
 class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor(uniqueName, params) {
         super(uniqueName, params);
