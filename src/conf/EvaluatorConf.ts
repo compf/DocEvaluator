@@ -140,10 +140,10 @@ export class EnvCommentConfLoader implements ConfLoader {
     updateConf(conf: EvaluatorConf): void {
         //TODO make this automatic
         if (env.INPUT_INCLUDE) {
-            conf.include = env.INPUT_INCLUDE.split(",")
+            conf.include = JSON.parse(env.INPUT_INCLUDE)
         }
         if (env.INPUT_EXCLUDE) {
-            conf.exclude = env.INPUT_EXCLUDE.split(",")
+            conf.exclude = JSON.parse(env.INPUT_EXCLUDE)
         }
         if (env.INPUT_ABSOLUTE_THRESHOLD) {
             conf.absolute_threshold = parseFloat(env.INPUT_ABSOLUTE_THRESHOLD);
@@ -152,13 +152,13 @@ export class EnvCommentConfLoader implements ConfLoader {
             conf.metrics = JSON.parse(env.INPUT_METRICS)
         }
         if (env.INPUT_METRIC_RESULT_BUILDER) {
-            conf.metric_result_builder = JSON.parse(env.INPUT_METRIC_RESULT_BUILDER)
+            conf.metric_result_builder = (env.INPUT_METRIC_RESULT_BUILDER)
         }
         if (env.INPUT_COMPONENT_RESULT_BUILDER) {
-            conf.component_result_builder = JSON.parse(env.INPUT_COMPONENT_RESULT_BUILDER)
+            conf.component_result_builder = (env.INPUT_COMPONENT_RESULT_BUILDER)
         }
         if (env.INPUT_FILE_RESULT_BUILDER) {
-            conf.file_result_builder = JSON.parse(env.INPUT_FILE_RESULT_BUILDER)
+            conf.file_result_builder = (env.INPUT_FILE_RESULT_BUILDER)
         }
         if (env.INPUT_PARSER) {
             conf.parser = (env.INPUT_PARSER)
