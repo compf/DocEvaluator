@@ -1,4 +1,5 @@
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import path from 'path';
 import SpellChecker from 'simple-spellchecker';
 import { Component } from '../../parser/parse_result/component';
 import { HierarchicalComponent } from '../../parser/parse_result/hierarchical_component';
@@ -8,8 +9,15 @@ import { MetricResultBuilder } from '../metric_result_builder';
 import { ComponentBasedMetric } from './component_based_,metric';
 import { MAX_SCORE, MIN_SCORE } from './documentation_analysis_metric';
 import { Utils } from './util';
+function findDictionary(){
+    let currPath=__dirname;
+    while(!existsSync(path.join(currPath,"en-US.dic"))){
+        currPath=path.dirname(currPath);
+    }
+    return currPath;
 
-const dictionary=SpellChecker.getDictionarySync("en-US",".")
+}
+const dictionary=SpellChecker.getDictionarySync("en-US",findDictionary())
 interface ParamType{additional_words:string[],k:number,dictionary_path:string}
 export class SpellingMetric extends ComponentBasedMetric{
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
