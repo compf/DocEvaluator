@@ -15,7 +15,7 @@ inputs:
   metrics:
     description: "define all metrics and their respective weights here"
     required: false
-  global_threshold:
+  absolute_threshold:
     description: "The global threshold when to fail"
     required: false
 
@@ -43,7 +43,7 @@ inputs:
   state_manager:
     description: "The state manager to store the result of the last run"
     required: false
-  max_diff_last_run:
+  relative_threshold:
     description: "max tolerable absolute difference from current to last run"
     required: false
   default_component_weight:

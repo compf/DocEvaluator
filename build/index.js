@@ -35391,7 +35391,7 @@ class EvaluatorConf {
         /**
          * the global threshold that the average of all metrics should meet to pass the documentation check
          */
-        this.global_threshold = 20.0;
+        this.absolute_threshold = 20.0;
         /**
          * The result builder for the metrics
          */
@@ -35431,7 +35431,7 @@ class EvaluatorConf {
         /**
          * max tolerable absolute difference from current to last run
          */
-        this.max_diff_last_run = 30;
+        this.relative_threshold = 30;
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), unique_name: metric_manager_1.MetricManager.getUniqueName(s) });
         }
@@ -35487,8 +35487,8 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_EXCLUDE) {
             conf.exclude = process_1.env.INPUT_EXCLUDE.split(",");
         }
-        if (process_1.env.INPUT_GLOBAL_THRESHOLD) {
-            conf.global_threshold = parseFloat(process_1.env.INPUT_GLOBAL_THRESHOLD);
+        if (process_1.env.INPUT_ABSOLUTE_THRESHOLD) {
+            conf.absolute_threshold = parseFloat(process_1.env.INPUT_ABSOLUTE_THRESHOLD);
         }
         if (process_1.env.INPUT_METRICS) {
             conf.metrics = JSON.parse(process_1.env.INPUT_METRICS);
@@ -35520,8 +35520,8 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_STATE_MANAGER) {
             conf.state_manager = process_1.env.INPUT_STATE_MANAGER;
         }
-        if (process_1.env.INPUT_MAX_DIFF_LAST_RUN) {
-            conf.max_diff_last_run = parseFloat(process_1.env.INPUT_MAX_DIFF_LAST_RUN);
+        if (process_1.env.INPUT_RELATIVE_THRESHOLD) {
+            conf.relative_threshold = parseFloat(process_1.env.INPUT_RELATIVE_THRESHOLD);
         }
         if (process_1.env.INPUT_DEFAULT_COMPONENT_WEIGHT) {
             conf.default_component_weight = parseFloat(process_1.env.INPUT_DEFAULT_COMPONENT_WEIGHT);
@@ -35717,10 +35717,10 @@ function main(args) {
     printResultByMetric(objects);
     console.log("The result was " + finalResult.getResult());
     objects.stateManager.save(finalResult.getResult());
-    if (finalResult.getResult() < conf.global_threshold) {
+    if (finalResult.getResult() < conf.absolute_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.max_diff_last_run) {
+    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.relative_threshold) {
         throw new Error("Difference from last run is too high");
     }
 }
