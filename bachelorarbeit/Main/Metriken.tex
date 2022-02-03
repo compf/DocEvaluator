@@ -24,7 +24,7 @@ Getter und Setter sind typische Konstrukte in objektorientierten Programmierspra
 Nicht trivial ist dagegen die Implementierung einer Metrik, die Getter- und Setter-Methoden ausschließt. Laut der JavaBeans-Spezifikation \cite[S. 55]{javabeans} sollen diese Zugriffsmethoden mit dem Präfix \enquote{get} bzw. \enquote{set} beginnen. Außerdem besitzt ein Getter keine Parameter und besitzt einen Rückgabetyp. Ein Setter sollte den Rückgabetyp \enquote{void} haben und exakt ein Parameter übergeben bekommen. Abweichend davon können Getter, die einen Boolean zurückgeben, mit dem Präfix \enquote{is} beginnen. Die Namenskonvention ist allerdings sprachspezifisch und noch kein eindeutiges Indiz für einen Getter bzw. Setter. Nichtsdestotrotz wurde entschieden die Filterung nach den JavaBeans-Kriterien durchzuführen und dafür eine Möglichkeit anzubieten, die Namenskonvention nach eigenen Wünschen zu konfigurieren. 
 
 Der Vorteil des Ausschließens von Getter und Setter wurde bereits genannt. Die Kommentare von diesen Zugriffsmethoden sind oft repetitiv und enthalten keinen Mehrwert, sodass sie überlesen werden und der größere Code sogar unübersichtlicher wird. Allerdings sollte die dazugehörigen Felder trotzdem dokumentiert werden, um ihren Sinn und Zweck zu begründen. Dies wird hier nicht durchgesetzt, sodass es dazu kommen kann, dass Felder nicht dokumentiert sind und auch die dazugehörigen Zugriffsmethoden keine Hilfe bieten. Dies führt vermutlich zu einer schlechteren Lesbarkeit, da jedes Feld eine Bedeutung hat, die nicht immer offensichtlich ist.
-\subsection{Flesch-Reading Ease Score}\label{chapter:metrics_flesh}
+\subsection{Metrik: Flesch-Reading Ease Score}\label{chapter:metrics_flesh}
 Der Flesch-Reading-Ease-Score\cite[S. 21]{ThePrinciplesofReadability} ist eine einfache Formel zur heuristischen Ermittlung der Lesbarkeit eines englischsprachigen Textes. Dabei werden die Anzahl der Sätze, die Anzahl der Wörter und die Anzahl der Silben im Text als Eingabeparameter. Die Formel lautet:
 \begin{equation}
    206.835-1.015*\frac{W}{S}-84.6*\frac{H}{W}
@@ -114,7 +114,7 @@ Diese Metrik ist relativ ähnlich zu der vorherigen Metrik. Allerdings arbeitet 
   \begin{itemize}
      \item \textit{ignore\_lines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
  \end{itemize}
- \subsection{Metrik: Bewertung der Formatierung}
+ \subsection{Metrik: Bewertung der Formatierung}\label{metric:formatting}
  
 Die strukturierte Dokumentation kann in vielen Fällen auch bestimmte Elemente enthalten, die zusätzliche Informationen enthalten oder bestimmte Informationen ansprechender formatieren. Beispielsweise ermöglicht der \textit{@author}-Tag, einen Autor für diese Komponente festzulegen. Mit \textit{\{@see ...\}} können in Javadoc Verweise auf andere Komponenten gelegt werden. Außerdem lassen sich bestimmte \ac{HTML}-Inhalte verwenden, die beim Rendern im Browser die Dokumentation aufwerten können \cite{HowtoWriteDocCommentsfortheJavadocTool}. 
 
@@ -139,4 +139,15 @@ Diese Metrik hilft dabei, Fehler bei der Formatierung der Dokumentation zu verhi
      \item \textit{allowed\_tags} Tags, die obwohl nicht standardisiert trotzdem akzeptiert werden,
     \item \textit{max\_lines\_no\_formatting} Anzahl der Zeilen, die zur Tolerierung von unformatierten langen Kommentaren  
  \end{itemize}
+ \subsection{Metrik: Zählen von Rechtschreibfehler}
+ 
+ Eine weitere mögliche Metrik ist das Zählen von Rechtschreibfehlern. Zwar führen Rechtschreibfehler nicht unbedingt zu einer Verschlechterung der Lesbarkeit eines Kommentars, sie sind aber zumindest ein Zeichen von Unprofessionalität. Daher kann es sinnvoll sein die Anzahl der Rechtschreibfehler zu zählen und eine Dokumentation mit vielen Rechtschreibfehlern schlechter zu bewerten. 
+ 
+ Um die Anzahl der Rechtschreibfehler zu zählen, muss zunächst der der Text der Dokumentation in die einzelnen Wörter zerlegt werden. Dabei werden Wörter in Tags wie z.B. \textit{\{@see ...\}} ignoriert, da sie möglicherweise Quellcode oder komplexere qualifizierte Namen enthalten, bei denen eine Rechtschreibprüfung schwieriger wäre. 
+ 
+ Jedes Wort wird dann mittels der Bibliothek  \enquote{simple-spellchecker}\footnote{\href{Simple-Spellchecker}{https://www.npmjs.com/package/simple-spellchecker} (Abruf am 03.02.2022)} auf Rechtschreibfehler überprüft, indem es mit einem Wörterbuch abgeglichen wird. Die Bibliothek liefert bereits viele gängige Wörter in ihrem Wörterbuch mit. Es können in den Parameter aber sowohl zusätzliche Wörter als korrekt klassifiziert werden als auch ein Pfad zu einer Textdatei mit weiteren korrekten Wörtern angegeben werden, wobei jedes Wort in einer Zeile steht. Zusätzlich prüft die Metrik rekursiv, ob das unbekannte Wort irgendwo in der aktuell analysierten Datei als Komponentenname verwendet wird. Wenn keine dieser Schritte das unbekannte Wort finden kann, wird es als fehlerhaft markiert. 
+ 
+ Die Anzahl der unbekannten bzw. falschen Wörter wird ähnlich wie in Kapitel \ref{metric:formatting} an einer beschränkt wachsenden Funktion übergeben, sodass viele Rechtschreibfehler bestraft werden. Im Gegensatz zu der Formatierungsmetrik wird standardmäßig ein eher kleiner Wachstumsfaktor von 0.05 verwendet, da ein Rechtschreibfehler nicht so gravierend ist, wie ein Formatierungsfehler, welches zu Darstellungs- oder Verarbeitungsproblemen führen kann. 
+ 
+ Diese Metrik kann dabei helfen, die Dokumentation kleine Rechtschreibfehler zu finden, die beim Schreiben der Dokumentation schnell geschehen können. Dadurch wirkt die Dokumentation professioneller und es können in gravierenden Fällen auch Missverständnisse verhindert werden. Allerdings prüft diese Metrik nur die Rechtschreibung und nicht die Grammatik. Außerdem ist die Gefahr von falsch-positiven Ergebnissen groß, da Begrifflichkeiten der Programmierung nicht unbedingt im mitgelieferten Wörterbuch enthalten sein müssen. Zudem werden Wörter in Tags aktuell ignoriert, sodass Rechtschreibfehler dort ignoriert werden. 
      
