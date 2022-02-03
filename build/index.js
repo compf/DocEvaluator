@@ -35493,9 +35493,6 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_METRICS) {
             conf.metrics = JSON.parse(process_1.env.INPUT_METRICS);
         }
-        if (process_1.env.INPUT_PARSER) {
-            conf.parser = JSON.parse(process_1.env.INPUT_PARSER);
-        }
         if (process_1.env.INPUT_METRIC_RESULT_BUILDER) {
             conf.metric_result_builder = JSON.parse(process_1.env.INPUT_METRIC_RESULT_BUILDER);
         }
@@ -37272,13 +37269,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SpellingMetric = void 0;
 const fs_1 = __nccwpck_require__(7147);
+const path_1 = __importDefault(__nccwpck_require__(1017));
 const simple_spellchecker_1 = __importDefault(__nccwpck_require__(9042));
 const hierarchical_component_1 = __nccwpck_require__(2960);
 const method_component_1 = __nccwpck_require__(4725);
 const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 const util_1 = __nccwpck_require__(996);
-const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US", ".");
+function findDictionary() {
+    let currPath = __dirname;
+    while (!(0, fs_1.existsSync)(path_1.default.join(currPath, "en-US.dic"))) {
+        currPath = path_1.default.dirname(currPath);
+    }
+    return currPath;
+}
+const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US", findDictionary());
 class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor(uniqueName, params) {
         super(uniqueName, params);
