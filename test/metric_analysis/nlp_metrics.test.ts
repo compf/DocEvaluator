@@ -18,14 +18,12 @@ beforeAll(()=>{
 });
 test("Test syllables",()=>{
     const text="This is a sample text";
-    let nlp_helper=new NLP_Helper();
-   expect(nlp_helper.getRelevantVariables(text).numSyllables).toBe(6);
+   expect(NLP_Helper.getRelevantVariables(text).numSyllables).toBe(6);
 });
 test("test flesch kincaid",()=>{
     const text="This is a longer text. It consists of multiple sentences."+
     " You should read this sentence carefully. Otherwise you might miss something";
-    let nlp_helper=new NLP_Helper();
-    let res=nlp_helper.getRelevantVariables(text);
+    let res=NLP_Helper.getRelevantVariables(text);
     expect(res.numSentences).toBe(4);
     expect(res.numWords).toBe(21);
     expect(res.numSyllables).toBe(34);
@@ -59,10 +57,9 @@ test("test easy flesh metric",()=>{
     expect(score).toBeCloseTo(85);
 });
 test(" test get words",()=>{
-    let nlp_helper=new NLP_Helper();
     const text="This is a text";
     const splitted_expected=text.split(" ");
-    let splitted=nlp_helper.getTokens(text);
+    let splitted=NLP_Helper.getTokens(text);
     expect(splitted).toMatchObject(splitted_expected);
 });
 test("test name convention splitting",()=>{
@@ -78,8 +75,7 @@ test("test name convention splitting",()=>{
     expect(result).toMatchObject(["get","hello","World"]);
 });
 test("test levenshtein",()=>{
-    let nlp_helper=new NLP_Helper();
-    let res=nlp_helper.levenshtein("test","tast");
+    let res=NLP_Helper.levenshtein("test","tast");
     expect(res).toBe(1);
 });
 test("test method coherence",()=>{

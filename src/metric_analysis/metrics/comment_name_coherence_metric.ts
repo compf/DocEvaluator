@@ -15,7 +15,8 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric{
     analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void {
         if(component.getComment()==null || component.getComment()?.getGeneralDescription()==null)return;
         let componentNameWords=this.splitByNameConvention(component.getName());
-        let commentWords=this.nlp_helper.getTokens(component.getComment()!.getGeneralDescription()!);
+        let rawText=langSpec.getRawText(component.getComment()!.getGeneralDescription()!)
+        let commentWords=NLP_Helper.getTokens(rawText);
         if(commentWords.length==0)return;
         let similarWordsCount=0;
         for(let componentWord of componentNameWords){
@@ -42,10 +43,9 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric{
         }
         else return MAX_SCORE;
     }
-    private nlp_helper=new NLP_Helper();
     private areSimilar(word1:string,word2:string):boolean{
         let params=this.getParams() as ParamType;
-        return this.nlp_helper.levenshtein(word1,word2)<=params.levenshtein_distance;
+        return NLP_Helper.levenshtein(word1,word2)<=params.levenshtein_distance;
     }
     public splitByNameConvention(name:string):string[]{
         let result:string[]=[];

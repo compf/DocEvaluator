@@ -13,11 +13,11 @@ export class FleschMetric extends ComponentBasedMetric {
 
         let textsToConsider = this.getTextToConsider(component, params as ParamsType);
         if(textsToConsider.length==0)return;
-        let nlp_helper=new NLP_Helper();
         let sum = 0;
 
         for (let text of textsToConsider) {
-            sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n","")));
+            let rawText=langSpec.getRawText(text);
+            sum += this.calcFleshKincaid(NLP_Helper.getRelevantVariables(rawText.replace("\n"," ")));
         }
         let msgs:string[]=[];
         let score = sum / textsToConsider.length;

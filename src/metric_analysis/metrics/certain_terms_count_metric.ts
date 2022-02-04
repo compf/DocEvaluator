@@ -12,7 +12,6 @@ interface ParamsType { k: number, consider_tags: boolean,terms:string[],levensht
  * Punishes comments with abbreviation as they are usually harder to read 
  */
 export class CertainTermCountMetric extends ComponentBasedMetric {
-    private nlp_helper = new NLP_Helper();
     public analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
         let params = this.getParams() as ParamsType;
         if (component.getComment() == null) return;
@@ -47,10 +46,10 @@ export class CertainTermCountMetric extends ComponentBasedMetric {
     private countSimilarTerms(text:string):number{
         let params=this.getParams() as ParamsType;
         let count=0;
-        let words=this.nlp_helper.getTokens(text);
+        let words=NLP_Helper.getTokens(text);
         for(let w1 of words){
             for (let w2 of params.terms){
-                if(this.nlp_helper.levenshtein(w1,w2)<=params.levenshtein_distance){
+                if(NLP_Helper.levenshtein(w1,w2)<=params.levenshtein_distance){
                     count++;
                 }
             }
