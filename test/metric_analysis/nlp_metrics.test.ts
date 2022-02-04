@@ -119,7 +119,7 @@ test("test spelling with additional words",()=>{
 test("nlp matching, null check",()=>{
     
     let terms=["(#Negative)? #Verb null","if null","null (will be | is)? treated as","null ~return~","null if","#Negative null"];
-    let sentences=[
+    let positiveCases=[
         "returns null if smaller than 0",
         "may not be null",
         "the value null will be treated as invalid",
@@ -127,10 +127,18 @@ test("nlp matching, null check",()=>{
         "never returns null",
         "cannot return null",
     ];
-    for(let sentence of sentences){
+    for(let sentence of positiveCases){
         expect(NLP_Helper.hasOneOfTerms(sentence,terms)).toBeTruthy();
     }
-    expect(NLP_Helper.hasOneOfTerms("",terms)).toBeFalsy();
+    let negativeCases=[
+        "",
+        "any value",
+        "nullable",
+        "can be none"
+    ]
+    for(let sentence of negativeCases){
+        expect(NLP_Helper.hasOneOfTerms(sentence,terms)).toBeFalsy();
+    }
    
    
 });
