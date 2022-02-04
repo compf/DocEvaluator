@@ -36165,7 +36165,8 @@ class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
     getAggregatedResult(creator) {
         if (this.resultList.length == 0)
             return new metric_result_1.InvalidMetricResult();
-        this.resultList.filter((x) => !(x instanceof metric_result_1.InvalidMetricResult)).sort((a, b) => a.getResult() - b.getResult());
+        this.resultList = this.resultList.filter((x) => !(x instanceof metric_result_1.InvalidMetricResult));
+        this.resultList.sort((a, b) => a.getResult() - b.getResult());
         let median = 0;
         if (this.resultList.length % 2 == 0) {
             let middleIndex = Math.floor((this.resultList.length - 1) / 2);
@@ -37294,7 +37295,6 @@ function findDictionary() {
     while (!(0, fs_1.existsSync)(path_1.default.join(currPath, "en-US.dic"))) {
         currPath = path_1.default.dirname(currPath);
     }
-    console.log("found dict at", currPath);
     return currPath;
 }
 const dictionary = simple_spellchecker_1.default.getDictionarySync("en-US", findDictionary());
