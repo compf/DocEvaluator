@@ -10,8 +10,8 @@
         {"metric_name":"public_members_only","weight":5,"unique_name":"m2"},
         {"metric_name":"large_method_commented","weight":1,"unique_name":"m3"}
     ],
-    "global_threshold":50,
+    "absolute_threshold":50,
     "metric_result_builder":"weighted_mean_builder",
     "files_result_builder":"default_builder",
-    "max_diff_last_run":30
+    "relative_threshold":30
 }

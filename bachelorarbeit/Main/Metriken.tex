@@ -85,8 +85,42 @@ Anschließend wird diese Anzahl der Funktion
     \item \textit{terms} alle unzulässigen Wörter
     \item \textit{use\_default\_terms\_too} Wenn true, nutze auch die in \cite{HowtoWriteDocCommentsfortheJavadocTool} beschriebenen Begriffe auch wenn durch Verwendung eigener Begriffe diese überschrieben wurden
 \end{itemize}
-
- \section{Weitere interessant Metriken}
+ \subsection{Metrik: Erwähnung von Randfällen bei Methodenparameter und -rückgabewerte}
+ Methoden sind wichtige Komponenten in objektorientierten Programmiersprachen. Sie können Parameter besitzen und Werte zurückgeben, sodass eine richtige Interaktion mit ihnen elementar ist. Während die Metrik in \ref{chapter:method_doc} nur analysiert hat, ob ein Parameter bzw. der Rückgabewert überhaupt kommentiert wurde, soll in dieser Metrik auch eine einfache semantische Analyse durchgeführt werden. Im Fokus steht dabei die Behandlung von Nullwerten. Einige Datentypen können den Wert \textit{null} besitzen, der oft für einen ungültigen Wert steht. Diese Nullwerte müssen gesondert behandelt werden, da beispielsweise das Aufrufen einer Methode eines Objektes, welches null ist, zu Ausnahmen führen kann.
+ 
+ Da Methoden Eingaben entgegennehmen und Ausgaben zurückgeben können, ist es wichtig zu wissen, ob diese Methode Nullwerte als Eingabe akzeptiert oder Null zurückgeben kann, da so der Benutzer der Methode diese korrekt verwenden kann. Dies sollte auch in der Dokumentation erwähnt werden \cite{javadoc_coding_standards}. Auch die Autoren in \cite[S. 260 ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies} sind der Ansicht, dass hier eine häufige Fehlerquelle vorliegt und entwickelten ein Programm, um diese Fehler zu analysieren und dabei auch zu prüfen, ob die Angaben in der Dokumentation auch stimmen. (siehe Kapitel \ref{@tComment})
+ 
+ Diese Metrik analysiert, ob die Parameter und der Rückgabewert einer Methode so dokumentiert sind, dass es klar ist, ob Nullwerte als Eingabe zulässig sind oder zurückgegeben werden können. Anders als das Programm in \cite[S. 260 ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies} soll hier nicht überprüft werden, ob die Angaben in der Dokumentation auch korrekt sind und somit Dokumentation und Code konsistent sind. Dies ist aufgrund der Komplexität von Java-Code und Quellcode anderer Programmiersprachen nicht trivial. Daher wurde hier darauf verzichtet.
+ 
+ Im ersten Schritt der Metrik werden die Datentypen aller Parameter mit den Beschreibungstext des jeweiligen Parameters in der Dokumentation verknüpft, sodass ein Array von Tupeln entsteht. Wurde ein Parameter nicht dokumentiert, so wird für die Beschreibung eine leere Zeichenkette verwendet. Auch für den Rückgabetyp wird ein entsprechender Tupel erzeugt. Datentypen, die gemäß den Regeln der Programmiersprache nie null sein können, werden herausgefiltert. Hierzu wird die sprachspezifische Funktion \textit{canTypeBeNull} verwendet, die besipielsweise für primitive Datentypen in Java \textit{false} zurückgeben soll. 
+ 
+ Anschließend wird für jede Beschreibung geprüft, ob eine Behandlung von null erwähnt wird. Dazu wird die \ac{NLP}-Bibliothek \enquote{compromise}\footnote{\href{https://www.npmjs.com/package/compromise?activeTab=readme}{Compromise NPM-Seite (Abruf am 04.02.2022}} verwendet. Mittels dieser Bibliothek wird geprüft, ob in dem Text das englische Wort \enquote{null} in einem bestimmten Zusammenhang verwendet wird. Die folgende Auflistung zeigt exemplarisch Sätze, bei denen auf die Behandlung eines Nullwertes bzw. die Möglichkeit einen Nullwert zurückzugeben eingegangen wird:
+ \begin{enumerate}
+      \item  the parameter may not be null
+       \item  the parameter may be null,
+       \item  the value null will be treated as the default value,
+       
+      \item  returns null if value is smaller than 0
+       \item  not null",
+       \item  never returns null,
+ \end{enumerate}
+ 
+ Bei Nr.~2 oder 3 kann der Entwickler davon ausgehen, dass ein Nullwert problemlos verarbeitet werden kann. Bei Nr.~1 darf der Parameter niemals null sein.  Genauso deutet die Beschreibung in Nr. 4 darauf hin, dass Nullwerte zurückgegeben werden können. Bei Nr.~5 und 6 wird dies aber ausgeschlossen. Die Entscheidung, ob der Begriff im richtigen Kontext genannt wird, wird mittels einer Abfrage getroffen, die ähnlich wie bei einem regulären Ausdruck funktioniert. So wird beispielweise überprüft, ob das Wort \textit{null} nach einem Verb vorkommt, das auch negiert sein kann. Da das Wort \textit{null} sprachspezifisch ist und in C++ beispielsweise \textit{nullptr} heißt, wird es dynamisch mittels der sprachspezifischen Hilfsklasse (s. Kapitel \ref{chapter:langSpec}) bestimmt. 
+ 
+ Die Anzahl der Texte, in denen nicht auf das Verhalten bei Nullwerten eingegangen wird, wird anschließend gezählt. Dieser Wert wird einer beschränkt wachsenden Funktion übergeben (siehe \ref{chapter:metric_certain_words}), da desto mehr Fehler vorhanden sind, die Qualität der Dokumentation schlechter sein wird. 
+ 
+ Diese Metrik kann dabei helfen, dass solche Randfälle euch in der Dokumentation erwähnt werden und somit leicht verstanden werden können. Somit können neue Entwickler Methoden sicherer benutzen und mögliche Fehler vermeiden. Allerdings wird wie erwähnt die Richtigkeit der Angaben geprüft, sodass eine Inkonsistenz zwischen Quellcode und Dokumentation entstehen kann. Zudem besitzt Java sogenannte \textit{Annotation (z.~dt. Anmerkung}, die eine dokumentationsähnliche Aufgabe erfüllen können. So kann ein Parameter beispielsweise mit \textit{NotNull} markiert werden, was eine IDE dazu nutzen kann, um den Nutzer auf Fehler bei der Verwendung einer Methode hinzuweisen. Auch andere Programmiersprache haben ähnliche Konstrukte (z.~B. Attribute in C\#). Da diese Möglichkeit besteht, kann die Wiederholung in der Dokumentation als redundant angesehen werden. Zudem besteht die Gefahr, dass bestimmte Ausdrücke nicht richtig interpretiert werden. Beispielsweise kann ein Text durchaus auf die Behandlung von null eingehen, aber nicht die Standardformulierungen (wie z.~B. in der Auflistung)verwenden, die hier überwiegend geprüft werden.
+ 
+   \subsubsection{Parameter}
+\begin{itemize}
+    \item \textit{only\_public} Wenn true,  überprüfe nur öffentliche Methoden
+    \item \textit{k} Der Wachstumsfaktor für das beschränkte Wachstum
+    
+    \item \textit{terms} alle Möglichen Wortkombinationen zur Prüfung, ob eine Behandlung von \textit{null} erwöhnt wird. Die genaue Syntax kann bei der Dokumentation von Compromise \footnote{\href{https://observablehq.com/@spencermountain/compromise-match-syntax}{Compromise Dokumentation (Abruf am 04.02.2022}} nachgelesen werden.
+    
+\end{itemize}
+ 
+ \section{Weitere interessante Metriken}
  Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus eine Betrachtung wert sind. Auch hier werden einige Vor- und Nachteile der jeweiligen Metrik genannt. Auch diese Metriken sind im Tool implementiert. 
  \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}\label{chapter:method_long}
 Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und längere Methoden in mehrere kleinere Methoden aufzuspalten. Jede Methode sollte dabei nicht mehr als vier Codezeilen lang sein \cite[S. 34]{martin2009clean}.
@@ -149,7 +183,7 @@ Diese Metrik hilft dabei, Fehler bei der Formatierung der Dokumentation zu verhi
  
  Die Anzahl der unbekannten bzw. falschen Wörter wird ähnlich wie in Kapitel \ref{chapter:metric_formatting} an einer beschränkt wachsenden Funktion übergeben, sodass viele Rechtschreibfehler bestraft werden. Im Gegensatz zu der Formatierungsmetrik wird standardmäßig ein eher kleiner Wachstumsfaktor von 0.05 verwendet, da ein Rechtschreibfehler nicht so gravierend ist, wie ein Formatierungsfehler, welches zu Darstellungs- oder Verarbeitungsproblemen führen kann. 
  
- Diese Metrik kann dabei helfen, die Dokumentation kleine Rechtschreibfehler zu finden, die beim Schreiben der Dokumentation schnell geschehen können. Dadurch wirkt die Dokumentation professioneller und es können in gravierenden Fällen auch Missverständnisse verhindert werden. Allerdings prüft diese Metrik nur die Rechtschreibung und nicht die Grammatik. Außerdem ist die Gefahr von falsch-positiven Ergebnissen groß, da Begrifflichkeiten der Programmierung nicht unbedingt im mitgelieferten Wörterbuch enthalten sein müssen. Zudem werden Wörter in Tags aktuell ignoriert, sodass Rechtschreibfehler dort ignoriert werden. 
+ Diese Metrik kann dabei helfen, die Dokumentation kleine Rechtschreibfehler zu finden, die beim Schreiben der Dokumentation schnell geschehen können. Dadurch wirkt die Dokumentation professioneller und es können in gravierenden Fällen auch Missverständnisse verhindert werden. Allerdings prüft diese Metrik nur die Rechtschreibung und nicht die Grammatik. Außerdem ist die Gefahr von falsch-positiven Ergebnissen groß, da Begrifflichkeiten der Programmierung nicht unbedingt im mitgelieferten Wörterbuch enthalten sein müssen. Zudem werden Wörter in Tags aktuell ignoriert, sodass Rechtschreibfehler dort nicht beachtet werden. 
  \begin{itemize}
     \item \textit{additional\_words} Ein Array von zusätzlichen Wörter, die als korrekt erkannt werden sollen
      \item
@@ -157,4 +191,7 @@ Diese Metrik hilft dabei, Fehler bei der Formatierung der Dokumentation zu verhi
     \item \textit{k} Die Wachstumsrate des beschränktes Wachstum
    
   
- \end{itemize}     
+ \end{itemize}  
+ 
+
+ 

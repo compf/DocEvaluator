@@ -185,7 +185,7 @@ Das Programm\textit{}{\/\*iComment}  wurde hauptsächlich für C-Programme entwi
 Setzt nun die Dokumentation einen Lock voraus, aber der Programmierer hat keinen Lock angefordert, können sehr schnelle und subtile Bugs entstehen, die nur schwer findbar sind. \cite[S. 145ff.]{icomment}
 
 Das Programm wurde auf dem Quellcode des Linux-Kernels und Mozilla angewandt und dabei mögliche Bugs gefunden, die später auch von den Entwicklern bestätigt wurden\cite[S. 146.]{icomment}.
-\subsubsection{@tComment}
+\subsubsection{@tComment}\label{@tComment}
 Ein anderer Ansatz, der ebenfalls mit Javadoc arbeitet, heißt \enquote{@tComment}\cite[S. 1ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies}. Dabei wurden die Konsistenz der Javadoc-Dokumentation mit dem tatsächlichen Programmcode verglichen. Anders als die vorherigen Ansätze, wird hier das Programm dynamisch ausgeführt. Dabei werden die verschiedenen Methoden und ihr dazugehörige Javadoc-Dokumentation analysiert und daraus mittels einfacher Heuristiken ermittelt, ob ein  Nullwert für einen Parameter eine Inkonsistenz zwischen Dokumentation und Quellcode offenbart.
 
 Beispielsweise kann die Dokumentation einer Java-Methode beschreiben, dass ein Parameter nicht null sein darf. Daraus kann gefolgert werden, dass ein Nullwert für diesen Parameter zu einer Ausnahme führt. Wenn diese Ausnahme dann auch genauer in der Dokumentation genauer spezifiziert ist, sollte genau diese Ausnahme bei einem Nullwert geworfen werden. 
