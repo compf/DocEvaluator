@@ -35817,9 +35817,10 @@ const levenshtein_1 = __importDefault(__nccwpck_require__(4740));
  * This class exposes some methods to calculate word count, syllables, etc
  * This will be useful if I try other NLP libraries later so the metrics don't need to be changed
  */
-class NLP_Helper {
+var NLP_Helper;
+(function (NLP_Helper) {
     //TODO find better way to count syllable, try to use old lib again which require esm (https://www.npmjs.com/package/syllable)
-    getRelevantVariables(text) {
+    function getRelevantVariables(text) {
         let corpus = (0, compromise_1.default)(text);
         compromise_1.default.extend(__nccwpck_require__(1534));
         const sent = corpus.sentences();
@@ -35829,27 +35830,36 @@ class NLP_Helper {
         const numSentences = sent.length;
         const numWords = corpus.wordCount();
         let s = corpus.terms().syllables();
-        const numSyllables = this.countSyllables(s);
+        const numSyllables = countSyllables(s);
         return { numSentences, numWords, numSyllables };
     }
-    getTokens(text) {
+    NLP_Helper.getRelevantVariables = getRelevantVariables;
+    function getTokens(text) {
         return compromise_1.default.tokenize(text).termList().map((x) => x.text);
     }
-    countSyllables(words) {
+    NLP_Helper.getTokens = getTokens;
+    function countSyllables(words) {
         let sum = 0;
         for (let z of words) {
             sum += z.syllables.length;
         }
         return sum;
     }
-    levenshtein(word1, word2) {
+    function levenshtein(word1, word2) {
         return (new levenshtein_1.default(word1, word2)).distance;
     }
-    countAbbreviations(text) {
+    NLP_Helper.levenshtein = levenshtein;
+    function countAbbreviations(text) {
         return (0, compromise_1.default)(text).abbreviations().length;
     }
-}
-exports.NLP_Helper = NLP_Helper;
+    NLP_Helper.countAbbreviations = countAbbreviations;
+    function hasOneOfTerms(sentence, terms) {
+        let corp = (0, compromise_1.default)(sentence);
+        corp.cache({ root: true });
+        return terms.some((w) => corp.has(w));
+    }
+    NLP_Helper.hasOneOfTerms = hasOneOfTerms;
+})(NLP_Helper = exports.NLP_Helper || (exports.NLP_Helper = {}));
 
 
 /***/ }),
@@ -35993,6 +36003,22 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
     getRawTextRegex() {
         return /( |^|\.|,|;)\w+}?/g;
     }
+    canTypeBeNull(type) {
+        switch (type) {
+            case "byte":
+            case "short":
+            case "int":
+            case "long":
+            case "float":
+            case "double":
+            case "boolean":
+            case "char":
+            case "void":
+                return false;
+            default:
+                return true;
+        }
+    }
 }
 exports.JavaSpecificHelper = JavaSpecificHelper;
 
@@ -36078,6 +36104,14 @@ class LanguageSpecificHelper {
                 words.push(m);
         }
         return words.join("");
+    }
+    /**
+     * Checks whether a datatype could be null in this language
+     * @param type a data type to check, may not be null
+     * @returns true if the type could be nullable, falso otherwise
+     */
+    canTypeBeNull(type) {
+        return true;
     }
 }
 exports.LanguageSpecificHelper = LanguageSpecificHelper;
@@ -36209,6 +36243,7 @@ const comment_name_coherence_metric_1 = __nccwpck_require__(3970);
 const certain_terms_count_metric_1 = __nccwpck_require__(480);
 const formatting_good_metric_1 = __nccwpck_require__(7658);
 const spelling_metric_1 = __nccwpck_require__(2337);
+const edge_case_metric_1 = __nccwpck_require__(3350);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -36289,6 +36324,7 @@ var MetricManager;
         MetricNames["certain_terms"] = "certain_terms";
         MetricNames["formatting_good"] = "formatting_good";
         MetricNames["spelling"] = "spelling";
+        MetricNames["edge_case"] = "edge_case";
     })(MetricNames = MetricManager.MetricNames || (MetricManager.MetricNames = {}));
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
@@ -36303,6 +36339,7 @@ var MetricManager;
         allMetricTypes.add(MetricNames.certain_terms, certain_terms_count_metric_1.CertainTermCountMetric);
         allMetricTypes.add(MetricNames.formatting_good, formatting_good_metric_1.FormattingGoodMetric);
         allMetricTypes.add(MetricNames.spelling, spelling_metric_1.SpellingMetric);
+        allMetricTypes.add(MetricNames.edge_case, edge_case_metric_1.EdgeCaseMetric);
     }
     const uniqueNameCountMap = new Map();
     /**
@@ -36395,6 +36432,11 @@ var MetricManager;
                 };
             case MetricNames.spelling:
                 return { additional_words: [], k: 0.05, dictionary_path: "" };
+            case MetricNames.edge_case:
+                return { terms: ["(#Negative)? #Verb null", "if null", "null (will be | is)? treated as", "null ~return~", "null if", "#Negative null"],
+                    only_public: true,
+                    k: 0.1
+                };
             default:
                 return {};
         }
@@ -36531,18 +36573,6 @@ const util_1 = __nccwpck_require__(996);
  * Punishes comments with abbreviation as they are usually harder to read
  */
 class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMetric {
-    constructor(uniqueName, params) {
-        super(uniqueName, params);
-        this.nlp_helper = new NLP_Helper_1.NLP_Helper();
-        let p = this.getParams();
-        if (p.use_default_terms_too) {
-            let defaultValue = metric_manager_1.MetricManager.getDefaultMetricParam(metric_manager_1.MetricManager.MetricNames.certain_terms);
-            for (let t of defaultValue.terms) {
-                if (!p.terms.includes(t))
-                    p.terms.push(t);
-            }
-        }
-    }
     analyze(component, builder, langSpec) {
         let params = this.getParams();
         if (component.getComment() == null)
@@ -36562,13 +36592,24 @@ class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMet
         let score = this.processResult(termCount, logMessages);
         this.pushResult(builder, score, this.createLogMessages(logMessages, component), component);
     }
+    constructor(uniqueName, params) {
+        super(uniqueName, params);
+        let p = this.getParams();
+        if (p.use_default_terms_too) {
+            let defaultValue = metric_manager_1.MetricManager.getDefaultMetricParam(metric_manager_1.MetricManager.MetricNames.certain_terms);
+            for (let t of defaultValue.terms) {
+                if (!p.terms.includes(t))
+                    p.terms.push(t);
+            }
+        }
+    }
     countSimilarTerms(text) {
         let params = this.getParams();
         let count = 0;
-        let words = this.nlp_helper.getTokens(text);
+        let words = NLP_Helper_1.NLP_Helper.getTokens(text);
         for (let w1 of words) {
             for (let w2 of params.terms) {
-                if (this.nlp_helper.levenshtein(w1, w2) <= params.levenshtein_distance) {
+                if (NLP_Helper_1.NLP_Helper.levenshtein(w1, w2) <= params.levenshtein_distance) {
                     count++;
                 }
             }
@@ -36626,16 +36667,13 @@ const documentation_analysis_metric_1 = __nccwpck_require__(5830);
  * On the other hand comments that have nothing to do with the name will be punished
  */
 class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBasedMetric {
-    constructor() {
-        super(...arguments);
-        this.nlp_helper = new NLP_Helper_1.NLP_Helper();
-    }
     analyze(component, builder, langSpec) {
         var _a;
         if (component.getComment() == null || ((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) == null)
             return;
         let componentNameWords = this.splitByNameConvention(component.getName());
-        let commentWords = this.nlp_helper.getTokens(component.getComment().getGeneralDescription());
+        let rawText = langSpec.getRawText(component.getComment().getGeneralDescription());
+        let commentWords = NLP_Helper_1.NLP_Helper.getTokens(rawText);
         if (commentWords.length == 0)
             return;
         let similarWordsCount = 0;
@@ -36665,7 +36703,7 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
     }
     areSimilar(word1, word2) {
         let params = this.getParams();
-        return this.nlp_helper.levenshtein(word1, word2) <= params.levenshtein_distance;
+        return NLP_Helper_1.NLP_Helper.levenshtein(word1, word2) <= params.levenshtein_distance;
     }
     splitByNameConvention(name) {
         let result = [];
@@ -36823,6 +36861,78 @@ exports.DocumentationAnalysisMetric = DocumentationAnalysisMetric;
 
 /***/ }),
 
+/***/ 3350:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.EdgeCaseMetric = void 0;
+const method_component_1 = __nccwpck_require__(4725);
+const structured_comment_1 = __nccwpck_require__(4048);
+const NLP_Helper_1 = __nccwpck_require__(2396);
+const component_based__metric_1 = __nccwpck_require__(5165);
+const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+const util_1 = __nccwpck_require__(996);
+class EdgeCaseMetric extends component_based__metric_1.ComponentBasedMetric {
+    analyze(component, builder, langSpec) {
+        if (!(component instanceof method_component_1.MethodComponent) || component.getComment() == null)
+            return;
+        let method = component;
+        let errorCount = 0;
+        let params = this.getParams();
+        let logMessages = [];
+        let typeDescriptionPairs = this.getTypeDescriptionPairs(method, langSpec);
+        for (let pair of typeDescriptionPairs) {
+            if (!NLP_Helper_1.NLP_Helper.hasOneOfTerms(pair.text, params.terms)) {
+                errorCount++;
+                logMessages.push(pair.name + " may not mention handling of null values");
+            }
+        }
+        let result = this.processResult(errorCount, logMessages);
+        this.pushResult(builder, result, this.createLogMessages(logMessages, component), component);
+    }
+    shallConsider(component) {
+        let params = this.getParams();
+        let consider = params.only_public ? component.getComponentMetaInformation().isPublic() : true;
+        return consider && super.shallConsider(component);
+    }
+    processResult(result, logMessages) {
+        let params = this.getParams();
+        return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
+    }
+    getTypeDescriptionPairs(component, langSpec) {
+        let result = [];
+        let docParams = component.getComment().getTags();
+        let params = component.getParams();
+        for (let param of params) {
+            if (langSpec.canTypeBeNull(param.type)) {
+                let paramDescr = docParams.filter((p) => p.getKind() == structured_comment_1.StructuredCommentTagKind.PARAM && p.getParam() == param.name);
+                if (paramDescr.length == 0 || paramDescr.length == 1 && paramDescr[0].getDescription() == null) {
+                    result.push({ name: param.name, type: param.type, text: "" });
+                }
+                else {
+                    result.push({ name: param.name, type: param.type, text: paramDescr[0].getDescription() });
+                }
+            }
+        }
+        if (langSpec.canTypeBeNull(component.getReturnType())) {
+            let returnTags = (docParams.filter((p) => p.getKind() == structured_comment_1.StructuredCommentTagKind.RETURN));
+            if (returnTags.length > 0 && returnTags[0].getDescription() != null) {
+                result.push({ name: "return", type: component.getReturnType(), text: returnTags[0].getDescription() });
+            }
+            else {
+                result.push({ name: "return", type: component.getReturnType(), text: "" });
+            }
+        }
+        return result;
+    }
+}
+exports.EdgeCaseMetric = EdgeCaseMetric;
+
+
+/***/ }),
+
 /***/ 544:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -36841,10 +36951,10 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         let textsToConsider = this.getTextToConsider(component, params);
         if (textsToConsider.length == 0)
             return;
-        let nlp_helper = new NLP_Helper_1.NLP_Helper();
         let sum = 0;
         for (let text of textsToConsider) {
-            sum += this.calcFleshKincaid(nlp_helper.getRelevantVariables(text.replace("\n", "")));
+            let rawText = langSpec.getRawText(text);
+            sum += this.calcFleshKincaid(NLP_Helper_1.NLP_Helper.getRelevantVariables(rawText.replace("\n", " ")));
         }
         let msgs = [];
         let score = sum / textsToConsider.length;
