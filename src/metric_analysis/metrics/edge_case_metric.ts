@@ -11,6 +11,9 @@ interface ParamsType{only_public:boolean,terms:string[],k:number}
 export class EdgeCaseMetric extends ComponentBasedMetric{
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
         if(!(component instanceof MethodComponent) || component.getComment()==null)return;
+        if(!this.hasExpandedTerms){
+            this.expandTerms(langSpec);
+        }
         let method=component as MethodComponent;
         let errorCount=0;
         let params=this.getParams() as ParamsType;
@@ -34,6 +37,16 @@ export class EdgeCaseMetric extends ComponentBasedMetric{
     protected processResult(result: number, logMessages: string[]): number {
         let params=this.getParams() as ParamsType;
         return Utils.boundedGrowth(MIN_SCORE,MAX_SCORE,params.k,result);
+    }
+    private hasExpandedTerms=false;
+    private expandTerms(langSpec:LanguageSpecificHelper){
+        let params=this.getParams() as ParamsType;
+        const nullPlaceholder="%null"
+        let nullValue=langSpec.getNullKeyword();
+        for(let i=0;i<params.terms.length;i++){
+            params.terms[i]=  params.terms[i].replace(nullPlaceholder,nullValue);
+        }
+        this.hasExpandedTerms=true;
     }
     private getTypeDescriptionPairs(component:MethodComponent,langSpec:LanguageSpecificHelper):{name:string,type:string,text:string}[]{
         let result:{name:string,type:string,text:string}[]=[];

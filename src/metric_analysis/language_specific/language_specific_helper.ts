@@ -82,4 +82,12 @@ export class LanguageSpecificHelper{
     canTypeBeNull(type:string):boolean{
         return true;
     }
+    /**
+     * returs the null keyword for the programming language (e.g. null in Java and other languages
+     * but nullptr would be the value in C++
+     * @returns the keyword for a null value
+     */
+    getNullKeyword():string{
+        return "null";
+    }
 }

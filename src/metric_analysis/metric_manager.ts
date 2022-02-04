@@ -201,7 +201,7 @@ export namespace MetricManager {
             case MetricNames.spelling:
                 return {additional_words:[],k:0.05,dictionary_path:""};
             case MetricNames.edge_case:
-                return {terms:["(#Negative)? #Verb null","if null","null (will be | is)? treated as","null ~return~","null if","#Negative null"],
+                return {terms:["(#Negative)? #Verb %null","if %null","%null (will be | is)? treated as","%null ~return~","%null if","#Negative %null"],
                 only_public:true,
                 k:0.1
             }
