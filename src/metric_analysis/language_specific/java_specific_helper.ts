@@ -47,5 +47,22 @@ export class JavaSpecificHelper extends LanguageSpecificHelper{
     override getRawTextRegex(): RegExp {
         return /( |^|\.|,|;)\w+}?/g;
     }
+    override canTypeBeNull(type: string): boolean {
+        switch(type){
+           
+            case "byte":
+            case "short":
+            case "int":
+            case "long":
+            case "float":
+            case "double":
+            case "boolean":
+            case "char":
+            case "void":
+                return false;
+            default:
+                return true;
+        }
+    }
 
 }

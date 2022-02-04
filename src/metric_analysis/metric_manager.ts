@@ -15,6 +15,7 @@ import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_met
 import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 import { FormattingGoodMetric } from "./metrics/formatting_good_metric";
 import { SpellingMetric } from "./metrics/spelling_metric";
+import { EdgeCaseMetric } from "./metrics/edge_case_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -88,7 +89,8 @@ export namespace MetricManager {
         comment_name_coherence = "comment_name_coherence",
         certain_terms = "certain_terms",
         formatting_good = "formatting_good",
-        spelling="spelling"
+        spelling="spelling",
+        edge_case="edge_case"
     }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
     const allMetricTypes: BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric> = new BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric>()
@@ -103,6 +105,7 @@ export namespace MetricManager {
         allMetricTypes.add(MetricNames.certain_terms, CertainTermCountMetric);
         allMetricTypes.add(MetricNames.formatting_good, FormattingGoodMetric);
         allMetricTypes.add(MetricNames.spelling,SpellingMetric);
+        allMetricTypes.add(MetricNames.edge_case,EdgeCaseMetric);
 
     }
     const uniqueNameCountMap: Map<string, number> = new Map<string, number>();
@@ -197,6 +200,11 @@ export namespace MetricManager {
                 };
             case MetricNames.spelling:
                 return {additional_words:[],k:0.05,dictionary_path:""};
+            case MetricNames.edge_case:
+                return {terms:["(#Negative)? #Verb null","if null","null (will be | is)? treated as","null ~return~","null if","#Negative null"],
+                only_public:true,
+                k:0.1
+            }
             default:
                 return {}
         }

@@ -74,4 +74,12 @@ export class LanguageSpecificHelper{
         }
         return words.join("");
     }
+    /**
+     * Checks whether a datatype could be null in this language
+     * @param type a data type to check, may not be null
+     * @returns true if the type could be nullable, falso otherwise
+     */
+    canTypeBeNull(type:string):boolean{
+        return true;
+    }
 }

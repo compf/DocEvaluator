@@ -39,6 +39,11 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
     export function countAbbreviations(text:string):number{
         return nlp(text).abbreviations().length as unknown as number;
     }
+    export function hasOneOfTerms(sentence:string,terms:string[]):boolean{
+        let corp=nlp(sentence);
+        corp.cache({root:true})
+        return terms.some((w)=>corp.has(w));
+    }
 
 }
 

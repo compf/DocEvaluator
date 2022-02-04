@@ -116,4 +116,27 @@ test("test spelling with additional words",()=>{
     "spelling2",
     params,95.122    ,2)
 });
+test("nlp matching, null check",()=>{
+    
+    let terms=["(#Negative)? #Verb null","if null","null (will be | is)? treated as","null ~return~","null if","#Negative null"];
+    let sentences=[
+        "returns null if smaller than 0",
+        "may not be null",
+        "the value null will be treated as invalid",
+        "not null",
+        "never returns null",
+        "cannot return null",
+    ];
+    for(let sentence of sentences){
+        expect(NLP_Helper.hasOneOfTerms(sentence,terms)).toBeTruthy();
+    }
+    expect(NLP_Helper.hasOneOfTerms("",terms)).toBeFalsy();
+   
+   
+});
+test("test edge case metric",()=>{
+let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.edge_case);
+const expected=95.2418;
+testSimpleFile(MetricManager.MetricNames.edge_case,"testDir/EdgeCaseTest.java","edge_case",params,expected,3);
+});
 
