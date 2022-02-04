@@ -36113,6 +36113,14 @@ class LanguageSpecificHelper {
     canTypeBeNull(type) {
         return true;
     }
+    /**
+     * returs the null keyword for the programming language (e.g. null in Java and other languages
+     * but nullptr would be the value in C++
+     * @returns the keyword for a null value
+     */
+    getNullKeyword() {
+        return "null";
+    }
 }
 exports.LanguageSpecificHelper = LanguageSpecificHelper;
 
@@ -36433,7 +36441,7 @@ var MetricManager;
             case MetricNames.spelling:
                 return { additional_words: [], k: 0.05, dictionary_path: "" };
             case MetricNames.edge_case:
-                return { terms: ["(#Negative)? #Verb null", "if null", "null (will be | is)? treated as", "null ~return~", "null if", "#Negative null"],
+                return { terms: ["(#Negative)? #Verb %null", "if %null", "%null (will be | is)? treated as", "%null ~return~", "%null if", "#Negative %null"],
                     only_public: true,
                     k: 0.1
                 };
@@ -36875,9 +36883,16 @@ const component_based__metric_1 = __nccwpck_require__(5165);
 const documentation_analysis_metric_1 = __nccwpck_require__(5830);
 const util_1 = __nccwpck_require__(996);
 class EdgeCaseMetric extends component_based__metric_1.ComponentBasedMetric {
+    constructor() {
+        super(...arguments);
+        this.hasExpandedTerms = false;
+    }
     analyze(component, builder, langSpec) {
         if (!(component instanceof method_component_1.MethodComponent) || component.getComment() == null)
             return;
+        if (!this.hasExpandedTerms) {
+            this.expandTerms(langSpec);
+        }
         let method = component;
         let errorCount = 0;
         let params = this.getParams();
@@ -36900,6 +36915,15 @@ class EdgeCaseMetric extends component_based__metric_1.ComponentBasedMetric {
     processResult(result, logMessages) {
         let params = this.getParams();
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
+    }
+    expandTerms(langSpec) {
+        let params = this.getParams();
+        const nullPlaceholder = "%null";
+        let nullValue = langSpec.getNullKeyword();
+        for (let i = 0; i < params.terms.length; i++) {
+            params.terms[i] = params.terms[i].replace(nullPlaceholder, nullValue);
+        }
+        this.hasExpandedTerms = true;
     }
     getTypeDescriptionPairs(component, langSpec) {
         let result = [];
