@@ -35829,9 +35829,10 @@ var NLP_Helper;
         */
         const numSentences = sent.length;
         const numWords = corpus.wordCount();
-        let s = corpus.terms().syllables();
-        const numSyllables = countSyllables(s);
-        return { numSentences, numWords, numSyllables };
+        let syllables = corpus.terms().syllables();
+        const numSyllables = countSyllables(syllables);
+        let numHardWords = syllables.filter((s) => s.syllables.length > 2).length;
+        return { numSentences, numWords, numSyllables, numHardWords };
     }
     NLP_Helper.getRelevantVariables = getRelevantVariables;
     function getTokens(text) {
@@ -36252,6 +36253,7 @@ const certain_terms_count_metric_1 = __nccwpck_require__(480);
 const formatting_good_metric_1 = __nccwpck_require__(7658);
 const spelling_metric_1 = __nccwpck_require__(2337);
 const edge_case_metric_1 = __nccwpck_require__(3350);
+const gunning_fog_metric_1 = __nccwpck_require__(762);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -36333,6 +36335,7 @@ var MetricManager;
         MetricNames["formatting_good"] = "formatting_good";
         MetricNames["spelling"] = "spelling";
         MetricNames["edge_case"] = "edge_case";
+        MetricNames["gunning_fog"] = "gunning_fog";
     })(MetricNames = MetricManager.MetricNames || (MetricManager.MetricNames = {}));
     const allMetrics = new Map();
     const allMetricTypes = new BiMap();
@@ -36348,6 +36351,7 @@ var MetricManager;
         allMetricTypes.add(MetricNames.formatting_good, formatting_good_metric_1.FormattingGoodMetric);
         allMetricTypes.add(MetricNames.spelling, spelling_metric_1.SpellingMetric);
         allMetricTypes.add(MetricNames.edge_case, edge_case_metric_1.EdgeCaseMetric);
+        allMetricTypes.add(MetricNames.gunning_fog, gunning_fog_metric_1.GunningFogMetric);
     }
     const uniqueNameCountMap = new Map();
     /**
@@ -36425,6 +36429,7 @@ var MetricManager;
             case MetricNames.public_members_only:
                 return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*", ignore_getter_setter: false };
             case MetricNames.flesch:
+            case MetricNames.gunning_fog:
                 return { consider_tags: false };
             case MetricNames.comment_name_coherence:
                 return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };
@@ -36978,7 +36983,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         let sum = 0;
         for (let text of textsToConsider) {
             let rawText = langSpec.getRawText(text);
-            sum += this.calcFleshKincaid(NLP_Helper_1.NLP_Helper.getRelevantVariables(rawText.replace("\n", " ")));
+            sum += this.calcReadability(NLP_Helper_1.NLP_Helper.getRelevantVariables(rawText.replace("\n", " ")));
         }
         let msgs = [];
         let score = sum / textsToConsider.length;
@@ -36987,7 +36992,11 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     }
     processResult(score, msgs) {
         let finalScore = 0;
-        if (score <= 70) {
+        if (score < 0) {
+            finalScore = 0;
+            msgs.push("Flesh score is in invalid range");
+        }
+        else if (score <= 70) {
             finalScore = this.quadratic(0, 140, -1 / 49, score);
             if (score < 40) {
                 msgs.push("The documentation seems to be very hard to read. Consider rewriting it");
@@ -37021,7 +37030,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         }
         return textsToConsider;
     }
-    calcFleshKincaid(vars) {
+    calcReadability(vars) {
         return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
 }
@@ -37141,6 +37150,44 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
     }
 }
 exports.FormattingGoodMetric = FormattingGoodMetric;
+
+
+/***/ }),
+
+/***/ 762:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GunningFogMetric = void 0;
+const flesch_metric_1 = __nccwpck_require__(544);
+class GunningFogMetric extends flesch_metric_1.FleschMetric {
+    calcReadability(vars) {
+        return 0.4 * (vars.numWords / vars.numSentences + vars.numHardWords);
+    }
+    processResult(score, msgs) {
+        let finalScore = 0;
+        if (score < 0) {
+            finalScore = 0;
+            msgs.push("Invalid gunning fog value");
+        }
+        else if (score <= 8) {
+            finalScore = (15 / 8) * score + 85;
+            if (score <= 4) {
+                msgs.push("The comment is maybe a little bit to easy");
+            }
+        }
+        else if (score <= 16) {
+            finalScore = (-25 / 16) * score * (score - 16);
+        }
+        else {
+            finalScore = 0;
+        }
+        return finalScore;
+    }
+}
+exports.GunningFogMetric = GunningFogMetric;
 
 
 /***/ }),
