@@ -36446,7 +36446,8 @@ var MetricManager;
             case MetricNames.spelling:
                 return { additional_words: [], k: 0.05, dictionary_path: "" };
             case MetricNames.edge_case:
-                return { terms: ["(#Negative)? #Verb %null", "if %null", "%null (will be | is)? treated as", "%null ~return~", "%null if", "#Negative %null"],
+                return {
+                    terms: edge_case_metric_1.DEFAULT_EDGE_CASE_TERMS,
                     only_public: true,
                     k: 0.1
                 };
@@ -36880,7 +36881,7 @@ exports.DocumentationAnalysisMetric = DocumentationAnalysisMetric;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EdgeCaseMetric = void 0;
+exports.DEFAULT_EDGE_CASE_TERMS = exports.EdgeCaseMetric = void 0;
 const method_component_1 = __nccwpck_require__(4725);
 const structured_comment_1 = __nccwpck_require__(4048);
 const NLP_Helper_1 = __nccwpck_require__(2396);
@@ -36958,6 +36959,7 @@ class EdgeCaseMetric extends component_based__metric_1.ComponentBasedMetric {
     }
 }
 exports.EdgeCaseMetric = EdgeCaseMetric;
+exports.DEFAULT_EDGE_CASE_TERMS = ["(#Negative)? #Verb %null", "if %null", "%null (will be | is)? treated as", "%null ~return~", "%null if", "#Negative %null"];
 
 
 /***/ }),
