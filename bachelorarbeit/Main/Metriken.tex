@@ -122,7 +122,7 @@ Anschließend wird diese Anzahl der Funktion
  
  \section{Weitere interessante Metriken}
  Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus eine Betrachtung wert sind. Auch hier werden einige Vor- und Nachteile der jeweiligen Metrik genannt. Auch diese Metriken sind im Tool implementiert. 
- \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}\label{chapter:method_long}
+ \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}\label{chapter:metric_method_long}
 Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und längere Methoden in mehrere kleinere Methoden aufzuspalten. Jede Methode sollte dabei nicht mehr als vier Codezeilen lang sein \cite[S. 34]{martin2009clean}.
  
  Dennoch wird diese Empfehlung nicht immer befolgt. Im Kontext der Softwaredokumentation sollten diese größeren Methoden allerdings umso eher dokumentiert werden, da es ansonsten schwieriger ist, die Bedeutung der verschiedenen Parameter, des Rückgabewertes und allgemeinen Rolle der Funktion zu erfassen. Daher macht es Sinn undokumentierte Methoden mit vielen Codezeilen schlechter zu bewerten.
@@ -192,6 +192,30 @@ Diese Metrik hilft dabei, Fehler bei der Formatierung der Dokumentation zu verhi
    
   
  \end{itemize}  
- 
+ \section{Algorithmen zur Bildung eines Gesamtergebnisses}
+Zur Bildung eines Gesamtergebnisses aus verschiedenen Teilresultaten gibt es verschiedene Möglichkeiten, die in diesen Abschnitt vorgestellt werden. Jeder vorgestellte Algorithmus hat bestimmte Voraussetzungen und ist nicht in jeder Situation gut geeignet.
 
+\subsection{Klassische Algorithmen}
+Die klassischen Algorithmen zur Berechnung eines Ergebnisses aus mehreren Ergebnissen sind hinlänglich bekannt. Sie alle basieren auf der Annahme, dass die dahinter liegende Verteilung symmetrisch ist, Im Kontext der besprochenen Metriken bedeutet dies, dass die Wahrscheinlichkeit für eine gute Bewertung ungefähr genauso sein sollte wie eine schlechte Bewertung. Bei vielen Metriken zur Bewertung der Softwarequalität kann diese Annahme nicht getroffen werden \cite[S. 313]{Youcantcontroltheunfamiliar:Astudyontherelationsbetweenaggregationtechniquesforsoftwaremetrics}. Auch bei den vorgestellten Metriken muss diese Annahme nicht zwangsläufig stimmen, sodass die Gesamtbewertung stets kritisch hinterfragt werden sollte. 
+\subsubsection{Arithmetischer Mittelwert}
+Der arithmetische Mittelwert wird durch die Klasse \textit{MetricResultBuilder} implementiert. Dieser Algorithmus berücksichtigt jedes Ergebnis gleichermaßen. Dies ist insbesondere dann sinnvoll, wenn keine gute Kriterien für die Gewichtung von Metriken, Dateien oder Komponenten gefunden werden können. Es sollte allerdings auch beachtet werden, dass der Mittelwert extreme Ausreißer berücksichtigt. Dies kann hier sinnvoll sein, da eine in Teilen sehr schlechte Dokumentation besser berücksichtigt wird und so ein verlässliches Gesamtergebnis geliefert wird.
+
+
+\subsubsection{Median}
+Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultate nach den bekannten Median-Algorithmus verarbeitet. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnissen gebildet. 
+
+Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat. Bei der überschaubaren Anzahl an Metriken wird dies weniger relevant sein, bei einer Anwendung des Medians auf vielen Dateien durchaus wohl. Zudem kann sich der Median stark ändern, wenn neue Komponenten hinzugefügt oder entfernt werden
+
+
+\subsubsection{Gewichteter Mittelwert}
+Der gewichtete Mittelwert ist in der Klasse \textit{WeightedMetricResultBuilder} implementiert. Die Zuweisung der Gewichte erfolgt wie in Kapitel \ref{chapter_weights_assign} beschrieben durch einen \textit{WeightResolver}. Die Gewichte müssen nicht normiert werden, da dies während der Berechnung implizit erledigt wird. Die Resultate jeder Metrik werden multipliziert mit dessen Gewicht, dann aufsummiert und zuletzt durch die Summe aller Gewichte geteilt. 
+
+
+Dieser Algorithmus ermöglicht es, bestimmte Metriken zu bevorzugen bzw. zu benachteiligen. Dies ist sinnvoll, da nicht jede Metrik immer ein aussagekräftiges Ergebnis liefert und bestimmte Metriken je nach Situation ein besseres Bild über die Dokumentationsqualität liefern. Allerdings ist auch zu beachten, dass die Wahl der Gewichte nicht trivial ist und ein Vergleich von Ergebnissen, die verschiedene Gewichte verwenden, nicht sinnvoll ist.
+
+\subsubsection{Gewichteter Median}
+Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} implementiert. Dabei wird zunächst die Summe der Gewichte berechnet und die Resultate nach ihrem Gewicht sortiert. Anschließend werden die sortierten Resultate und ihre Gewichte so lange aufsummiert, bis diese temporäre Summe die Hälfte der Gesamtsumme überschreitet. Das Metrikergebnis, bei der diese Bedingung zutrifft, ist das gesuchte Gesamtergebnis. Die Vor- und Nachteile dieses Algorithmus entsprechen den Vor- und Nachteilen des gewichteten Mittelwerts und des Medians. So muss auch hier eine Sortierung durchgeführt werden und die Wahl der richtigen Gewichte ist nicht trivial. 
+
+ \subsection{Algorithmen aus der Ökonomie}
  
+ Als Alternative zu den klassischen Algorithmen wurden Verfahren aus den Wirtschaftswissenschaften vorgestellt, die eine bessere Aggregierung der Einzelergebnisse ermöglichen sollen. Diese Verfahren werden in der Ökonomie benutzt, um die Ungleichheit von Einkommen mathematisch darzustellen. So besitzen in den meisten Staaten viele Menschen nur wenig Einkommen und nur einige Menschen ein sehr hohes Einkommen. Auch auf Softwareprojekten lässt sich diese Erfahrung übertragen, da beispielsweise es nur sehr wenige Methoden mit sehr viel Codezeilen geben wird, aber dafür sehr viele Methoden mit einer relativ kleinen Anzahl an Zeilen \cite[S. 314]{Youcantcontroltheunfamiliar:Astudyontherelationsbetweenaggregationtechniquesforsoftwaremetrics}. Einige Metriken (wie z.~B. in Kapitel \ref{chapter:metric_method_long}) basierend auf die Anzahl der \ac{LOC}, sodass eine Anwendung der klassischen Algorithmen problematisch sein kann, wenn die Verteilung sehr asymmetrisch ist. 

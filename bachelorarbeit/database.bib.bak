@@ -1081,4 +1081,11 @@ facilitating its maintenance.},
   url   = {https://www.doxygen.nl/manual/docblocks.html},
 }
 
+@WWW{javadoc_coding_standards,
+  author = {Stephen Colebourne},
+  title  = {Javadoc coding standards},
+  date   = {2012-11-23},
+  url    = {https://blog.joda.org/2012/11/javadoc-coding-standards.html},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}

@@ -153,27 +153,7 @@ Bei der Suche nach dem passenden Gewicht zu den Dateien und Komponenten kann es 
 
 Jedes \textit{MetricResult}-Objekt enthält eine Zeichenkette, die den Erzeuger des Ergebnisses repräsentiert; so kann jedes Einzelresultat passend gewichtet werden. Bei der Bildung eines Gesamtergebnis aus einzelnen Teilresultaten mittels der Methode \textit{getAggregatedResult} muss das neue \textit{MetricResult}-Objekt ebenfalls ein Erzeuger besitzen. Dieser Erzeuger wird vom Anwender der Funktion übergeben. Werden beispielsweise die Ergebnisse mehrere Metriken aber einer Datei zusammengefasst, so ist der neue Erzeuger der Dateipfad. Bei dem endgültigen Gesamtergebnis ist eine Gewichtung nicht mehr sinnvoll, daher kann dann eine leere Zeichenkette übergeben werden.
 
-\subsection{Implementierte Algorithmen zur Bildung eines Gesamtergebnisses}
-In den folgenden Unterabschnitten wird jeder Algorithmus, welches ein Gesamtresultat bildet, kurz erläutert und dabei kurz auf die Vor- und Nachteile eingegangen. 
 
-\subsubsection{Arithmetischer Mittelwert}
-Der arithmetische Mittelwert wird durch die Klasse \textit{MetricResultBuilder} implementiert. Dieser Algorithmus berücksichtigt jedes Ergebnis gleichermaßen. Dies ist insbesondere dann sinnvoll, wenn keine gute Kriterien für die Gewichtung von Metriken, Datein oder Komponenten gefunden werden können. Es sollte allerdings auch beachtet werden, dass der Mittelwert extreme Ausreißer berücksichtigt. Dies kann hier sinnvoll sein, da eine in Teilen sehr schlechte Dokumentation besser berücksichtigt wird und so ein verlässliches Gesamtergebnis geliefert wird.
-
-
-\subsubsection{Median}
-Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultate nach den bekannten Median-Algorithmus verarbeitet. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnissen gebildet. 
-
-Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat. Bei der überschaubaren Anzahl an Metriken wird dies weniger relevant sein, bei einer Anwendung des Medians auf vielen Dateien durchaus wohl.
-
-
-\subsubsection{Gewichteter Mittelwert}
-Der gewichtete Mittelwert ist in der Klasse \textit{WeightedMetricResultBuilder} implementiert. Die Zuweisung der Gewichte erfolgt wie in Kapitel \ref{chapter_weights_assign} beschrieben durch einen \textit{WeightResolver}. Die Gewichte müssen nicht normiert werden, da dies während der Berechnung implizit erledigt wird. Die Resultate jeder Metrik werden multipliziert mit dessen Gewicht, dann aufsummiert und zuletzt durch die Summe aller Gewichte geteilt. 
-
-
-Dieser Algorithmus ermöglicht es, bestimmte Metriken zu bevorzugen bzw. zu benachteiligen. Dies ist sinnvoll, da nicht jede Metrik immer ein aussagekräftiges Ergebnis liefert und bestimmte Metriken je nach Situation ein besseres Bild über die Dokumentationsqualität liefern. Allerdings ist auch zu beachten, dass die Wahl der Gewichte nicht trivial ist und ein Vergleich von Ergebnissen, die verschiedene Gewichte verwenden, nicht sinnvoll ist.
-
-\subsubsection{Gewichteter Median}
-Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} implementiert. Dabei wird zunächst die Summe der Gewichte berechnet und die Resultate nach ihrem Gewicht sortiert. Anschließend werden die sortierten Resultate und ihre Gewichte so lange aufsummiert, bis diese temporäre Summe die Hälfte der Gesamtsumme überschreitet. Das Metrikergebnis, bei der diese Bedingung zutrifft, ist das gesuchte Gesamtergebnis. Die Vor- und Nachteile dieses Algorithmus entsprechen den Vor- und Nachteilen des gewichteten Mittelwerts und des Medians. So muss auch hier eine Sortierung durchgeführt werden und die Wahl der richtigen Gewichte ist nicht trivial. 
 \subsection{Sprachspezifische Informationen für Metriken}\label{chapter:langSpec}
 Da das Tool für möglichst viele objektorientierte Programmiersprachen konzipiert werden soll, muss eine Generalisierung erfolgen, da jede Sprache ihre Eigenheiten hat und möglicherweise besondere Funktionen anbietet, die nur schwer in einem abstrakten Format zu bringen sind.
 
