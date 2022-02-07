@@ -15,7 +15,7 @@ import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_met
 import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 import { FormattingGoodMetric } from "./metrics/formatting_good_metric";
 import { SpellingMetric } from "./metrics/spelling_metric";
-import { EdgeCaseMetric } from "./metrics/edge_case_metric";
+import { EdgeCaseMetric,DEFAULT_EDGE_CASE_TERMS } from "./metrics/edge_case_metric";
 import { GunningFogMetric } from "./metrics/gunning_fog_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
@@ -205,7 +205,8 @@ export namespace MetricManager {
             case MetricNames.spelling:
                 return {additional_words:[],k:0.05,dictionary_path:""};
             case MetricNames.edge_case:
-                return {terms:["(#Negative)? #Verb %null","if %null","%null (will be | is)? treated as","%null ~return~","%null if","#Negative %null"],
+                return {
+                    terms:DEFAULT_EDGE_CASE_TERMS,
                 only_public:true,
                 k:0.1
             }

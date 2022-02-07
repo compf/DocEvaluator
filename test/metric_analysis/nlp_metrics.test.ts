@@ -2,6 +2,7 @@ import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { CertainTermCountMetric } from "../../src/metric_analysis/metrics/certain_terms_count_metric";
 import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
+import { DEFAULT_EDGE_CASE_TERMS, EdgeCaseMetric } from "../../src/metric_analysis/metrics/edge_case_metric";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
 import { SpellingMetric } from "../../src/metric_analysis/metrics/spelling_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
@@ -118,7 +119,7 @@ test("test spelling with additional words",()=>{
 });
 test("nlp matching, null check",()=>{
     
-    let terms=["(#Negative)? #Verb null","if null","null (will be | is)? treated as","null ~return~","null if","#Negative null"];
+    let terms=DEFAULT_EDGE_CASE_TERMS.map((s)=>s.replace("%null","null"));
     let positiveCases=[
         "returns null if smaller than 0",
         "may not be null",

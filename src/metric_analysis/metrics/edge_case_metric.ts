@@ -78,3 +78,4 @@ export class EdgeCaseMetric extends ComponentBasedMetric{
     }
 
 }
+export const DEFAULT_EDGE_CASE_TERMS=["(#Negative)? #Verb %null","if %null","%null (will be | is)? treated as","%null ~return~","%null if","#Negative %null"]
