@@ -16,6 +16,7 @@ import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 import { FormattingGoodMetric } from "./metrics/formatting_good_metric";
 import { SpellingMetric } from "./metrics/spelling_metric";
 import { EdgeCaseMetric } from "./metrics/edge_case_metric";
+import { GunningFogMetric } from "./metrics/gunning_fog_metric";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -90,7 +91,8 @@ export namespace MetricManager {
         certain_terms = "certain_terms",
         formatting_good = "formatting_good",
         spelling="spelling",
-        edge_case="edge_case"
+        edge_case="edge_case",
+        gunning_fog="gunning_fog"
     }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
     const allMetricTypes: BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric> = new BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric>()
@@ -106,6 +108,7 @@ export namespace MetricManager {
         allMetricTypes.add(MetricNames.formatting_good, FormattingGoodMetric);
         allMetricTypes.add(MetricNames.spelling,SpellingMetric);
         allMetricTypes.add(MetricNames.edge_case,EdgeCaseMetric);
+        allMetricTypes.add(MetricNames.gunning_fog,GunningFogMetric);
 
     }
     const uniqueNameCountMap: Map<string, number> = new Map<string, number>();
@@ -185,6 +188,7 @@ export namespace MetricManager {
             case MetricNames.public_members_only:
                 return { getter_pattern: "(get.*)|(is.*)", setter_pattern: "set.*", ignore_getter_setter: false };
             case MetricNames.flesch:
+            case MetricNames.gunning_fog:
                 return { consider_tags: false };
             case MetricNames.comment_name_coherence:
                 return { upper_theshold: 0.5, lower_threshold: 0, levenshtein_distance: 1 };

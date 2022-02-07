@@ -147,4 +147,8 @@ let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.edge_ca
 const expected=95.2418;
 testSimpleFile(MetricManager.MetricNames.edge_case,"testDir/EdgeCaseTest.java","edge_case",params,expected,3);
 });
+test("test fog index",()=>{
+    const expected=88.75;
+    testSimpleFile(MetricManager.MetricNames.gunning_fog,"testDir/FleschTestEasy.java","gunning",MetricManager.getDefaultMetricParam(MetricManager.MetricNames.gunning_fog),expected,3);
+})
 

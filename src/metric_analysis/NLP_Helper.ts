@@ -1,7 +1,7 @@
 import nlp from "compromise";
 
 import Levenshtein from "levenshtein"
-export type RelevantVariables = { numSentences: number, numWords: number, numSyllables: number }
+export type RelevantVariables = { numSentences: number, numWords: number, numSyllables: number,numHardWords:number }
 
 /**
  * This class exposes some methods to calculate word count, syllables, etc
@@ -18,9 +18,10 @@ export type RelevantVariables = { numSentences: number, numWords: number, numSyl
         */
         const numSentences = (sent.length as unknown) as number;
         const numWords = corpus.wordCount();
-        let s=(corpus.terms() as any).syllables()
-        const numSyllables =countSyllables(s)
-        return { numSentences, numWords, numSyllables };
+        let syllables=(corpus.terms() as any).syllables() as {text:string,syllables:string[]}[]
+        const numSyllables =countSyllables(syllables)
+        let numHardWords=syllables.filter((s)=>s.syllables.length>2).length;
+        return { numSentences, numWords, numSyllables,numHardWords };
     }
     export function getTokens(text:string):string[]{
         return nlp.tokenize(text).termList().map((x)=>x.text);

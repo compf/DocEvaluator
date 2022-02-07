@@ -17,7 +17,7 @@ export class FleschMetric extends ComponentBasedMetric {
 
         for (let text of textsToConsider) {
             let rawText=langSpec.getRawText(text);
-            sum += this.calcFleshKincaid(NLP_Helper.getRelevantVariables(rawText.replace("\n"," ")));
+            sum += this.calcReadability(NLP_Helper.getRelevantVariables(rawText.replace("\n"," ")));
         }
         let msgs:string[]=[];
         let score = sum / textsToConsider.length;
@@ -27,7 +27,11 @@ export class FleschMetric extends ComponentBasedMetric {
     }
     public override  processResult(score: number,msgs:string[]): number {
         let finalScore=0;
-        if (score <= 70) {
+        if(score<0){
+            finalScore=0;
+            msgs.push("Flesh score is in invalid range");
+        }
+        else if (score <= 70) {
             finalScore = this.quadratic(0, 140, -1 / 49, score);
             if(score<40){
                 msgs.push("The documentation seems to be very hard to read. Consider rewriting it");
@@ -46,7 +50,7 @@ export class FleschMetric extends ComponentBasedMetric {
     quadratic(root1: number, root2: number, a: number, x: number) {
         return a * (x - root1) * (x - root2);
     }
-    private getTextToConsider(component: Component, params: ParamsType): string[] {
+    protected getTextToConsider(component: Component, params: ParamsType): string[] {
         let textsToConsider: string[] = [];
         if (component.getComment() != null) {
             if (component.getComment()?.getGeneralDescription() != null) {
@@ -61,7 +65,7 @@ export class FleschMetric extends ComponentBasedMetric {
         }
         return textsToConsider;
     }
-    private calcFleshKincaid(vars: RelevantVariables): number {
+    protected calcReadability(vars: RelevantVariables): number {
         return  206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
     
