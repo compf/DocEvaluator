@@ -35432,6 +35432,10 @@ class EvaluatorConf {
          * max tolerable absolute difference from current to last run
          */
         this.relative_threshold = 30;
+        /**
+         * parameters data for the builders,  most builder won't need them
+         */
+        this.builder_params = { file: {}, component: {}, metric: {} };
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), unique_name: metric_manager_1.MetricManager.getUniqueName(s) });
         }
@@ -35522,6 +35526,9 @@ class EnvCommentConfLoader {
         }
         if (process_1.env.INPUT_DEFAULT_COMPONENT_WEIGHT) {
             conf.default_component_weight = parseFloat(process_1.env.INPUT_DEFAULT_COMPONENT_WEIGHT);
+        }
+        if (process_1.env.INPUT_BUILDER_PARAMS) {
+            conf.builder_params = JSON.parse(process_1.env.INPUT_BUILDER_PARAMS);
         }
     }
 }
@@ -35757,9 +35764,9 @@ function initializeObjects(conf, workingDirectory) {
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
-    let componentResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new weight_resolver_1.DefaultFallbackResolver(conf.component_weights, conf.default_component_weight));
-    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver);
-    let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver);
+    let componentResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new weight_resolver_1.DefaultFallbackResolver(conf.component_weights, conf.default_component_weight), conf.builder_params.component);
+    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver, conf.builder_params.file);
+    let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver, conf.builder_params.metric);
     let resultByMetric = new Map();
     let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
     return { parser, fileAnalyzer, componentResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper, stateManager };
@@ -36254,6 +36261,7 @@ const formatting_good_metric_1 = __nccwpck_require__(7658);
 const spelling_metric_1 = __nccwpck_require__(2337);
 const edge_case_metric_1 = __nccwpck_require__(3350);
 const gunning_fog_metric_1 = __nccwpck_require__(762);
+const squale_builder_1 = __nccwpck_require__(9268);
 class BiMap {
     constructor() {
         this.k_to_v = new Map();
@@ -36378,7 +36386,7 @@ var MetricManager;
      * @param weightResolver an object to assign a weight to a given string, if the builder doesn't need a resolver it will be ignored
      * @returns a new MetricResultBuilder whose type depends on a the builderName
      */
-    function getNewMetricResultBuilder(builderName, weightResolver) {
+    function getNewMetricResultBuilder(builderName, weightResolver, params) {
         switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":
@@ -36395,6 +36403,10 @@ var MetricManager;
             case "weighted_median_result_builder":
             case "weighted_median_builder":
                 return new weighted_median_result_builder_1.WeightedMedianResultBuilder(weightResolver);
+            case "squale_builder":
+            case "squale_result_builder":
+            case "squale":
+                return new squale_builder_1.SqualeResultBuilder(params);
         }
         throw new Error("Could not identify ResultBuilder");
     }
@@ -37579,6 +37591,66 @@ var Utils;
     }
     Utils.boundedGrowth = boundedGrowth;
 })(Utils = exports.Utils || (exports.Utils = {}));
+
+
+/***/ }),
+
+/***/ 9268:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SqualeResultBuilder = void 0;
+const documentation_analysis_metric_1 = __nccwpck_require__(5830);
+const metric_result_1 = __nccwpck_require__(6673);
+const metric_result_builder_1 = __nccwpck_require__(9514);
+var NormalizationDirection;
+(function (NormalizationDirection) {
+    NormalizationDirection[NormalizationDirection["Tool_To_ISO"] = 1] = "Tool_To_ISO";
+    NormalizationDirection[NormalizationDirection["ISO_To_Tool"] = 2] = "ISO_To_Tool";
+})(NormalizationDirection || (NormalizationDirection = {}));
+class SqualeResultBuilder extends metric_result_builder_1.MetricResultBuilder {
+    constructor(params) {
+        super();
+        this.params = { lambda: 9 };
+        this.params = params;
+    }
+    getAggregatedResult(creator) {
+        let sum = 0;
+        let lambda = 9;
+        if (this.params != undefined && this.params.lambda != undefined) {
+            lambda = this.params.lambda;
+        }
+        let allLogMessages = [];
+        if (this.resultList.length == 0)
+            return new metric_result_1.InvalidMetricResult();
+        for (let partialResult of this.resultList) {
+            let result = this.normalizeResult(partialResult.getResult(), NormalizationDirection.Tool_To_ISO);
+            sum += Math.pow(lambda, -result);
+            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+        }
+        let averaged = sum / this.resultList.length;
+        let finalResult = -Math.log(averaged) / Math.log(lambda);
+        finalResult = this.normalizeResult(finalResult, NormalizationDirection.ISO_To_Tool);
+        return new metric_result_1.MetricResult(finalResult, allLogMessages, creator);
+    }
+    normalizeResult(result, toDirection) {
+        const minScoreTool = documentation_analysis_metric_1.MIN_SCORE;
+        const minScoreISO = 0;
+        const maxScoreTool = documentation_analysis_metric_1.MAX_SCORE;
+        const maxScoreISO = 3;
+        let finalResult = 0;
+        if (toDirection == NormalizationDirection.Tool_To_ISO) {
+            finalResult = (result / (maxScoreTool - minScoreTool)) * (maxScoreISO - minScoreISO);
+        }
+        else {
+            finalResult = (result / (maxScoreISO - minScoreISO)) * (maxScoreTool - minScoreTool);
+        }
+        return finalResult;
+    }
+}
+exports.SqualeResultBuilder = SqualeResultBuilder;
 
 
 /***/ }),
