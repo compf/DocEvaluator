@@ -82,6 +82,12 @@ export class EvaluatorConf {
      * max tolerable absolute difference from current to last run
      */
     relative_threshold: number = 30;
+
+    /**
+     * parameters data for the builders,  most builder won't need them
+     */
+    builder_params:{file:any,component:any,metric:any}={file:{},component:{},metric:{}}
+
     constructor() {
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s as MetricManager.MetricNames, params: MetricManager.getDefaultMetricParam(s as MetricManager.MetricNames), unique_name: MetricManager.getUniqueName(s) })
@@ -180,6 +186,9 @@ export class EnvCommentConfLoader implements ConfLoader {
         }
         if (env.INPUT_DEFAULT_COMPONENT_WEIGHT) {
             conf.default_component_weight = parseFloat(env.INPUT_DEFAULT_COMPONENT_WEIGHT)
+        }
+        if (env.INPUT_BUILDER_PARAMS) {
+            conf.builder_params = JSON.parse(env.INPUT_BUILDER_PARAMS)
         }
 
 

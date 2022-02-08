@@ -32,10 +32,10 @@ class DummyWeightResolver implements WeightResolver{
     
 }
 test("Test  get new result builder",()=>{
-    expect(MetricManager.getNewMetricResultBuilder("default_builder",null) instanceof MetricResultBuilder).toBeTruthy();
-    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder",new DummyWeightResolver()) instanceof WeightedMedianResultBuilder).toBeTruthy();
+    expect(MetricManager.getNewMetricResultBuilder("default_builder",null,undefined) instanceof MetricResultBuilder).toBeTruthy();
+    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder",new DummyWeightResolver(),undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
     try {
-        expect(MetricManager.getNewMetricResultBuilder("weighted_mean_builder",null) instanceof WeightedMedianResultBuilder).toBeTruthy();
+        expect(MetricManager.getNewMetricResultBuilder("weighted_mean_builder",null,undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
         fail();
     } catch (error) {
         

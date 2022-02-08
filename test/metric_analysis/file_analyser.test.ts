@@ -15,6 +15,7 @@ import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchica
 import { PathWeightResolver, SimpleWeightResolver,WeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { FormattingGoodMetric } from "../../src/metric_analysis/metrics/formatting_good_metric";
+import { SqualeResultBuilder } from "../../src/metric_analysis/squale_builder";
 const path = "testDir/commented_class.java";
 const languageHelper=LanguageSpecificHelperFactory.loadHelper("java");
 function getCommentedClassRoot(): HierarchicalComponent {
@@ -300,3 +301,14 @@ test("test component weighting",()=>{
     expect(finalResult).toBeCloseTo(expectedResult);
 });
 
+test("squale result builder",()=>{
+    let squale=new SqualeResultBuilder(undefined);
+    let metricResults=[100,100,90,100,100,80,0,100,100].map((i)=>new MetricResult(i,[],""));
+    expect(metricResults).toHaveLength(9);
+    for(let m of metricResults){
+        squale.processResult(m);
+    }
+    let finalResult=squale.getAggregatedResult("").getResult();
+    const expected=33.092;
+    expect(finalResult).toBeCloseTo(expected);
+});

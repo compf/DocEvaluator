@@ -90,9 +90,9 @@ function initializeObjects(conf: EvaluatorConf,workingDirectory:string):SharedOb
     let filesWeightResolver = new PathWeightResolver(conf.path_weights, conf.default_path_weight);
     let parser = ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new FileAnalyzer();
-    let componentResultBuilder = MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new DefaultFallbackResolver(conf.component_weights,conf.default_component_weight));
-    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver);
-    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver)
+    let componentResultBuilder = MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new DefaultFallbackResolver(conf.component_weights,conf.default_component_weight),conf.builder_params.component);
+    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver,conf.builder_params.file);
+    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver,conf.builder_params.metric);
     let resultByMetric: Map<string, MetricResultBuilder> = new Map();
     let stateManager = StateManagerFactory.load(conf.state_manager, workingDirectory);
 

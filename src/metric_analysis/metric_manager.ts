@@ -17,6 +17,7 @@ import { FormattingGoodMetric } from "./metrics/formatting_good_metric";
 import { SpellingMetric } from "./metrics/spelling_metric";
 import { EdgeCaseMetric,DEFAULT_EDGE_CASE_TERMS } from "./metrics/edge_case_metric";
 import { GunningFogMetric } from "./metrics/gunning_fog_metric";
+import { SqualeResultBuilder } from "./squale_builder";
 class BiMap<K, V>{
     private k_to_v: Map<K, V> = new Map<K, V>();
     private v_to_k: Map<V, K> = new Map<V, K>();
@@ -136,7 +137,7 @@ export namespace MetricManager {
      * @param weightResolver an object to assign a weight to a given string, if the builder doesn't need a resolver it will be ignored
      * @returns a new MetricResultBuilder whose type depends on a the builderName
      */
-    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver | null): MetricResultBuilder {
+    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver | null,params:any): MetricResultBuilder {
         switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":
@@ -153,6 +154,10 @@ export namespace MetricManager {
             case "weighted_median_result_builder":
             case "weighted_median_builder":
                 return new WeightedMedianResultBuilder(weightResolver!);
+            case "squale_builder":
+            case "squale_result_builder":
+            case "squale":
+                return new SqualeResultBuilder(params);
         }
         throw new Error("Could not identify ResultBuilder");
     }

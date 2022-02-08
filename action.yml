@@ -49,10 +49,9 @@ inputs:
   default_component_weight:
     description: "The default weight for a given component"
     required: false
-
-#branding:
-  #icon: 'check-circle'
-  #color: 'blue'
+  builder_params:
+    description: "parameters data for the builders,  most builder won't need them"
+    required: false
 runs:
   using: 'node16'
   main: 'build/index.js'
