@@ -220,7 +220,31 @@ Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} imp
  
  Als Alternative zu den klassischen Algorithmen wurden Verfahren aus den Wirtschaftswissenschaften vorgestellt, die eine bessere Aggregierung der Einzelergebnisse ermöglichen sollen. Diese Verfahren werden in der Ökonomie benutzt, um die Ungleichheit von Einkommen mathematisch darzustellen. So besitzen in den meisten Staaten viele Menschen nur wenig Einkommen und nur einige Menschen ein sehr hohes Einkommen. Auch auf Softwareprojekten lässt sich diese Erfahrung übertragen, da beispielsweise es nur sehr wenige Methoden mit sehr viel Codezeilen geben wird, aber dafür sehr viele Methoden mit einer relativ kleinen Anzahl an Zeilen. Beispiele für diese Algorithmen sind Gini, Theil oder Atkinson \cite[S. 314]{Youcantcontroltheunfamiliar:Astudyontherelationsbetweenaggregationtechniquesforsoftwaremetrics}. Einige Metriken (wie z.~B. in Kapitel \ref{chapter:metric_method_long}) basierend auf die Anzahl der \ac{LOC}, sodass eine Anwendung der klassischen Algorithmen problematisch sein kann, wenn die Verteilung sehr asymmetrisch ist. 
  
- Allerdings beschreiben diese Algorithmen nur, ob die Ergebnisse der Metriken ungleich verteilt sind und nicht, wie gut die Ergebnisse sind. Ein Projekt, bei dem alle Metriken schlechte Resultate liefern, würde dann ein ähnliches Gesamtergebnis liefern als ein Projekt, welches überall gut bewertet wird.  Im Kontext der Bachelorarbeit könnte dies bedeuten, dass eine nicht vorhandene Dokumentation genauso gut bewertet wird wie eine exzessive Kommentierung aller Komponenten. Zudem bringt dieses Vorgehen Probleme mit der Konzeption des Tools mit sich. Wenn eine Datei \textit{A} überhaupt nicht dokumentiert ist und eine Datei \textit{B} vollständig dokumentiert ist, würde die ökonomischen Algorithmen bei beiden Dateien gute Ergebnisse zurückgeben. Wenn dann durch einen anderen \textit{MetricResultBuilder} der Mittelwert der beiden Teilergebnisse gebildet wird, würde wieder ein gutes Ergebnisse liefern, obwohl ein möglicherweise beachtlicher Teil schlecht dokumentiert ist.
+ Allerdings beschreiben diese Algorithmen nur, ob die Ergebnisse der Metriken ungleich verteilt sind und nicht, wie gut die Ergebnisse sind. Ein Projekt, bei dem alle Metriken schlechte Resultate liefern, würde dann ein ähnliches Gesamtergebnis liefern als ein Projekt, welches überall gut bewertet wird \cite[S. 1121]{Softwarequalitymetricsaggregationinindustry}.  Im Kontext der Bachelorarbeit könnte dies bedeuten, dass eine nicht vorhandene Dokumentation genauso gut bewertet wird wie eine exzessive Kommentierung aller Komponenten. Zudem bringt dieses Vorgehen Probleme mit der Konzeption des Tools mit sich. Wenn eine Datei \textit{A} überhaupt nicht dokumentiert ist und eine Datei \textit{B} vollständig dokumentiert ist, würde die ökonomischen Algorithmen bei beiden Dateien gute Ergebnisse zurückgeben. Wenn dann durch einen anderen \textit{MetricResultBuilder} der Mittelwert der beiden Teilergebnisse gebildet wird, würde wieder ein gutes Ergebnisse liefern, obwohl ein möglicherweise beachtlicher Teil schlecht dokumentiert ist .
  
  Daher werden diese Algorithmen vom Tool in der ausgelieferten Fassung nicht implementiert. Sie können aber in Verbindung mit anderen Aggregrationalgorithmen interessant sein, um mehr über eventuelle Ungleichheiten bei der Dokumentation zu erfahren.
+ 
+ \section{Squale}
+ Eine andere Möglichkeit zur Aggregierung von Metrikergebnissen wird in \cite[S. 1124]{Softwarequalitymetricsaggregationinindustry} vorgestellt. Das sogenannte Squale-Modell berechnet aus verschiedenen Teilergebnissen von Metriken ein Gesamtergebnis und kann dabei besonders schlechte Ergebnisse stärker gewichten, damit eventuelle Probleme schnell erkannt werden können. 
+ 
+ Im ersten Schritt werden die Ergebnisse der einzelnen Metriken, die auf unterschiedliche Skalen basieren, auf einer Skala normalisiert. Die Autoren nutzen dafür das Intervall 0 bis 3, da so eine Einteilung in Ziel nicht erfüllt (0 bis 1), Ziel größtenteils erfüllt (1 bis 2) und Ziel erfüllt (2 bis 3) möglich ist. Diese normalisierten Ergebnisse werden von den Autoren als \enquote{Individual marks (IM)} (z.~dt. individuelle Bewertungen) bezeichnet \cite[S. 142]{AnEmpiricalModelforContinuousandWeightedMetricAggregation}. 
+ 
+ Im nächsten Schritt werden die einzelnen Ergebnisse aggregiert. Dazu wird jeder IM mittels der Funktion
+ \begin{equation}
+     g(IM)=\lambda^{-IM}
+ \end{equation} übergeben. Dabei ist $\lambda$ eine Konstante, welche bei der Gewichtung der Ergebnisse hilft. Sollen schlechte Ergebnisse sehr hart bestraft werden, sodass bereits einige Fehler zu einer schlechten Bewertung führen, so muss $\lambda$ eine große Zahl sein. Durch die Wahl einer kleineren Zahl kann die Bewertung toleranter ausfallen. Aus den Ergebnissen der Funktion $g(IM)$ wird anschließend der Mittelwert $W_{avg}$ gebildet.
+ 
+ Im Anschluss daran muss der Mittelwert wieder in den ursprünglichen Wertebereich abgebildet werden. Dazu wird die Umkehrfunktion
+ \begin{equation}
+     g^{-1}(W_{avg})=-\log_\lambda (W_{avg})
+ \end{equation} angewendet. Dieses Ergebnis wird von den Autoren als \enquote{global mark (IM)} (z.~dt. globale Bewertung) bezeichnet und repräsentiert das endgültige Ergebnis.
+ 
+ Durch diese Aggregierung werden Metriken/Komponenten/Dateien mit schlechten Ergebnisse stärker gewichtet und haben so ein größeren Einfluss auf das Gesamtergebnis. Allerdings kann dies bei der Dokumentation dazu führen, dass nur wenige schlecht dokumentierte Komponenten die Bewertung stark nach unten ziehen, sodass das Erreichen einer guten Bewertung einen hohen Aufwand erfordert. 
+ 
+ Im Tool wird dieser Algorithmus ebenfalls unterstützt. Die Konstante $\lambda$ kann über den Konfigurationsparamater \textit{builderParams} für die einzelnen \textit{MetricResultBuilder} (Dateien, Komponenten oder Metriken) festgelegt werden. Standardmäßig ist er 9, was für eine mittlere Bestrafung von schlechter Dokumentationsqualität führt \cite[S. 1127]{Softwarequalitymetricsaggregationinindustry}. Intern werden die Teilergebnisse in das Intervall 0 bis 3 konvertiert, da ein Intervall von 0 bis 100 zu einer hohen negativen Potenz führen kann und dementsprechend mit Rundungsungenauigkeiten behaftet ist. Am Ende wird das Ergebnis wieder in das originale Intervall von 0 bis 100 gebracht. 
+ 
+ 
+ 
+
+ 
  

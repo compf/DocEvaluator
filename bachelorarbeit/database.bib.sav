@@ -1114,4 +1114,13 @@ facilitating its maintenance.},
   keywords = {software metrics, software quality, aggregation, inequality indices},
 }
 
+@InProceedings{AnEmpiricalModelforContinuousandWeightedMetricAggregation,
+  author    = {Mordal-Manet, Karine and Laval, Jannik and Ducasse, Stephane and Anquetil, Nicolas and Balmas, Francoise and Bellingard, Fabrice and Bouhier, Laurent and Vaillergues, Philippe and McCabe, Thomas J.},
+  title     = {An Empirical Model for Continuous and Weighted Metric Aggregation},
+  booktitle = {2011 15th European Conference on Software Maintenance and Reengineering},
+  year      = {2011},
+  pages     = {141-150},
+  doi       = {10.1109/CSMR.2011.20},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
