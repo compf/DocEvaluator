@@ -36,12 +36,30 @@ Die Flesch-Metrik nutzt diese Formeln, um eine Bewertung der Softwaredokumentati
 
 Aus diesen Grund wurde eine mathematische Funktion ermittelt, die für einen Flesch-Score von 70 eine Bewertung von 100 zurückgibt. Für einen größeren Flesch-Score wird eine lineare Funktion verwendet, die für einen sehr leichten Text (Flesh-Score 100 oder darüber) eine Bewertung von 85 zurückgibt. Damit sollen Programmierer für sehr leichte Texte nicht stark bestraft, aber trotzdem ermuntert werden einen für technische Dokumentationen angemessenen Text zu schreiben.
 
-Für einen Flesch-Score unter 70 wird eine quadratische Funktion verwendet, die einen Flesch-Score von 60 noch sehr fair behandelt, aber kleinere Flesch-Scores, die auf einen komplizierten Text hindeuten, deutlich schlechter bewertet werden. Damit sollen Entwickler dazu ermuntert werden, ihre Texte nicht allzu kompliziert zu gestalten. Dies hilft nachfolgenden Entwicklern, aber auch dem Erzeuger der Dokumentation, beim Verständnis des Quellcodes und verhindert so potenzielle Bugs.
+Für einen Flesch-Score unter 70 wird eine quadratische Funktion verwendet, die einen Flesch-Score von 60 noch sehr fair behandelt, aber kleinere Flesch-Scores, die auf einen komplizierten Text hindeuten, deutlich schlechter bewertet werden. Damit sollen Entwickler angeregt werden, ihre Texte nicht allzu kompliziert zu gestalten. Dies hilft nachfolgenden Entwicklern, aber auch dem Erzeuger der Dokumentation, beim Verständnis des Quellcodes und verhindert so potenzielle Bugs.
 
 Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung von Flesch bei kurzen Texten, zum Beispiel aus nur einem Satz, stark fluktuiert. Außerdem ist die Bestimmung der Silbenzahl eines Wortes nicht immer trivial; bei der Entwicklung des Tools musste bei einem Austausch einer Bibliothekt die Testmethode angepasst werden, da das Wort \enquote{themselves} plötzlich drei statt zwei Silben hatte. Dies hängt natürlich auch von der Aussprache und somit von kulturellen Gegebenheiten ab. Dies gilt natürlich auch für Wörter und Sätze. 
 \subsubsection{Parameter}
 \begin{itemize}
     \item \textit{consider\_tags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
+\end{itemize}
+
+\subsection{Gunning-Fog-Index}
+Ein mit dem Flesch-Score (Kapitel \ref{chapter:metrics_flesh}) vergleichbare Metrik ist der Gunning-Fog-Index. Während der Flesch-Index die Gesamtzahl der Silben berücksichtigt, zählt der Gunning-Fog-Index nur die zahl der komplizierten Wörter. Ein Wort gilt im Kontext dieser Metrik als kompliziert, wenn es mehr als zwei Silben hat. Die folgende Formel dient zur Berechnung des Fog-Indexes:
+\begin{equation}
+    0.4*(\frac{W}{S}+\frac{K}{100})
+\end{equation}
+Dabei ist $W$ bzw. $S$ wie bei dem Flesch-Score die Anzahl der Wörter und der Sätze. Die Variable $K$ ist die Anzahl der komplizierten Wörter. 
+
+Im Unterschied zum Flesch-Index liefert die Formel die Anzahl der akademischen Bildungsjahre zurück, die absolviert werden müssen, um diesen Text gut zu verstehen. Ein Wert von 8 würde also bedeuten, dass mindestens 8 Jahre Schulbildung nötig wären\cite[S. 24]{ThePrinciplesofReadability}. 
+
+Ähnlich wie bei der Flesch-Metrik wird der Gunning-Fox-Index mittels Funktionen in den Wertebereich 0 bis 100 gebracht. Dabei wird angenommen, dass ein Gunning-Fog-Index von 8 optimal ist, da dies in etwa dem Flesch-Score von 70 entspricht. Für leichte Texte mit einem Fog-Index von 0 bis 8 wird eine wachsende lineare Funktion verwendet, die minimal 85 ist und bei einen Wert von 8 den Maximalwert 100 zurückgibt. Bei schwierigeren Texten  wird eine quadratische Funktion verwendet, die ihren Nullpunkt bei 16 hat, sodass schwierige Texte hart bestraft werden und der Entwickler auf komplizierte Texte hingewiesen wird.
+
+Der Fog-Index ist leicht zu berechnen und kann durch das Zählen der komplizierten Wörter eine Einschätzung geben, ob ein Text verständlich ist. Allerdings ist die Definition eines komplizierten Wortes recht grob. So besitzen Wörter wie \enquote{vacation} bereits drei Silben und würden daher als komplizierte Wörter klassifiziert werden, obwohl sie  bekannt sein sollten. \cite[S. 10]{bogert1985defense}.
+
+\subsubsection{Parameter}
+\begin{itemize}
+    \item \textit{consider\_tags} Wenn true, berechne den Mittelwert aus allen Fog-Indizes der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
 \end{itemize}
 \subsection{Metrik:Kohärenz zwischen Kommentar und Komponentenname}\label{chapter:metrics_coherence}
 Die Dokumentation einer Komponente sollte einen Mehrwert bieten und nicht nur den Namen der Komponente wiederholen  Gleichzeitig sollte es einen Zusammenhang zwischen den Namen einer Komponente und dessen Dokumentation geben, da ansonsten keine gute Beziehung hergestellt werden kann\cite[S. 86-87]{Qualityanalysisofsourcecodecomments}. Um diese Beziehung mittels einer Metrik bewerten zu können, kann die Anzahl der Wörter bestimmt werden, die sowohl im Komponentennamen als auch in der Dokumentation auftauchen. Durch Division dieser Anzahl durch die Gesamtzahl der Wörter wird der \textbf{Koheränzkoeffizient} berechnet. Die Autoren in \cite[S. 86-87]{Qualityanalysisofsourcecodecomments} wenden diesen Koeffizienten nur auf Methodennamen an und vertreten die Auffassung, dass ein Koheränzkoeffizient von 0 bzw. über 0.5 auf eine schlechte Dokumentierung hindeuten, da im ersten Fall es keine Verbindung zwischen den Kommentar und der Komponente gibt und im zweiten Fall zu viele Gemeinsamkeiten existieren. Diese Metrik nutzt die ermittelten Ober- und Untergrenze des Koheränzkoeffizienten für alle Komponenten, da die Beschränkung auf Methoden nicht sinnvoll ist und auch andere Komponenten einen nicht repetitiven Kommentar haben sollten. Außerdem sind die Grenzen hier parametrisierbar, um die Handhabung der Metrik auf unterschiedliche Situationen zu erleichtern. Komponenten ohne Dokumentation werden hier vollständig ignoriert. 
