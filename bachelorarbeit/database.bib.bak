@@ -1123,4 +1123,16 @@ facilitating its maintenance.},
   doi       = {10.1109/CSMR.2011.20},
 }
 
+@Article{bogert1985defense,
+  author    = {Bogert, Judith},
+  title     = {In defense of the Fog Index},
+  journal   = {The Bulletin of the Association for Business Communication},
+  year      = {1985},
+  volume    = {48},
+  number    = {2},
+  pages     = {9--12},
+  file      = {:/home/compf/data/uni/sem7/bachelor/sources/108056998504800203.pdf:PDF},
+  publisher = {Sage Publications Sage CA: Thousand Oaks, CA},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
