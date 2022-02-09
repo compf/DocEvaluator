@@ -44,7 +44,7 @@ Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung 
     \item \textit{consider\_tags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
 \end{itemize}
 
-\subsection{Gunning-Fog-Index}
+\subsection{Gunning-Fog-Index}\label{chapter:metric_gunning_fog}
 Ein mit dem Flesch-Score (Kapitel \ref{chapter:metrics_flesh}) vergleichbare Metrik ist der Gunning-Fog-Index. Während der Flesch-Index die Gesamtzahl der Silben berücksichtigt, zählt der Gunning-Fog-Index nur die zahl der komplizierten Wörter. Ein Wort gilt im Kontext dieser Metrik als kompliziert, wenn es mehr als zwei Silben hat. Die folgende Formel dient zur Berechnung des Fog-Indexes:
 \begin{equation}
     0.4*(\frac{W}{S}+\frac{K}{100})
@@ -103,7 +103,7 @@ Anschließend wird diese Anzahl der Funktion
     \item \textit{terms} alle unzulässigen Wörter
     \item \textit{use\_default\_terms\_too} Wenn true, nutze auch die in \cite{HowtoWriteDocCommentsfortheJavadocTool} beschriebenen Begriffe auch wenn durch Verwendung eigener Begriffe diese überschrieben wurden
 \end{itemize}
- \subsection{Metrik: Erwähnung von Randfällen bei Methodenparameter und -rückgabewerte}
+ \subsection{Metrik: Erwähnung von Randfällen bei Methodenparameter und -rückgabewerte}\label{chapter:metric_edge_case}
  Methoden sind wichtige Komponenten in objektorientierten Programmiersprachen. Sie können Parameter besitzen und Werte zurückgeben, sodass eine richtige Interaktion mit ihnen elementar ist. Während die Metrik in \ref{chapter:method_doc} nur analysiert hat, ob ein Parameter bzw. der Rückgabewert überhaupt kommentiert wurde, soll in dieser Metrik auch eine einfache semantische Analyse durchgeführt werden. Im Fokus steht dabei die Behandlung von Nullwerten. Einige Datentypen können den Wert \textit{null} besitzen, der oft für einen ungültigen Wert steht. Diese Nullwerte müssen gesondert behandelt werden, da beispielsweise das Aufrufen einer Methode eines Objektes, welches null ist, zu Ausnahmen führen kann.
  
  Da Methoden Eingaben entgegennehmen und Ausgaben zurückgeben können, ist es wichtig zu wissen, ob diese Methode Nullwerte als Eingabe akzeptiert oder Null zurückgeben kann, da so der Benutzer der Methode diese korrekt verwenden kann. Dies sollte auch in der Dokumentation erwähnt werden \cite{javadoc_coding_standards}. Auch die Autoren in \cite[S. 260 ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies} sind der Ansicht, dass hier eine häufige Fehlerquelle vorliegt und entwickelten ein Programm, um diese Fehler zu analysieren und dabei auch zu prüfen, ob die Angaben in der Dokumentation auch stimmen. (siehe Kapitel \ref{@tComment})
@@ -242,7 +242,7 @@ Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} imp
  
  Daher werden diese Algorithmen vom Tool in der ausgelieferten Fassung nicht implementiert. Sie können aber in Verbindung mit anderen Aggregrationalgorithmen interessant sein, um mehr über eventuelle Ungleichheiten bei der Dokumentation zu erfahren.
  
- \section{Squale}
+ \subsection{Squale}
  Eine andere Möglichkeit zur Aggregierung von Metrikergebnissen wird in \cite[S. 1124]{Softwarequalitymetricsaggregationinindustry} vorgestellt. Das sogenannte Squale-Modell berechnet aus verschiedenen Teilergebnissen von Metriken ein Gesamtergebnis und kann dabei besonders schlechte Ergebnisse stärker gewichten, damit eventuelle Probleme schnell erkannt werden können. 
  
  Im ersten Schritt werden die Ergebnisse der einzelnen Metriken, die auf unterschiedliche Skalen basieren, auf einer Skala normalisiert. Die Autoren nutzen dafür das Intervall 0 bis 3, da so eine Einteilung in Ziel nicht erfüllt (0 bis 1), Ziel größtenteils erfüllt (1 bis 2) und Ziel erfüllt (2 bis 3) möglich ist. Diese normalisierten Ergebnisse werden von den Autoren als \enquote{Individual marks (IM)} (z.~dt. individuelle Bewertungen) bezeichnet \cite[S. 142]{AnEmpiricalModelforContinuousandWeightedMetricAggregation}. 
