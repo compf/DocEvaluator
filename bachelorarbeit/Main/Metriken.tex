@@ -44,7 +44,7 @@ Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung 
     \item \textit{consider\_tags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
 \end{itemize}
 
-\subsection{Gunning-Fog-Index}\label{chapter:metric_gunning_fog}
+\subsection{Metrik: Gunning-Fog-Index}\label{chapter:metric_gunning_fog}
 Ein mit dem Flesch-Score (Kapitel \ref{chapter:metrics_flesh}) vergleichbare Metrik ist der Gunning-Fog-Index. Während der Flesch-Index die Gesamtzahl der Silben berücksichtigt, zählt der Gunning-Fog-Index nur die zahl der komplizierten Wörter. Ein Wort gilt im Kontext dieser Metrik als kompliziert, wenn es mehr als zwei Silben hat. Die folgende Formel dient zur Berechnung des Fog-Indexes:
 \begin{equation}
     0.4*(\frac{W}{S}+\frac{K}{100})
