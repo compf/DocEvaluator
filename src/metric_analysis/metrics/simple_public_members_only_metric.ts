@@ -10,12 +10,12 @@ export class SimplePublicMembersOnlyMetric extends SimpleCommentPresentMetric {
         return component.getComponentMetaInformation().isPublic() && super.shallConsider(component);
     }
     protected processResult(result: number, logMessages: string[]): number {
-        if(result==MIN_SCORE)
+        if (result == MIN_SCORE)
             logMessages.push("Public member has no documentation");
         return result;
 
     }
-  
+
 
 
 }

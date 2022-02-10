@@ -4,12 +4,12 @@ import { Component } from "../parser/parse_result/component";
 
 export class LogMessage {
     private msg: string;
-    public static BasePath:string=".";
-    constructor(msg: string,component:Component) {
-        let p= chalk.green( path.relative(LogMessage.BasePath, component.getTopParent().getName()));
-        let qualifiedName=chalk.yellow(component.getQualifiedName())
-        let prefix=p+ " "+ qualifiedName + "(L. "+component.getLineNumber()+"): ";
-        this.msg = prefix +msg;
+    public static BasePath: string = ".";
+    constructor(msg: string, component: Component) {
+        let p = chalk.green(path.relative(LogMessage.BasePath, component.getTopParent().getName()));
+        let qualifiedName = chalk.yellow(component.getQualifiedName())
+        let prefix = p + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
+        this.msg = prefix + msg;
     }
     /**
      * Log the message to the console

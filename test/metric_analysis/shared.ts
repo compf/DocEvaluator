@@ -3,20 +3,20 @@ import { JavaSpecificHelper } from "../../src/metric_analysis/language_specific/
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
-let languageHelper=new JavaSpecificHelper();
-export function testSimpleFile(metricName:MetricManager.MetricNames,filename:string,uniqueName:string,params:any|undefined,expected:number,digits:number){
-    if(params==undefined){
-        params=MetricManager.getDefaultMetricParam(metricName);
+let languageHelper = new JavaSpecificHelper();
+export function testSimpleFile(metricName: MetricManager.MetricNames, filename: string, uniqueName: string, params: any | undefined, expected: number, digits: number) {
+    if (params == undefined) {
+        params = MetricManager.getDefaultMetricParam(metricName);
     }
 
-    let spelling=MetricManager.createMetricByName(metricName,uniqueName,params);
-    let builder=new MetricResultBuilder();
-    let root=new JavaParser().parse(filename);
-    
-    let res={path:filename,root:root}
-    let analyzer=new FileAnalyzer();
-    analyzer.analyze(res,spelling,builder,languageHelper);
-    let result=builder.getAggregatedResult("").getResult()
-    expect(result).toBeCloseTo(expected,digits);
+    let spelling = MetricManager.createMetricByName(metricName, uniqueName, params);
+    let builder = new MetricResultBuilder();
+    let root = new JavaParser().parse(filename);
+
+    let res = { path: filename, root: root }
+    let analyzer = new FileAnalyzer();
+    analyzer.analyze(res, spelling, builder, languageHelper);
+    let result = builder.getAggregatedResult("").getResult()
+    expect(result).toBeCloseTo(expected, digits);
 
 }

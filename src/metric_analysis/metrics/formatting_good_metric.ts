@@ -29,12 +29,12 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
 
 
         let inlineTags = this.findTags(text, langSpec.getInlineTagRegex());
-        let invalidInlineTagCount=this.getInvalidInlineTagCount(inlineTags, langSpec,  logMessages);
-         // sum up number of invalid inline tags
+        let invalidInlineTagCount = this.getInvalidInlineTagCount(inlineTags, langSpec, logMessages);
+        // sum up number of invalid inline tags
         errorCount += invalidInlineTagCount;
 
         // add number of lines to error count if no formatting is used
-        let validInlineTagCount=inlineTags.length-invalidInlineTagCount;
+        let validInlineTagCount = inlineTags.length - invalidInlineTagCount;
         let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null
         if (!params.accept_no_formatting && validInlineTagCount == 0 && !htmlPresent) {
             logMessages.push("Documentation contains no formation like links or html");
@@ -45,10 +45,10 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
 
     }
     private getInvalidInlineTagCount(inlineTags: string[], langSpec: LanguageSpecificHelper, logMessages: string[]) {
-        let errorCount=0;
-        let params=this.getParams() as ParamType;
+        let errorCount = 0;
+        let params = this.getParams() as ParamType;
         for (let tag of inlineTags) {
-            if (!langSpec.isValidInlineTag(tag) && !params.allowed_tags.some((t)=>tag.startsWith(t))) {
+            if (!langSpec.isValidInlineTag(tag) && !params.allowed_tags.some((t) => tag.startsWith(t))) {
                 errorCount++;
                 logMessages.push(tag + " is not a valid inline tag");
             }
@@ -87,38 +87,38 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
         return messages.filter((m) => !this.needNotToBeClosed(m));
     }
     private findHtmlErrors(text: string) {
-       
-        let regex=/<\/?\w+/g;
-        let stack:string[]=[];
+
+        let regex = /<\/?\w+/g;
+        let stack: string[] = [];
         let matches = text.match(regex);
         let messages: string[] = [];
         if (matches != null) {
             for (let m of matches) {
-                let isEndTag=m.includes("/");
-                let tagName=isEndTag ? m.substring(2):m.substring(1);
-                if(isEndTag){
-                    let removed=stack.pop();
-                    while(removed!=undefined && removed!=tagName ){
-                        if(!this.needNotToBeClosed(removed)){
-                            messages.push("Tag " +removed+ "not closed")
+                let isEndTag = m.includes("/");
+                let tagName = isEndTag ? m.substring(2) : m.substring(1);
+                if (isEndTag) {
+                    let removed = stack.pop();
+                    while (removed != undefined && removed != tagName) {
+                        if (!this.needNotToBeClosed(removed)) {
+                            messages.push("Tag " + removed + "not closed")
                         }
-                   
-                    removed=stack.pop();
-                    
+
+                        removed = stack.pop();
+
                     }
                 }
-                else{
+                else {
                     stack.push(tagName);
                 }
             }
-            while(stack.length>0){
-                let removed=stack.pop()!;
-                messages.push("Tag " +removed+ "not closed")
+            while (stack.length > 0) {
+                let removed = stack.pop()!;
+                messages.push("Tag " + removed + "not closed")
             }
             return messages;
         }
         return [];
-       
+
 
     }
     private needNotToBeClosed(tag: string) {

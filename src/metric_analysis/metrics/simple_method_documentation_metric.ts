@@ -12,9 +12,9 @@ import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
  */
 export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
     shallConsider(component: Component) {
-        return super.shallConsider(component) &&  component instanceof MethodComponent;
+        return super.shallConsider(component) && component instanceof MethodComponent;
     }
-    analyze(component: Component, builder: AbstractMetricBuilder,langSpec:LanguageSpecificHelper): void {
+    analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
         let logMessages: LogMessage[] = [];
         let method = component as MethodComponent;
         let score = 0;
@@ -24,15 +24,15 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let nonExistingParamResult = this.checkNonExistingDocumentedParameters(method, logMessages);
             let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.RETURN);
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
-           let results=[paramsResult , nonExistingParamResult , returnExistingResult];
-            langSpec.rateDocumentationCompatibility(component,results,logMessages);
-           let sum=0;
-           for(let s of results){
-               sum+=s;
-           }
-           score=sum/results.length;
+            let results = [paramsResult, nonExistingParamResult, returnExistingResult];
+            langSpec.rateDocumentationCompatibility(component, results, logMessages);
+            let sum = 0;
+            for (let s of results) {
+                sum += s;
+            }
+            score = sum / results.length;
         }
-       this.pushResult(builder,score,logMessages,component);
+        this.pushResult(builder, score, logMessages, component);
 
     }
     private checkNonExistingDocumentedParameters(method: MethodComponent, logMessages: LogMessage[]): number {
@@ -48,7 +48,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             }
             else {
                 let paramName = tag.getParam() ?? "Unnamed";
-                this.pushLogMessage(method,"Parameter " + paramName + " is documented but has no matching method param",logMessages)
+                this.pushLogMessage(method, "Parameter " + paramName + " is documented but has no matching method param", logMessages)
             }
         }
         return matchingParamsCount / paramsTags.length * 100;
@@ -66,7 +66,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
                 matchingParamsCount++;
             }
             else {
-                this.pushLogMessage(method,"Parameter " + param.name + " is not documented",logMessages);
+                this.pushLogMessage(method, "Parameter " + param.name + " is not documented", logMessages);
             }
         }
         return matchingParamsCount / method.getParams().length * 100;

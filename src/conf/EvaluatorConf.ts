@@ -86,7 +86,7 @@ export class EvaluatorConf {
     /**
      * parameters data for the builders,  most builder won't need them
      */
-    builder_params:{file:any,component:any,metric:any}={file:{},component:{},metric:{}}
+    builder_params: { file: any, component: any, metric: any } = { file: {}, component: {}, metric: {} }
 
     constructor() {
         for (let s of defaultMetrics) {

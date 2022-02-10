@@ -17,15 +17,15 @@ import { Interval } from "antlr4ts/misc/Interval";
 import { FileComponent } from "./parse_result/file_component";
 
 export class JavaParser extends BaseParser {
-     /**
-     * Reads all tokens from the source code file
-     * @param content a string that contains valid source code
-     * @returns a CommonTokenStream that contains all read tokens
-     */
-      public getTokens<T>(content: string): CommonTokenStream {
+    /**
+    * Reads all tokens from the source code file
+    * @param content a string that contains valid source code
+    * @returns a CommonTokenStream that contains all read tokens
+    */
+    public getTokens<T>(content: string): CommonTokenStream {
 
         let inputStream = CharStreams.fromString(content);
-        let lexer =  new JavaLexer(inputStream)
+        let lexer = new JavaLexer(inputStream)
         let tokenStream = new CommonTokenStream(lexer as any)
         tokenStream.fill();
         return tokenStream;
@@ -93,7 +93,7 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         this.meta = meta;
     }
 }
-function addSuperTypes(superTypes:string[],ctx: ParserRuleContext){
+function addSuperTypes(superTypes: string[], ctx: ParserRuleContext) {
     let splitted = ctx.getChild(1).text.split(",");
     for (let s of splitted) {
         superTypes.push(s);
@@ -104,7 +104,7 @@ class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<string[]>{
         return []
     }
     visitImplementInterfaces(ctx: ImplementInterfacesContext) {
-        addSuperTypes(this.superTypes,ctx);
+        addSuperTypes(this.superTypes, ctx);
     }
     visitExtendClass(ctx: ExtendClassContext) {
         this.superTypes.push(ctx.getChild(1).text);
@@ -121,7 +121,7 @@ class InterfaceExtendVisitor extends AbstractParseTreeVisitor<string[]>{
         return []
     }
     visitExtendInterface(ctx: ExtendInterfaceContext) {
-       addSuperTypes(this.superTypes,ctx);
+        addSuperTypes(this.superTypes, ctx);
     }
     private superTypes: string[] = [];
 
@@ -219,7 +219,7 @@ export class JavadocParser {
         else return null;
     }
     private splitWithRemainder(str: string, delim: RegExp, max: number) {
-        let splitted = str.split(delim).filter((c)=>c!="");
+        let splitted = str.split(delim).filter((c) => c != "");
         let result = []
         let last = "";
         for (let i = 0; i < splitted.length; i++) {
@@ -256,7 +256,7 @@ export class JavadocParser {
         let tagsWithParams = ["@param", "@throws"];
         return tagsWithParams.some((t) => line.startsWith(t));
     }
-    startsWithTag(line:string):boolean{
+    startsWithTag(line: string): boolean {
         return line.startsWith("@")
     }
     parseCommentText(text: string): StructuredComment {
@@ -277,15 +277,15 @@ export class JavadocParser {
         for (let line of lines) {
             if (this.startsWithTag(line)) {
                 let tag = this.parseTag(line);
-                
+
                 tags.push(tag);
                 foundTag = true;
             }
-            else if(line!="" && foundTag){
-                let oldTag=tags[tags.length-1];
-                tags[tags.length-1]=new  StructuredCommentTag(oldTag.getKind(),oldTag.getParam(),(oldTag.getDescription()??"")+"\n"+line)
+            else if (line != "" && foundTag) {
+                let oldTag = tags[tags.length - 1];
+                tags[tags.length - 1] = new StructuredCommentTag(oldTag.getKind(), oldTag.getParam(), (oldTag.getDescription() ?? "") + "\n" + line)
             }
-            else if (line != "" ) {
+            else if (line != "") {
                 descriptionLines.push(line)
             }
         }

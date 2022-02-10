@@ -1,7 +1,5 @@
 import { MetricManager } from "../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../src/metric_analysis/metric_result_builder";
-import { SimpleCommentPresentMetric } from "../src/metric_analysis/metrics/simple_comment_present_metric";
-import { SimpleMethodDocumentationMetric } from "../src/metric_analysis/metrics/simple_method_documentation_metric";
 import { WeightedMedianResultBuilder } from "../src/metric_analysis/weighted_median_result_builder";
 import { WeightResolver } from "../src/metric_analysis/weight_resolver";
 import { main } from "../src";
@@ -25,45 +23,45 @@ test("test empty class instanceof works", () => {
     expect(derive instanceof BaseClass).toBeTruthy();
     expect(derive instanceof DerivedClass).toBeTruthy();
 });
-class DummyWeightResolver implements WeightResolver{
+class DummyWeightResolver implements WeightResolver {
     resolveWeight(key: any): number {
         return 0;
     }
-    
+
 }
-test("Test  get new result builder",()=>{
-    expect(MetricManager.getNewMetricResultBuilder("default_builder",null,undefined) instanceof MetricResultBuilder).toBeTruthy();
-    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder",new DummyWeightResolver(),undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
+test("Test  get new result builder", () => {
+    expect(MetricManager.getNewMetricResultBuilder("default_builder", null, undefined) instanceof MetricResultBuilder).toBeTruthy();
+    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder", new DummyWeightResolver(), undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
     try {
-        expect(MetricManager.getNewMetricResultBuilder("weighted_mean_builder",null,undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
+        expect(MetricManager.getNewMetricResultBuilder("weighted_mean_builder", null, undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
         fail();
     } catch (error) {
-        
+
     }
 
 });
-test("test unique name from MetricManager",()=>{
-    const test="test";
-    for(let i=0;i<3;i++){
-        const expectedName=test+"_"+i;
-        const receivedName=MetricManager.getUniqueName(test);
+test("test unique name from MetricManager", () => {
+    const test = "test";
+    for (let i = 0; i < 3; i++) {
+        const expectedName = test + "_" + i;
+        const receivedName = MetricManager.getUniqueName(test);
         expect(receivedName).toBe(expectedName);
     }
 });
-test("normal main program works",()=>{
-    if(existsSync("test_main.txt")){
+test("normal main program works", () => {
+    if (existsSync("test_main.txt")) {
         main(["testDir/expr"])
-        let actual=parseFloat(readFileSync("testDir/expr/.evaluator_last_state.txt").toString());
-        const expected=44.669;
-        expect(actual).toBeCloseTo(expected,3);
+        let actual = parseFloat(readFileSync("testDir/expr/.evaluator_last_state.txt").toString());
+        const expected = 44.669;
+        expect(actual).toBeCloseTo(expected, 3);
     }
-   
+
 });
-test("test raw text",()=>{
-    const text="this is a test <html> with some {@see test} words";
-    const raw="this is a test with some words";
-    let langSpec=new JavaSpecificHelper();
-    let result=langSpec.getRawText(text);
+test("test raw text", () => {
+    const text = "this is a test <html> with some {@see test} words";
+    const raw = "this is a test with some words";
+    let langSpec = new JavaSpecificHelper();
+    let result = langSpec.getRawText(text);
     expect(result).toBe(raw);
 });
 

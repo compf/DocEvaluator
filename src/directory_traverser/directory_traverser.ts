@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { IMinimatch, Minimatch } from "minimatch"
-import { MiniMatchConf} from "../conf/EvaluatorConf";
+import { MiniMatchConf } from "../conf/EvaluatorConf";
 
 
 
@@ -39,7 +39,7 @@ export class DirectoryTraverser {
      * @returns A set of all absolute filenames of all relevant files
      */
     public getRelevantFiles(): string[] {
-        let resultArray:string[] =[];
+        let resultArray: string[] = [];
         this.getRelevantFilesRec(this.basePath, resultArray);
         return resultArray;
     }

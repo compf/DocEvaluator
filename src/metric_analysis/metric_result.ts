@@ -1,7 +1,4 @@
-import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { LogMessage } from "./log_message";
-import { MetricResultBuilder } from "./metric_result_builder";
-
 export class MetricResult {
     private result: number;
     private logMessages: LogMessage[];
@@ -38,8 +35,8 @@ export class MetricResult {
 /**
  * A result that is created when no child results are existing
  */
-export class InvalidMetricResult extends MetricResult{
-    constructor(){
-        super(0,[],"");
+export class InvalidMetricResult extends MetricResult {
+    constructor() {
+        super(0, [], "");
     }
 }

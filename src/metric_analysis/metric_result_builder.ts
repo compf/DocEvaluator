@@ -1,4 +1,3 @@
-import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
 import { LogMessage } from "./log_message";
 import { InvalidMetricResult, MetricResult } from "./metric_result";
 import { AbstractMetricBuilder } from "./abstract_metric_builder";
@@ -9,7 +8,7 @@ import { AbstractMetricBuilder } from "./abstract_metric_builder";
  */
 export class MetricResultBuilder extends AbstractMetricBuilder {
     protected resultList: MetricResult[] = []
-    
+
     override processResult(result: MetricResult) {
         this.resultList.push(result)
     }
@@ -18,19 +17,19 @@ export class MetricResultBuilder extends AbstractMetricBuilder {
             dest.push(item)
         }
     }
-    
+
     /**
      * Creates the aggegrated MetricResult 
      * @returns some kind of aggregation of all results that have been processed
      */
-    getAggregatedResult(creator:string): MetricResult {
+    getAggregatedResult(creator: string): MetricResult {
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
         if (numberResults == 0) return new InvalidMetricResult()
         let sum = 0;
         let allLogMessages: LogMessage[] = []
         for (let partialResult of this.resultList) {
-            if(partialResult instanceof InvalidMetricResult)continue;
+            if (partialResult instanceof InvalidMetricResult) continue;
             sum += partialResult.getResult();
             this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
         }

@@ -1,6 +1,5 @@
 import { CommentedLinesRatioMetric } from "./metrics/commented_lines_ratio_metric";
 import { DocumentationAnalysisMetric } from "./metrics/documentation_analysis_metric";
-import { IgnoreGetterSetterMetric } from "./metrics/ignore_getters_setter_metric";
 import { MedianResultBuilder } from "./median_result_builder";
 import { MetricResultBuilder } from "./metric_result_builder";
 import { SimpleCommentPresentMetric } from "./metrics/simple_comment_present_metric";
@@ -15,7 +14,7 @@ import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_met
 import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 import { FormattingGoodMetric } from "./metrics/formatting_good_metric";
 import { SpellingMetric } from "./metrics/spelling_metric";
-import { EdgeCaseMetric,DEFAULT_EDGE_CASE_TERMS } from "./metrics/edge_case_metric";
+import { EdgeCaseMetric, DEFAULT_EDGE_CASE_TERMS } from "./metrics/edge_case_metric";
 import { GunningFogMetric } from "./metrics/gunning_fog_metric";
 import { SqualeResultBuilder } from "./squale_builder";
 class BiMap<K, V>{
@@ -91,9 +90,9 @@ export namespace MetricManager {
         comment_name_coherence = "comment_name_coherence",
         certain_terms = "certain_terms",
         formatting_good = "formatting_good",
-        spelling="spelling",
-        edge_case="edge_case",
-        gunning_fog="gunning_fog"
+        spelling = "spelling",
+        edge_case = "edge_case",
+        gunning_fog = "gunning_fog"
     }
     const allMetrics: Map<string, DocumentationAnalysisMetric> = new Map<string, DocumentationAnalysisMetric>();
     const allMetricTypes: BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric> = new BiMap<MetricNames, new (name: string, params: any) => DocumentationAnalysisMetric>()
@@ -107,9 +106,9 @@ export namespace MetricManager {
         allMetricTypes.add(MetricNames.comment_name_coherence, CommentNameCoherenceMetric);
         allMetricTypes.add(MetricNames.certain_terms, CertainTermCountMetric);
         allMetricTypes.add(MetricNames.formatting_good, FormattingGoodMetric);
-        allMetricTypes.add(MetricNames.spelling,SpellingMetric);
-        allMetricTypes.add(MetricNames.edge_case,EdgeCaseMetric);
-        allMetricTypes.add(MetricNames.gunning_fog,GunningFogMetric);
+        allMetricTypes.add(MetricNames.spelling, SpellingMetric);
+        allMetricTypes.add(MetricNames.edge_case, EdgeCaseMetric);
+        allMetricTypes.add(MetricNames.gunning_fog, GunningFogMetric);
 
     }
     const uniqueNameCountMap: Map<string, number> = new Map<string, number>();
@@ -137,7 +136,7 @@ export namespace MetricManager {
      * @param weightResolver an object to assign a weight to a given string, if the builder doesn't need a resolver it will be ignored
      * @returns a new MetricResultBuilder whose type depends on a the builderName
      */
-    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver | null,params:any): MetricResultBuilder {
+    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver | null, params: any): MetricResultBuilder {
         switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":
@@ -205,16 +204,16 @@ export namespace MetricManager {
                     only_public: true,
                     k: 0.2,
                     allowed_tags: [],
-                    max_lines_no_formatting:2
+                    max_lines_no_formatting: 2
                 };
             case MetricNames.spelling:
-                return {additional_words:[],k:0.05,dictionary_path:""};
+                return { additional_words: [], k: 0.05, dictionary_path: "" };
             case MetricNames.edge_case:
                 return {
-                    terms:DEFAULT_EDGE_CASE_TERMS,
-                only_public:true,
-                k:0.1
-            }
+                    terms: DEFAULT_EDGE_CASE_TERMS,
+                    only_public: true,
+                    k: 0.1
+                }
             default:
                 return {}
         }
