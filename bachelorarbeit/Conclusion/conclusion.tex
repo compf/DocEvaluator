@@ -1,17 +1,17 @@
-In diesem Kapitel wird ein Ausblick gegeben und ein Fazit gezogen. Dazu wird erläutert, wie das Tool ergänzt werden kann und welche Probleme bei einer Erweiterung auftreten können
+In diesem Kapitel wird ein Ausblick gegeben und ein Fazit gezogen. Dazu wird erläutert, wie das Tool ergänzt werden kann und welche Probleme bei einer Erweiterung auftreten können.
 \section{Erweiterung des Tools}
-Es gibt viele Ideen, um weitere Funktionen für den \textit{DocEvaluator} zu implementieren, dies es wegen der begrenzten Bearbeitungszeitraums allerdings nicht in der Abgabeversion geschafft haben. Diese Vorschläge und Ideen werden nachfolgend erläutert.
+Es gibt viele Ideen, um weitere Funktionen für den \textit{DocEvaluator} zu implementieren, die es wegen des begrenzten Bearbeitungszeitraums allerdings nicht in der Abgabeversion geschafft haben. Diese Vorschläge und Ideen werden nachfolgend erläutert.
 \subsubsection{Weitere Programmiersprachen}
 In der ausgelieferten Version unterstützt das Tool nur Java, es wurde aber prinzipiell so konzipiert, dass eine Erweiterung auf weitere Programmiersprachen möglich ist. Dazu muss eine geeignete Parser-Klasse geschrieben werden, die eine Quellcodedatei in das in Kapitel \ref{chapter_conception} beschriebene Format überführt. 
 
 Da sich die Programmiersprachen in einigen Punkten besondere Funktionen haben, müssen diese geeignet abstrahiert werden. Beispielsweise müssen Eigenschaften in C\# in einer geeigneten Unterklasse von \textit{Component} dargestellt werden. Dazu kann eine neue abgeleitete Klasse erstellt werden. Alternativ kann die Klasse \textit{SingleMemberComponent}  benutzt werden, da sich eine C\#-Eigenschaft von der Benutzung sich kaum von einem gewöhnlichen Feld unterscheidet.
 
-Außerdem muss dann für die Programmiersprache die sprachspezifischen Hilfsmethoden passend überschrieben werden.
+Außerdem müssen dann für die Programmiersprache die sprachspezifischen Hilfsmethoden passend überschrieben werden.
 
 \subsubsection{Unterstützung mehrere Programmiersprachen}
-Eine weitere Idee ist es, mehrere Programmiersprachen zu unterstützt, sodass  beispielsweise die Dokumentationsqualität von einen gemixten Java- und Python-Projekt bewertet werden kann. Dazu kann je nach Dateiendung ein passender Parser aufgerufen werden und dann die sprachunabhängigen Metriken angewendet werden.
+Eine weitere Idee ist es, mehrere Programmiersprachen zu unterstützt, sodass  beispielsweise die Dokumentationsqualität von einen gemixten Java- und Python-Projektes bewertet werden kann. Dazu kann je nach Dateiendung ein passender Parser aufgerufen werden und dann die sprachunabhängigen Metriken angewendet werden.
 
-\subsubsection{Unterstützung weitere natürlicher Sprachen}
+\subsubsection{Unterstützung weiterer natürlicher Sprachen}
 In der ausgelieferten Fassung unterstützt das Tool nur Englisch als Sprache. Beispielsweise sind alle \ac{NLP}-Metriken sehr auf die englische Sprache bezogen. Eine Erweiterung auf andere Sprachen könnte in Erwägung gezogen werden. 
 
 \subsubsection{Unterstützung von anderen CI/CD-Plattformen}
