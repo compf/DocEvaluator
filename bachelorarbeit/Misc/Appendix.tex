@@ -7,7 +7,7 @@
 \begin{table}[h!]
     \centering
     \begin{tabular}{m{0.75cm}|m{4cm}|m{10cm}}
-        Zeile & Änderung & Begründung \\
+        \textbf{Zeile} & \textbf{Änderung} & \textbf{Begründung} \\
          \hline
         116 & Deklaration Kommentar & Hier wird ein mehrzeiliger Kommentar definiert, dies ist hier ein Alias für den Token \textit{JCOMMENT}\\
         \hline
@@ -22,7 +22,7 @@
         105 & Zulassung von Kommentaren bei Enumerationen & Zwar werden Javadoc-Kommentare in Enumerationen mit diesem Tool nicht betrachtet, sie führen aber dennoch zu Warnungen und Fehlermeldungen. Daher werden sie hier zugelassen, aber später ignoriert. \\
         \hline
         82, 83 & Erzeugung eines separaten Knotens für \textit{Extends}- und \textit{Implements}-Deklarationen & In der originalen Version der Parserdatei wurde die Definition der Basisklasse bzw. der implementierten Schnittstellen direkt über die Tokens \textit{EXTENDS} bzw. \textit{IMPLEMENTS} gelöst. Dies wurde in einem neuen Knoten \textit{extendClass} bzw. \textit{implementInterfaces} ausgegliedert, um so das Parsing etwas zu vereinfachen.  \\
-         \hline
+         
     \end{tabular}
     \caption{Änderungen an der Parserdatei}
     \label{tab:parser_changes}
@@ -76,7 +76,7 @@
 \begin{table}[h!]
     \centering
     \begin{tabular}{c|c|c}
-        Metrikname & Klassenname & Erklärt in (Kapitel)  \\\hline
+        \textbf{Metrikname} & \textbf{Klassenname} & \textbf{Erklärt in (Kapitel)}  \\\hline
           simple\_comment & SimpleCommentPresentMetric & \ref{chapter:metrics_simple_comment}\\\hline
         public\_members\_only & SimplePublicMembersOnlyMetric &  \ref{chapter:public_members}\\\hline
         large\_method\_commented & SimpleLargeMethodCommentedMetric & \ref{chapter:metric_method_long}\\\hline
@@ -88,7 +88,7 @@
           formatting\_good&FormattingGoodMetric & \ref{chapter:metric_formatting}\\\hline
           spellling&SpellingMetric & \ref{chapter:metric_spelling}\\\hline
         edge\_case&EdgeCaseMetric & \ref{chapter:metric_edge_case}\\\hline
-        gunning\_fog&GunningFogMetric & \ref{chapter:metric_gunning_fog}\\\hline
+        gunning\_fog&GunningFogMetric & \ref{chapter:metric_gunning_fog}\\
     \end{tabular}
     \caption{Alle implementierten Metriken}
     \label{table:metrics_name}
