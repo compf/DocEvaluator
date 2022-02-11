@@ -3,10 +3,13 @@ import { FleschMetric } from "./flesch_metric";
 interface ParamsType {
     consider_tags: boolean
 }
+/**
+ * Calculates the gunning fog index of a text
+ */
 export class GunningFogMetric extends FleschMetric {
 
     protected calcReadability(vars: RelevantVariables): number {
-        return 0.4 * (vars.numWords / vars.numSentences + vars.numHardWords);
+        return 0.4 * (vars.numWords / vars.numSentences + 100*(vars.numHardWords/vars.numWords));
     }
     public processResult(score: number, msgs: string[]): number {
         let finalScore = 0;
