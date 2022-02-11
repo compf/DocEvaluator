@@ -36175,6 +36175,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.LogMessage = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(7349));
 const path_1 = __importDefault(__nccwpck_require__(1017));
+/**
+ * stores a log message that can be displayed
+ */
 class LogMessage {
     constructor(msg, component) {
         let p = chalk_1.default.green(path_1.default.relative(LogMessage.BasePath, component.getTopParent().getName()));
@@ -36364,7 +36367,7 @@ var MetricManager;
     const uniqueNameCountMap = new Map();
     /**
      * Creates a unique name by appending a number at the base name depending of how often this base name was used
-     * E.g. if the input is test, the first invocation would return test0, the second invocation returns test1
+     * E.g. if the input is test, the first invocation would return test_0, the second invocation returns test_1
      * @param baseName a bgase name where a number wil be attached so that an unique name can be created
      * @returns an unique name
      */
@@ -36900,6 +36903,10 @@ const NLP_Helper_1 = __nccwpck_require__(9986);
 const component_based__metric_1 = __nccwpck_require__(1516);
 const documentation_analysis_metric_1 = __nccwpck_require__(6006);
 const util_1 = __nccwpck_require__(2363);
+/**
+ * Checks whether comments for parameters and return values include information about handling of null values
+ * This could be important for developers trying to use a method
+ */
 class EdgeCaseMetric extends component_based__metric_1.ComponentBasedMetric {
     constructor() {
         super(...arguments);
@@ -36934,6 +36941,10 @@ class EdgeCaseMetric extends component_based__metric_1.ComponentBasedMetric {
         let params = this.getParams();
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
     }
+    /**
+     *  Replace the generic %null by the valid null keyword of the programming language
+     * @param langSpec a reference to the {@link LanguageSpecificHelper}
+     */
     expandTerms(langSpec) {
         let params = this.getParams();
         const nullPlaceholder = "%null";
@@ -36991,7 +37002,7 @@ const component_based__metric_1 = __nccwpck_require__(1516);
 class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, langSpec) {
         let params = this.getParams();
-        let textsToConsider = this.getTextToConsider(component, params);
+        let textsToConsider = this.getTextsToConsider(component, params, langSpec);
         if (textsToConsider.length == 0)
             return;
         let sum = 0;
@@ -37028,22 +37039,39 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     quadratic(root1, root2, a, x) {
         return a * (x - root1) * (x - root2);
     }
-    getTextToConsider(component, params) {
+    /**
+     * collects all text form the genral description and params
+     * only returns the raw text
+     * @param component the component of which the text should be consideredc
+     * @param params the params of this metric
+     * @param langHelper the language specific information that will be used extract the raw text
+     * @returns
+     */
+    getTextsToConsider(component, params, langHelper) {
         var _a, _b, _c;
         let textsToConsider = [];
         if (component.getComment() != null) {
             if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
-                textsToConsider.push((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
+                let rawText = langHelper.getRawText((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
+                textsToConsider.push(rawText);
             }
             if (params.consider_tags) {
                 for (let tag of (_c = component.getComment()) === null || _c === void 0 ? void 0 : _c.getTags()) {
-                    if (tag.getDescription() != null)
+                    if (tag.getDescription() != null) {
+                        let rawText = langHelper.getRawText(tag.getDescription());
                         textsToConsider.push(tag.getDescription());
+                    }
                 }
             }
         }
         return textsToConsider;
     }
+    /**
+     * calcuates the readability based on the flesh score
+     * but could be overriden to use another formula
+     * @param vars The stats of the text like number of words, syllables
+     * @returns
+     */
     calcReadability(vars) {
         return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
@@ -37063,6 +37091,11 @@ exports.FormattingGoodMetric = void 0;
 const component_based__metric_1 = __nccwpck_require__(1516);
 const util_1 = __nccwpck_require__(2363);
 const documentation_analysis_metric_1 = __nccwpck_require__(6006);
+/**
+ * Checks whether the formatting of a comment is good
+ * Will check whether html tags are closed and whether unknown block tags are used
+ * will punish long methods that have no formatting
+ */
 class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, langSpec) {
         var _a;
@@ -37129,6 +37162,12 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
     filterTagsNotNeedClose(messages) {
         return messages.filter((m) => !this.needNotToBeClosed(m));
     }
+    /**
+     * find all html tags in the given text and checks whether the html is valid
+     * It will only check for unclosed tags
+     * @param text a text to search
+     * @returns a list of errors that occur if the html is not valid
+     */
     findHtmlErrors(text) {
         let regex = /<\/?\w+/g;
         let stack = [];
@@ -37176,9 +37215,12 @@ exports.FormattingGoodMetric = FormattingGoodMetric;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GunningFogMetric = void 0;
 const flesch_metric_1 = __nccwpck_require__(9545);
+/**
+ * Calculates the gunning fog index of a text
+ */
 class GunningFogMetric extends flesch_metric_1.FleschMetric {
     calcReadability(vars) {
-        return 0.4 * (vars.numWords / vars.numSentences + vars.numHardWords);
+        return 0.4 * (vars.numWords / vars.numSentences + 100 * (vars.numHardWords / vars.numWords));
     }
     processResult(score, msgs) {
         let finalScore = 0;
@@ -37398,6 +37440,12 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
         }
         this.pushResult(builder, score, logMessages, component);
     }
+    /**
+     * checks whether parameters were documented although they don't exist
+     * @param method the component to analyze
+     * @param logMessages  will be used to push log messages
+     * @returns  the number of documented parameters that are actually parameters
+     */
     checkNonExistingDocumentedParameters(method, logMessages) {
         var _a;
         let comment = method.getComment();
@@ -37424,7 +37472,7 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
         }
         let matchingParamsCount = 0;
         for (let param of method.getParams()) {
-            let tagMatchFound = comment.getTags().some((t) => t.getKind() == structured_comment_1.StructuredCommentTagKind.PARAM && t.getParam() == param.name);
+            let tagMatchFound = comment.getTags().some((t) => t.getKind() == structured_comment_1.StructuredCommentTagKind.PARAM && t.getParam() == param.name && t.getDescription() != null);
             if (tagMatchFound) {
                 matchingParamsCount++;
             }
@@ -37510,12 +37558,13 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         let logMessages = [];
         let errorCount = 0;
         if (component.getComment().getGeneralDescription() != null) {
-            let rawtext = langSpec.getRawText(component.getComment().getGeneralDescription());
-            errorCount += this.getMisspellingCount(rawtext, logMessages, component);
+            let rawText = langSpec.getRawText(component.getComment().getGeneralDescription());
+            errorCount += this.getMisspellingCount(rawText, logMessages, component);
         }
         for (let tag of component.getComment().getTags()) {
             if (tag.getDescription() != null) {
-                errorCount += this.getMisspellingCount(tag.getDescription(), logMessages, component);
+                let rawText = tag.getDescription();
+                errorCount += this.getMisspellingCount(rawText, logMessages, component);
             }
         }
         let result = this.processResult(errorCount, logMessages);
@@ -37525,9 +37574,15 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         let params = this.getParams();
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
     }
+    /**
+     * calculates how many words are probably misspelled
+     * @param text the text to analyze
+     * @param logMessages will be uesed to store log messages
+     * @param component the current component, will be used to fimnd whether a word is a name of another component defined in context
+     * @returns the number of (probably) misspelled words
+     */
     getMisspellingCount(text, logMessages, component) {
         let errorCount = 0;
-        let params = this.getParams();
         let splitted = text.split(" ");
         for (let word of splitted) {
             if (!dictionary.spellCheck(word) && !this.additionalWords.has(word) && !this.isNameDefinedInContext(word, component)) {
@@ -37537,12 +37592,25 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         }
         return errorCount;
     }
+    /**
+     * finds out whether a word is a name of a component and caches
+     *  name of components so that those names are not misspelled anymore
+     * @param word the word to be searched
+     * @param component a reference to the current component
+     * @returns true if the word is indeed a name of a component
+     */
     isNameDefinedInContext(word, component) {
         if (word == component.getName())
             return true;
         let topParent = component.getTopParent();
         return this.isNameDefinedInContextRec(word, topParent);
     }
+    /**
+     * recursively search whether the word could be a name of a parent component or defined elsewhere
+     * @param word the  word to be searched
+     * @param component a reference to the current component
+     * @returns true if the word is indeed a name of a component
+     */
     isNameDefinedInContextRec(word, component) {
         this.additionalWords.add(component.getName());
         if (component.getName() == word) {
@@ -37610,6 +37678,10 @@ var NormalizationDirection;
     NormalizationDirection[NormalizationDirection["Tool_To_ISO"] = 1] = "Tool_To_ISO";
     NormalizationDirection[NormalizationDirection["ISO_To_Tool"] = 2] = "ISO_To_Tool";
 })(NormalizationDirection || (NormalizationDirection = {}));
+/**
+ * A builder that uses the squale model
+ * @see  https://ieeexplore.ieee.org/abstract/document/4812772
+ */
 class SqualeResultBuilder extends metric_result_builder_1.MetricResultBuilder {
     constructor(params) {
         super();
@@ -37708,6 +37780,9 @@ class StubResolver {
     }
 }
 exports.StubResolver = StubResolver;
+/**
+ * A resolver that returns
+ */
 class DefaultFallbackResolver {
     constructor(map, defaultWeight) {
         this.defaultWeight = defaultWeight;
@@ -50039,7 +50114,6 @@ class JavaParser extends base_parser_1.BaseParser {
         let tokens = this.getTokens(content);
         tokens.fill();
         let parser = new JavaParser_1.JavaParser(tokens);
-        //parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         let visitor = new FileVisitor(filepath !== null && filepath !== void 0 ? filepath : "");
         let rel = parser.compilationUnit();
         var res = visitor.visit(rel);
@@ -50047,6 +50121,9 @@ class JavaParser extends base_parser_1.BaseParser {
     }
 }
 exports.JavaParser = JavaParser;
+/**
+ * visit field declarations like fields
+ */
 class FieldDecVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor(parent, comment, meta) {
         super();
@@ -50059,6 +50136,11 @@ class FieldDecVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisito
     defaultResult() {
         return null;
     }
+    /**
+     * visits the type of a field
+     * @param ctx
+     * @returns
+     */
     visitTypeType(ctx) {
         this.type = ctx.text;
         return null;
@@ -50067,6 +50149,13 @@ class FieldDecVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisito
         super.visit(ctx);
         return this.field;
     }
+    /**
+     * visit a field,
+     * returns a grouped component if the field is a grouped field (for example  "private int a, b")
+     *
+     * @param ctx
+     * @returns
+     */
     visitVariableDeclarators(ctx) {
         if (ctx.children != undefined) {
             let lineNumber = ctx.start.line;
@@ -50093,6 +50182,10 @@ function addSuperTypes(superTypes, ctx) {
         superTypes.push(s);
     }
 }
+/**
+ * visits the all extends asn implements statement so that all classes and interface from which this class
+ * inherits can be stored
+ */
 class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor() {
         super(...arguments);
@@ -50201,23 +50294,38 @@ class JavadocParser {
         else
             return null;
     }
+    /**
+     * splits the string {@link max} times,
+     * if the delimeter occurs more often than {@link max}, it will split the first {@link max} occurences
+     * after that the remaining string appended at the last array element that will be returned
+     * @param str the string to split
+     * @param delim the delimeter that will be used to split
+     * @param max determines how often the text should be splitted
+     * @returns a strign array with the splitted text, the last array element will include the remaining text seperated by white spaces
+     */
     splitWithRemainder(str, delim, max) {
         let splitted = str.split(delim).filter((c) => c != "");
         let result = [];
-        let last = "";
+        let last = [];
         for (let i = 0; i < splitted.length; i++) {
             if (i < max - 1) {
                 result.push(splitted[i]);
             }
             else {
-                last += splitted[i] + " ";
+                last.push(splitted[i]);
             }
         }
-        result.push(last.trim());
+        result.push(last.join(" "));
         return result;
     }
+    /**
+     * parses all important infromation from a line to extract the tag information
+     * @param line the line to analyze
+     * @returns an instance of a {@link StructuredCommentTag}
+     */
     parseTag(line) {
         let splitted = [];
+        // Tag is of form @tag param description
         if (this.hasParam(line)) {
             splitted = this.splitWithRemainder(line, /\s/, 3);
             let tag = this.getElementOrDefault(splitted, 0);
@@ -50225,6 +50333,7 @@ class JavadocParser {
             let descr = this.getElementOrDefault(splitted, 2);
             return new structured_comment_1.StructuredCommentTag(tag, param, descr);
         }
+        // Tag is of from @tag description
         else {
             splitted = this.splitWithRemainder(line, /\s/, 2);
             let tag = this.getElementOrDefault(splitted, 0);
@@ -50239,6 +50348,11 @@ class JavadocParser {
     startsWithTag(line) {
         return line.startsWith("@");
     }
+    /**
+     * parse the comment text by finding all tags the general description
+     * @param text
+     * @returns a StructuredComment instance
+     */
     parseCommentText(text) {
         var _a;
         let lines = text.split("\n");
@@ -50273,6 +50387,9 @@ class JavadocParser {
     }
 }
 exports.JavadocParser = JavadocParser;
+/**
+ * Visits component and the associated comments
+ */
 class CommentComponentPairVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor(parent) {
         super();
@@ -50314,6 +50431,12 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor_1.AbstractPar
         let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
         return visitor.visit(ctx);
     }
+    /**
+     * visit a comment so that it will be associated with the current component
+     * if there a multiple (Javadoc) comments the last will the final one
+     * @param ctx
+     * @returns
+     */
     visitComment(ctx) {
         let commentText = ctx.text;
         let parser = new JavadocParser();
@@ -50325,6 +50448,9 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor_1.AbstractPar
         return visitor.visit(ctx);
     }
 }
+/**
+ * Visits the parameter and the thrown exception of a method
+ */
 class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor() {
         super(...arguments);
@@ -50362,6 +50488,9 @@ var Accessibility;
     Accessibility[Accessibility["Protected"] = 1] = "Protected";
     Accessibility[Accessibility["Private"] = 2] = "Private";
 })(Accessibility || (Accessibility = {}));
+/**
+ * visits the methody body and returns the whole text of the method body without parsing further structures
+ */
 class MethodBodyTextVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     defaultResult() {
         return "";
@@ -50374,7 +50503,6 @@ class MethodBodyTextVisitor extends AbstractParseTreeVisitor_1.AbstractParseTree
 class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor(parent, comment, isPublic, isOverriding) {
         super();
-        this.modifierVisitor = new ModifierVisitor();
         this.lineNumber = 0;
         this.comment = null;
         this.methodName = "";
@@ -50398,6 +50526,11 @@ class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor 
         this.lineNumber = ctx.start.line;
         this.visitMethod(ctx);
     }
+    /**
+     * visit a constructor
+     * they are treated like methods but have the void return type and are named "constructor"
+     * @param ctx
+     */
     visitConstructorDeclaration(ctx) {
         this.lineNumber = ctx.start.line;
         this.returnType = "void";
@@ -50422,6 +50555,9 @@ class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor 
         return new method_component_1.MethodComponent(this.lineNumber, this.methodName, this.returnType, this.parent, this.comment, new JavaMethodData_1.JavaMethodData(this.isPublic, this.isOverriding, this.thrownException), this.methodParams, this.methodBody);
     }
 }
+/**
+ * visits a modifier so that this information could be used for metrics
+ */
 class ModifierVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor {
     constructor() {
         super(...arguments);
