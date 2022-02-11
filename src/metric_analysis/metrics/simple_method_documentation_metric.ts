@@ -35,6 +35,12 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
         this.pushResult(builder, score, logMessages, component);
 
     }
+/**
+ * checks whether parameters were documented although they don't exist
+ * @param method the component to analyze
+ * @param logMessages  will be used to push log messages
+ * @returns  the number of documented parameters that are actually parameters
+ */
     private checkNonExistingDocumentedParameters(method: MethodComponent, logMessages: LogMessage[]): number {
         let comment = method.getComment()!!
         let matchingParamsCount = 0;

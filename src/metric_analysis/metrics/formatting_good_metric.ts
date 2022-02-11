@@ -11,6 +11,11 @@ interface ParamType {
     allowed_tags: string[],
     max_lines_no_formatting: number
 }
+/**
+ * Checks whether the formatting of a comment is good
+ * Will check whether html tags are closed and whether unknown block tags are used
+ * will punish long methods that have no formatting
+ */
 export class FormattingGoodMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
         let errorCount = 0;
@@ -86,6 +91,12 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
     private filterTagsNotNeedClose(messages: string[]) {
         return messages.filter((m) => !this.needNotToBeClosed(m));
     }
+    /**
+     * find all html tags in the given text and checks whether the html is valid
+     * It will only check for unclosed tags
+     * @param text a text to search
+     * @returns a list of errors that occur if the html is not valid
+     */
     private findHtmlErrors(text: string) {
 
         let regex = /<\/?\w+/g;

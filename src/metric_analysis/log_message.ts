@@ -1,7 +1,9 @@
 import chalk from "chalk";
 import path from "path";
 import { Component } from "../parser/parse_result/component";
-
+/**
+ * stores a log message that can be displayed
+ */
 export class LogMessage {
     private msg: string;
     public static BasePath: string = ".";

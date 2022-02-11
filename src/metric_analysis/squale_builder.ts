@@ -3,6 +3,10 @@ import { MAX_SCORE, MIN_SCORE } from "./metrics/documentation_analysis_metric";
 import { InvalidMetricResult, MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 enum NormalizationDirection { Tool_To_ISO = 1, ISO_To_Tool }
+/**
+ * A builder that uses the squale model
+ * @see  https://ieeexplore.ieee.org/abstract/document/4812772
+ */
 export class SqualeResultBuilder extends MetricResultBuilder {
     override getAggregatedResult(creator: string): MetricResult {
         let sum = 0;

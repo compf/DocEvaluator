@@ -7,7 +7,8 @@ const config = {
   testPathIgnorePatterns: [".d.ts", ".js"],
   transformIgnorePatterns: [
     "node_modules/(?!(syllable)/)"
-  ]
+  ],
+  "coveragePathIgnorePatterns":["src/parser/antlr_files/*"]
 };
 
 module.exports = config;

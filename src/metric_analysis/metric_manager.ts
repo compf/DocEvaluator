@@ -114,7 +114,7 @@ export namespace MetricManager {
     const uniqueNameCountMap: Map<string, number> = new Map<string, number>();
     /**
      * Creates a unique name by appending a number at the base name depending of how often this base name was used
-     * E.g. if the input is test, the first invocation would return test0, the second invocation returns test1
+     * E.g. if the input is test, the first invocation would return test_0, the second invocation returns test_1
      * @param baseName a bgase name where a number wil be attached so that an unique name can be created
      * @returns an unique name
      */

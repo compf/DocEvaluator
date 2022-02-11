@@ -8,6 +8,10 @@ import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
 interface ParamsType { only_public: boolean, terms: string[], k: number }
+ /**
+  * Checks whether comments for parameters and return values include information about handling of null values
+  * This could be important for developers trying to use a method
+  */
 export class EdgeCaseMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
         if (!(component instanceof MethodComponent) || component.getComment() == null) return;
@@ -39,6 +43,10 @@ export class EdgeCaseMetric extends ComponentBasedMetric {
         return Utils.boundedGrowth(MIN_SCORE, MAX_SCORE, params.k, result);
     }
     private hasExpandedTerms = false;
+    /**
+     *  Replace the generic %null by the valid null keyword of the programming language
+     * @param langSpec a reference to the {@link LanguageSpecificHelper}
+     */
     private expandTerms(langSpec: LanguageSpecificHelper) {
         let params = this.getParams() as ParamsType;
         const nullPlaceholder = "%null"

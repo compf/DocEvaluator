@@ -25,12 +25,13 @@ export class SpellingMetric extends ComponentBasedMetric {
         let logMessages: string[] = [];
         let errorCount = 0;
         if (component.getComment()!.getGeneralDescription() != null) {
-            let rawtext = langSpec.getRawText(component.getComment()!.getGeneralDescription()!);
-            errorCount += this.getMisspellingCount(rawtext, logMessages, component)
+            let rawText = langSpec.getRawText(component.getComment()!.getGeneralDescription()!);
+            errorCount += this.getMisspellingCount(rawText, logMessages, component)
         }
         for (let tag of component.getComment()!.getTags()) {
             if (tag.getDescription() != null) {
-                errorCount += this.getMisspellingCount(tag.getDescription()!, logMessages, component);
+                let rawText=tag.getDescription()!;
+                errorCount += this.getMisspellingCount(rawText, logMessages, component);
             }
         }
         let result = this.processResult(errorCount, logMessages);
@@ -41,9 +42,15 @@ export class SpellingMetric extends ComponentBasedMetric {
         let params = this.getParams() as ParamType;
         return Utils.boundedGrowth(MIN_SCORE, MAX_SCORE, params.k, result);
     }
+    /**
+     * calculates how many words are probably misspelled
+     * @param text the text to analyze
+     * @param logMessages will be uesed to store log messages
+     * @param component the current component, will be used to fimnd whether a word is a name of another component defined in context
+     * @returns the number of (probably) misspelled words
+     */
     getMisspellingCount(text: string, logMessages: string[], component: Component): number {
         let errorCount = 0;
-        let params = this.getParams() as ParamType;
         let splitted = text.split(" ");
         for (let word of splitted) {
             if (!dictionary.spellCheck(word) && !this.additionalWords.has(word) && !this.isNameDefinedInContext(word, component)) {
@@ -53,11 +60,24 @@ export class SpellingMetric extends ComponentBasedMetric {
         }
         return errorCount;
     }
+    /**
+     * finds out whether a word is a name of a component and caches
+     *  name of components so that those names are not misspelled anymore
+     * @param word the word to be searched
+     * @param component a reference to the current component
+     * @returns true if the word is indeed a name of a component 
+     */
     isNameDefinedInContext(word: string, component: Component): boolean {
         if (word == component.getName()) return true;
         let topParent = component.getTopParent();
         return this.isNameDefinedInContextRec(word, topParent);
     }
+    /**
+     * recursively search whether the word could be a name of a parent component or defined elsewhere
+     * @param word the  word to be searched
+     * @param component a reference to the current component
+     * @returns true if the word is indeed a name of a component 
+     */
     isNameDefinedInContextRec(word: string, component: Component): boolean {
         this.additionalWords.add(component.getName());
         if (component.getName() == word) {

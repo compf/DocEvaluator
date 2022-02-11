@@ -34,7 +34,6 @@ export class JavaParser extends BaseParser {
         let tokens = this.getTokens(content);
         tokens.fill()
         let parser = new Antlr_JavaParser(tokens);
-        //parser.removeErrorListener(ConsoleErrorListener.INSTANCE)
         let visitor = new FileVisitor(filepath ?? "");
         let rel = parser.compilationUnit()
         var res = visitor.visit(rel) as FileComponent;
@@ -42,7 +41,9 @@ export class JavaParser extends BaseParser {
     }
 
 }
-
+/**
+ * visit field declarations like fields
+ */
 class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
 
     protected defaultResult(): Component | null {
@@ -53,6 +54,11 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
     private comment: StructuredComment | null;
     private meta: ComponentMetaInformation;
     private field: Component | null = null;
+    /**
+     * visits the type of a field
+     * @param ctx 
+     * @returns 
+     */
     visitTypeType(ctx: TypeTypeContext) {
         this.type = ctx.text;
         return null;
@@ -61,6 +67,13 @@ class FieldDecVisitor extends AbstractParseTreeVisitor<Component | null> impleme
         super.visit(ctx);
         return this.field;
     }
+    /**
+     * visit a field, 
+     * returns a grouped component if the field is a grouped field (for example  "private int a, b")
+     * 
+     * @param ctx 
+     * @returns 
+     */
     visitVariableDeclarators(ctx: VariableDeclaratorsContext) {
         if (ctx.children != undefined) {
             let lineNumber = ctx.start.line;
@@ -99,6 +112,10 @@ function addSuperTypes(superTypes: string[], ctx: ParserRuleContext) {
         superTypes.push(s);
     }
 }
+/**
+ * visits the all extends asn implements statement so that all classes and interface from which this class
+ * inherits can be stored
+ */
 class ClassExtendAndImplementVisitor extends AbstractParseTreeVisitor<string[]>{
     protected defaultResult(): string[] {
         return []
@@ -218,24 +235,38 @@ export class JavadocParser {
         }
         else return null;
     }
+    /**
+     * splits the string {@link max} times,
+     * if the delimeter occurs more often than {@link max}, it will split the first {@link max} occurences
+     * after that the remaining string appended at the last array element that will be returned
+     * @param str the string to split
+     * @param delim the delimeter that will be used to split
+     * @param max determines how often the text should be splitted
+     * @returns a strign array with the splitted text, the last array element will include the remaining text seperated by white spaces
+     */
     private splitWithRemainder(str: string, delim: RegExp, max: number) {
         let splitted = str.split(delim).filter((c) => c != "");
         let result = []
-        let last = "";
+        let last = []
         for (let i = 0; i < splitted.length; i++) {
             if (i < max - 1) {
                 result.push(splitted[i])
             }
             else {
-                last += splitted[i] + " ";
+                last.push(splitted[i]);
             }
-
         }
-        result.push(last.trim());
+        result.push(last.join(" "));
         return result;
     }
+    /**
+     * parses all important infromation from a line to extract the tag information
+     * @param line the line to analyze
+     * @returns an instance of a {@link StructuredCommentTag}
+     */
     parseTag(line: string): StructuredCommentTag {
         let splitted: string[] = []
+        // Tag is of form @tag param description
         if (this.hasParam(line)) {
             splitted = this.splitWithRemainder(line, /\s/, 3);
 
@@ -244,6 +275,7 @@ export class JavadocParser {
             let descr = this.getElementOrDefault(splitted, 2)
             return new StructuredCommentTag(tag, param, descr);
         }
+        // Tag is of from @tag description
         else {
             splitted = this.splitWithRemainder(line, /\s/, 2);
             let tag = this.getElementOrDefault(splitted, 0)!!
@@ -259,6 +291,11 @@ export class JavadocParser {
     startsWithTag(line: string): boolean {
         return line.startsWith("@")
     }
+    /**
+     * parse the comment text by finding all tags the general description
+     * @param text 
+     * @returns a StructuredComment instance
+     */
     parseCommentText(text: string): StructuredComment {
         let lines = text.split("\n");
         let toReplace = ["/**", "*/", "*"]
@@ -292,6 +329,9 @@ export class JavadocParser {
         return new StructuredComment(descriptionLines.join("\n"), tags);
     }
 }
+/**
+ * Visits component and the associated comments
+ */
 class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     protected defaultResult(): null | Component {
         return null;
@@ -333,6 +373,12 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
         let visitor = new ClassDecVisitor(this.parent, this.comment, (this.modifier.accessibilty == Accessibility.Public));
         return visitor.visit(ctx);
     }
+    /**
+     * visit a comment so that it will be associated with the current component
+     * if there a multiple (Javadoc) comments the last will the final one
+     * @param ctx 
+     * @returns 
+     */
     visitComment(ctx: CommentContext): null {
         let commentText = ctx.text;
         let parser = new JavadocParser();
@@ -348,6 +394,9 @@ class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | n
 }
 
 type ParamsAndThrow = { params: { type: string, name: string }[], thrownException: string[] }
+/**
+ * Visits the parameter and the thrown exception of a method
+ */
 class MethodParamsAndThrowVisitor extends AbstractParseTreeVisitor<ParamsAndThrow>{
     protected defaultResult(): ParamsAndThrow {
         return { params: [], thrownException: [] }
@@ -383,6 +432,9 @@ enum Accessibility {
     Public, Protected, Private
 }
 type ModifiererInformation = { accessibilty: Accessibility, isStatic: boolean, isOverride: boolean }
+/**
+ * visits the methody body and returns the whole text of the method body without parsing further structures
+ */
 class MethodBodyTextVisitor extends AbstractParseTreeVisitor<string>{
     protected defaultResult(): string {
         return "";
@@ -405,7 +457,6 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         this.isPublic = isPublic;
         this.isOverriding = isOverriding;
     }
-    private modifierVisitor = new ModifierVisitor()
     private lineNumber: number = 0;
     private comment: StructuredComment | null = null;
     private methodName = "";
@@ -426,6 +477,11 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
         this.lineNumber = ctx.start.line;
         this.visitMethod(ctx);
     }
+    /**
+     * visit a constructor
+     * they are treated like methods but have the void return type and are named "constructor"
+     * @param ctx 
+     */
     visitConstructorDeclaration(ctx: ConstructorDeclarationContext) {
         this.lineNumber = ctx.start.line;
         this.returnType = "void";
@@ -453,6 +509,9 @@ class MethodVisitor extends AbstractParseTreeVisitor<MethodComponent | void> imp
     }
 
 }
+/**
+ * visits a modifier so that this information could be used for metrics
+ */
 class ModifierVisitor extends AbstractParseTreeVisitor<ModifiererInformation> implements JavaParserVisitor<ModifiererInformation>{
     public defaultResult(): ModifiererInformation {
         return { accessibilty: Accessibility.Private, isStatic: false, isOverride: false };

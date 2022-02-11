@@ -11,7 +11,7 @@ export class FleschMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
         let params = this.getParams();
 
-        let textsToConsider = this.getTextToConsider(component, params as ParamsType);
+        let textsToConsider = this.getTextsToConsider(component, params as ParamsType,langSpec);
         if (textsToConsider.length == 0) return;
         let sum = 0;
 
@@ -50,21 +50,39 @@ export class FleschMetric extends ComponentBasedMetric {
     quadratic(root1: number, root2: number, a: number, x: number) {
         return a * (x - root1) * (x - root2);
     }
-    protected getTextToConsider(component: Component, params: ParamsType): string[] {
+    /**
+     * collects all text form the genral description and params
+     * only returns the raw text
+     * @param component the component of which the text should be consideredc
+     * @param params the params of this metric
+     * @param langHelper the language specific information that will be used extract the raw text
+     * @returns 
+     */
+    protected getTextsToConsider(component: Component, params: ParamsType,langHelper:LanguageSpecificHelper): string[] {
         let textsToConsider: string[] = [];
         if (component.getComment() != null) {
             if (component.getComment()?.getGeneralDescription() != null) {
-                textsToConsider.push(component.getComment()?.getGeneralDescription()!);
+                let rawText=langHelper.getRawText(component.getComment()?.getGeneralDescription()!)
+                textsToConsider.push(rawText);
             }
             if (params.consider_tags) {
                 for (let tag of component.getComment()?.getTags()!) {
-                    if (tag.getDescription() != null)
+                    if (tag.getDescription() != null){
+                        let rawText=langHelper.getRawText(tag.getDescription()!)
                         textsToConsider.push(tag.getDescription()!);
+                    }
+                        
                 }
             }
         }
         return textsToConsider;
     }
+    /**
+     * calcuates the readability based on the flesh score
+     * but could be overriden to use another formula
+     * @param vars The stats of the text like number of words, syllables
+     * @returns 
+     */
     protected calcReadability(vars: RelevantVariables): number {
         return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }

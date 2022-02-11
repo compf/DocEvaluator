@@ -56,6 +56,9 @@ export class StubResolver implements WeightResolver {
     }
 
 }
+/**
+ * A resolver that returns 
+ */
 export class DefaultFallbackResolver implements WeightResolver {
     private defaultWeight: number;
     private map: Map<string, number>
