@@ -35,7 +35,7 @@ Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile a
 			\lstinputlisting
 			[caption={Beispielhafte Syntax vom Lexer},
 			label={lst:lexer_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=ANTLR]
 			{figures/chapter4/lexer_example.g4}
 		\end{figure}
 
@@ -48,7 +48,7 @@ So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren
 			\lstinputlisting
 			[caption={Beispielhafte Syntax vom Parser},
 			label={lst:parser_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=ANTLR]
 			{figures/chapter4/parser_example.g4}
 		\end{figure}
 		
@@ -92,7 +92,7 @@ Zur Nutzung des Tools werden bestimmte Informationen benötigt, die aus verschie
 \lstinputlisting
 [caption={Beispielhafte Konfigurationsdatei für das Tool},
 label={lst:example_conf},
-captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=JSON]
 {figures/chapter4/example_conf.json}
 \end{figure}
 
@@ -118,16 +118,16 @@ Der Ort zur Speicherung des letzten Wertes ist dabei flexibel. Standardmäßig w
 
   
 \section{Einbindung in GitHub Actions}\label{chapter:github_actions_impl}
-Um das Tool in GitHub Actions einzubinden, müssen einige Schritte erfolgen. Zunächst muss eine \enquote{action.yaml} geschrieben werden, die das GitHub-Repository als Aktion markiert und die notwendige Befehle für die Ausführung enthält. Listing  \ref{lst:action} zeigt den kompletten Code einer Aktion:
+Um das Tool in GitHub Actions einzubinden, müssen einige Schritte erfolgen. Zunächst muss eine \enquote{action.yaml} geschrieben werden, die das GitHub-Repository als Aktion markiert und die notwendige Befehle für die Ausführung enthält. Listing  \ref{lst:action} zeigt einen den Code der Action. Zur Übersichtlichkeit wird in diesem Listing nur ein Eingabeparameter definiert; die restlichen Eingabeparameter werden im Programm analog definiert:
 \begin{figure} [htbp]
 \lstinputlisting
 [caption={Beispielhafte Action-Datei für das Tool},
 label={lst:action},
-captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=YAML]
 {figures/chapter4/action.yml}
 \end{figure}
 
-In den ersten beiden Zeilen werden Attribute wie der Name und eine Beschreibung gesetzt. Danach (Z. 4-7) wird der Eingabeparameter für die minimal erlaubte Bewertung für die Dokumentationsqualität definiert, damit dieser von den Nutzern der Aktion verändert werden kann.  Außerdem werden noch ein Icon und eine Farbe gesetzt (Z. 8-10), da dies von GitHub Actions vorgeschrieben ist. In den Zeilen 11 bis 13 ist der wichtige Programmcode enthalten, in denen die Aktion als JavaScript-Aktion mit der Node-Version 16 festgelegt wird. Zudem enthält die letzte Zeile auch den Pfad zur Quellcodedatei, mit dem das Programm gestartet werden soll. 
+In den ersten beiden Zeilen werden Attribute wie der Name und eine Beschreibung gesetzt. Danach (Z. 4-7) wird der Eingabeparameter für die minimal erlaubte Bewertung für die Dokumentationsqualität definiert, damit dieser von den Nutzern der Aktion verändert werden kann. In den Zeilen 8 bis 10 ist der wichtige Programmcode enthalten, in denen die Aktion als JavaScript-Aktion mit der Node-Version 16 festgelegt wird. Zudem enthält die letzte Zeile auch den Pfad zur Quellcodedatei, mit dem das Programm gestartet werden soll. 
 
 \bigskip
 Da das Programm in TypeScript programmiert wurde, eine JavaScript-Aktion aber reines JavaScript benötigt, sind weitere Schritte nötig. Es wird ein weiterer Workflow benötigt, der bei jedem Push in dem Main-Zweig folgende Schritte ausführt:
@@ -146,7 +146,7 @@ Die oben erstellte Aktion kann nun von jedem GitHub-Repository verwendet werden.
 \lstinputlisting
 [caption={Verwendung der Aktion in einem Workflow},
 label={lst:action_using},
-captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
+captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=YAML]
 {figures/chapter4/action_using.yml}
 \end{figure}
 

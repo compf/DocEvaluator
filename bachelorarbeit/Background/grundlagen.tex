@@ -110,7 +110,7 @@ Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und 
 	\lstinputlisting
 			[caption={Beispielhafter Workflow-Datei},
 			label={lst:simple_workflow},
-			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			captionpos=b,language=YAML, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/chapter2/workflow_example.yaml}
 			\end{figure}
 In Zeile 1 wird der Name des Workflows festgelegt. Anschließend werden die Bedingungen festgelegt, die den Workflow starten. In diesem Beispiel wird dieser Workflow bei einem Push (Z. 3) oder ein Pull-Request (Z. 5) ausgeführt, wenn dabei die Main-Branch betroffen ist. Mit \enquote{workflow\_dispatch} wird zusätzlich ermöglicht, den Workflow auch manuell zu starten, was zu Debugging-Zwecken sinnvoll sein kann. In Zeile 8 werden dann die Jobs definiert, wobei hier nur ein Job namens \enquote{build} (Z. 9) erstellt wird. Der Job benötigt einen Runner, der hier ein System mit einer aktuellen Ubuntu-Version ist (Z. 10). Als Nächstes werden die einzelnen Steps deklariert. Jeder Step beginnt mit einem Bindestrich. Der erste Step (Z. 12) sorgt dafür, dass der Quellcode der entsprechenden Branch des Repositorys auf das System geklont wird. Dabei wird auch eine Umgebungsvariable namens \textit{\$GITHUB\_WORKSPACE} bereitgestellt, die den Pfad des geklonten Repositorys enthält. Der nächste Step (Z. 13-14) gibt den Text \enquote{Hello, world!} auf der Kommandozeile aus. Der letzte Step (Z. 17-19) zeigt exemplarisch, dass auch mehrere Kommandozeilenbefehle sequentiell ausgeführt  werden können, indem die einzelnen Befehle auf  mehrere Zeilen verteilt werden und die erste Zeile hinter dem \textit{run} mit dem Zeichen \enquote{\textbf{|}} beginnt. Natürlich können mehrere Befehle auch per \enquote{\&} verknüpft werden. 
@@ -130,7 +130,7 @@ Um eine eigene GitHub Action zu erstellen, muss in dem Hauptverzeichnis des Repo
 			\lstinputlisting
 			[caption={Beispielhafte Action-Konfigurationsdatei},
 			label={lst:create_action_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left,language=YAML]
 			{figures/chapter2/create_action_example.yaml}
 		\end{figure}
 Zunächst wird der Name der Action und eine Beschreibung definiert. Anschließend können Eingabeparameter definiert werden, die später im Programm verwendet werden können. Zu jedem Parameter muss auch festgelegt werden, ob er zwingend erforderlich ist und den Standardwert des Parameters. Außerdem können Ausgabeparameter festgelegt werden, die spätere Actions als Eingabe nutzen können. Danach wird festgelegt, wie diese Action ausgeführt wird. Eine Action kann in einer JavaScript-Umgebung, in einem Docker-Container, oder als Liste von verschiedenen Steps ausgeführt werden. 
