@@ -61,7 +61,7 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
 
         let matchingParamsCount = 0
         for (let param of method.getParams()) {
-            let tagMatchFound = comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.PARAM && t.getParam() == param.name);
+            let tagMatchFound = comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.PARAM && t.getParam() == param.name && t.getDescription()!=null);
             if (tagMatchFound) {
                 matchingParamsCount++;
             }
