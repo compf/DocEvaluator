@@ -117,7 +117,7 @@ Auch die Qualität des Codes kann mit geeigneten Actions geprüft werden, was im
 
 
 
-\subsection{Erstellung eines Workflows}
+\subsubsection{Erstellung eines Workflows}
 Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird.
 
 
@@ -129,7 +129,8 @@ Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und 
 			{figures/chapter2/workflow_example.yaml}
 			\end{figure}
 In Zeile 1 wird der Name des Workflows festgelegt. Anschließend werden die Bedingungen festgelegt, die den Workflow starten. In diesem Beispiel wird dieser Workflow bei einem Push (Z. 3) oder ein Pull-Request (Z. 5) ausgeführt, wenn dabei die Main-Branch betroffen ist. Mit \enquote{workflow\_dispatch} wird zusätzlich ermöglicht, den Workflow auch manuell zu starten, was zu Debugging-Zwecken sinnvoll sein kann. In Zeile 8 werden dann die Jobs definiert, wobei hier nur ein Job namens \enquote{build} (Z. 9) erstellt wird. Der Job benötigt einen Runner, der hier ein System mit einer aktuellen Ubuntu-Version ist (Z. 10). Als Nächstes werden die einzelnen Steps deklariert. Jeder Step beginnt mit einem Bindestrich. Der erste Step (Z. 12) sorgt dafür, dass der Quellcode der entsprechenden Branch des Repositorys auf das System geklont wird. Dabei wird auch eine Umgebungsvariable namens \textit{\$GITHUB\_WORKSPACE} bereitgestellt, die den Pfad des geklonten Repositorys enthält. Der nächste Step (Z. 13-14) gibt den Text \enquote{Hello, world!} auf der Kommandozeile aus. Der letzte Step (Z. 17-19) zeigt exemplarisch, dass auch mehrere Kommandozeilenbefehle sequentiell ausgeführt  werden können, indem die einzelnen Befehle auf  mehrere Zeilen verteilt werden und die erste Zeile hinter dem \textit{run} mit dem Zeichen \enquote{\textbf{|}} beginnt. Natürlich können mehrere Befehle auch per \enquote{\&} verknüpft werden. 
-	\subsection{Ausführung von Workflows}
+
+\subsubsection{Ausführung von Workflows}
 Sobald ein Workflow durch ein Ereignis ausgeführt wird, kann ein Benutzer den Programmablauf live über die Registerkarte \enquote{Actions} einsehen. Nachdem der Workflow abgeschlossen wurde, können hier auch Informationen über den Erfolg bzw. Misserfolg abgerufen werden. Beispielsweise können die Ausgaben auf der Konsole angesehen werden, die bis zu 90 Tage gespeichert werden.  Des Weiteren kann ein Benutzer auch erfahren, wie viel Zeit der Workflow benötigt hat, wobei hier auch der Zeitbedarf der einzelnen Steps angezeigt wird. 
 
 Abbildung \ref{fig:workflow_output} zeigt, wie ein Benutzer den Ablauf eines Workflows einsehen kann. Der Nutzer kann durch einklappbare Gruppen die Ausgaben der einzelnen Steps einsehen, sodass Steps für die Initialisierung etc. nicht die Übersicht stören. Zudem befindet sich auf der rechten Seite der Zeitbedarf eines Steps. Durch das rote Kreuz erfährt ein Nutzer, dass dieser Step fehlgeschlagen ist. Im Original ist der Text weiß und der Hintergrund schwarz, dies wurde invertiert, um eine bessere Lesbarkeit zu ermöglichen. 
@@ -139,7 +140,8 @@ Abbildung \ref{fig:workflow_output} zeigt, wie ein Benutzer den Ablauf eines Wor
     \caption{Ausgabe eines Workflows}
     \label{fig:workflow_output}
 \end{figure}
-\subsection{Erstellung einer eigenen Action}
+
+\subsubsection{Erstellung einer eigenen Action}
 Um eine eigene GitHub Action zu erstellen, muss in dem Hauptverzeichnis des Repositorys, in dem der Programmcode der Action liegt, eine Datei namens \enquote{action.yaml} oder \enquote{action.yml} erstellt werden. Listing \ref{lst:create_action_example} zeigt eine beispielhafte \enquote{action.yaml}.
 	\begin{figure}[h!]
 			\lstinputlisting
