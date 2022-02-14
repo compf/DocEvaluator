@@ -19,14 +19,8 @@ inputs:
     description: "The global threshold when to fail"
     required: false
 
-  metric_result_builder:
-    description: "The result builder for the metrics"
-    required: false
-  file_result_builder:
-    description: "The result builder for the files"
-    required: false
-  component_result_builder:
-    description: "The result builder for a the components"
+  builder:
+    description: "The result builder for the several results"
     required: false
   parser:
     description: "the parser to be used/ the programming languages to be analyzed"

@@ -35393,17 +35393,9 @@ class EvaluatorConf {
          */
         this.absolute_threshold = 20.0;
         /**
-         * The result builder for the metrics
+         * The result builder to aggregate the result
          */
-        this.metric_result_builder = "default_builder";
-        /**
-     * The result builder for the files
-     */
-        this.file_result_builder = "default_builder";
-        /**
-         * The result builder for the components
-         */
-        this.component_result_builder = "default_builder";
+        this.builder = "default_builder";
         /**
          * the parser to be used/ the programming languages to be analyzed
          */
@@ -35432,10 +35424,6 @@ class EvaluatorConf {
          * max tolerable absolute difference from current to last run
          */
         this.relative_threshold = 30;
-        /**
-         * parameters data for the builders,  most builder won't need them
-         */
-        this.builder_params = { file: {}, component: {}, metric: {} };
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), unique_name: metric_manager_1.MetricManager.getUniqueName(s) });
         }
@@ -35497,14 +35485,8 @@ class EnvCommentConfLoader {
         if (process_1.env.INPUT_METRICS) {
             conf.metrics = JSON.parse(process_1.env.INPUT_METRICS);
         }
-        if (process_1.env.INPUT_METRIC_RESULT_BUILDER) {
-            conf.metric_result_builder = (process_1.env.INPUT_METRIC_RESULT_BUILDER);
-        }
-        if (process_1.env.INPUT_COMPONENT_RESULT_BUILDER) {
-            conf.component_result_builder = (process_1.env.INPUT_COMPONENT_RESULT_BUILDER);
-        }
-        if (process_1.env.INPUT_FILE_RESULT_BUILDER) {
-            conf.file_result_builder = (process_1.env.INPUT_FILE_RESULT_BUILDER);
+        if (process_1.env.INPUT_BUILDER) {
+            conf.builder = (process_1.env.INPUT_BUILDER);
         }
         if (process_1.env.INPUT_PARSER) {
             conf.parser = (process_1.env.INPUT_PARSER);
@@ -35702,7 +35684,6 @@ exports.main = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(7349));
 const directory_traverser_1 = __nccwpck_require__(1925);
 const metric_manager_1 = __nccwpck_require__(648);
-const metric_result_builder_1 = __nccwpck_require__(6919);
 const file_analyzer_1 = __nccwpck_require__(5560);
 const EvaluatorConf_1 = __nccwpck_require__(4881);
 const parser_factory_1 = __nccwpck_require__(7136);
@@ -35717,32 +35698,33 @@ function main(args) {
     let objects = initializeObjects(conf, workingDirectory);
     let lastResult = objects.stateManager.load();
     let finalResult = calculateResult(workingDirectory, conf, objects);
-    printLogsMessages(finalResult.getLogMessages());
+    printLogsMessages(logMessages);
     printResultByMetric(objects);
-    console.log("The result was " + finalResult.getResult());
-    objects.stateManager.save(finalResult.getResult());
-    if (finalResult.getResult() < conf.absolute_threshold) {
+    console.log("The result was " + finalResult);
+    objects.stateManager.save(finalResult);
+    if (finalResult < conf.absolute_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.relative_threshold) {
+    else if (lastResult != null && lastResult > finalResult && Math.abs(lastResult - finalResult) >= conf.relative_threshold) {
         throw new Error("Difference from last run is too high");
     }
 }
 exports.main = main;
 function printResultByMetric(objects) {
-    console.log("Results by metric:");
+    /*console.log("Results by metric:");
     for (let m of objects.resultByMetric) {
         let res = m[1].getAggregatedResult("").getResult();
         console.log(m[0], res);
-    }
+    }*/
 }
+let logMessages = [];
 function calculateResult(workingDirectory, conf, objects) {
     let traverser = new directory_traverser_1.DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
     for (let relevantFile of relevantFiles) {
         processByFile(relevantFile, objects);
     }
-    return objects.allFilesResultBulder.getAggregatedResult("");
+    return objects.builder.getAggregatedResult(logMessages);
 }
 function getWorkingDirectory(args) {
     if (args.length < 1) {
@@ -35762,14 +35744,14 @@ function initializeObjects(conf, workingDirectory) {
     let languageHelper = language_specific_helper_factory_1.LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver = new weight_resolver_1.SimpleWeightResolver(weightMap);
     let filesWeightResolver = new weight_resolver_1.PathWeightResolver(conf.path_weights, conf.default_path_weight);
+    let componentWeightResolver = new weight_resolver_1.DefaultFallbackResolver(conf.component_weights, conf.default_component_weight);
+    let weightResolverTuple = { components: componentWeightResolver, files: filesWeightResolver, metrics: metricWeightResolver };
     let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
-    let componentResultBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new weight_resolver_1.DefaultFallbackResolver(conf.component_weights, conf.default_component_weight), conf.builder_params.component);
-    let allFilesResultBulder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver, conf.builder_params.file);
-    let metricBuilder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver, conf.builder_params.metric);
+    let builder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.builder, weightResolverTuple, conf.builder_params);
     let resultByMetric = new Map();
     let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
-    return { parser, fileAnalyzer, componentResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper, stateManager };
+    return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages) {
     for (let log of logMessages) {
@@ -35777,18 +35759,8 @@ function printLogsMessages(logMessages) {
     }
 }
 function processByMetric(root, metric, objects) {
-    var _a;
     console.log("Using metric", metric.getUniqueName());
-    objects.fileAnalyzer.analyze(root, metric, objects.componentResultBuilder, objects.languageHelper);
-    let partialResult = objects.componentResultBuilder.getAggregatedResult(metric.getUniqueName());
-    if (!objects.resultByMetric.has(metric.getUniqueName())) {
-        objects.resultByMetric.set(metric.getUniqueName(), new metric_result_builder_1.MetricResultBuilder());
-    }
-    (_a = objects.resultByMetric.get(metric.getUniqueName())) === null || _a === void 0 ? void 0 : _a.processResult(partialResult);
-    console.log("Partial result", partialResult.getResult());
-    objects.metricBuilder.processResult(partialResult);
-    objects.componentResultBuilder.reset();
-    console.log();
+    objects.fileAnalyzer.analyze(root, metric, objects.builder, objects.languageHelper);
 }
 function processByFile(relevantFile, objects) {
     var root = { root: objects.parser.parse(relevantFile), path: relevantFile };
@@ -35796,10 +35768,6 @@ function processByFile(relevantFile, objects) {
     for (let metric of objects.metrics) {
         processByMetric(root, metric, objects);
     }
-    console.log();
-    let metricResult = objects.metricBuilder.getAggregatedResult(root.path);
-    objects.metricBuilder.reset();
-    objects.allFilesResultBulder.processResult(metricResult);
 }
 if (require.main === require.cache[eval('__filename')]) {
     main(process.argv.slice(2));
@@ -36215,9 +36183,9 @@ exports.MedianResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(3051);
 const metric_result_builder_1 = __nccwpck_require__(6919);
 class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
-    getAggregatedResult(creator) {
+    getAggregatedResult(logMessages) {
         if (this.resultList.length == 0)
-            return new metric_result_1.InvalidMetricResult();
+            return 0;
         this.resultList = this.resultList.filter((x) => !(x instanceof metric_result_1.InvalidMetricResult));
         this.resultList.sort((a, b) => a.getResult() - b.getResult());
         let median = 0;
@@ -36229,11 +36197,10 @@ class MedianResultBuilder extends metric_result_builder_1.MetricResultBuilder {
             let middleIndex = Math.floor(this.resultList.length / 2);
             median = this.resultList[middleIndex].getResult();
         }
-        let allLogMessages = [];
         for (let partialResult of this.resultList) {
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages);
         }
-        return new metric_result_1.MetricResult(median, allLogMessages, creator);
+        return median;
     }
 }
 exports.MedianResultBuilder = MedianResultBuilder;
@@ -36485,10 +36452,10 @@ var MetricManager;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.InvalidMetricResult = exports.MetricResult = void 0;
 class MetricResult {
-    constructor(res, msgs, creator) {
+    constructor(res, msgs, creators) {
         this.result = res;
         this.logMessages = msgs;
-        this.creator = creator;
+        this.creators = creators;
     }
     /**
      * Getter to obtain the numerical score of the MetricResult
@@ -36509,8 +36476,8 @@ class MetricResult {
      * of a file, or some other unique string
      * @returns the unique creator name
      */
-    getCreator() {
-        return this.creator;
+    getCreators() {
+        return this.creators;
     }
 }
 exports.MetricResult = MetricResult;
@@ -36519,7 +36486,7 @@ exports.MetricResult = MetricResult;
  */
 class InvalidMetricResult extends MetricResult {
     constructor() {
-        super(0, [], "");
+        super(0, [], { path: "", metric: "", component: "" });
     }
 }
 exports.InvalidMetricResult = InvalidMetricResult;
@@ -36558,21 +36525,20 @@ class MetricResultBuilder extends abstract_metric_builder_1.AbstractMetricBuilde
      * Creates the aggegrated MetricResult
      * @returns some kind of aggregation of all results that have been processed
      */
-    getAggregatedResult(creator) {
+    getAggregatedResult(logMessages) {
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
         if (numberResults == 0)
-            return new metric_result_1.InvalidMetricResult();
+            return 0;
         let sum = 0;
-        let allLogMessages = [];
         for (let partialResult of this.resultList) {
             if (partialResult instanceof metric_result_1.InvalidMetricResult)
                 continue;
             sum += partialResult.getResult();
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages);
         }
-        let result = new metric_result_1.MetricResult(sum / numberResults, allLogMessages, creator);
-        return result;
+        return sum / numberResults;
+        ;
     }
     /**
      * reset the builder  to default values
@@ -36872,7 +36838,11 @@ class DocumentationAnalysisMetric {
         return result;
     }
     pushResult(builder, score, logMessages, component) {
-        builder.processResult(new metric_result_1.MetricResult(score, logMessages, component.constructor.name));
+        const componentName = component.constructor.name;
+        const uniqueName = this.getUniqueName();
+        const filePath = component.getTopParent().getName();
+        const creatorTuple = { path: filePath, metric: uniqueName, component: componentName };
+        builder.processResult(new metric_result_1.MetricResult(score, logMessages, creatorTuple));
     }
     pushLogMessage(component, msg, logMessages) {
         logMessages.push(new log_message_1.LogMessage(msg, component));
@@ -37671,7 +37641,6 @@ var Utils;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SqualeResultBuilder = void 0;
 const documentation_analysis_metric_1 = __nccwpck_require__(6006);
-const metric_result_1 = __nccwpck_require__(3051);
 const metric_result_builder_1 = __nccwpck_require__(6919);
 var NormalizationDirection;
 (function (NormalizationDirection) {
@@ -37688,24 +37657,23 @@ class SqualeResultBuilder extends metric_result_builder_1.MetricResultBuilder {
         this.params = { lambda: 9 };
         this.params = params;
     }
-    getAggregatedResult(creator) {
+    getAggregatedResult(logMessages) {
         let sum = 0;
         let lambda = 9;
         if (this.params != undefined && this.params.lambda != undefined) {
             lambda = this.params.lambda;
         }
-        let allLogMessages = [];
         if (this.resultList.length == 0)
-            return new metric_result_1.InvalidMetricResult();
+            return 0;
         for (let partialResult of this.resultList) {
             let result = this.normalizeResult(partialResult.getResult(), NormalizationDirection.Tool_To_ISO);
             sum += Math.pow(lambda, -result);
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages);
         }
         let averaged = sum / this.resultList.length;
         let finalResult = -Math.log(averaged) / Math.log(lambda);
         finalResult = this.normalizeResult(finalResult, NormalizationDirection.ISO_To_Tool);
-        return new metric_result_1.MetricResult(finalResult, allLogMessages, creator);
+        return finalResult;
     }
     normalizeResult(result, toDirection) {
         const minScoreTool = documentation_analysis_metric_1.MIN_SCORE;
@@ -37815,29 +37783,28 @@ exports.WeightedMedianResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(3051);
 const weighted_metric_result_builder_1 = __nccwpck_require__(8429);
 class WeightedMedianResultBuilder extends weighted_metric_result_builder_1.WeightedMetricResultBuilder {
-    getAggregatedResult(creator) {
+    getAggregatedResult(logMessages) {
         let weightResultList = [];
         let weightSum = 0;
-        let allLogMessages = [];
         for (let partialResult of this.resultList) {
             if (partialResult instanceof metric_result_1.InvalidMetricResult)
                 continue;
-            let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
+            let weight = this.calcWeightProduct(partialResult.getCreators());
             weightResultList.push({ weight: weight, result: partialResult.getResult() });
             weightSum += weight;
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages);
         }
         if (weightSum == 0)
-            return new metric_result_1.InvalidMetricResult();
+            return 0;
         weightResultList.sort((a, b) => a.weight - b.weight);
         let sum = 0;
         for (let weight_result of weightResultList) {
             sum += weight_result.weight;
             if (sum > weightSum / 2) { // might not be totally correct
-                return new metric_result_1.MetricResult(weight_result.result, allLogMessages, creator);
+                return weight_result.result;
             }
         }
-        return new metric_result_1.MetricResult(weightResultList[weightResultList.length - 1].result, allLogMessages, creator);
+        return weightResultList[weightResultList.length - 1].result;
     }
 }
 exports.WeightedMedianResultBuilder = WeightedMedianResultBuilder;
@@ -37855,25 +37822,33 @@ exports.WeightedMetricResultBuilder = void 0;
 const metric_result_1 = __nccwpck_require__(3051);
 const metric_result_builder_1 = __nccwpck_require__(6919);
 class WeightedMetricResultBuilder extends metric_result_builder_1.MetricResultBuilder {
-    constructor(weightResolver) {
+    constructor(weightResolverTuple) {
         super();
-        this.weightResolver = weightResolver;
+        this.weightResolverTuple = weightResolverTuple;
     }
-    getAggregatedResult(creator) {
+    calcWeightProduct(creatorTuple) {
+        const fileWeight = this.weightResolverTuple.files.resolveWeight(creatorTuple.path);
+        const componentWeight = this.weightResolverTuple.components.resolveWeight(creatorTuple.component);
+        const metricWeight = this.weightResolverTuple.metrics.resolveWeight(creatorTuple.metric);
+        //console.log("mulitiplying ",fileWeight,componentWeight,metricWeight);
+        return fileWeight * componentWeight * metricWeight;
+    }
+    getAggregatedResult(logMessages) {
         let resultSum = 0;
         let weightSum = 0;
-        let allLogMessages = [];
         for (let partialResult of this.resultList) {
             if (partialResult instanceof metric_result_1.InvalidMetricResult)
                 continue;
-            let weight = this.weightResolver.resolveWeight(partialResult.getCreator());
+            let weight = this.calcWeightProduct(partialResult.getCreators());
+            //console.log(partialResult.getCreators(),weight);
             resultSum += (partialResult.getResult() * weight);
             weightSum += weight;
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages);
         }
         if (weightSum == 0)
-            return new metric_result_1.InvalidMetricResult();
-        return new metric_result_1.MetricResult(resultSum / weightSum, allLogMessages, creator);
+            return 0;
+        //console.log("result tuple",resultSum,weightSum)
+        return resultSum / weightSum;
     }
 }
 exports.WeightedMetricResultBuilder = WeightedMetricResultBuilder;
