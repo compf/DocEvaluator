@@ -7,7 +7,7 @@ import { SimpleLargeMethodCommentedMetric } from "./metrics/simple_large_method_
 import { SimpleMethodDocumentationMetric } from "./metrics/simple_method_documentation_metric";
 import { SimplePublicMembersOnlyMetric } from "./metrics/simple_public_members_only_metric";
 import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
-import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder";
+import { WeightedMetricResultBuilder, WeightResolverTuple } from "./weighted_metric_result_builder";
 import { FleschMetric } from "./metrics/flesch_metric";
 import { WeightResolver } from "./weight_resolver";
 import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_metric";
@@ -136,7 +136,7 @@ export namespace MetricManager {
      * @param weightResolver an object to assign a weight to a given string, if the builder doesn't need a resolver it will be ignored
      * @returns a new MetricResultBuilder whose type depends on a the builderName
      */
-    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolver | null, params: any): MetricResultBuilder {
+    export function getNewMetricResultBuilder(builderName: string, weightResolver: WeightResolverTuple | null, params: any): MetricResultBuilder {
         switch (builderName) {
             case "mean_builder":
             case "metric_result_builder":

@@ -23,9 +23,8 @@ interface SharedObjects {
 
     parser: BaseParser,
     fileAnalyzer: FileAnalyzer,
-    componentResultBuilder: MetricResultBuilder,
-    allFilesResultBulder: MetricResultBuilder,
-    metricBuilder: MetricResultBuilder,
+    builder: MetricResultBuilder,
+   
     metrics: DocumentationAnalysisMetric[],
     resultByMetric: Map<string, MetricResultBuilder>,
     languageHelper: LanguageSpecificHelper,
@@ -41,34 +40,35 @@ export function main(args: string[]) {
 
 
     let finalResult = calculateResult(workingDirectory, conf, objects);
-    printLogsMessages(finalResult.getLogMessages());
+    printLogsMessages(logMessages);
     printResultByMetric(objects);
-    console.log("The result was " + finalResult.getResult());
-    objects.stateManager.save(finalResult.getResult());
+    console.log("The result was " + finalResult);
+    objects.stateManager.save(finalResult);
 
-    if (finalResult.getResult() < conf.absolute_threshold) {
+    if (finalResult < conf.absolute_threshold) {
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult > finalResult.getResult() && Math.abs(lastResult - finalResult.getResult()) >= conf.relative_threshold) {
+    else if (lastResult != null && lastResult > finalResult && Math.abs(lastResult - finalResult) >= conf.relative_threshold) {
         throw new Error("Difference from last run is too high");
 
     }
 }
 function printResultByMetric(objects: SharedObjects) {
-    console.log("Results by metric:");
+    /*console.log("Results by metric:");
     for (let m of objects.resultByMetric) {
         let res = m[1].getAggregatedResult("").getResult();
         console.log(m[0], res);
-    }
+    }*/
 }
-function calculateResult(workingDirectory: string, conf: EvaluatorConf, objects: SharedObjects): MetricResult {
+let logMessages:LogMessage[]=[]
+function calculateResult(workingDirectory: string, conf: EvaluatorConf, objects: SharedObjects): number {
     let traverser = new DirectoryTraverser(workingDirectory, conf);
     const relevantFiles = traverser.getRelevantFiles();
     for (let relevantFile of relevantFiles) {
         processByFile(relevantFile, objects);
     }
 
-    return objects.allFilesResultBulder.getAggregatedResult("");
+    return objects.builder.getAggregatedResult(logMessages);
 }
 function getWorkingDirectory(args: string[]): string {
     if (args.length < 1) {
@@ -88,15 +88,15 @@ function initializeObjects(conf: EvaluatorConf, workingDirectory: string): Share
     let languageHelper = LanguageSpecificHelperFactory.loadHelper(conf.parser);
     let metricWeightResolver = new SimpleWeightResolver(weightMap);
     let filesWeightResolver = new PathWeightResolver(conf.path_weights, conf.default_path_weight);
+    let componentWeightResolver=new DefaultFallbackResolver(conf.component_weights, conf.default_component_weight);
+    let weightResolverTuple={components:componentWeightResolver,files:filesWeightResolver,metrics:metricWeightResolver};
     let parser = ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new FileAnalyzer();
-    let componentResultBuilder = MetricManager.getNewMetricResultBuilder(conf.component_result_builder, new DefaultFallbackResolver(conf.component_weights, conf.default_component_weight), conf.builder_params.component);
-    let allFilesResultBulder = MetricManager.getNewMetricResultBuilder(conf.file_result_builder, filesWeightResolver, conf.builder_params.file);
-    let metricBuilder = MetricManager.getNewMetricResultBuilder(conf.metric_result_builder, metricWeightResolver, conf.builder_params.metric);
+    let builder = MetricManager.getNewMetricResultBuilder(conf.builder,weightResolverTuple , conf.builder_params);
     let resultByMetric: Map<string, MetricResultBuilder> = new Map();
     let stateManager = StateManagerFactory.load(conf.state_manager, workingDirectory);
 
-    return { parser, fileAnalyzer, componentResultBuilder, allFilesResultBulder, metricBuilder, metrics, resultByMetric, languageHelper, stateManager };
+    return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages: LogMessage[]) {
     for (let log of logMessages) {
@@ -105,18 +105,7 @@ function printLogsMessages(logMessages: LogMessage[]) {
 }
 function processByMetric(root: ParseResult, metric: DocumentationAnalysisMetric, objects: SharedObjects) {
     console.log("Using metric", metric.getUniqueName())
-
-    objects.fileAnalyzer.analyze(root, metric, objects.componentResultBuilder, objects.languageHelper);
-    let partialResult = objects.componentResultBuilder.getAggregatedResult(metric.getUniqueName());
-    if (!objects.resultByMetric.has(metric.getUniqueName())) {
-        objects.resultByMetric.set(metric.getUniqueName(), new MetricResultBuilder());
-    }
-    objects.resultByMetric.get(metric.getUniqueName())?.processResult(partialResult);
-    console.log("Partial result", partialResult.getResult());
-
-    objects.metricBuilder.processResult(partialResult);
-    objects.componentResultBuilder.reset();
-    console.log();
+    objects.fileAnalyzer.analyze(root, metric, objects.builder, objects.languageHelper);
 }
 function processByFile(relevantFile: string, objects: SharedObjects) {
     var root: ParseResult = { root: objects.parser.parse(relevantFile), path: relevantFile };
@@ -125,10 +114,6 @@ function processByFile(relevantFile: string, objects: SharedObjects) {
         processByMetric(root, metric, objects)
     }
 
-    console.log();
-    let metricResult = objects.metricBuilder.getAggregatedResult(root.path);
-    objects.metricBuilder.reset();
-    objects.allFilesResultBulder.processResult(metricResult);
 }
 if (require.main === module) {
     main(process.argv.slice(2))

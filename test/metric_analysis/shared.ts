@@ -16,7 +16,7 @@ export function testSimpleFile(metricName: MetricManager.MetricNames, filename: 
     let res = { path: filename, root: root }
     let analyzer = new FileAnalyzer();
     analyzer.analyze(res, spelling, builder, languageHelper);
-    let result = builder.getAggregatedResult("").getResult()
+    let result = builder.getAggregatedResult([]);
     expect(result).toBeCloseTo(expected, digits);
 
 }

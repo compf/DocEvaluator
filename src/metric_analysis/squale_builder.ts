@@ -8,24 +8,23 @@ enum NormalizationDirection { Tool_To_ISO = 1, ISO_To_Tool }
  * @see  https://ieeexplore.ieee.org/abstract/document/4812772
  */
 export class SqualeResultBuilder extends MetricResultBuilder {
-    override getAggregatedResult(creator: string): MetricResult {
+    override getAggregatedResult(logMessages:LogMessage[]): number {
         let sum = 0;
         let lambda = 9;
         if (this.params != undefined && this.params.lambda != undefined) {
             lambda = this.params.lambda;
         }
-        let allLogMessages: LogMessage[] = [];
-        if (this.resultList.length == 0) return new InvalidMetricResult();
+        if (this.resultList.length == 0) return 0;
         for (let partialResult of this.resultList) {
             let result = this.normalizeResult(partialResult.getResult(), NormalizationDirection.Tool_To_ISO);
             sum += Math.pow(lambda, -result);
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages)
 
         }
         let averaged = sum / this.resultList.length;
         let finalResult = -Math.log(averaged) / Math.log(lambda);
         finalResult = this.normalizeResult(finalResult, NormalizationDirection.ISO_To_Tool);
-        return new MetricResult(finalResult, allLogMessages, creator);
+        return   finalResult;
 
     }
     normalizeResult(result: number, toDirection: NormalizationDirection): number {

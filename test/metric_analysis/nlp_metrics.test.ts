@@ -40,7 +40,7 @@ test("test complex flesh metric", () => {
     let builder = new MetricResultBuilder();
     let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
     analyzer.analyze(res, MetricManager.createMetricByType(FleschMetric, "flesch_complex", params), builder, languageHelper);
-    let score = builder.getAggregatedResult("").getResult();
+    let score = builder.getAggregatedResult([]);
     expect(score).toBeCloseTo(15.68);
 });
 
@@ -53,7 +53,7 @@ test("test easy flesh metric", () => {
     let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
 
     analyzer.analyze(res, MetricManager.createMetricByType(FleschMetric, "flesch_complex", params), builder, languageHelper);
-    let score = builder.getAggregatedResult("").getResult();
+    let score = builder.getAggregatedResult([]);
     expect(score).toBeCloseTo(85);
 });
 test(" test get words", () => {
@@ -87,7 +87,7 @@ test("test method coherence", () => {
     let res = { path, root }
     let analyzer = new FileAnalyzer();
     analyzer.analyze(res, coherence, builder, languageHelper);
-    let result = builder.getAggregatedResult("").getResult()
+    let result = builder.getAggregatedResult([]);
     expect(result).toBe(60);
 });
 test("test certain terms count", () => {
@@ -99,7 +99,7 @@ test("test certain terms count", () => {
     let res = { path, root }
     let analyzer = new FileAnalyzer();
     analyzer.analyze(res, certain_terms, builder, languageHelper);
-    let result = builder.getAggregatedResult("").getResult()
+    let result = builder.getAggregatedResult([])
     expect(result).toBeCloseTo(90.7856);
 });
 

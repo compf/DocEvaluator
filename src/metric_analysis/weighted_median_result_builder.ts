@@ -3,27 +3,26 @@ import { InvalidMetricResult, MetricResult } from "./metric_result";
 import { WeightedMetricResultBuilder } from "./weighted_metric_result_builder"
 
 export class WeightedMedianResultBuilder extends WeightedMetricResultBuilder {
-    override getAggregatedResult(creator: string): MetricResult {
+    override getAggregatedResult(logMessages:LogMessage[]): number {
         let weightResultList: { weight: number, result: number }[] = []
         let weightSum = 0;
-        let allLogMessages: LogMessage[] = [];
         for (let partialResult of this.resultList) {
             if (partialResult instanceof InvalidMetricResult) continue;
-            let weight = this.weightResolver.resolveWeight(partialResult.getCreator())!;
+            let weight = this.calcWeightProduct(partialResult.getCreators())
             weightResultList.push({ weight: weight, result: partialResult.getResult() })
             weightSum += weight;
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages);
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages);
         }
 
-        if (weightSum == 0) return new InvalidMetricResult();
+        if (weightSum == 0) return 0;
         weightResultList.sort((a, b) => a.weight - b.weight);
         let sum = 0
         for (let weight_result of weightResultList) {
             sum += weight_result.weight;
             if (sum > weightSum / 2) { // might not be totally correct
-                return new MetricResult(weight_result.result, allLogMessages, creator);
+                return weight_result.result
             }
         }
-        return new MetricResult(weightResultList[weightResultList.length - 1].result, allLogMessages, creator);
+        return weightResultList[weightResultList.length - 1].result;
     }
 }

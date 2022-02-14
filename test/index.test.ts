@@ -31,7 +31,8 @@ class DummyWeightResolver implements WeightResolver {
 }
 test("Test  get new result builder", () => {
     expect(MetricManager.getNewMetricResultBuilder("default_builder", null, undefined) instanceof MetricResultBuilder).toBeTruthy();
-    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder", new DummyWeightResolver(), undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
+    let resolverTuple={components:new DummyWeightResolver(),files:new DummyWeightResolver(),metrics:new DummyWeightResolver()}
+    expect(MetricManager.getNewMetricResultBuilder("weighted_median_builder", resolverTuple, undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
     try {
         expect(MetricManager.getNewMetricResultBuilder("weighted_mean_builder", null, undefined) instanceof WeightedMedianResultBuilder).toBeTruthy();
         fail();
@@ -52,7 +53,7 @@ test("normal main program works", () => {
     if (existsSync("test_main.txt")) {
         main(["testDir/expr"])
         let actual = parseFloat(readFileSync("testDir/expr/.evaluator_last_state.txt").toString());
-        const expected = 44.669;
+        const expected = 38.91;
         expect(actual).toBeCloseTo(expected, 3);
     }
 

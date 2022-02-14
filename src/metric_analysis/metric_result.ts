@@ -1,12 +1,17 @@
 import { LogMessage } from "./log_message";
+export type CreatorTuple={
+    path:string,
+    component:string,
+    metric:string
+}
 export class MetricResult {
     private result: number;
     private logMessages: LogMessage[];
-    private creator: string;
-    constructor(res: number, msgs: LogMessage[], creator: string) {
+    private creators: CreatorTuple;
+    constructor(res: number, msgs: LogMessage[], creators: CreatorTuple) {
         this.result = res;
         this.logMessages = msgs;
-        this.creator = creator;
+        this.creators = creators;
     }
     /**
      * Getter to obtain the numerical score of the MetricResult
@@ -28,8 +33,8 @@ export class MetricResult {
      * of a file, or some other unique string
      * @returns the unique creator name
      */
-    public getCreator(): string {
-        return this.creator;
+    public getCreators(): CreatorTuple {
+        return this.creators;
     }
 }
 /**
@@ -37,6 +42,6 @@ export class MetricResult {
  */
 export class InvalidMetricResult extends MetricResult {
     constructor() {
-        super(0, [], "");
+        super(0, [], {path:"",metric:"",component:""});
     }
 }

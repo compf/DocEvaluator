@@ -22,19 +22,17 @@ export class MetricResultBuilder extends AbstractMetricBuilder {
      * Creates the aggegrated MetricResult 
      * @returns some kind of aggregation of all results that have been processed
      */
-    getAggregatedResult(creator: string): MetricResult {
+    getAggregatedResult(logMessages:LogMessage[]): number {
         //prevent numberResults from becoming 0
         let numberResults = this.resultList.length;
-        if (numberResults == 0) return new InvalidMetricResult()
+        if (numberResults == 0) return 0;
         let sum = 0;
-        let allLogMessages: LogMessage[] = []
         for (let partialResult of this.resultList) {
             if (partialResult instanceof InvalidMetricResult) continue;
             sum += partialResult.getResult();
-            this.putAllLogMessages(partialResult.getLogMessages(), allLogMessages)
+            this.putAllLogMessages(partialResult.getLogMessages(), logMessages)
         }
-        let result = new MetricResult(sum / numberResults, allLogMessages, creator);
-        return result;
+        return sum/numberResults;;
     }
     /**
      * reset the builder  to default values

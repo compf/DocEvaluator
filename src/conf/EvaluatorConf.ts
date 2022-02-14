@@ -34,19 +34,10 @@ export class EvaluatorConf {
     absolute_threshold: number = 20.0;
 
     /**
-     * The result builder for the metrics
+     * The result builder to aggregate the result
      */
-    metric_result_builder: string = "default_builder";
+    builder: string = "default_builder";
 
-    /**
- * The result builder for the files
- */
-    file_result_builder: string = "default_builder";
-
-    /**
-     * The result builder for the components
-     */
-    component_result_builder: string = "default_builder";
 
     /**
      * the parser to be used/ the programming languages to be analyzed
@@ -86,7 +77,7 @@ export class EvaluatorConf {
     /**
      * parameters data for the builders,  most builder won't need them
      */
-    builder_params: { file: any, component: any, metric: any } = { file: {}, component: {}, metric: {} }
+    builder_params: any
 
     constructor() {
         for (let s of defaultMetrics) {
@@ -157,14 +148,8 @@ export class EnvCommentConfLoader implements ConfLoader {
         if (env.INPUT_METRICS) {
             conf.metrics = JSON.parse(env.INPUT_METRICS)
         }
-        if (env.INPUT_METRIC_RESULT_BUILDER) {
-            conf.metric_result_builder = (env.INPUT_METRIC_RESULT_BUILDER)
-        }
-        if (env.INPUT_COMPONENT_RESULT_BUILDER) {
-            conf.component_result_builder = (env.INPUT_COMPONENT_RESULT_BUILDER)
-        }
-        if (env.INPUT_FILE_RESULT_BUILDER) {
-            conf.file_result_builder = (env.INPUT_FILE_RESULT_BUILDER)
+        if (env.INPUT_BUILDER) {
+            conf.builder = (env.INPUT_BUILDER)
         }
         if (env.INPUT_PARSER) {
             conf.parser = (env.INPUT_PARSER)

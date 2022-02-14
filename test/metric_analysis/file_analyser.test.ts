@@ -12,7 +12,7 @@ import { WeightedMedianResultBuilder } from "../../src/metric_analysis/weighted_
 import { WeightedMetricResultBuilder } from "../../src/metric_analysis/weighted_metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
 import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
-import { PathWeightResolver, SimpleWeightResolver, WeightResolver } from "../../src/metric_analysis/weight_resolver";
+import { PathWeightResolver, SimpleWeightResolver, StubResolver, WeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { FormattingGoodMetric } from "../../src/metric_analysis/metrics/formatting_good_metric";
 import { SqualeResultBuilder } from "../../src/metric_analysis/squale_builder";
@@ -35,7 +35,7 @@ test("test simple present metric on commented class", () => {
     let resultBuilder = new MetricResultBuilder();
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple_comment_test", undefined), resultBuilder, languageHelper);
     const expectedResult = (3 / 11) * 100;
-    expect(resultBuilder.getAggregatedResult("").getResult()).toBeCloseTo(expectedResult, 5)
+    expect(resultBuilder.getAggregatedResult([])).toBeCloseTo(expectedResult, 5)
 });
 test("test public only metric on commented class", () => {
     let root = getCommentedClassRoot();
@@ -43,7 +43,7 @@ test("test public only metric on commented class", () => {
     let analyzer = new FileAnalyzer();
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimplePublicMembersOnlyMetric, "public_only_test", undefined), resultBuilder, languageHelper);
     const expectedResult = (2 / 6) * 100;
-    expect(resultBuilder.getAggregatedResult("").getResult()).toBeCloseTo(expectedResult, 5)
+    expect(resultBuilder.getAggregatedResult([])).toBeCloseTo(expectedResult, 5)
 });
 test("test longer uncommented method", () => {
     let parser = new JavaParser();
@@ -53,7 +53,7 @@ test("test longer uncommented method", () => {
     let analyzer = new FileAnalyzer();
     let conf = { ignore_lines: ["", "{", "}"], k: 0.2 }
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleLargeMethodCommentedMetric, "large_method_test", conf), builder, languageHelper);
-    let result = builder.getAggregatedResult("");
+    let result = builder.getAggregatedResult([]);
 
 
 
@@ -65,7 +65,7 @@ test("test longer uncommented method", () => {
 
     const expectedResult = (shortCommentedMethodResult + shortUncommentedResult + longCommentedMethodResult + longUncommentedResult) / 4;
 
-    expect(result.getResult()).toBeCloseTo(expectedResult);
+    expect(result).toBeCloseTo(expectedResult);
 
 
 });
@@ -77,8 +77,8 @@ test("test commented ratio metric", () => {
     let analyzer = new FileAnalyzer();
     let conf = { ignore_lines: ["", "{", "}"] }
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(CommentedLinesRatioMetric, "comment_line_ratio_test", conf), builder, languageHelper);
-    let result = builder.getAggregatedResult("");
-    expect(result.getResult()).toBe(50);
+    let result = builder.getAggregatedResult([]);
+    expect(result).toBe(50);
 });
 test("test median builder", () => {
     let oddCountArray = [7, 3, 6, 2, 1, 4, 2, 8, 10, 15, 19]
@@ -86,23 +86,23 @@ test("test median builder", () => {
 
     expect(oddCountArray.length % 2 == 1).toBeTruthy();
     expect(evenCountArray.length % 2 == 0).toBeTruthy();
-
+    const creatorTuple={path:"",component:"",metric:""};
     let medianBuilder = new MedianResultBuilder();
     for (let odd of oddCountArray) {
-        medianBuilder.processResult(new MetricResult(odd, [], "simple_comment_median"))
+        medianBuilder.processResult(new MetricResult(odd, [], creatorTuple))
     }
-    let result = medianBuilder.getAggregatedResult("");
+    let result = medianBuilder.getAggregatedResult([]);
     let expectedResult = 6;
-    expect(result.getResult()).toBe(expectedResult)
+    expect(result).toBe(expectedResult)
 
 
     medianBuilder = new MedianResultBuilder();
     for (let even of evenCountArray) {
-        medianBuilder.processResult(new MetricResult(even, [], "simple_comment_median"))
+        medianBuilder.processResult(new MetricResult(even, [], creatorTuple))
     }
-    result = medianBuilder.getAggregatedResult("");
+    result = medianBuilder.getAggregatedResult([]);
     expectedResult = 15.5;
-    expect(result.getResult()).toBe(expectedResult)
+    expect(result).toBe(expectedResult)
 
 
 
@@ -118,14 +118,14 @@ test("weighted median builder", () => {
     let map = new Map<any, number>();
     map.set("simple_comment_w_median", 2);
     map.set("simple_public_w_median", 5);
-
-    let medianBuilder = new WeightedMedianResultBuilder(new SimpleWeightResolver(map))
+    let resolverTuple={metrics:new SimpleWeightResolver(map),files:new StubResolver(),components:new StubResolver()}
+    let medianBuilder = new WeightedMedianResultBuilder(resolverTuple)
     for (let number of oddCountArray) {
-        medianBuilder.processResult(new MetricResult(number, [], number % 2 == 0 ? "simple_comment_w_median" : "simple_public_w_median"))
+        medianBuilder.processResult(new MetricResult(number, [], {path:"",component:"",metric:number % 2 == 0 ? "simple_comment_w_median" : "simple_public_w_median"}))
     }
-    let result = medianBuilder.getAggregatedResult("");
+    let result = medianBuilder.getAggregatedResult([]);
     let expectedResult = 3;
-    expect(result.getResult()).toBe(expectedResult)
+    expect(result).toBe(expectedResult)
 
 
 
@@ -139,10 +139,10 @@ test("test method documentation compatible", () => {
     let analyzer = new FileAnalyzer();
     let conf = undefined;
     analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleMethodDocumentationMetric, "doc_complete", conf), builder, languageHelper);
-    let result = builder.getAggregatedResult("");
+    let result = builder.getAggregatedResult([]);
 
     const expected = 63.8888888;
-    expect(result.getResult()).toBeCloseTo(expected);
+    expect(result).toBeCloseTo(expected);
 
 });
 test("weighted result builder", () => {
@@ -152,23 +152,25 @@ test("weighted result builder", () => {
 
     weightMap.set("simple_comment_weighted", 1);
     weightMap.set("simple_public_weighted", 3);
+    let resolverTuple={metrics:new SimpleWeightResolver(weightMap),files:new StubResolver(),components:new StubResolver()}
 
     let parser = new JavaParser();
     const path = "testDir/commented_class.java";
     let root = parser.parse(path);
 
-    let builder = new WeightedMetricResultBuilder(new SimpleWeightResolver(weightMap));
+    let builder = new WeightedMetricResultBuilder(resolverTuple);
 
     let firstBuilder = new MetricResultBuilder();
     let analyzer = new FileAnalyzer();
     analyzer.analyze({ root, path }, simple_comment, firstBuilder, languageHelper);
     const simpleCommentExpectedResult = (3 / 11) * 100;
-    let simpleCommentResult = firstBuilder.getAggregatedResult("simple_comment_weighted");
+
+    let simpleCommentResult =  new MetricResult(firstBuilder.getAggregatedResult([]),[],{path:"",metric:"simple_comment_weighted",component:""});
 
     let secondBuilder = new MetricResultBuilder();
 
     analyzer.analyze({ root, path }, public_members, secondBuilder, languageHelper);
-    let publicMembersOnlyResult = secondBuilder.getAggregatedResult("simple_public_weighted");
+    let publicMembersOnlyResult = new MetricResult(secondBuilder.getAggregatedResult([]),[],{path:"",metric:"simple_public_weighted",component:""});
 
     const publicMembersExpectedOnlyResult = (2 / 6) * 100;
     let simple_comment_weight = weightMap.get("simple_comment_weighted")!;
@@ -176,7 +178,7 @@ test("weighted result builder", () => {
     let expectedResult = (simpleCommentExpectedResult * simple_comment_weight + publicMembersExpectedOnlyResult * public_members_weight) / (simple_comment_weight + public_members_weight);
     builder.processResult(simpleCommentResult);
     builder.processResult(publicMembersOnlyResult);
-    let actual = builder.getAggregatedResult("").getResult();
+    let actual = builder.getAggregatedResult([]);
     expect(actual).toBeCloseTo(expectedResult);
 
 });
@@ -191,8 +193,8 @@ test("test ignore getters setters", () => {
     let analyzer = new FileAnalyzer();
 
     analyzer.analyze(res, metric, builder, languageHelper)
-    let result = builder.getAggregatedResult("");
-    expect(result.getResult()).toBe(25);
+    let result = builder.getAggregatedResult([]);
+    expect(result).toBe(25);
 
 });
 
@@ -204,26 +206,27 @@ test("test ignore comments", () => {
     let file_analyzer = new FileAnalyzer();
     let builder = new MetricResultBuilder();
     file_analyzer.analyze(result, MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple_comment_ignore", undefined), builder, languageHelper);
-    let metricResult = builder.getAggregatedResult("").getResult();
+    let metricResult = builder.getAggregatedResult([]);
     expect(metricResult).toBe(50);
 });
 
 test("test weighted path", () => {
     let paths = ["./testDir/CommentClass.java", "./testDir/commented_class.java", "./testDir/LargeMethodTest.java", "./testDir/GetterSetter.java"];
     let path_weights = [{ path: "*Class.java", weight: 5 }, { path: "*_class.java", weight: 5 }];
-    let builder = new WeightedMetricResultBuilder(new PathWeightResolver(path_weights, 1));
+    let resolverTuple={metrics:new StubResolver(),files:new PathWeightResolver(path_weights, 1),components:new StubResolver()}
+
+    let builder = new WeightedMetricResultBuilder(resolverTuple);
     let metric = MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple_weighted_path", undefined);
     let parser = new JavaParser();
     let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder = new MetricResultBuilder();
     for (let p of paths) {
         let root = parser.parse(p);
-        fileAnalyzer.analyze({ path: p, root: root }, metric, singleFileResultBuilder, languageHelper);
-        builder.processResult(singleFileResultBuilder.getAggregatedResult(p));
-        singleFileResultBuilder.reset();
+        fileAnalyzer.analyze({ path: p, root: root }, metric, builder, languageHelper);
+     
     }
-    let result = builder.getAggregatedResult("").getResult();
-    expect(result).toBeCloseTo(40.887, 3);
+    let result = builder.getAggregatedResult([]);
+    const expected=38.235;
+    expect(result).toBeCloseTo(expected, 3);
 
 });
 test("test overriding and java throws", () => {
@@ -235,7 +238,7 @@ test("test overriding and java throws", () => {
     let fileAnalyzer = new FileAnalyzer();
     let singleFileResultBuilder = new MetricResultBuilder();
     fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult("").getResult();
+    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
     const expectedResult = 80;
     expect(finalResult).toBeCloseTo(expectedResult);
 });
@@ -249,7 +252,7 @@ test("test good formatting", () => {
     let fileAnalyzer = new FileAnalyzer();
     let singleFileResultBuilder = new MetricResultBuilder();
     fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult("").getResult();
+    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
     const expectedResult = 87.9153;
     ;
     expect(finalResult).toBeCloseTo(expectedResult);
@@ -265,7 +268,7 @@ test("test no formatting", () => {
     let fileAnalyzer = new FileAnalyzer();
     let singleFileResultBuilder = new MetricResultBuilder();
     fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult("").getResult();
+    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
     const expectedResult = 67.032;
     expect(finalResult).toBeCloseTo(expectedResult);
 });
@@ -291,24 +294,26 @@ test("test component weighting", () => {
     let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.simple_comment);
     let doc = MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple", params);
     let fileAnalyzer = new FileAnalyzer();
+    let resolverTuple={metrics:new StubResolver(),components:new ComponentWeight(),files:new StubResolver()}
 
 
 
-    let singleFileResultBuilder = new WeightedMetricResultBuilder(new ComponentWeight());
+    let singleFileResultBuilder = new WeightedMetricResultBuilder(resolverTuple);
     fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult("").getResult();
+    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
     const expectedResult = 87.5;
     expect(finalResult).toBeCloseTo(expectedResult);
 });
 
 test("squale result builder", () => {
     let squale = new SqualeResultBuilder(undefined);
-    let metricResults = [100, 100, 90, 100, 100, 80, 0, 100, 100].map((i) => new MetricResult(i, [], ""));
+    let creatorTuple={path:"",component:"",metric:""};
+    let metricResults = [100, 100, 90, 100, 100, 80, 0, 100, 100].map((i) => new MetricResult(i, [], creatorTuple));
     expect(metricResults).toHaveLength(9);
     for (let m of metricResults) {
         squale.processResult(m);
     }
-    let finalResult = squale.getAggregatedResult("").getResult();
+    let finalResult = squale.getAggregatedResult([]);
     const expected = 33.092;
     expect(finalResult).toBeCloseTo(expected);
 });

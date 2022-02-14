@@ -45,7 +45,11 @@ export abstract class DocumentationAnalysisMetric {
         return result;
     }
     protected pushResult(builder: AbstractMetricBuilder, score: number, logMessages: LogMessage[], component: Component) {
-        builder.processResult(new MetricResult(score, logMessages, component.constructor.name));
+        const componentName=component.constructor.name;
+        const uniqueName=this.getUniqueName();
+        const filePath=component.getTopParent().getName();
+        const creatorTuple={path:filePath,metric:uniqueName,component:componentName};
+        builder.processResult(new MetricResult(score, logMessages, creatorTuple));
     }
     protected pushLogMessage(component: Component, msg: string, logMessages: LogMessage[]) {
 
