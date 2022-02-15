@@ -15,10 +15,13 @@ npm  install -g javadoc_evaluator
 ```bash
 npm run launch <path to project folder>
 ```
-The project folder should contain a file called "comment_conf.json"
+The project folder should contain a file called "comment_conf.json". An example for a comment_conf.json can be found in the root directory of this project.
+
+To use this project as a GitHub action, you can use the "action" branch of this project and import it as a step
+The action branch contains all neccessary files to run the action. An example worklflow for using this action can be found at "action_usage_example.yml" in the root directory of this project.
 
 ## Contributing
-This is a private project for a Bachelor thesis for now so pull request will be ignored for the time being.
+This is a private project for a Bachelor thesis for now, so pull request will be ignored for the time being.
 Beginning in April 2022, you are encouraged to submit pull request
 
 ## License

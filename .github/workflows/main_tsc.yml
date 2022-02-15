@@ -17,6 +17,7 @@ jobs:
       - run: npm i -g @vercel/ncc
       - run: npm run deploy && git stash && cp en-US.dic ./build/en-US.dic
         #based on https://dev.to/krzkaczor/fixing-github-actions-development-using-github-actions-33mk
+        # dictionary file en-US.dic cloned from https://www.npmjs.com/package/simple-spellchecker
       - uses: ActionwareIO/branch-push-action@action
         with:
           branch: action
