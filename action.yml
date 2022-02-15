@@ -4,13 +4,10 @@ author: 'Timo Schoemaker'
 inputs:
   include:
     description: "All file names that should be included in the analysis should be defined here.
-     * Use common Linux syntax (*) to indicate that a filename should start or end with a specific string
-     */"
+     Use common Linux syntax (*) to indicate that a filename should start or end with a specific string"
     required: false
   exclude:
-    description: "Similary as include but used to exclude specific files,
-     * should be a subset of include
-     */"
+    description: "Similary as include but used to exclude specific files,should be a subset of include"
     required: false
   metrics:
     description: "define all metrics and their respective weights here"
@@ -44,7 +41,7 @@ inputs:
     description: "The default weight for a given component"
     required: false
   builder_params:
-    description: "parameters data for the builders,  most builder won't need them"
+    description: "parameters data for the builder,  most builder won't need them"
     required: false
 runs:
   using: 'node16'
