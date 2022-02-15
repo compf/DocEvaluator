@@ -109,6 +109,9 @@ function sanitize(conf: EvaluatorConf): EvaluatorConf {
         if (m.params == undefined) {
             m.params = MetricManager.getDefaultMetricParam(m.metric_name);
         }
+        if(m.weight==undefined){
+            m.weight=1;
+        }
     }
     return conf;
 }
