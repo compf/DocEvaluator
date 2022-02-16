@@ -9,7 +9,6 @@ import { SimplePublicMembersOnlyMetric } from "./metrics/simple_public_members_o
 import { WeightedMedianResultBuilder } from "./weighted_median_result_builder";
 import { WeightedMetricResultBuilder, WeightResolverTuple } from "./weighted_metric_result_builder";
 import { FleschMetric } from "./metrics/flesch_metric";
-import { WeightResolver } from "./weight_resolver";
 import { CommentNameCoherenceMetric } from "./metrics/comment_name_coherence_metric";
 import { CertainTermCountMetric } from "./metrics/certain_terms_count_metric";
 import { FormattingGoodMetric } from "./metrics/formatting_good_metric";

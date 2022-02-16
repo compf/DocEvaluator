@@ -75,7 +75,7 @@ export class EvaluatorConf {
     relative_threshold: number = 30;
 
     /**
-     * parameters data for the builders,  most builder won't need them
+     * parameters data for the builder,  most builder won't need them
      */
     builder_params: any
 
