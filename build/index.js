@@ -35451,6 +35451,9 @@ function sanitize(conf) {
         if (m.params == undefined) {
             m.params = metric_manager_1.MetricManager.getDefaultMetricParam(m.metric_name);
         }
+        if (m.weight == undefined) {
+            m.weight = 1;
+        }
     }
     return conf;
 }
