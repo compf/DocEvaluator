@@ -37,7 +37,7 @@
 @WWW{PMD,
   title   = {PMD},
   url     = {https://pmd.github.io/},
-  urldate = {2021-12-16},
+  urldate = {2022-02-17},
 }
 
 @WWW{Checkstyle,
@@ -58,7 +58,7 @@
 @WWW{ANTLR,
   title   = {ANTLR},
   url     = {https://www.antlr.org/},
-  urldate = {2021-12-16},
+  urldate = {2022-02-17},
 }
 
 @WWW{GithubActions,
@@ -68,9 +68,9 @@
 }
 
 @WWW{ANTLRgrammarforjava,
-  title   = {ANTLR grammar for java},
+  title   = {ANTLR-Grammatik für Java},
   url     = {https://github.com/antlr/grammars-v4/tree/master/java},
-  urldate = {2021-12-16},
+  urldate = {2022-02-17},
 }
 
 @InProceedings{EvaluatingtheQualityoftheDocumentationofOpenSourceSoftware,
@@ -868,6 +868,7 @@ facilitating its maintenance.},
 }
 
 @WWW{Minimatch,
+  date    = {2022-02-17},
   url     = {https://github.com/isaacs/minimatch},
   urldate = {2021-12-16},
 }
@@ -1133,6 +1134,31 @@ facilitating its maintenance.},
   pages     = {9--12},
   file      = {:/home/compf/data/uni/sem7/bachelor/sources/108056998504800203.pdf:PDF},
   publisher = {Sage Publications Sage CA: Thousand Oaks, CA},
+}
+
+@InProceedings{AStudyoftheDocumentationEssentialtoSoftwareMaintenance,
+  author    = {de Souza, Sergio Cozzetti B. and Anquetil, Nicolas and de Oliveira, K\'{a}thia M.},
+  title     = {A Study of the Documentation Essential to Software Maintenance},
+  booktitle = {Proceedings of the 23rd Annual International Conference on Design of Communication: Documenting \&amp; Designing for Pervasive Information},
+  year      = {2005},
+  series    = {SIGDOC '05},
+  publisher = {Association for Computing Machinery},
+  location  = {Coventry, United Kingdom},
+  isbn      = {1595931759},
+  pages     = {68–75},
+  doi       = {10.1145/1085313.1085331},
+  url       = {https://doi.org/10.1145/1085313.1085331},
+  abstract  = {Software engineering has been striving for years to improve the practice of software development and maintenance. Documentation has long been prominent on the list of recommended practices to improve development and help maintenance. Recently however, agile methods started to shake this view, arguing that the goal of the game is to produce software and that documentation is only useful as long as it helps to reach this goal.On the other hand, in the re-engineering field, people wish they could re-document useful legacy software so that they may continue maintain them or migrate them to new platform.In these two case, a crucial question arises: "How much documentation is enough?" In this article, we present the results of a survey of software maintainers to try to establish what documentation artifacts are the most useful to them.},
+  address   = {New York, NY, USA},
+  file      = {:/home/compf/data/uni/sem7/bachelor/sources/1085313.1085331.pdf:PDF},
+  keywords  = {software maintenance, empirical study, software system documentation, program understanding},
+  numpages  = {8},
+}
+
+@WWW{,
+  title   = {Add \& commit},
+  url     = {https://github.com/EndBug/add-and-commit},
+  urldate = {2022-02-17},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

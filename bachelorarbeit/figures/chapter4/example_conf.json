@@ -11,7 +11,6 @@
         {"metric_name":"large_method_commented","weight":1,"unique_name":"m3"}
     ],
     "absolute_threshold":50,
-    "metric_result_builder":"weighted_mean_builder",
-    "files_result_builder":"default_builder",
+    "builder":"weighted_mean_builder",
     "relative_threshold":30
 }
