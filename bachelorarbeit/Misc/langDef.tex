@@ -1,11 +1,11 @@
 \lstdefinelanguage{YAML}{
   morekeywords=
   {
-    name:,on:,jobs:,steps:,uses:,run:,echo,workflow_dispatch:,description:,inputs:,required:,default:,runs:using:,main:,with:,author;
+    name:,on:,jobs:,steps:,uses:,run:,echo,workflow_dispatch:,description:,inputs:,required:,default:,runs:,using:,main:,with:,author:, absolute_threshold:
   },
   keywordstyle=\color{blue}\bfseries,
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=\color{darkgray}\bfseries,
+  ndkeywords={false,compf/JavaDocEvaluator@action},
+  ndkeywordstyle=\color{black}\bfseries,
   identifierstyle=\color{black},
   sensitive=false,
   comment=[l]{//},
@@ -15,6 +15,7 @@
   morestring=[b]',
   morestring=[b]",
   alsodigit={:},
+  alsoletter={/,@}
 },
 
 \lstdefinelanguage{ANTLR}{
