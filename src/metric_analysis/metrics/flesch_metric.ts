@@ -53,7 +53,7 @@ export class FleschMetric extends ComponentBasedMetric {
     /**
      * collects all text form the genral description and params
      * only returns the raw text
-     * @param component the component of which the text should be consideredc
+     * @param component the component of which the text should be considered
      * @param params the params of this metric
      * @param langHelper the language specific information that will be used extract the raw text
      * @returns 
@@ -80,7 +80,7 @@ export class FleschMetric extends ComponentBasedMetric {
     /**
      * calcuates the readability based on the flesh score
      * but could be overriden to use another formula
-     * @param vars The stats of the text like number of words, syllables
+     * @param vars The stats of the text, like number of words, syllables
      * @returns 
      */
     protected calcReadability(vars: RelevantVariables): number {

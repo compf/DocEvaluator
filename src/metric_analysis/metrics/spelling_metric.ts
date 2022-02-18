@@ -30,7 +30,7 @@ export class SpellingMetric extends ComponentBasedMetric {
         }
         for (let tag of component.getComment()!.getTags()) {
             if (tag.getDescription() != null) {
-                let rawText=tag.getDescription()!;
+                let rawText=langSpec.getRawText(tag.getDescription()!);
                 errorCount += this.getMisspellingCount(rawText, logMessages, component);
             }
         }
@@ -53,6 +53,7 @@ export class SpellingMetric extends ComponentBasedMetric {
         let errorCount = 0;
         let splitted = text.split(" ");
         for (let word of splitted) {
+            if(word.length==0)continue;
             if (!dictionary.spellCheck(word) && !this.additionalWords.has(word) && !this.isNameDefinedInContext(word, component)) {
                 errorCount++;
                 logMessages.push("Word " + word + " could be mispelled");
