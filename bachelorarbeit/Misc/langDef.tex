@@ -18,6 +18,9 @@
   alsoletter={/,@}
 }
 
+
+
+
 \lstdefinelanguage{ANTLR}{
   morekeywords=
   {
@@ -37,13 +40,23 @@
   alsodigit={:},
 }
 
+\lstdefinelanguage{JSON}{
+    tabsize             = 4,
+    showstringspaces    = false,
+    keywords            = {false,true,include,exclude,metrics,metric_name,weight,unique_name,params,absolute_threshold,builder,relative_threshold},
+    alsoletter          = 0123456789.,
+    stringstyle         = \color{black},
+    basicstyle          = \ttfamily
+}
 
 
+
+\begin{comment}
 %from https://tex.stackexchange.com/questions/195486/how-can-i-highlight-json-string-values-but-not-attributes
 \definecolor{jsonString}{RGB}{20,0,20}
 \newcommand\jsonkey{\color{black}}
 \newcommand\jsonvalue{\color{red}}
-\newcommand\jsonnumber{\color{orange}}
+\newcommand\jsonnumber{\color{black}}
 
 % switch used as state variable
 \makeatletter
@@ -82,3 +95,5 @@
     %override by keyword style if a keyword is detected!
     \lsthk@DetectKeywords% 
 }
+\end{comment}
+
