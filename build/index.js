@@ -36151,16 +36151,33 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
  */
 class LogMessage {
     constructor(msg, component) {
-        let p = chalk_1.default.green(path_1.default.relative(LogMessage.BasePath, component.getTopParent().getName()));
-        let qualifiedName = chalk_1.default.yellow(component.getQualifiedName());
-        let prefix = p + " " + qualifiedName + "(L. " + component.getLineNumber() + "): ";
-        this.msg = prefix + msg;
+        var _a, _b;
+        this.path = path_1.default.relative(LogMessage.BasePath, component.getTopParent().getName());
+        this.qualifiedName = component.getQualifiedName();
+        this.msg = msg;
+        if (component.getComment() == null) {
+            this.lineStart = component.getLineNumber();
+            this.lineEnd = this.lineStart;
+        }
+        else {
+            let comment = component.getComment();
+            let commentLines = (_b = (_a = comment.getGeneralDescription()) === null || _a === void 0 ? void 0 : _a.split("\n").length) !== null && _b !== void 0 ? _b : 0;
+            commentLines += comment.getTags().length;
+            this.lineStart = component.getLineNumber() - commentLines;
+            this.lineEnd = component.getLineNumber();
+        }
+    }
+    buildLogMessage() {
+        let path = chalk_1.default.green(this.path);
+        const qualifiedName = chalk_1.default.yellow(this.qualifiedName);
+        let msg = `${path}: ${qualifiedName} (L. ${this.lineStart}-${this.lineEnd}): ${this.msg})`;
+        return msg;
     }
     /**
      * Log the message to the console
      */
     log() {
-        console.log(this.msg);
+        console.log(this.buildLogMessage());
     }
     /**
      *
@@ -37015,7 +37032,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     /**
      * collects all text form the genral description and params
      * only returns the raw text
-     * @param component the component of which the text should be consideredc
+     * @param component the component of which the text should be considered
      * @param params the params of this metric
      * @param langHelper the language specific information that will be used extract the raw text
      * @returns
@@ -37042,7 +37059,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
     /**
      * calcuates the readability based on the flesh score
      * but could be overriden to use another formula
-     * @param vars The stats of the text like number of words, syllables
+     * @param vars The stats of the text, like number of words, syllables
      * @returns
      */
     calcReadability(vars) {
@@ -37536,7 +37553,7 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         }
         for (let tag of component.getComment().getTags()) {
             if (tag.getDescription() != null) {
-                let rawText = tag.getDescription();
+                let rawText = langSpec.getRawText(tag.getDescription());
                 errorCount += this.getMisspellingCount(rawText, logMessages, component);
             }
         }
@@ -37558,6 +37575,8 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         let errorCount = 0;
         let splitted = text.split(" ");
         for (let word of splitted) {
+            if (word.length == 0)
+                continue;
             if (!dictionary.spellCheck(word) && !this.additionalWords.has(word) && !this.isNameDefinedInContext(word, component)) {
                 errorCount++;
                 logMessages.push("Word " + word + " could be mispelled");
