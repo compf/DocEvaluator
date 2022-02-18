@@ -93,7 +93,7 @@ Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Pro
 
 GitHub Action \cite{GithubActions} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  GitHub Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenen System ausgeführt werden. Dieses System wird auch als \textbf{Runner} bezeichnet.
 
-Der gesamte Programmcode wird im Kontext von GitHub Actions auch als \textbf{Workflow (Ablauf)} bezeichnet und führt einen oder mehrere \textbf{Jobs} aus. Diese Jobs sind eine Ansammlung von \textbf{Steps (Schritte)}, die man als Befehle interpretieren kann. Die Jobs werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird. Ein Step kann Befehl sein, der auf einer Kommandozeile ausgeführt werden kann, oder ein Verweis auf eine andere GitHub Action, die dann ausgeführt wird. 
+Der gesamte Programmcode wird im Kontext von GitHub Actions auch als \textbf{Workflow (Ablauf)} bezeichnet und führt einen oder mehrere \textbf{Jobs} aus. Diese Jobs sind eine Ansammlung von \textbf{Steps (Schritte)}, die man als Befehle interpretieren kann. Die Jobs werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird. Ein Step kann ein Befehl sein, der auf einer Kommandozeile ausgeführt werden kann, oder ein Verweis auf eine andere GitHub Action, die dann ausgeführt wird \cite[S. 5-7]{github_action_book}. 
 
 
 Abbildung \ref{fig:workflow_schema} zeigt schematisch wie ein Workflow in einem GitHub-Projekt ausgeführt werden kann. Eine Benutzer löst beispielsweise durch einen Push ein Ereignis aus. Daraufhin werden für jeden Job ein Runner initialisiert, die aus dem Repository das Projekt klonen, um so mit einer geklonten Kopie zu arbeiten.  Das Klonen des Repositorys ist dabei nicht obligatorisch, ist aber notwendig, falls mit dem Quelltext des Projektes gearbeitet werden soll.  Anschließend werden die Jobs gestartet, die ihrerseits wieder die Steps ausführen. Jeder Job wird auf einen separaten Runner ausgeführt und läuft parallel, außer der Benutzer gibt explizit eine Abhängigkeit zwischen den Jobs an. 
@@ -113,7 +113,7 @@ Ein Anwendungsfall von GitHub Actions sind automatisierte Tests. Bei einem Push-
 
 Des Weiteren kann das Deployment (z.~dt. Verteilung) der Software mittels einer Action automatisiert erfolgen. So lässt sich z.~B. bei Programmen, die auf verschieden Plattformen (NPM, Yarn, NuGet etc.)  veröffentlicht werden, sicherstellen, dass stets die aktuelle Version auf jeder Plattform verfügbar ist, was auch zu einem besseren Schutz vor Sicherheitslücken führen kann. 
 
-Auch die Qualität des Codes kann mit geeigneten Actions geprüft werden, was im Kontext dieser Bachelorarbeit besonders interessant ist.  
+Auch die Qualität des Codes kann mit geeigneten Actions geprüft werden, was im Kontext dieser Bachelorarbeit besonders interessant ist \cite[S. 1ff.]{github_action_book}.  
 
 
 
@@ -150,7 +150,7 @@ Um eine eigene GitHub Action zu erstellen, muss in dem Hauptverzeichnis des Repo
 			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left,language=YAML]
 			{figures/chapter2/create_action_example.yaml}
 		\end{figure}
-Zunächst wird der Name der Action und eine Beschreibung definiert. Anschließend können Eingabeparameter definiert werden, die später im Programm verwendet werden können. Zu jedem Parameter muss auch festgelegt werden, ob er zwingend erforderlich ist und den Standardwert des Parameters. Außerdem können Ausgabeparameter festgelegt werden, die spätere Actions als Eingabe nutzen können. Danach wird festgelegt, wie diese Action ausgeführt wird. Eine Action kann in einer JavaScript-Umgebung, in einem Docker-Container, oder als Liste von verschiedenen Steps ausgeführt werden. 
+Zunächst wird der Name der Action und eine Beschreibung definiert. Anschließend können Eingabeparameter definiert werden, die später im Programm verwendet werden können. Zu jedem Parameter muss auch festgelegt werden, ob er zwingend erforderlich ist und den Standardwert des Parameters. Außerdem können Ausgabeparameter festgelegt werden, die spätere Actions als Eingabe nutzen können. Danach wird festgelegt, wie diese Action ausgeführt wird. Eine Action kann in einer JavaScript-Umgebung, in einem Docker-Container, oder als Liste von verschiedenen Steps ausgeführt werden \cite[S. 117ff.]{github_action_book}. 
 
 
 \section{Verwandte Werkzeuge}

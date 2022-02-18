@@ -1155,7 +1155,7 @@ facilitating its maintenance.},
   numpages  = {8},
 }
 
-@WWW{,
+@WWW{add_commit,
   title   = {Add \& commit},
   url     = {https://github.com/EndBug/add-and-commit},
   urldate = {2022-02-17},
