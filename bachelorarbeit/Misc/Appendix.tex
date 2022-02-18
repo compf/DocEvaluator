@@ -46,13 +46,10 @@
 \begin{description}
         \item[include]  Alle Dateien, die bei der Bewertung der Dokumentationsqualität berücksichtigt werden müssen
         \item[Exclude]  Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen
-        \item[metrics]  Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Strukur \enquote{(name,weight,params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist( Bei Algorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name (oder Aliasname) der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik
-        \item[global\_threshold] Mindestwert der Bewertung ,der erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert
-        \item[metric\_result\_builder] Der Name des Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse der Metriken verarbeitet und so das Gesamtergebnis berechnet.
-        
-          \item[component\_file\_result\_builder] Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse aller Komponenten einer Datei verarbeitet.
-          
-        \item[file\_result\_builder] Der Name des Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse aller Dateien verarbeitet
+        \item[metrics]  Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Strukur \enquote{(name,weight,unique\_name,params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist( Bei Algorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name (oder Aliasname) der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik
+        \item[absolute\_threshold] Mindestwert der Bewertung ,der erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert
+       
+          \item[builder] Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse verarbeitet.
         
         \item[parser]  Kann verwendet, um die zu parsende Programmiersprache zu wählen. Dazu muss \textit{ParserFactory} angepasst werden
         
@@ -66,33 +63,119 @@
          
          \item[state\_manager] Kann verwendet werden, um festzulegen, wie das letzte Ergebnis der Dokumentationsqualität gespeichert werden soll. Weitere Möglichkeiten können durch Erweiterung der \textit{StateManagerFactory} hinzugefügt werden.
          
-         \item[max\_diff\_last\_run] Der maximale  relative Abstand zur letzten Dokumentationsqualität bevor eine Fehlermeldung geworfen wird.
+         \item[relative\_threshold] Der maximale  relative Abstand zur letzten Dokumentationsqualität bevor eine Fehlermeldung geworfen wird.
         
         
         
     \label{enum:tool_javadoc_conf}
 \end{description}
-\chapter{Implementierte Metriken}
-\begin{table}[h!]
+\chapter{Implementierte Metriken}\label{appendix_metrics}
+\section{Anteil dokumentierter Komponenten an allen Komponenten}
+\begin{description}
+    \item [Metrikname]  simple\_comment
+    \item [Klassenname] SimpleCommentPresentMetric
+    \item[Beschreibung] Berechnet den Anteil der dokumentierten Komponenten an allen Komponenten, kann Getter und Setter ignorieren
+\end{description}
+
+\section{Anteil öffentlicher dokumentierter Komponenten an allen öffentlichen Komponenten}
+\begin{description}
+    \item [Metrikname]  public\_members\_only
+    \item [Klassenname] SimplePublicMembersOnlyMetric
+    \item[Beschreibung] Berechnet den Anteil der öffentlichen dokumentierten Komponenten an allen öffentlichen Komponenten, kann Getter und Setter ignorieren
+\end{description}
+
+\section{Bestrafung langer undokumentierter Methoden}
+\begin{description}
+    \item [Metrikname]  large\_method\_commented
+    \item [Klassenname] SimpleLargeMethodCommentedMetric
+    \item[Beschreibung] Bestraft undokumentierte Methoden je nach ihrer Länge
+\end{description}
+
+\section{Vollständigkeit der Dokumentation von Methoden}
+\begin{description}
+    \item [Metrikname]  method\_fully\_documented
+    \item [Klassenname] SimpleMethodDocumentationMetric
+    \item[Beschreibung] Prüft, ob alle Methodenparameter und Rückgabewert dokumentiert sind
+\end{description}
+
+\section{Anteil dokumentierter Methoden an allen Methoden unter
+Berücksichtigung der LOC}
+\begin{description}
+    \item [Metrikname]  commented\_lines
+    \item [Klassenname] CommentedLinesRatioMetric
+    \item[Beschreibung]  Berechnet den Anteil der \ac{LOC} der dokumentierten Methoden an allen \ac{LOC} aller Methoden
+\end{description}
+
+\section{Kohärenz zwischen Kommentar und
+Komponentenname}
+\begin{description}
+    \item [Metrikname]  comment\_name\_coherence
+    \item [Klassenname] CommentNameCoherenceMetric
+    \item[Beschreibung]  Prüft, ob der Kommentar und der Name der dokumentierten Komponente sehr ähnlich sind oder keine Ähnlichkeit haben
+\end{description}
+
+\section{Verwendung bestimmter Wörter bestrafen}
+\begin{description}
+    \item [Metrikname]  certain\_terms
+    \item [Klassenname] CertainTermCountMetric
+    \item[Beschreibung]  Bestraft das Vorkommen bestimmter Wörter (wie z.~B. Abkürzungen)
+\end{description}
+
+\section{Bewertung der Formatierung}
+\begin{description}
+    \item [Metrikname]  formatting\_good
+    \item [Klassenname] FormattingGoodMetric
+    \item[Beschreibung] Überprüft, ob korrekte Tags verwendet wurde, HTML-Tags geschlossen wurden und bei langen Methoden überhaupt eine Formatierung verwendet wurden
+\end{description}
+
+
+\section{Bewertung der Formatierung}
+\begin{description}
+    \item [Metrikname]  spellling
+    \item [Klassenname] SpellingMetric
+    \item[Beschreibung]Sucht nach Rechtschreibfehlern und bestraft sie
+\end{description}
+
+\section{Erwähnung von Randfällen bei Methodenparameter
+und -rückgabewerte}
+\begin{description}
+    \item [Metrikname]  edge\_case
+    \item [Klassenname] EdgeCaseMetric
+    \item[Beschreibung] Prüft, ob bei der Dokumentation von Parametern die Behandlung des Wertes \textit{null} erwähnt wird
+\end{description}
+
+
+\section{Gunning-Fog-Index}
+\begin{description}
+    \item [Metrikname]  gunning\_fog
+    \item [Klassenname] GunningFogMetric
+    \item[Beschreibung] Berechnet den Gunnin-Fog-Index des Kommentars und bewertet so, ob der Kommentar verständlich ist
+\end{description}
+ 
+
+\begin{comment}
+\begin{table}[ht!]
     \centering
-    \begin{tabular}{c|c|c}
-        \textbf{Metrikname} & \textbf{Klassenname} & \textbf{Erklärt in (Kapitel)}  \\\hline
-          simple\_comment & SimpleCommentPresentMetric & dummy\\\hline
-        public\_members\_only & SimplePublicMembersOnlyMetric &  dummy\\\hline
-        large\_method\_commented & SimpleLargeMethodCommentedMetric & dummy\\\hline
-     method\_fully\_documented & SimpleMethodDocumentationMetric & dummy\\\hline
-       commented\_lines\_ratio& CommentedLinesRatioMetric & dummy\\\hline
-       flesch& FleschMetric & dummy\\\hline
-        comment\_name\_coherence&CommentNameCoherenceMetric & dummy\\\hline
-     certain\_terms&CertainTermCountMetric & dummy\\\hline
-          formatting\_good&FormattingGoodMetric & dummy\\\hline
-          spellling&SpellingMetric & dummy\\\hline
-        edge\_case&EdgeCaseMetric & dummy\\\hline
-        gunning\_fog&GunningFogMetric & dummy\\
+    \begin{tabular}{m{4.5cm}|m{6.8cm}|m{5cm}}
+        \textbf{Metrikname} & \textbf{Klassenname} & \textbf{Beschreibung}  \\\hline
+          simple\_comment & SimpleCommentPresentMetric & Berechnet den Anteil der dokumentierten Komponenten an allen Komponenten\\\hline
+        public\_members\_only & SimplePublicMembersOnlyMetric &   Berechnet den Anteil der öffentlichen dokumentierten Komponenten an allen öffentlichen Komponenten\\\hline
+        large\_method\_commented & SimpleLargeMethodCommentedMetric & Bestraft undokumentierte Methoden je nach ihrer Länge\\\hline
+     method\_fully\_documented & SimpleMethodDocumentationMetric & Prüft, ob alle Methodenparameter und Rückgabewert dokumentiert sind\\\hline
+       commented\_lines\_ratio& CommentedLinesRatioMetric & Berechnet den Anteil der \ac{LOC} der dokumentierten Methoden an allen \ac{LOC} aller Methoden\\\hline
+       flesch& FleschMetric & Berechnet den Flesch-Score des Kommentars und bewertet so, ob der Kommentar verständlich ist\\\hline
+        comment\_name\_coherence&CommentNameCoherenceMetric & Prüft, ob der Kommentar und der Name der dokumentierten Komponente sehr ähnlich sind oder keine Ähnlichkeit haben\\\hline
+     certain\_terms&CertainTermCountMetric & Bestraft das Vorkommen bestimmter Wörter (wie z.~B. Abkürzungen)\\\hline
+          formatting\_good&FormattingGoodMetric & Überprüft, ob korrekte Tags verwendet wurde, HTML-Tags geschlossen wurden und bei langen Methoden überhaupt eine Formatierung verwendet wurden\\\hline
+          spellling&SpellingMetric & Sucht nach Rechtschreibfehlern und bestraft sie\\\hline
+        edge\_case&EdgeCaseMetric & Prüft, ob bei der Dokumentation von Parametern die Behandlung des Wertes \textit{null} erwähnt wird\\\hline
+        gunning\_fog&GunningFogMetri& Berechnet den Gunnin-Fog-Index des Kommentars und bewertet so, ob der Kommentar verständlich ist\\
     \end{tabular}
     \caption{Alle implementierten Metriken}
     \label{table:metrics_name}
 \end{table}
+\end{comment}
+
 
 \end{appendices}
 	
