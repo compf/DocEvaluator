@@ -124,3 +124,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 .vscode/launch.json
+
+
+# evaluation stuff
+eval/pmd.zip
+eval/pmd-bin-6.42.0
+eval/checkstyle.jar
+eval/DocEvaluator
+eval/__pycache__
+eval/*_out.txt

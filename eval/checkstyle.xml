@@ -56,8 +56,7 @@
         <module name="JavadocType">
             <property name="scope" value="private" />
             <!--<property name="excludeScope" value="null" />-->
-            <property name="authorFormat" value="null" />
-            <property name="versionFormat" value="null" />
+
             <property name="allowMissingParamTags" value="false" />
             <property name="allowUnknownTags" value="false" />
             <property name="allowedAnnotations" value="Generated" />
@@ -105,11 +104,6 @@
             <property name="forbiddenSummaryFragments" value="^$" />
             <property name="period" value="." />
         </module>
-        <module name="WriteTag">
-            <property name="tag" value="null" />
-            <property name="tagFormat" value="null" />
-            <property name="tagSeverity" value="info" />
-            <property name="tokens" value="INTERFACE_DEF,CLASS_DEF,ENUM_DEF,ANNOTATION_DEF,RECORD_DEF" />
-        </module>
+       
     </module>
 </module>
