@@ -99,6 +99,7 @@ function initializeObjects(conf: EvaluatorConf, workingDirectory: string): Share
     return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages: LogMessage[]) {
+    console.log("Log messages:");
     for (let log of logMessages) {
         log.log();
     }
