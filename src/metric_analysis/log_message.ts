@@ -10,12 +10,13 @@ export class LogMessage {
     private qualifiedName:string;
     private lineStart:number;
     private lineEnd:number;
+    private metricName:string;
     public static BasePath: string = ".";
-    constructor(msg: string, component: Component) {
+    constructor(msg: string, component: Component,metricName:string) {
         this.path=path.relative(LogMessage.BasePath, component.getTopParent().getName());
         this.qualifiedName = component.getQualifiedName();
         this.msg =msg;
-
+        this.metricName=metricName;
 
         if(component.getComment()==null){
             this.lineStart=component.getLineNumber();
@@ -32,7 +33,7 @@ export class LogMessage {
     buildLogMessage():string{
         let path=chalk.green(this.path);
         const qualifiedName=chalk.yellow(this.qualifiedName);
-        let msg=`${path}: ${qualifiedName} (L. ${this.lineStart}-${this.lineEnd}): ${this.msg})`;
+        let msg=`${path}: ${qualifiedName} (L. ${this.lineStart}-${this.lineEnd}): [${this.metricName}]: ${this.msg})`;
         return msg;
     }
     /**

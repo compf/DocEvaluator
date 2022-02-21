@@ -53,7 +53,7 @@ export abstract class DocumentationAnalysisMetric {
     }
     protected pushLogMessage(component: Component, msg: string, logMessages: LogMessage[]) {
 
-        logMessages.push(new LogMessage(msg, component));
+        logMessages.push(new LogMessage(msg, component,this.getUniqueName()));
     }
     protected createLogMessages(messages: string[], component: Component) {
         let result: LogMessage[] = []

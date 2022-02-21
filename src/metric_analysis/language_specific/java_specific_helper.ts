@@ -3,6 +3,7 @@ import { JavaMethodData } from "../../parser/parse_result/java/JavaMethodData";
 import { MethodComponent } from "../../parser/parse_result/method_component";
 import { LogMessage } from "../log_message";
 import { MAX_SCORE, MIN_SCORE } from "../metrics/documentation_analysis_metric";
+import { MetricManager } from "../metric_manager";
 import { LanguageSpecificHelper } from "./language_specific_helper";
 
 export class JavaSpecificHelper extends LanguageSpecificHelper {
@@ -17,7 +18,7 @@ export class JavaSpecificHelper extends LanguageSpecificHelper {
             }
             else {
                 results.push(MIN_SCORE);
-                logMessages.push(new LogMessage("Throw " + s1 + " is not documented", component))
+                logMessages.push(new LogMessage("Throw " + s1 + " is not documented", component,MetricManager.MetricNames.method_fully_documented))
             }
         }
 
