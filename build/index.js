@@ -35757,6 +35757,7 @@ function initializeObjects(conf, workingDirectory) {
     return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages) {
+    console.log("Log messages:");
     for (let log of logMessages) {
         log.log();
     }
@@ -35939,6 +35940,7 @@ exports.JavaSpecificHelper = void 0;
 const method_component_1 = __nccwpck_require__(1480);
 const log_message_1 = __nccwpck_require__(3663);
 const documentation_analysis_metric_1 = __nccwpck_require__(6006);
+const metric_manager_1 = __nccwpck_require__(648);
 const language_specific_helper_1 = __nccwpck_require__(8361);
 class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelper {
     constructor() {
@@ -35959,7 +35961,7 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
             }
             else {
                 results.push(documentation_analysis_metric_1.MIN_SCORE);
-                logMessages.push(new log_message_1.LogMessage("Throw " + s1 + " is not documented", component));
+                logMessages.push(new log_message_1.LogMessage("Throw " + s1 + " is not documented", component, metric_manager_1.MetricManager.MetricNames.method_fully_documented));
             }
         }
     }
@@ -36150,11 +36152,12 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
  * stores a log message that can be displayed
  */
 class LogMessage {
-    constructor(msg, component) {
+    constructor(msg, component, metricName) {
         var _a, _b;
         this.path = path_1.default.relative(LogMessage.BasePath, component.getTopParent().getName());
         this.qualifiedName = component.getQualifiedName();
         this.msg = msg;
+        this.metricName = metricName;
         if (component.getComment() == null) {
             this.lineStart = component.getLineNumber();
             this.lineEnd = this.lineStart;
@@ -36170,7 +36173,7 @@ class LogMessage {
     buildLogMessage() {
         let path = chalk_1.default.green(this.path);
         const qualifiedName = chalk_1.default.yellow(this.qualifiedName);
-        let msg = `${path}: ${qualifiedName} (L. ${this.lineStart}-${this.lineEnd}): ${this.msg})`;
+        let msg = `${path}: ${qualifiedName} (L. ${this.lineStart}-${this.lineEnd}): [${this.metricName}]: ${this.msg})`;
         return msg;
     }
     /**
@@ -36865,7 +36868,7 @@ class DocumentationAnalysisMetric {
         builder.processResult(new metric_result_1.MetricResult(score, logMessages, creatorTuple));
     }
     pushLogMessage(component, msg, logMessages) {
-        logMessages.push(new log_message_1.LogMessage(msg, component));
+        logMessages.push(new log_message_1.LogMessage(msg, component, this.getUniqueName()));
     }
     createLogMessages(messages, component) {
         let result = [];
