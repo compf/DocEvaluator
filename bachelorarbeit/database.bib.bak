@@ -1071,15 +1071,15 @@ facilitating its maintenance.},
 }
 
 @WWW{docstring,
-  title = {Docstring},
-  date  = {2022-01-27},
-  url   = {https://www.python.org/dev/peps/pep-0257/},
+  title   = {Docstring},
+  url     = {https://www.python.org/dev/peps/pep-0257/},
+  urldate = {2022-02-22},
 }
 
 @WWW{doxygen,
-  title = {Doxygen},
-  date  = {2022-01-27},
-  url   = {https://www.doxygen.nl/manual/docblocks.html},
+  title   = {Doxygen},
+  url     = {https://www.doxygen.nl/manual/docblocks.html},
+  urldate = {2022-02-22},
 }
 
 @WWW{javadoc_coding_standards,
@@ -1159,6 +1159,24 @@ facilitating its maintenance.},
   title   = {Add \& commit},
   url     = {https://github.com/EndBug/add-and-commit},
   urldate = {2022-02-17},
+}
+
+@Book{github_action_book,
+  author    = {Chaminda Chandrasekara Pushpa Herath},
+  title     = {Hands-on GitHub Actions},
+  year      = {2021},
+  subtitle  = {Implement CI/CD with GitHub Action Workflows for Your Applications},
+  edition   = {1},
+  publisher = {Apress, Berkeley, CA},
+  isbn      = {978-1-4842-6464-5},
+  pagetotal = {162},
+  doi       = {https://doi.org/10.1007/978-1-4842-6464-5},
+}
+
+@WWW{checkstyle_doc_metrics,
+  title   = {Checkstyle Javadoc-Metriken},
+  url     = {https://checkstyle.sourceforge.io/config_javadoc.html},
+  urldate = {2022-02-22},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
