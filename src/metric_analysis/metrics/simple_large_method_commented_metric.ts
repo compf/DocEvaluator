@@ -5,7 +5,11 @@ import { LanguageSpecificHelper } from "../language_specific/language_specific_h
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
-interface ParamsType { k: number, ignore_lines: string[] }
+interface ParamsType {
+    /**the growth factor */
+     k: number, 
+      /**A list of strings to determine which lines should be ignored */
+     ignore_lines: string[] }
 /**
  * This metric assume that methods with more lines of code should be commented more often
  * So methods without comments are punished if they are longer

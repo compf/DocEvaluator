@@ -4,7 +4,14 @@ import { LanguageSpecificHelper } from "../language_specific/language_specific_h
 import { NLP_Helper } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-interface ParamType { upper_theshold: number, lower_threshold: number, levenshtein_distance: number }
+interface ParamType 
+{ 
+    /**the upper threshold of the allowed comment name coherence, a value larger than this threshold means a too large coherence */
+    upper_theshold: number,
+        /**the upper threshold of the allowed comment name coherence, a value larger than this threshold means a too large coherence */
+     lower_threshold: number, 
+     /** The maximum levenshtein distance to determine whether two words are similar*/
+     levenshtein_distance: number }
 /**
  * Measures the coherence of comment and name of component
  * This will ensure that a comment does not simply repeat the component's name but contains additional information

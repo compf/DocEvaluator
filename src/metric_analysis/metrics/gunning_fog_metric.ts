@@ -1,6 +1,8 @@
 import { RelevantVariables } from "../NLP_Helper";
 import { FleschMetric } from "./flesch_metric";
 interface ParamsType {
+
+    /**If true also calculate the flesh score for the block tags of the components and calculate the average of them */
     consider_tags: boolean
 }
 /**
@@ -9,7 +11,7 @@ interface ParamsType {
 export class GunningFogMetric extends FleschMetric {
 
     protected calcReadability(vars: RelevantVariables): number {
-        return 0.4 * (vars.numWords / vars.numSentences + 100*(vars.numHardWords/vars.numWords));
+        return 0.4 * (vars.numWords / vars.numSentences + 100 * (vars.numHardWords / vars.numWords));
     }
     public processResult(score: number, msgs: string[]): number {
         let finalScore = 0;

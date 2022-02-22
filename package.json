@@ -46,5 +46,17 @@
     "minimatch": "^3.0.4",
     "simple-spellchecker": "^1.0.2",
     "yaml": "^1.10.2"
+  },
+  "dependenciesComment":{
+    "antlr4": "Used to parse java files",
+    "antlr4ts": "Makes it easier to use antlr4 with typescript",
+    "chalk": "used to format console output",
+    "command-line-args": "Used by the configuration creation tool to process command line args ",
+    "compromise": "Used to process text via nlp",
+    "compromise-syllables": "used tom extract the syllables from a text",
+    "levenshtein": "Used to calculate the levenshtein distance between two words",
+    "minimatch": "Used to check the similiarity of two paths via linux wildcards",
+    "simple-spellchecker": "Used to find incorrect spelled words",
+    "yaml": "used by the configuration creation tool to create an example configuration yaml that can be used by GitHub Action"
   }
 }

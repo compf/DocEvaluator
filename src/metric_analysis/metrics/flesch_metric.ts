@@ -3,7 +3,10 @@ import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { NLP_Helper, RelevantVariables } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
-interface ParamsType { consider_tags: boolean }
+interface ParamsType {
+    /**If true also calculate the flesh score for the block tags of the components and calculate the average of them */
+    consider_tags: boolean
+}
 /**
  * This metric calculate the flesh score which describes the readability of a text
  */
@@ -11,7 +14,7 @@ export class FleschMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
         let params = this.getParams();
 
-        let textsToConsider = this.getTextsToConsider(component, params as ParamsType,langSpec);
+        let textsToConsider = this.getTextsToConsider(component, params as ParamsType, langSpec);
         if (textsToConsider.length == 0) return;
         let sum = 0;
 
@@ -58,20 +61,20 @@ export class FleschMetric extends ComponentBasedMetric {
      * @param langHelper the language specific information that will be used extract the raw text
      * @returns 
      */
-    protected getTextsToConsider(component: Component, params: ParamsType,langHelper:LanguageSpecificHelper): string[] {
+    protected getTextsToConsider(component: Component, params: ParamsType, langHelper: LanguageSpecificHelper): string[] {
         let textsToConsider: string[] = [];
         if (component.getComment() != null) {
             if (component.getComment()?.getGeneralDescription() != null) {
-                let rawText=langHelper.getRawText(component.getComment()?.getGeneralDescription()!)
+                let rawText = langHelper.getRawText(component.getComment()?.getGeneralDescription()!)
                 textsToConsider.push(rawText);
             }
             if (params.consider_tags) {
                 for (let tag of component.getComment()?.getTags()!) {
-                    if (tag.getDescription() != null){
-                        let rawText=langHelper.getRawText(tag.getDescription()!)
+                    if (tag.getDescription() != null) {
+                        let rawText = langHelper.getRawText(tag.getDescription()!)
                         textsToConsider.push(tag.getDescription()!);
                     }
-                        
+
                 }
             }
         }

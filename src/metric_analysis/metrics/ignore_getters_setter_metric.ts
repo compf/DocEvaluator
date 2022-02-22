@@ -2,7 +2,12 @@
 
 import { Component } from "../../parser/parse_result/component";
 import { MethodComponent } from "../../parser/parse_result/method_component";
-export interface GetterSetterParamsType { getter_pattern: string, setter_pattern: string }
+export interface GetterSetterParamsType { 
+    /**the regex pattern to determine whether a method name is a getter */
+    getter_pattern: string,
+    /**the regex pattern to determine whether a method name is a setter */
+     setter_pattern: string 
+    }
 /**
  * This class expose a shallConsider method to ignore getters and setters
  */

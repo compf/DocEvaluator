@@ -7,11 +7,20 @@ import { NLP_Helper } from "../NLP_Helper";
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
-interface ParamsType { only_public: boolean, terms: string[], k: number }
- /**
-  * Checks whether comments for parameters and return values include information about handling of null values
-  * This could be important for developers trying to use a method
-  */
+interface ParamsType {
+    /**if true only apply this metric to public components */
+    only_public: boolean,
+    /**A list of terms that will be checked to determine whether edge cases are mentioned.
+     * @see https://observablehq.com/@spencermountain/compromise-match-syntax to find the precise syntax
+     */
+    terms: string[],
+    /** the growth factor*/
+    k: number
+}
+/**
+ * Checks whether comments for parameters and return values include information about handling of null values
+ * This could be important for developers trying to use a method
+ */
 export class EdgeCaseMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
         if (!(component instanceof MethodComponent) || component.getComment() == null) return;

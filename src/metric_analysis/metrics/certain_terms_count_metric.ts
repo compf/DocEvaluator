@@ -7,7 +7,18 @@ import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { Utils } from "./util";
 
-interface ParamsType { k: number, consider_tags: boolean, terms: string[], levenshtein_distance: number, use_default_terms_too: boolean }
+interface ParamsType { 
+    /** the growth factor*/
+    k: number, 
+    /** Should the block tags be included in the checking of the certain words* */
+     consider_tags: boolean, 
+     /**ALl words that should be forbidden */
+     terms: string[], 
+     /** The maximum levenshtein distance to determine whether two words are similar*/
+     levenshtein_distance: number, 
+     /**if true, use the default terms as forbidden terms too */
+     use_default_terms_too: boolean
+     }
 /**
  * Punishes comments with abbreviation as they are usually harder to read 
  */

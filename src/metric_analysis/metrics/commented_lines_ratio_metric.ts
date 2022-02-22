@@ -5,7 +5,10 @@ import { LanguageSpecificHelper } from "../language_specific/language_specific_h
 import { MetricResultBuilder } from "../metric_result_builder";
 import { ChildrenBasedMetric } from "./children_based_metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
-interface ParamType { ignore_lines: string[] | undefined }
+interface ParamType {
+    /**A list of strings to determine which lines should be ignored */
+    ignore_lines: string[] | undefined
+}
 /**
  * This metric calculates how many lines of the hierarchical component are covered by 
  * undocumented methods and how many lines are covered by documented methods.

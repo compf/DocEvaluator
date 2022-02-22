@@ -4,7 +4,11 @@ import { LanguageSpecificHelper } from "../language_specific/language_specific_h
 import { ComponentBasedMetric } from "./component_based_,metric";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 import { GetterSetterParamsType, IgnoreGetterSetterMetric } from "./ignore_getters_setter_metric";
-interface ParamsType extends GetterSetterParamsType { ignore_getter_setter: boolean }
+interface ParamsType extends GetterSetterParamsType 
+{ 
+    /** if true ignore getters and setters */
+    ignore_getter_setter: boolean
+ }
 /**
  * This metric simply check whether a comment is present
  */

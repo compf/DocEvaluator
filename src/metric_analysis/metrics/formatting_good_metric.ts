@@ -5,10 +5,13 @@ import { ComponentBasedMetric } from "./component_based_,metric";
 import { Utils } from "./util";
 import { MAX_SCORE, MIN_SCORE } from "./documentation_analysis_metric";
 interface ParamType {
+    /**if true accept a documentation without any formatting without punishing */
     accept_no_formatting: boolean,
-    only_public: boolean,
+    /**the growth factor */
     k: number,
+    /**all allowed block tags that a user can use in the documentation */
     allowed_tags: string[],
+    /** Maximum number of lines that are allowed if a documentation is unformatted*/
     max_lines_no_formatting: number
 }
 /**

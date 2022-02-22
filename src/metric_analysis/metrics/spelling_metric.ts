@@ -18,7 +18,14 @@ function findDictionary() {
 
 }
 const dictionary = SpellChecker.getDictionarySync("en-US", findDictionary())
-interface ParamType { additional_words: string[], k: number, dictionary_path: string }
+interface ParamType {
+    /**a list of additional words that should be deemed a correctly spelled */
+    additional_words: string[],
+    /**the growth factor */
+    k: number,
+    /**the path to a line-based dictionary for additional allowed words */
+    dictionary_path: string
+}
 export class SpellingMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
         if (component.getComment() == null) return;
@@ -30,7 +37,7 @@ export class SpellingMetric extends ComponentBasedMetric {
         }
         for (let tag of component.getComment()!.getTags()) {
             if (tag.getDescription() != null) {
-                let rawText=langSpec.getRawText(tag.getDescription()!);
+                let rawText = langSpec.getRawText(tag.getDescription()!);
                 errorCount += this.getMisspellingCount(rawText, logMessages, component);
             }
         }
@@ -53,7 +60,7 @@ export class SpellingMetric extends ComponentBasedMetric {
         let errorCount = 0;
         let splitted = text.split(" ");
         for (let word of splitted) {
-            if(word.length==0)continue;
+            if (word.length == 0) continue;
             if (!dictionary.spellCheck(word) && !this.additionalWords.has(word) && !this.isNameDefinedInContext(word, component)) {
                 errorCount++;
                 logMessages.push("Word " + word + " could be mispelled");
