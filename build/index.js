@@ -36443,7 +36443,6 @@ var MetricManager;
             case MetricNames.formatting_good:
                 return {
                     accept_no_formatting: true,
-                    only_public: true,
                     k: 0.2,
                     allowed_tags: [],
                     max_lines_no_formatting: 2
