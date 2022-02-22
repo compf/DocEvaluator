@@ -25,7 +25,6 @@ class AbstractCheckTool:
         self._run_tool(subprocess.DEVNULL)
         elapsed=time.time_ns()-start_time
         return elapsed
-        pass
     @abstractmethod
     def get_ruleset_path(self)->str:
         pass
@@ -104,7 +103,6 @@ class PMDTool(AbstractCheckTool):
     def get_command(self) -> List[str]:
         #./run.sh pmd --rulesets ../../rulesets/pmd.xml --dir ~/data/uni/sem7/github_projects/argouml-VERSION_0_24
         return ["pmd-bin-6.42.0/bin/run.sh","pmd", "--rulesets",self.get_ruleset_path(),"--dir",self.project_path]
-        pass
     def download(self):
         urllib.request.urlretrieve(" https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.42.0/pmd-bin-6.42.0.zip","pmd.zip")
         with zipfile.ZipFile(PMDTool.ZIP_NAME, 'r') as zip_ref:
@@ -143,7 +141,6 @@ class DocTool(AbstractCheckTool):
     def get_command(self) -> List[str]:
         #./run.sh pmd --rulesets ../../rulesets/pmd.xml --dir ~/data/uni/sem7/github_projects/argouml-VERSION_0_24
         return ["node","DocEvaluator/build/index.js",self.project_path]
-        pass
     def download(self):
         shutil.rmtree("DocEvaluator")
         shutil.copy("comment_conf.json",self.project_path)
