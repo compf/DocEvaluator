@@ -8,9 +8,16 @@ from collections import namedtuple
 from typing import List,Tuple
 from abc import abstractmethod
 import subprocess
+from enum import Enum,auto
 LogLine=namedtuple("LogLine","path line_range msg_code")
-class MessageCodes:
-    MissingDoc=1
+class MessageCodes(Enum):
+    CheckstyleSpecific=auto
+    PMDSpecific=auto
+    DocEvaluatorSpecific=auto 
+    MissingDoc=auto
+    IllegalTerm=auto
+    MethodNotFullyDocumented=auto
+    JavadocStyle=auto
 class AbstractCheckTool:
   
     @abstractmethod
@@ -84,10 +91,14 @@ class CheckStyleTool(AbstractCheckTool):
     def is_valid_line(self,line:str)->bool:
         return not (line.startswith("Starting") or line.startswith("Audit")  or line.startswith("Checkstyle")  )
     def parse_code(self,code:str)->int:
-        if code=="MissingJavadocMethod":
+        if code=="MissingJavadocMethod" or code=="MissingJavadocType" or code=="JavadocVariable":
+            return MessageCodes.MissingDoc
+        elif code=="JavadocStyle":
+            return MessageCodes.JavadocStyle
+        elif code=="JavadocMethod":
             return MessageCodes.MissingDoc
         else:
-            return 0
+            return MessageCodes.CheckstyleSpecific
 
 
 
@@ -125,10 +136,12 @@ class PMDTool(AbstractCheckTool):
     def is_valid_line(self,line:str)->bool:
         return not("This analysis" in line)
     def parse_code(self,code:str)->int:
-        if code=="MissingJavadocMethod":
+        if code=="CommentContent":
+            return MessageCodes.IllegalTerm
+        elif code=="CommentRequired":
             return MessageCodes.MissingDoc
         else:
-            return 0
+            return MessageCodes.PMDSpecific
 
 
 class DocTool(AbstractCheckTool):
@@ -176,7 +189,13 @@ class DocTool(AbstractCheckTool):
         else:
             return False
     def parse_code(self,code:str)->int:
-        if code=="MissingJavadocMethod":
+        if code.startswith("simple_comment") or code.startswith("public_members"):
             return MessageCodes.MissingDoc
+        elif code.startswith("method_fully"):
+            return MessageCodes.MethodNotFullyDocumented
+        elif code.startswith("formatting_good"):
+            return MessageCodes.JavadocStyle
+        elif code.startswith("certain_terms"):
+            return MessageCodes.IllegalTerm
         else:
-            return 0
+            return MessageCodes.DocEvaluatorSpecific
