@@ -57,6 +57,7 @@ def main(args):
     relevant_subsets=[set([pmd]),set([cs]),set([de]),set([pmd,de]),set([cs,de]),set([cs,pmd,de]),set([pmd,cs])]
     for subset in relevant_subsets:
         matched=[c for c in all_covered_components if c.covered_by==subset]
+        count=len(matched)
         print(subset,count)
     print()
     for t in tools:

@@ -154,12 +154,12 @@ class DocTool(AbstractCheckTool):
         return "doc_out.txt"
     def get_command(self) -> List[str]:
         #./run.sh pmd --rulesets ../../rulesets/pmd.xml --dir ~/data/uni/sem7/github_projects/argouml-VERSION_0_24
-        return ["node","DocEvaluator/build/index.js",self.project_path]
+        return ["node","../build/src/index.js",self.project_path]
     def download(self):
         shutil.copy("comment_conf.json",self.project_path)
-        shutil.rmtree("DocEvaluator")
+        #shutil.rmtree("DocEvaluator")
         
-        subprocess.run(["git","clone", "-b","action","https://github.com/compf/DocEvaluator.git"])
+        #subprocess.run(["git","clone", "-b","action","https://github.com/compf/DocEvaluator.git"])
 
     def get_ruleset_path(self) -> str:
         return None
