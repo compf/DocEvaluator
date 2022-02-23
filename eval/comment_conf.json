@@ -16,62 +16,9 @@
     },
     {
       "weight": 1,
-      "metric_name": "public_members_only",
-      "params": {
-        "getter_pattern": "(get.*)|(is.*)",
-        "setter_pattern": "set.*",
-        "ignore_getter_setter": false
-      },
-      "unique_name": "public_members_only_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "large_method_commented",
-      "params": {
-        "ignore_lines": [
-          "",
-          "{",
-          "}"
-        ],
-        "k": 0.2
-      },
-      "unique_name": "large_method_commented_0"
-    },
-    {
-      "weight": 1,
       "metric_name": "method_fully_documented",
       "params": {},
       "unique_name": "method_fully_documented_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "commented_lines_ratio",
-      "params": {
-        "ignore_ines": [
-          "",
-          "{",
-          "}"
-        ]
-      },
-      "unique_name": "commented_lines_ratio_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "flesch",
-      "params": {
-        "consider_tags": false
-      },
-      "unique_name": "flesch_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "comment_name_coherence",
-      "params": {
-        "upper_theshold": 0.5,
-        "lower_threshold": 0,
-        "levenshtein_distance": 1
-      },
-      "unique_name": "comment_name_coherence_0"
     },
     {
       "weight": 1,
@@ -89,54 +36,8 @@
         "use_default_terms_too": false
       },
       "unique_name": "certain_terms_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "formatting_good",
-      "params": {
-        "accept_no_formatting": true,
-        "only_public": true,
-        "k": 0.2,
-        "allowed_tags": [],
-        "max_lines_no_formatting": 2
-      },
-      "unique_name": "formatting_good_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "spelling",
-      "params": {
-        "additional_words": [],
-        "k": 0.05,
-        "dictionary_path": ""
-      },
-      "unique_name": "spelling_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "edge_case",
-      "params": {
-        "terms": [
-          "(#Negative)? #Verb %null",
-          "if %null",
-          "%null (will be | is)? treated as",
-          "%null ~return~",
-          "%null if",
-          "#Negative %null"
-        ],
-        "only_public": true,
-        "k": 0.1
-      },
-      "unique_name": "edge_case_0"
-    },
-    {
-      "weight": 1,
-      "metric_name": "gunning_fog",
-      "params": {
-        "consider_tags": false
-      },
-      "unique_name": "gunning_fog_0"
     }
+   
   ],
   "absolute_threshold": 20,
   "builder": "default_builder",

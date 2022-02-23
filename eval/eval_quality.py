@@ -28,33 +28,42 @@ def main(args):
     result=dict()
     project=args.project
     tools=[CheckStyleTool(project),PMDTool(project),DocTool( project)]
+    cs,pmd,de=[t.get_out_path() for t in tools]
     if not args.debug:
 
         for t in tools:
             t.download()
             t.run()
-            output=t.parse_output()
-            result[t.get_out_path()]=output
-    else:
-        for t in tools:
-            output=t.parse_output()
-            result[t.get_out_path()]=output
-        for t in tools:
-            tool_out_path=t.get_out_path()
-            for c in result[tool_out_path]:
-                covered_component=CoveredComponent(c.path,c.line_range,c.msg_code)
-                similar_component=find_covered_component(covered_component,tool_out_path,all_covered_components)
-                if similar_component!=None:
-                    similar_component.covered_by.add(tool_out_path)
-                else:
-                    all_covered_components.append(covered_component)
-                    covered_component.covered_by.add(tool_out_path)
-        
-        for cov in all_covered_components:
-            print(cov.path,cov.line_range,cov.error_code,cov.covered_by)
- 
+        output=t.parse_output()
+        result[t.get_out_path()]=output
 
+    for t in tools:
+        output=t.parse_output()
+        result[t.get_out_path()]=output
+    for t in tools:
+        tool_out_path=t.get_out_path()
+        for c in result[tool_out_path]:
+            covered_component=CoveredComponent(c.path,c.line_range,c.msg_code)
+            similar_component=find_covered_component(covered_component,tool_out_path,all_covered_components)
+            if similar_component!=None:
+                similar_component.covered_by.add(tool_out_path)
+            else:
+                all_covered_components.append(covered_component)
+                covered_component.covered_by.add(tool_out_path)
     
+    for cov in all_covered_components:
+        print(cov.path,cov.line_range,cov.error_code,cov.covered_by)
+ 
+    relevant_subsets=[set([pmd]),set([cs]),set([de]),set([pmd,de]),set([cs,de]),set([cs,pmd,de]),set([pmd,cs])]
+    for subset in relevant_subsets:
+        matched=[c for c in all_covered_components if c.covered_by==subset]
+        print(subset,count)
+    print()
+    for t in tools:
+        ele=[c for c in all_covered_components if t.get_out_path() in c.covered_by]
+        count=len(ele)
+        print(t.get_out_path(),count)
+
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser()

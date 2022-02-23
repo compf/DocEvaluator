@@ -156,40 +156,34 @@ class DocTool(AbstractCheckTool):
         #./run.sh pmd --rulesets ../../rulesets/pmd.xml --dir ~/data/uni/sem7/github_projects/argouml-VERSION_0_24
         return ["node","DocEvaluator/build/index.js",self.project_path]
     def download(self):
-        shutil.rmtree("DocEvaluator")
         shutil.copy("comment_conf.json",self.project_path)
+        shutil.rmtree("DocEvaluator")
+        
         subprocess.run(["git","clone", "-b","action","https://github.com/compf/DocEvaluator.git"])
 
     def get_ruleset_path(self) -> str:
         return None
     def parse_line(self, line: str) -> LogLine:
-        #print(line)
-        #print(line)
-        splitted=line.split(":")
-        #print(splitted)
-        path=os.path.join(self.project_path,splitted[0])
+        try:
+            splitted=line.split(":")
+            #print(splitted)
+            path=os.path.join(self.project_path,splitted[0])
 
-        component_line=splitted[1].split()
-        line_range=component_line[-1].replace(")","")
-        line_range=line_range.split("-")
-        line_range=(int(line_range[0]),int(line_range[1]))
-        
-       
+            component_line=splitted[1].split()
+            line_range=component_line[-1].replace(")","")
+            line_range=line_range.split("-")
+            line_range=(int(line_range[0]),int(line_range[1]))
 
-        error_code=splitted[2].strip().replace("[","").replace("]","")
-        
-        error_code=self.parse_code(error_code.strip())
-        return LogLine(path,line_range,error_code)
+
+
+            error_code=splitted[2].strip().replace("[","").replace("]","")
+
+            error_code=self.parse_code(error_code.strip())
+            return LogLine(path,line_range,error_code)
+        except:
+            return None
     def is_valid_line(self,line:str)->bool:
-        if line.startswith("The result"):
-            return False
-        elif self.found_log_message:
-            return True
-        elif line.startswith("Log messages"):
-            self.found_log_message=True
-            return False
-        else:
-            return False
+        return self.parse_line(line)!=None
     def parse_code(self,code:str)->int:
         if code.startswith("simple_comment") or code.startswith("public_members"):
             return MessageCodes.MissingDoc
