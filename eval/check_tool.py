@@ -11,13 +11,13 @@ import subprocess
 from enum import Enum,auto
 LogLine=namedtuple("LogLine","path line_range msg_code")
 class MessageCodes(Enum):
-    CheckstyleSpecific=auto
-    PMDSpecific=auto
-    DocEvaluatorSpecific=auto 
-    MissingDoc=auto
-    IllegalTerm=auto
-    MethodNotFullyDocumented=auto
-    JavadocStyle=auto
+    CheckstyleSpecific=0
+    PMDSpecific=1
+    DocEvaluatorSpecific=2 
+    MissingDoc=3
+    IllegalTerm=4
+    MethodNotFullyDocumented=5
+    JavadocStyle=6
 class AbstractCheckTool:
   
     @abstractmethod
@@ -86,7 +86,7 @@ class CheckStyleTool(AbstractCheckTool):
 
         error_code=line.split()[-1]
         error_code=error_code[1:-1]
-        error_code=self.parse_code(error_code)
+        error_code=self.parse_code(error_code.strip())
         return LogLine(path,line_range,error_code)
     def is_valid_line(self,line:str)->bool:
         return not (line.startswith("Starting") or line.startswith("Audit")  or line.startswith("Checkstyle")  )
@@ -122,16 +122,17 @@ class PMDTool(AbstractCheckTool):
         return "pmd.xml"
     def parse_line(self, line: str) -> LogLine:
         #print(line)
-        print(line)
+        #print(line)
         splitted=line.split(":")
         path=splitted[0]
-      
         
         line_nr=int(splitted[1])
         line_range=(line_nr,line_nr)
 
-        error_code=line.split()[2]
-        error_code=self.parse_code(error_code)
+        error_code=splitted[2]
+
+        error_code=self.parse_code(error_code.strip())
+        
         return LogLine(path,line_range,error_code)
     def is_valid_line(self,line:str)->bool:
         return not("This analysis" in line)
@@ -165,7 +166,7 @@ class DocTool(AbstractCheckTool):
         #print(line)
         #print(line)
         splitted=line.split(":")
-        print(splitted)
+        #print(splitted)
         path=os.path.join(self.project_path,splitted[0])
 
         component_line=splitted[1].split()
@@ -175,8 +176,9 @@ class DocTool(AbstractCheckTool):
         
        
 
-        error_code=line.split()[2].strip().replace("[","").replace("]","")
-        error_code=self.parse_code(error_code)
+        error_code=splitted[2].strip().replace("[","").replace("]","")
+        
+        error_code=self.parse_code(error_code.strip())
         return LogLine(path,line_range,error_code)
     def is_valid_line(self,line:str)->bool:
         if line.startswith("The result"):
