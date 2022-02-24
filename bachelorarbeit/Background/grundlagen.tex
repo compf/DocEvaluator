@@ -9,7 +9,7 @@ Diese abstrakte Definition lässt sich so auf Softwareentwicklung übertragen. I
 
 Im Kontext dieser Bachelorarbeit sollen allerdings nur bestimmte Arten der Softwaredokumentation betrachtet werden, da eine umfassende Betrachtung innerhalb der vorgegebenen Zeit nicht möglich ist.  Zwar wären Readme-Dateien oder UML-Diagramme für eine Bewertung auch interessant, allerdings sind diese nicht so stark mit dem dazugehörigen Code verknüpft, sondern befinden sich in externen Dateien, sodass eine Verarbeitung ungleich schwieriger wäre.
 
-Aus diesen Grund konzentriert sich diese Bachelorarbeit nur auf Kommentare. Studien zeigen, dass Kommentare eine hohe Relevanz in der Softwareentwicklung haben, sodass eine Analyse der Kommentare eine gute Annäherung an die tatsächliche Qualität der Dokumentation geben kann \cite[S. 71]{AStudyoftheDocumentationEssentialtoSoftwareMaintenance}. Dabei sollen nicht alle Kommentare betrachtet werden, sondern nur eine bestimmte Kategorie von Kommentaren, die besonders leicht verarbeitbar sind, sodass aus ihnen viele Informationen extrahiert werden können und die Bewertung dadurch genauer werden kann. 
+Aus diesem Grunde konzentriert sich diese Bachelorarbeit nur auf Kommentare. Studien zeigen, dass Kommentare eine hohe Relevanz in der Softwareentwicklung haben, sodass eine Analyse der Kommentare eine gute Annäherung an die tatsächliche Qualität der Dokumentation geben kann \cite[S. 71]{AStudyoftheDocumentationEssentialtoSoftwareMaintenance}. Dabei sollen nicht alle Kommentare betrachtet werden, sondern nur eine bestimmte Kategorie von Kommentaren, die besonders leicht verarbeitbar sind, sodass aus ihnen viele Informationen extrahiert werden können und die Bewertung dadurch genauer werden kann. 
 
 Für diese Bachelorarbeit werden daher nur bestimmte Inline-Kommentare im Quellcode betrachtet, die ein Spezialfall von normalen mehrzeiligen Kommentaren sind.
 Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Nichtsdestotrotz haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichte Verarbeitung durch Computerprogramme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. In vielen Fällen werden diese Kommentare einer bestimmten Komponente zugeordnet, wobei dies dadurch geschieht, dass der Kommentar direkt vor dieser Komponente steht. Ein Beispiel dafür ist Javadoc, da jeder Javadoc-Kommentar auch ein gültiger mehrzeiliger Kommentar ist.
@@ -18,8 +18,8 @@ Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Be
 
 
 
-\section{Code Smell}\label{chapter:code_smell}
-Der Begriff Code-Smell (z.~dt. übelriechender Code)  wurde von Kent Beck in \cite[S. 71 ff.]{fowler2019refactoring}  vorgeschlagen, um Quellcode zu beschreiben, bei dem Refactoring (z.~dt. Restrukturierung) sinnvoll ist. Bestimmte Strukturen im Quellcode deuten darauf hin, dass der Code verbessert werden sollte, da ansonsten die zukünftige Wartbarkeit des Codes verringert wird. Beispiele sind schlecht gewählte Namen für Variablen oder Methoden, duplizierter Code, lange Methoden oder globale Daten. In bestimmten Situationen werden Kommentare ebenfalls als Code-Smell klassifiziert, da sie auf komplizierten  Code hindeuten können oder der Name einer Komponente schlecht gewählt wurde. Daher sollte geprüft werden, ob nach einem Refactoring die Kommentare noch notwendig sind.
+\section{Code-Smells}\label{chapter:code_smell}
+Der Begriff \enquote{Code-Smell} (z.~dt. übel riechender Code)  wurde von Kent Beck in \cite[S. 71 ff.]{fowler2019refactoring}  vorgeschlagen, um Quellcode zu beschreiben, bei dem Refactoring (z.~dt. Restrukturierung) sinnvoll ist. Bestimmte Strukturen im Quellcode deuten darauf hin, dass der Code verbessert werden sollte, da ansonsten die zukünftige Wartbarkeit des Codes verringert wird. Beispiele sind schlecht gewählte Namen für Variablen oder Methoden, duplizierter Code, lange Methoden oder globale Daten. In bestimmten Situationen werden Kommentare ebenfalls als Code-Smell klassifiziert, da sie auf komplizierten  Code hindeuten können oder der Name einer Komponente schlecht gewählt wurde. Daher sollte geprüft werden, ob nach einem Refactoring die Kommentare noch notwendig sind.
 
 Nach \cite[S. 249-250]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} kann eine mangelhafte Dokumentation als Code-Smell bezeichnet werden, da sie die Wartbarkeit der Software beeinträchtigen kann. Dies gilt besonders, wenn die Dokumentation vom Code abweicht und damit bei den Entwicklern zu Verwirrung führt. Eine fehlerhaft dokumentierte Methode, bei der beispielsweise ein Parameter nicht dokumentiert ist, deutet stark auf Code-Smells hin, da der Code von der Dokumentation divergiert. Zudem kann eine \ac{IDE} die Informationen von strukturierten Kommentaren nutzen, um beispielsweise den Benutzer einer Methode Hinweise zur Benutzung zu geben. Dies ist bei normalen Kommentaren nicht möglich. 
 
@@ -45,7 +45,7 @@ In der folgenden Auflistung werden beispielhaft einige Javadoc-Tags aufgelistet 
 \begin{description}
          \item[@param]  Beschreibt einen Parameter, benötigt den Parameternamen als Argument
          \item[@return]  Beschreibt den Rückgabewert der Methode, sofern er existiert 
-         \item[@throws] Beschreibt welche Ausnahmen diese Methode werfen kann und möglichst unter welchen Umständen dies passiert, benötigt die Namen der Ausnahme. Für mehrere Ausnahmen sollte dieser Tag entsprechend wiederholt werden 
+         \item[@throws] Beschreibt welche Ausnahmen diese Methode werfen kann und möglichst unter welchen Umständen dies passiert, benötigt den Namen der Ausnahme. Für mehrere Ausnahmen sollte dieser Tag entsprechend wiederholt werden 
          \item[@deprecrated] Falls diese Methode veraltet ist und nicht mehr verwendet werden sollte, kann hier eine Alternative beschrieben werden. 
         
 \end{description}
@@ -60,13 +60,13 @@ Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse n
 
 Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite \cite{HowtoWriteDocCommentsfortheJavadocTool}:
 \begin{itemize}
-    \item Nicht in jeden Fall vollständige Sätze verwenden, aber klar formulieren, was die Aufgabe einer Komponente ist
+    \item Nicht in jedem Fall vollständige Sätze verwenden, aber klar formulieren, was die Aufgabe einer Komponente ist
     \item In der dritten und nicht in der zweiten Person schreiben
     \item Nicht repetitiv sein. Ein Kommentar, der im Wesentlichen nur den Namen einer Komponente wiedergibt, hat keinen Mehrwert
     \item  Beschreibungen von Methoden sollten mit einem Verb beginnen
     \item Keine lateinischen Ausdrücke wie \enquote{e.g}, \enquote{aka} oder \enquote{i.e} verwenden
     \item Bei einem Verweis auf das aktuelle Objekt sollte das spezifische \textit{this} statt des allgemeineren \textit{the} verwendet werden, bspw. \enquote{opens the connection of \textbf{this} object} statt \enquote{opens the connection of \textbf{the} object}
-    \item Bezeichner sollten in mit \textit{<code></code>} umschlossen werden, um deutlich zu machen, dass dies eine andere Komponente ist
+    \item Bezeichner sollten mit \textit{<code></code>} umschlossen werden, um deutlich zu machen, dass dies eine andere Komponente ist
     \item Der Kommentar sollte eventuelle Unterschiede unter verschiedene Plattformen erläutern
     \item Die Dokumentation sollte erläutern, wie sich die Komponente in Randfällen verhält
     
@@ -86,14 +86,14 @@ Die Syntax von JavaScript basiert wie bei der Programmiersprache Java auf C, den
 \subsubsection{TypeScript}
 TypeScript ist eine auf JavaScript aufbauende Programmiersprache, die JavaScript um statische Typisierung ergänzt. Jeder JavaScript-Code ist gültiger TypeScript-Code, sodass TypeScript als Obermenge von JavaScript angesehen werden kann. Der TypeScript-Code kann nicht direkt ausgeführt werden, sondern wird in gültiges JavaScript transkribiert, sodass er von einem Client mit JavaScript-Unterstützung ausgeführt werden kann. 
 
-In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variable festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wurde TypeScript gewählt, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
+In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variablen festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wurde TypeScript gewählt, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
 
 \subsubsection{ Node.js}
 Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen; folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
 
 \section{GitHub Actions}\label{chapter:github_actions}
 
-GitHub Action \cite{GithubActions} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  GitHub Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenen System ausgeführt werden. Dieses System wird auch als \textbf{Runner} bezeichnet.
+GitHub Actions \cite{GithubActions} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  GitHub Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenen System ausgeführt werden. Dieses System wird auch als \textbf{Runner} bezeichnet.
 
 Der gesamte Programmcode wird im Kontext von GitHub Actions auch als \textbf{Workflow (Ablauf)} bezeichnet und führt einen oder mehrere \textbf{Jobs} aus. Diese Jobs sind eine Ansammlung von \textbf{Steps (Schritte)}, die man als Befehle interpretieren kann. Die Jobs werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird. Ein Step kann ein Befehl sein, der auf einer Kommandozeile ausgeführt werden kann, oder ein Verweis auf eine andere GitHub Action, die dann ausgeführt wird \cite[S. 5-7]{github_action_book}. 
 
@@ -107,7 +107,7 @@ Abbildung \ref{fig:workflow_schema} zeigt schematisch wie ein Workflow in einem 
     \label{fig:workflow_schema}
 \end{figure}
 
-Schlägt der Programmcode fehl kann der Nutzer den Grund des Fehlers über die  \enquote{Actions}-Registerkarte herausfinden. Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden.
+Schlägt der Programmcode fehl, kann der Nutzer den Grund des Fehlers über die  \enquote{Actions}-Registerkarte herausfinden. Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden.
 
 \subsubsection{Verwendungsmöglichkeiten für GitHub Actions}
 
@@ -125,7 +125,7 @@ Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und 
 
 \begin{figure}[h!]
 	\lstinputlisting
-			[caption={Beispielhafter Workflow-Datei},
+			[caption={Beispielhafte Workflow-Datei},
 			label={lst:simple_workflow},
 			captionpos=b,language=YAML, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/chapter2/workflow_example.yaml}
@@ -170,7 +170,7 @@ Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der So
 
 
 \subsubsection{Quasoledo}\label{chapter:Quasoledo}
-In \cite[S. 4-10]{HowDocumentationEvolvesoverTime} geben die Autoren einige Metriken an, die sie für die Bewertung der Softwaredokumentation als nützlich erachten, und stellen ein Programm namens \textit{Quasoledo} vor, dass mittels dieser Metriken Softwaredokumentationen analysieren kann. Zu den Metriken gehören z.~B.  \textit{ANYJ},  welches den Anteil der dokumentierten Deklarationen an allen Deklarationen beschreibt und \textit{KINCAID}, welches die Lesbarkeit von Texten beschreibt.
+In \cite[S. 4-10]{HowDocumentationEvolvesoverTime} geben die Autoren einige Metriken an, die sie für die Bewertung der Softwaredokumentation als nützlich erachten, und stellen ein Programm namens \enquote{}{Quasoledo} vor, dass mittels dieser Metriken Softwaredokumentationen analysieren kann. Zu den Metriken gehören z.~B.  \textit{ANYJ},  welches den Anteil der dokumentierten Deklarationen an allen Deklarationen beschreibt und \textit{KINCAID}, welches die Lesbarkeit von Texten beschreibt.
 
 Die Arbeit wertet anschließend die Javadoc-Dokumentation von Eclipse aus und findet heraus, dass öffentliche Methoden häufiger dokumentiert sind und ihre Dokumentation oft lesbarer ist. Außerdem wenden die Autoren das Tool auf die gesamte Versionshistorie von Eclipse bis zum 8. April 2006 an und plotten den Verlauf der Dokumentationsqualität über diesem Zeitraum. Dabei wird sichtbar, dass die Qualität am Anfang des Projektes noch sehr stark schwankt, aber nach einiger Zeit recht konstant bleibt. 
 \subsubsection{JavaDocMiner}
@@ -181,17 +181,17 @@ Insgesamt verwendeten die Autoren viele Metriken aus dem Tool \hyperref[chapter:
 Anschließend wendeten die Autoren das Tool auf den Quellcode an und prüften, ob es eine Korrelation zwischen der Anzahl an Bugs und der Qualität der Dokumentation nach den benannten Metriken und fanden dabei heraus, dass die Kincaid-Metrik nur wenig mit der Anzahl der Bugs korreliert, während es bei anderen Metriken wie z.~B. \textit{ANYJ} eine starke negative Korrelation gab. 
 
 \subsubsection{Doc2Spec}
-Die Autoren in \cite[S. 307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} stellen ein Tool namens \textit{Doc2Spec} vor und erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
+Die Autoren in \cite[S. 307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} stellen ein Tool namens \enquote{Doc2Spec} vor und erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
 
 Für jede dokumentierte Methode der API wird ein Aktion-Ressource-Paar erstellt. Diese beschreibt, welche Aktion auf welche Ressource ausgeführt wird. Bei einer Methode namens \textit{close}, die mit dem englischen Text \enquote{Initiates close of the connection handle at the
-application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern, dass das Aktion-Ressource-Paar \textit{(close,connection)} sein kann; denn die Aktion \textit{close} bezieht sich auf die Ressource \textit{connection}. Dabei sind aber manchmal mehrere Aktion-Ressource-Paare möglich\cite[S. 308]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}.
+application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern, dass das Aktion-Ressource-Paar \textit{(close,connection)} sein kann; denn die Aktion \textit{close} bezieht sich auf die Ressource \textit{connection}. Dabei sind aber manchmal mehrere Aktion-Ressource-Paare möglich \cite[S. 308]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}.
 
 Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet, in der die meisten Java-Methoden passen. Die Kategorien sind Methoden, die eine Ressource oder Objekt erstellen, eine Ressource sperren, auf eine Ressource zugreifen, eine gesperrte Ressource wieder freigeben und Ressourcen schließen. 
 
 Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.~B. im Ausnahmefall ein häufiger Fehler sein kann. 
 
 \subsubsection{iComment}
-Das Programm \textit{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
+Das Programm \enquote{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
 
 Setzt nun die Dokumentation einen Lock voraus, aber der Programmierer hat keinen Lock angefordert, können sehr schnelle und subtile Bugs entstehen, die nur schwer findbar sind. \cite[S. 145ff.]{icomment}
 
