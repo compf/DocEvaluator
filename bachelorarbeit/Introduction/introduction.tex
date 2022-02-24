@@ -2,27 +2,28 @@
 
 Ein wichtiger Bestandteil der Softwareentwicklung von heute ist die Softwaredokumentation. Dies liegt unter anderem daran, dass die Größe von Softwareprojekten steigt, sodass kein Entwickler das gesamte Projekt im Überblick hat und daher zusätzliche Informationen neben dem Code benötigt \cite[S. 1]{StaticAnalysis:AnIntroduction:TheFundamentalChallengeofSoftwareEngineeringisOneofComplexity.}. Nichtsdestotrotz wird die Softwaredokumentation von Entwicklern oft vernachlässigt \cite[S. 83]{Qualityanalysisofsourcecodecomments}.  Die Gründe für schlechte Dokumentation sind vielfältig. Das Schreiben der Dokumentation wird oft als mühevoll empfunden und erfordert Fähigkeiten, die ein Programmierer nichts zwangsläufig hat\cite[S. 70]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner} \cite[S. 593]{Softwareengineeringandsoftwaredocumentation:aunifiedlongcourse}.  
 
+
+Weitere Studien verdeutlichen die Problematik der mangelhaften Softwaredokumentation. So belegt eine Umfrage aus dem Jahr 2002 mit 48 Teilnehmern  beispielsweise, dass Anforderungs- oder Spezifikationsdokumente nur selten bei Änderungen am Quellcode angepasst werden. Außerdem finden 54 \% der befragten Entwickler  Textverarbeitungsprogramme wie Word für hilfreich, die nicht für Dokumentationszwecke entwickelt wurden. Diese Programme sind leicht zu bedienen und sehr flexibel, aber nicht effizient  \cite[S. 28-29]{TheRelevanceofSoftwareDocumentationToolsandTechnologies:ASurvey}. 
+
+Eine neuere Umfrage aus dem Jahr 2014 mit 88 Teilnehmern zeigt, dass eine automatisierte Überprüfung der Dokumentationsqualität von knapp der Hälfte der Entwickler gewünscht wird. Die Autoren der Studie sehen dies als Zeichen dafür, dass ein grundsätzliches Bedürfnis zur automatisierten Bewertung von Dokumentationen besteht und daher weitere Studien notwendig sind \cite[S. 340]{TheValueofSoftwareDocumentationQuality}
+
 Die mangelhafte Dokumentation führt dazu, dass nicht nur nachfolgende Entwickler Probleme mit dem Codeverständnis haben, sondern auch Entwickler eines Moduls nach einer längeren Pause Zeit aufbringen müssen, um den Code wieder zu verstehen. \cite[S. 511]{vestdam}. Auch für Kunden/Auftraggeber ist eine gute Dokumentation wichtig, da gut dokumentierte Software tendenziell besser wartbar ist und somit mehr Nutzen bringt \cite[S. 83]{Qualityanalysisofsourcecodecomments}\cite[S. 1]{SoftwareDocumentationManagementIssuesandPractices:ASurvey}.
-
-
-Dass in vielen Fällen die Softwaredokumentation vernachlässigt wird, ist durch viele Studien belegt. Eine Umfrage aus dem Jahr 2002 mit 48 Teilnehmern belegt beispielsweise, dass Anforderungs- oder Spezifikationsdokumente nur selten bei Änderungen am Quellcode angepasst werden. Außerdem finden 54 \% der befragten Entwickler  Textverarbeitungsprogramme wie Word für hilfreich, die nicht für Dokumentationszwecke entwickelt wurden. Diese Programme sind leicht zu bedienen und sehr flexibel, aber nicht effizient  \cite[S. 28-29]{TheRelevanceofSoftwareDocumentationToolsandTechnologies:ASurvey}. 
-
-Eine weitere Studie aus dem Jahr 2019 verdeutlicht viele Aspekte aus der vorgenannten Umfrage. Es wurden dabei Daten aus Stack Overflow, GitHub-Issues, Pull-Requests und Mailing-Listen automatisiert heruntergeladen und dann von den Autoren analysiert, ob und inwieweit mit mangelhafter Softwaredokumentation zu tun haben.  Die Studie liefert klare Indizien dafür, dass die Softwaredokumentation in vielen Fällen nicht komplett, nicht auf dem neuesten Stand oder sogar nicht korrekt ist. Des Weiteren ist die Softwaredokumentation nicht gut nutzbar oder schlecht lesbar, sodass der Vorteil verloren geht\cite[S. 1201-1204]{SoftwareDocumentationIssuesUnveiled}.
-
-
-
-
 
 
 
 \section{Zielsetzung}
-Aus diesen Gründen ist eine regelmäßige Rückmeldung über die Dokumentation von hoher Bedeutung. Eine Möglichkeit, dieses Feedback zu geben, sind spezielle Metriken, welche eine numerische Auskunft über die Qualität der Softwaredokumentation liefern. Diese Metriken liefern dem Programmierer eine gute Einschätzung, ob die Softwaredokumentation ausreichend ist oder eine Verbesserung sinnvoll wäre. Da es im Bereich der Softwaredokumentation verschiedene Metriken gibt, ist es sinnvoll, mehrere Metriken zu verwenden. Die Ergebnisse aller Metriken können dann kombiniert werden. Dabei ist es auch ratsam, die Metriken zu gewichten oder eine andere Methode zur Kombination der Metrikergebnisse zu benutzen, weil nicht jede Metrik die gleiche Zuverlässigkeit und Relevanz besitzt \cite[S. 1117ff.]{Softwarequalitymetricsaggregationinindustry}.
+Aus diesen Gründen ist eine regelmäßige Rückmeldung über die Dokumentation von hoher Bedeutung. Eine Möglichkeit, dieses Feedback zu geben, sind spezielle Metriken, welche eine numerische Auskunft über die Qualität der Softwaredokumentation liefern. Diese Metriken liefern dem Programmierer eine Einschätzung darüber, ob die Softwaredokumentation ausreichend ist oder eine Verbesserung sinnvoll wäre. Da es im Bereich der Softwaredokumentation verschiedene Metriken gibt, kann es sinnvoll sein, mehrere Metriken zu verwenden \cite[S. 29]{Pfleeger2005UsingMM}. Damit ein Entwickler einen Gesamtüberblick über die Dokumentationsqualität erhält, können diese Metriken kombiniert werden, um eine einzelne numerische Bewertung der Qualität der Dokumenation zu erhalten. 
+Dabei ist es auch ratsam, die Metriken zu gewichten oder eine andere Methode zur Kombination der Metrikergebnisse zu benutzen, weil nicht jede Metrik die gleiche Zuverlässigkeit und Relevanz besitzt \cite[S. 1117ff.]{Softwarequalitymetricsaggregationinindustry}.
 
-Damit das Feedback über die Softwaredokumentation auch wahrgenommen wird, sollte die Qualität regelmäßig  überprüft werden. Dies kann automatisiert in \ac{CI/CD}-Prozess erfolgen, bei dem Software kontinuierlich getestet und für den Release (z.~dt. Veröffentlichung) vorbereitet werden kann. Durch CI/CD können Unternehmen effizienter und besser Software entwickeln. So konnte die ING NL die gelieferten Function-Points vervierfachen und die Kosten für einen Function-Point auf einem Drittel reduzieren \cite[S. 520]{Vassallo2016}.
+Damit das Feedback über die Softwaredokumentation auch wahrgenommen wird, sollte die Qualität regelmäßig  überprüft werden. Dies kann automatisiert in \ac{CI/CD}-Prozess erfolgen, bei dem Software kontinuierlich getestet und für den Release (z.~dt. Veröffentlichung) vorbereitet werden kann. Durch CI/CD können Unternehmen effizienter und besser Software entwickeln. So konnte die \textit{NG NL} die gelieferten Function-Points vervierfachen und die Kosten für einen Function-Point auf einem Drittel reduzieren \cite[S. 520]{Vassallo2016}.
 
-Basierend auf diesen Überlegungen soll ein Tool (z.dt. Werkzeug) entwickelt werden. Dieses Tool soll ein gegebenes Software-Projekt analysieren und eine numerische Bewertung darüber abgeben, die eine heuristische Aussage über die Qualität der Softwaredokumentation trifft.  Dabei soll das Tool primär für Javadoc konzipiert werden, allerdings soll während der Entwicklung auch darauf geachtet werden, dass eine Portierung auf eine andere Programmiersprache möglichst einfach wird und die Bewertung der Dokumentation unabhängig von der Programmiersprache funktioniert. Außerdem soll zur Vereinfachung dabei nur englischsprachige Dokumentationen betrachtet werden.
+\hfill
+
+Basierend auf diesen Überlegungen soll ein Tool (z.dt. Werkzeug) entwickelt werden. Dieses Tool soll ein gegebenes Software-Projekt analysieren und eine numerische Bewertung abgeben, die eine heuristische Aussage über die Qualität der Softwaredokumentation trifft.  Dabei soll das Tool primär für Javadoc konzipiert werden, allerdings soll während der Entwicklung auch darauf geachtet werden, dass eine Portierung auf eine andere Programmiersprache möglichst einfach wird und die Bewertung der Dokumentation unabhängig von der Programmiersprache funktioniert. Außerdem soll zur Vereinfachung dabei nur englischsprachige Dokumentationen betrachtet werden.
 
 Dabei sollte es nicht unbedingt das Ziel sein, dass jede Komponente dokumentiert ist, sondern dass die wichtigen Komponenten eine gute Dokumentationsqualität haben und somit die Wartung vereinfacht wird.  Als Komponente im Sinne dieser Bachelorarbeit werden dabei Klassen, Schnittstellen, Methoden und Felder verstanden. 
+
+Dieses Tool soll anschließend in dem \ac{CI/CD}-Prozess einbinden lassen, sodass die Dokumentationsqualität kontinuierlich geprüft werden kann. Als \ac{CI/CD}-Plattform soll dabei \enquote{GitHub Action} verwendet werden, da GitHub eine beliebte Plattform zur verteilten Distribution von Quellcode ist und von den meisten Entwicklern verwendet wird \cite{github_popular}. Mittels GitHub Action soll das Tool bei einer sehr schlechten Dokumentationsqualität den Entwickler auf diesen Umstand hinweisen, indem beispielsweise ein Merge (z~dt. Verschmelzung) in GitHub verhindert wird. Auch bei einer deutlichen inkrementellen Verschlechterung der Qualität soll der Entwickler informiert werden, um so eine ausreichende Qualität der Dokumentation sicherzustellen. 
 
 
 
@@ -31,13 +32,9 @@ In Kapitel 2 werden die wichtigen Grundlagen über die Themen dieser Bachelorarb
 
 In Kapitel 3 werden die Fragestellungen besprochen, die sich beim Design des Tools entwickelt haben. Dazu gehören die notwendigen Objekte und ihre Interaktion untereinander und wie von einer losen Ansammlung von Dateien zu einer Bewertung der Softwaredokumentation gelangt werden kann.
 
-In Kapitel 4 wird anschließend erläutert, wie aus dieser Konzeption ein vollständiges Programm entwickelt wurde. Dazu wird eine Einführung in ANTLR4 gegeben, das für das Parsing der Quellcodedateien in Java verwendet wird. Zudem wird erläutert, wie das Programm in GitHub Action eingebunden werden kann. Im Anschluss daran werden alle implementierten Metriken mit ihren Vor- und Nachteilen erläutert. Außerdem werden die Algorithmen bzw. Verfahren erläutert, um die Ergebnisse der einzelnen Metriken zu einem Gesamtergebnis zu aggregieren. 
+In Kapitel 4 wird anschließend erläutert, wie aus dieser Konzeption ein vollständiges Programm entwickelt wurde. Dazu wird eine Einführung in ANTLR4 gegeben, das für das Parsing der Quellcodedateien in Java verwendet wird. Zudem wird erläutert, wie das Programm in GitHub Action eingebunden werden kann. Im Anschluss daran wird ein Überblick über die implementierten Metriken mit ihren Vor- und Nachteilen gegeben. Außerdem werden die Algorithmen bzw. Verfahren erläutert, um die Ergebnisse der einzelnen Metriken zu einem Gesamtergebnis zu aggregieren. 
 
 In Kapitel 5 wird das Programm dann mit ähnlichen Tools verglichen, indem beispielhafte Java-Projekte aus GitHub mit allen Programmen analysiert werden und die Geschwindigkeit und die Qualität jedes Programmes ermittelt wird. 
-
-
-
-
 
 
 
