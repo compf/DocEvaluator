@@ -26,7 +26,6 @@ Nach \cite[S. 249-250]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} 
 \section{Javadoc}\label{chapter:javadoc}
 Javadoc \cite{HowtoWriteDocCommentsfortheJavadocTool} ist ein Tool zur Generierung von Dokumentationen, das sich als de facto Standard für Dokumentationen in der Programmiersprache Java etabliert hat \cite[S. 249]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}.  Javadoc besteht aus speziellen Java-Kommentaren, die an bestimmten Stellen im Quellcode eingefügt werden und daher bei der Kompilation nicht berücksichtigt werden. Ein Javadoc-Block beschreibt immer ein bestimmtes Modul (z. B. eine Klasse, Methode oder Feld). Es beginnt mit der Zeichenkette \enquote{/**}, wobei die ersten beiden Zeichen \enquote{/*} den Beginn eines mehrzeiligen Kommentars in Java einläuten, und endet mit \enquote{*/}. Durch das zusätzliche \enquote{*} unterscheidet sich ein Javadoc-Kommentar von einem normalen mehrzeiligen Kommentar, der zwar zur Kommentierung eines Blocks verwendet werden kann, aber vom Javadoc-Tool ignoriert wird und daher einen geringeren Mehrwert hat. 
 
-Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine gelungene Verwendung von Javadoc. Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert. Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes, welche am besten auch jeden möglichen Fall abdeckt. Mit \enquote{{@code ...}} kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
 
 		\begin{figure}[ht!]
 			\lstinputlisting
@@ -35,6 +34,9 @@ Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine gelungene Verwendu
 			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
 			{figures/chapter2/ternary.java}
 		\end{figure}
+
+Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine gelungene Verwendung von Javadoc. Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert. Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes, welche am besten auch jeden möglichen Fall abdeckt. Mit \enquote{{@code ...}} kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
+
 		
 		
 Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente geschrieben werden. Danach können sogenannte Tags (z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
