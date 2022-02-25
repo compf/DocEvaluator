@@ -77,7 +77,7 @@ export class EvaluatorConf {
     /**
      * parameters data for the builder,  most builder won't need them
      */
-    builder_params: any
+    builder_params: any={}
 
     constructor() {
         for (let s of defaultMetrics) {
@@ -101,7 +101,7 @@ export function loadConf(basePath: string): EvaluatorConf {
     }
     return sanitize(conf);
 }
-function sanitize(conf: EvaluatorConf): EvaluatorConf {
+export function sanitize(conf: EvaluatorConf): EvaluatorConf {
     for (let m of conf.metrics) {
         if (m.unique_name == undefined) {
             m.unique_name = MetricManager.getUniqueName(m.metric_name);
@@ -138,7 +138,6 @@ export class JSONCommentConfLoader implements ConfLoader {
 }
 export class EnvCommentConfLoader implements ConfLoader {
     updateConf(conf: EvaluatorConf): void {
-        //TODO make this automatic
         if (env.INPUT_INCLUDE) {
             conf.include = JSON.parse(env.INPUT_INCLUDE)
         }

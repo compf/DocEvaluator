@@ -8,7 +8,7 @@ const config = {
   transformIgnorePatterns: [
     "node_modules/(?!(syllable)/)"
   ],
-  "coveragePathIgnorePatterns":["src/parser/antlr_files/*"]
+  "coveragePathIgnorePatterns":["src/parser/antlr_files/*","src/index.ts"]
 };
 
 module.exports = config;

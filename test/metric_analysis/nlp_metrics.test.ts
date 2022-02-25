@@ -1,21 +1,20 @@
+
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { CertainTermCountMetric } from "../../src/metric_analysis/metrics/certain_terms_count_metric";
 import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
+import { MAX_SCORE, MIN_SCORE } from "../../src/metric_analysis/metrics/documentation_analysis_metric";
 import { DEFAULT_EDGE_CASE_TERMS, EdgeCaseMetric } from "../../src/metric_analysis/metrics/edge_case_metric";
 import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
+import { Utils } from "../../src/metric_analysis/metrics/util";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
 import { JavaParser } from "../../src/parser/java_parser";
-import { testSimpleFile } from "./shared";
+import { parseAndTestFile,parse, testParsedFile } from "./shared";
 const languageHelper = LanguageSpecificHelperFactory.loadHelper("java");
-
-beforeAll(() => {
-    MetricManager.getAllImplementedMetricNames();
-
-
-});
+const emptyComment=parse("testDir/java/EmptyCommentTest.java");
+const noComment=parse("testDir/java/NoCommentTest.java");
 test("Test syllables", () => {
     const text = "This is a sample text";
     expect(NLP_Helper.getRelevantVariables(text).numSyllables).toBe(6);
@@ -33,28 +32,17 @@ test("test flesch kincaid", () => {
 
 });
 test("test complex flesh metric", () => {
-    const path = "testDir/FleschTestComplex.java";
-    let root = new JavaParser().parse(path);
-    let res = { path, root }
-    let analyzer = new FileAnalyzer();
-    let builder = new MetricResultBuilder();
-    let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
-    analyzer.analyze(res, MetricManager.createMetricByType(FleschMetric, "flesch_complex", params), builder, languageHelper);
-    let score = builder.getAggregatedResult([]);
-    expect(score).toBeCloseTo(15.68);
+    const expected=(15.68+0)/2;
+    parseAndTestFile(MetricManager.MetricNames.flesch,"testDir/java/FleschTestComplex.java",undefined,expected,2);  
 });
 
 test("test easy flesh metric", () => {
-    const path = "testDir/FleschTestEasy.java";
-    let root = new JavaParser().parse(path);
-    let res = { path, root }
-    let analyzer = new FileAnalyzer();
-    let builder = new MetricResultBuilder();
-    let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
-
-    analyzer.analyze(res, MetricManager.createMetricByType(FleschMetric, "flesch_complex", params), builder, languageHelper);
-    let score = builder.getAggregatedResult([]);
-    expect(score).toBeCloseTo(85);
+    const expected=87.26;
+    parseAndTestFile(MetricManager.MetricNames.flesch,"testDir/java/FleschTestEasy.java",undefined,expected,2);
+});
+test("test empty comment with flesh",()=>{
+const expected=0;
+testParsedFile(emptyComment,MetricManager.MetricNames.flesch,undefined,expected,1);
 });
 test(" test get words", () => {
     const text = "This is a text";
@@ -79,41 +67,45 @@ test("test levenshtein", () => {
     expect(res).toBe(1);
 });
 test("test method coherence", () => {
-    let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.comment_name_coherence);
-    let coherence = MetricManager.createMetricByType(CommentNameCoherenceMetric, "coherence1", params);
-    let builder = new MetricResultBuilder();
-    const path = "testDir/CommentCoherenceTest.java";
-    let root = new JavaParser().parse(path);
-    let res = { path, root }
-    let analyzer = new FileAnalyzer();
-    analyzer.analyze(res, coherence, builder, languageHelper);
-    let result = builder.getAggregatedResult([]);
-    expect(result).toBe(60);
+    const expected=50;
+    parseAndTestFile(MetricManager.MetricNames.comment_name_coherence,"testDir/java/CommentCoherenceTest.java",undefined,expected,1);
+});
+test("test method coherence on empty comment", () => {
+    const expected=0;
+    testParsedFile(emptyComment,MetricManager.MetricNames.comment_name_coherence,undefined,expected,1);
 });
 test("test certain terms count", () => {
-    let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.certain_terms);
-    let certain_terms = MetricManager.createMetricByType(CertainTermCountMetric, "certain_terms", params);
-    let builder = new MetricResultBuilder();
-    const path = "testDir/CertainWordsTest.java";
-    let root = new JavaParser().parse(path);
-    let res = { path, root }
-    let analyzer = new FileAnalyzer();
-    analyzer.analyze(res, certain_terms, builder, languageHelper);
-    let result = builder.getAggregatedResult([])
-    expect(result).toBeCloseTo(90.7856);
+    const params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.certain_terms);
+    params.consider_tags=true;
+    const expected=88.188;
+    parseAndTestFile(MetricManager.MetricNames.certain_terms,"testDir/java/CertainWordsTest.java",params,expected,2);
+   
 });
+test("test certain term, use additional terms too",()=>{
+    const params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.certain_terms);
+    const paramsCopy=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.certain_terms);
 
+    params.use_default_terms_too=true;
+    params.terms=["hallo","test"];
+    for(let t of params.terms){
+        paramsCopy.terms.push(t);
+    }
+    let metric=new CertainTermCountMetric("metric",params);
+
+    expect(new Set(metric.getParams().terms)).toEqual(new Set(paramsCopy.terms));
+
+   
+})
 test("test spelling", () => {
-    testSimpleFile(MetricManager.MetricNames.spelling, "testDir/SpellingTest.java",
-        "spelling1",
+    parseAndTestFile(MetricManager.MetricNames.spelling, "testDir/java/SpellingTest.java",
+     
         undefined, 90.483, 2)
 });
 test("test spelling with additional words", () => {
     let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.spelling);
     params.dictionary_path = "testDir/spelling_dictionary.txt";
     params.additional_words.push("clas");
-    testSimpleFile(MetricManager.MetricNames.spelling, "testDir/SpellingTestWithAdditional.java",
-        "spelling2",
+    parseAndTestFile(MetricManager.MetricNames.spelling, "testDir/java/SpellingTestWithAdditional.java",
         params, 95.122, 2)
 });
 test("nlp matching, null check", () => {
@@ -145,10 +137,14 @@ test("nlp matching, null check", () => {
 test("test edge case metric", () => {
     let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.edge_case);
     const expected = 95.2418;
-    testSimpleFile(MetricManager.MetricNames.edge_case, "testDir/EdgeCaseTest.java", "edge_case", params, expected, 3);
+    parseAndTestFile(MetricManager.MetricNames.edge_case, "testDir/java/EdgeCaseTest.java", params, expected, 3);
 });
 test("test fog index", () => {
-    const expected = 88.75;
-    testSimpleFile(MetricManager.MetricNames.gunning_fog, "testDir/FleschTestEasy.java", "gunning", MetricManager.getDefaultMetricParam(MetricManager.MetricNames.gunning_fog), expected, 3);
+    const expected = (88.75+99.58)/2;
+    parseAndTestFile(MetricManager.MetricNames.gunning_fog, "testDir/java/FleschTestEasy.java", MetricManager.getDefaultMetricParam(MetricManager.MetricNames.gunning_fog), expected, 2);
+})
+test("test fog index on empty comment", () => {
+    const expected = 0;
+    parseAndTestFile(MetricManager.MetricNames.gunning_fog, "testDir/java/EmptyCommentTest.java", MetricManager.getDefaultMetricParam(MetricManager.MetricNames.gunning_fog), expected, 3);
 })
 

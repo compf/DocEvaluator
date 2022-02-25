@@ -28,7 +28,6 @@ interface ParamType {
 }
 export class SpellingMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
-        if (component.getComment() == null) return;
         let logMessages: string[] = [];
         let errorCount = 0;
         if (component.getComment()!.getGeneralDescription() != null) {
@@ -43,6 +42,9 @@ export class SpellingMetric extends ComponentBasedMetric {
         }
         let result = this.processResult(errorCount, logMessages);
         this.pushResult(builder, result, this.createLogMessages(logMessages, component), component);
+    }
+    shallConsider(component: Component): boolean {
+        return super.shallConsider(component) && component.getComment()!=null;
     }
     private additionalWords: Set<string>;
     protected processResult(result: number, logMessages: string[]): number {

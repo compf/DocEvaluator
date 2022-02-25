@@ -115,7 +115,6 @@ jobs:
                 "metric_name": "formatting_good",
                 "params": {
                   "accept_no_formatting": true,
-                  "only_public": true,
                   "k": 0.2,
                   "allowed_tags": [],
                   "max_lines_no_formatting": 2
@@ -131,6 +130,31 @@ jobs:
                   "dictionary_path": ""
                 },
                 "unique_name": "spelling_0"
+              },
+              {
+                "weight": 1,
+                "metric_name": "edge_case",
+                "params": {
+                  "terms": [
+                    "(#Negative)? #Verb %null",
+                    "if %null",
+                    "%null (will be | is)? treated as",
+                    "%null ~return~",
+                    "%null if",
+                    "#Negative %null"
+                  ],
+                  "only_public": true,
+                  "k": 0.1
+                },
+                "unique_name": "edge_case_0"
+              },
+              {
+                "weight": 1,
+                "metric_name": "gunning_fog",
+                "params": {
+                  "consider_tags": false
+                },
+                "unique_name": "gunning_fog_0"
               }
             ]
           absolute_threshold: 20
@@ -142,6 +166,7 @@ jobs:
           default_component_weight: 1
           state_manager: file
           relative_threshold: 30
+          builder_params: "{}"
       - name: Add & commit
         if: always()
         uses: EndBug/add-and-commit@v7.5.0

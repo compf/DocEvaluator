@@ -19,14 +19,16 @@ export class FleschMetric extends ComponentBasedMetric {
         let sum = 0;
 
         for (let text of textsToConsider) {
-            let rawText = langSpec.getRawText(text);
-            sum += this.calcReadability(NLP_Helper.getRelevantVariables(rawText.replace("\n", " ")));
+            sum += this.calcReadability(NLP_Helper.getRelevantVariables(text.replace("\n", " ")));
         }
         let msgs: string[] = [];
         let score = sum / textsToConsider.length;
         let finalScore = this.processResult(score, msgs);
 
         this.pushResult(builder, finalScore, this.createLogMessages(msgs, component), component)
+    }
+    override shallConsider(component: Component): boolean {
+        return super.shallConsider(component) && component.getComment()!=null;
     }
     public override  processResult(score: number, msgs: string[]): number {
         let finalScore = 0;
@@ -63,20 +65,24 @@ export class FleschMetric extends ComponentBasedMetric {
      */
     protected getTextsToConsider(component: Component, params: ParamsType, langHelper: LanguageSpecificHelper): string[] {
         let textsToConsider: string[] = [];
-        if (component.getComment() != null) {
             if (component.getComment()?.getGeneralDescription() != null) {
                 let rawText = langHelper.getRawText(component.getComment()?.getGeneralDescription()!)
-                textsToConsider.push(rawText);
+                if(rawText!=""){
+                    textsToConsider.push(rawText);
+                }
+                
             }
             if (params.consider_tags) {
                 for (let tag of component.getComment()?.getTags()!) {
                     if (tag.getDescription() != null) {
-                        let rawText = langHelper.getRawText(tag.getDescription()!)
-                        textsToConsider.push(tag.getDescription()!);
+                        let rawText = langHelper.getRawText(component.getComment()?.getGeneralDescription()!)
+                        if(rawText!=""){
+                            textsToConsider.push(tag.getDescription()!);
+                        }
+                      
                     }
 
                 }
-            }
         }
         return textsToConsider;
     }
@@ -87,7 +93,8 @@ export class FleschMetric extends ComponentBasedMetric {
      * @returns 
      */
     protected calcReadability(vars: RelevantVariables): number {
-        return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
+        console.log(vars);
+        return  206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
 
 

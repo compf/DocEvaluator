@@ -16,70 +16,12 @@ import { PathWeightResolver, SimpleWeightResolver, StubResolver, WeightResolver 
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { FormattingGoodMetric } from "../../src/metric_analysis/metrics/formatting_good_metric";
 import { SqualeResultBuilder } from "../../src/metric_analysis/squale_builder";
-const path = "testDir/commented_class.java";
 const languageHelper = LanguageSpecificHelperFactory.loadHelper("java");
-function getCommentedClassRoot(): HierarchicalComponent {
-    let parser = new JavaParser();
-
-    let root = parser.parse(path);
-    return root;
-}
-
-beforeAll(() => {
-    MetricManager.getAllImplementedMetricNames();
-
-});
-test("test simple present metric on commented class", () => {
-    let root = getCommentedClassRoot();
-    let analyzer = new FileAnalyzer();
-    let resultBuilder = new MetricResultBuilder();
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple_comment_test", undefined), resultBuilder, languageHelper);
-    const expectedResult = (3 / 11) * 100;
-    expect(resultBuilder.getAggregatedResult([])).toBeCloseTo(expectedResult, 5)
-});
-test("test public only metric on commented class", () => {
-    let root = getCommentedClassRoot();
-    let resultBuilder = new MetricResultBuilder();
-    let analyzer = new FileAnalyzer();
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimplePublicMembersOnlyMetric, "public_only_test", undefined), resultBuilder, languageHelper);
-    const expectedResult = (2 / 6) * 100;
-    expect(resultBuilder.getAggregatedResult([])).toBeCloseTo(expectedResult, 5)
-});
-test("test longer uncommented method", () => {
-    let parser = new JavaParser();
-    const path = "testDir/LargeMethodTest.java";
-    let root = parser.parse(path);
-    let builder = new MetricResultBuilder();
-    let analyzer = new FileAnalyzer();
-    let conf = { ignore_lines: ["", "{", "}"], k: 0.2 }
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleLargeMethodCommentedMetric, "large_method_test", conf), builder, languageHelper);
-    let result = builder.getAggregatedResult([]);
 
 
 
-    const shortCommentedMethodResult = 100;
-    const shortUncommentedResult = 98.1873075307798;
-    const longCommentedMethodResult = 100;
-    const longUncommentedResult = 9.97228425261005;
-    ;
-
-    const expectedResult = (shortCommentedMethodResult + shortUncommentedResult + longCommentedMethodResult + longUncommentedResult) / 4;
-
-    expect(result).toBeCloseTo(expectedResult);
 
 
-});
-test("test commented ratio metric", () => {
-    let parser = new JavaParser();
-    const path = "testDir/LargeMethodTest.java";
-    let root = parser.parse(path);
-    let builder = new MetricResultBuilder();
-    let analyzer = new FileAnalyzer();
-    let conf = { ignore_lines: ["", "{", "}"] }
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(CommentedLinesRatioMetric, "comment_line_ratio_test", conf), builder, languageHelper);
-    let result = builder.getAggregatedResult([]);
-    expect(result).toBe(50);
-});
 test("test median builder", () => {
     let oddCountArray = [7, 3, 6, 2, 1, 4, 2, 8, 10, 15, 19]
     let evenCountArray = [4, 80, 14, 12, 98, 36, 23, 101, 0, -1, 17, 5]
@@ -130,21 +72,7 @@ test("weighted median builder", () => {
 
 
 })
-test("test method documentation compatible", () => {
-    let parser = new JavaParser();
-    const path = "testDir/CommentClass.java";
-    let root = parser.parse(path);
 
-    let builder = new MetricResultBuilder();
-    let analyzer = new FileAnalyzer();
-    let conf = undefined;
-    analyzer.analyze({ root, path }, MetricManager.createMetricByType(SimpleMethodDocumentationMetric, "doc_complete", conf), builder, languageHelper);
-    let result = builder.getAggregatedResult([]);
-
-    const expected = 63.8888888;
-    expect(result).toBeCloseTo(expected);
-
-});
 test("weighted result builder", () => {
     let weightMap: Map<any, number> = new Map<any, number>();
     const simple_comment = MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple_comment_weighted", undefined);
@@ -155,7 +83,7 @@ test("weighted result builder", () => {
     let resolverTuple={metrics:new SimpleWeightResolver(weightMap),files:new StubResolver(),components:new StubResolver()}
 
     let parser = new JavaParser();
-    const path = "testDir/commented_class.java";
+    const path = "testDir/java/commented_class.java";
     let root = parser.parse(path);
 
     let builder = new WeightedMetricResultBuilder(resolverTuple);
@@ -182,36 +110,12 @@ test("weighted result builder", () => {
     expect(actual).toBeCloseTo(expectedResult);
 
 });
-test("test ignore getters setters", () => {
-    let parser = new JavaParser();
-    const path = "testDir/GetterSetter.java"
-    let root = parser.parse(path);
-    let res = { root, path };
-    let params = { getterPattern: "(get.*)|(is.*)", setterPattern: "set.*", ignore_getter_setter: true }
-    let builder = new MetricResultBuilder();
-    let metric = MetricManager.createMetricByType(SimpleCommentPresentMetric, "getter_setter_test", params);
-    let analyzer = new FileAnalyzer();
 
-    analyzer.analyze(res, metric, builder, languageHelper)
-    let result = builder.getAggregatedResult([]);
-    expect(result).toBe(25);
 
-});
 
-test("test ignore comments", () => {
-    const path = "testDir/TestIgnoreComments.java";
-    let parser = new JavaParser();
-    let root = parser.parse(path);
-    let result = { path, root };
-    let file_analyzer = new FileAnalyzer();
-    let builder = new MetricResultBuilder();
-    file_analyzer.analyze(result, MetricManager.createMetricByType(SimpleCommentPresentMetric, "simple_comment_ignore", undefined), builder, languageHelper);
-    let metricResult = builder.getAggregatedResult([]);
-    expect(metricResult).toBe(50);
-});
 
 test("test weighted path", () => {
-    let paths = ["./testDir/CommentClass.java", "./testDir/commented_class.java", "./testDir/LargeMethodTest.java", "./testDir/GetterSetter.java"];
+    let paths = ["./testDir/java/CommentClass.java", "./testDir/java/commented_class.java", "./testDir/java/LargeMethodTest.java", "./testDir/java/GetterSetter.java"];
     let path_weights = [{ path: "*Class.java", weight: 5 }, { path: "*_class.java", weight: 5 }];
     let resolverTuple={metrics:new StubResolver(),files:new PathWeightResolver(path_weights, 1),components:new StubResolver()}
 
@@ -229,49 +133,8 @@ test("test weighted path", () => {
     expect(result).toBeCloseTo(expected, 3);
 
 });
-test("test overriding and java throws", () => {
-    const path = "testDir/OverridingTest.java";
-    let parser = new JavaParser();
-    let root = parser.parse(path);
-    let result = { path, root };
-    let doc = MetricManager.createMetricByType(SimpleMethodDocumentationMetric, "doc2", null);
-    let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder = new MetricResultBuilder();
-    fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
-    const expectedResult = 80;
-    expect(finalResult).toBeCloseTo(expectedResult);
-});
-test("test good formatting", () => {
-    const path = "testDir/GoodFormattingTest.java";
-    let parser = new JavaParser();
-    let root = parser.parse(path);
-    let result = { path, root };
-    let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.formatting_good);
-    let doc = MetricManager.createMetricByType(FormattingGoodMetric, "doc2", params);
-    let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder = new MetricResultBuilder();
-    fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
-    const expectedResult = 87.9153;
-    ;
-    expect(finalResult).toBeCloseTo(expectedResult);
-});
-test("test no formatting", () => {
-    const path = "testDir/NoFormattingTest.java";
-    let parser = new JavaParser();
-    let root = parser.parse(path);
-    let result = { path, root };
-    let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.formatting_good);
-    params.accept_no_formatting = false;
-    let doc = MetricManager.createMetricByType(FormattingGoodMetric, "doc2", params);
-    let fileAnalyzer = new FileAnalyzer();
-    let singleFileResultBuilder = new MetricResultBuilder();
-    fileAnalyzer.analyze(result, doc, singleFileResultBuilder, languageHelper);
-    let finalResult = singleFileResultBuilder.getAggregatedResult([]);
-    const expectedResult = 67.032;
-    expect(finalResult).toBeCloseTo(expectedResult);
-});
+
+
 
 class ComponentWeight implements WeightResolver {
     resolveWeight(key: string): number {
@@ -287,7 +150,7 @@ class ComponentWeight implements WeightResolver {
 
 }
 test("test component weighting", () => {
-    const path = "testDir/CertainWordsTest.java";
+    const path = "testDir/java/CertainWordsTest.java";
     let parser = new JavaParser();
     let root = parser.parse(path);
     let result = { path, root };

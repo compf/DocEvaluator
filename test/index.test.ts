@@ -51,8 +51,8 @@ test("test unique name from MetricManager", () => {
 });
 test("normal main program works", () => {
     if (existsSync("test_main.txt")) {
-        main(["testDir/expr"])
-        let actual = parseFloat(readFileSync("testDir/expr/.evaluator_last_state.txt").toString());
+        main(["testDir/mainTest"])
+        let actual = parseFloat(readFileSync("testDir/mainTest/.evaluator_last_state.txt").toString());
         const expected = 38.91;
         expect(actual).toBeCloseTo(expected, 3);
     }

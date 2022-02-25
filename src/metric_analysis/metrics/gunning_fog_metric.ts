@@ -15,11 +15,8 @@ export class GunningFogMetric extends FleschMetric {
     }
     public processResult(score: number, msgs: string[]): number {
         let finalScore = 0;
-        if (score < 0) {
-            finalScore = 0;
-            msgs.push("Invalid gunning fog value");
-        }
-        else if (score <= 8) {
+       
+         if (score <= 8) {
             finalScore = (15 / 8) * score + 85;
             if (score <= 4) {
                 msgs.push("The comment is maybe a little bit to easy");

@@ -13,8 +13,9 @@ public class CertainWordsTest {
     }
     /**
      * This method has aka viz
+     * @param a viz
      */
-    protected void manyAbbrev(){
+    protected void manyAbbrev(int a){
 
     }
 }

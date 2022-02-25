@@ -5,6 +5,7 @@ import { MethodComponent } from "../../src/parser/parse_result/method_component"
 import { SingleMemberComponent } from "../../src/parser/parse_result/single_member_component";
 import { ClassComponent } from "../../src/parser/parse_result/class_component";
 import { GroupedMemberComponent } from "../../src/parser/parse_result/grouped_member_component";
+import { ParserFactory } from "../../src/parser/parser_factory";
 
 let tokens: Token[] = []
 const numberTokensMainJava = 33;
@@ -32,7 +33,7 @@ test("test token types correct", () => {
 })
 test("test java parser", () => {
     var parser = new JavaParser();
-    const filepath = "testDir/commented_class.java";
+    const filepath = "testDir/java/commented_class.java";
     let res = parser.parse(filepath);
     expect(res.getTopParent().getName()).toBe(filepath);
     expect(res.getName()).toBe(filepath);
@@ -182,8 +183,14 @@ test("test javadoc parser", () => {
 });
 test("test multiple javadoc",()=>{
     let parser=new JavaParser();
-    let res=parser.parse("testDir/MultipleJavadocTest.java");
+    let res=parser.parse("testDir/java/MultipleJavadocTest.java");
     let cls=res.getChildren()[0];
     expect(cls.getComment()!.getGeneralDescription()).toBe("correct javadoc");
 
+});
+test("test parser factory",()=>{
+    expect(ParserFactory.createParser("java")).toBeInstanceOf(JavaParser);
+    expect(()=>{
+        ParserFactory.createParser("")
+    }).toThrow();
 })

@@ -94,7 +94,7 @@ function initializeObjects(conf: EvaluatorConf, workingDirectory: string): Share
     let fileAnalyzer = new FileAnalyzer();
     let builder = MetricManager.getNewMetricResultBuilder(conf.builder,weightResolverTuple , conf.builder_params);
     let resultByMetric: Map<string, MetricResultBuilder> = new Map();
-    let stateManager = StateManagerFactory.load(conf.state_manager, workingDirectory);
+    let stateManager = StateManagerFactory.createStateManager(conf.state_manager, workingDirectory);
 
     return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
 }

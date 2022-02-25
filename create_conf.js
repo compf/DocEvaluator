@@ -41,7 +41,7 @@ const options=[
 ];
 let args=commandLineArgs(options);
 let conf=new EvaluatorConf.EvaluatorConf();
-if(args.type=="yaml"){
+if(args.type=="yaml"|| args.type=="yml"){
     let confObj=yamlTemplate.jobs.build.steps[1].with
     for(let key of Object.keys(conf)){
         if(typeof(conf[key])=="object"){

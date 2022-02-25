@@ -1,4 +1,5 @@
 import { Component } from "../../parser/parse_result/component";
+import { MethodComponent } from "../../parser/parse_result/method_component";
 import { AbstractMetricBuilder } from "../abstract_metric_builder";
 import { LanguageSpecificHelper } from "../language_specific/language_specific_helper";
 import { NLP_Helper } from "../NLP_Helper";
@@ -20,7 +21,6 @@ interface ParamType
 export class CommentNameCoherenceMetric extends ComponentBasedMetric {
 
     analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
-        if (component.getComment() == null || component.getComment()?.getGeneralDescription() == null) return;
         let componentNameWords = this.splitByNameConvention(component.getName());
         let rawText = langSpec.getRawText(component.getComment()!.getGeneralDescription()!)
         let commentWords = NLP_Helper.getTokens(rawText);
@@ -36,6 +36,13 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric {
         let messages: string[] = [];
         let result = this.processResult(similarWordsCount / commentWords.length, messages);
         this.pushResult(builder, result, this.createLogMessages(messages, component), component);
+
+    }
+    override shallConsider(component: Component): boolean {
+        let baseClassConsider=super.shallConsider(component);
+        let isMethod=component instanceof MethodComponent;
+        let hasComment=component.getComment()!=null && component.getComment()?.getGeneralDescription()!=null;
+        return baseClassConsider && isMethod && hasComment;
 
     }
     public override processResult(result: number, messages: string[]): number {
