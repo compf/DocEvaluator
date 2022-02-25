@@ -37051,7 +37051,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
      * @returns
      */
     getTextsToConsider(component, params, langHelper) {
-        var _a, _b, _c, _d;
+        var _a, _b, _c;
         let textsToConsider = [];
         if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
             let rawText = langHelper.getRawText((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
@@ -37062,9 +37062,9 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
         if (params.consider_tags) {
             for (let tag of (_c = component.getComment()) === null || _c === void 0 ? void 0 : _c.getTags()) {
                 if (tag.getDescription() != null) {
-                    let rawText = langHelper.getRawText((_d = component.getComment()) === null || _d === void 0 ? void 0 : _d.getGeneralDescription());
+                    let rawText = langHelper.getRawText(tag.getDescription());
                     if (rawText != "") {
-                        textsToConsider.push(tag.getDescription());
+                        textsToConsider.push(rawText);
                     }
                 }
             }
