@@ -44,6 +44,12 @@ test("test empty comment with flesh",()=>{
 const expected=0;
 testParsedFile(emptyComment,MetricManager.MetricNames.flesch,undefined,expected,1);
 });
+test("test method params with flesh",()=>{
+    const expected=85;
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.flesch);
+    params.consider_tags=true;
+    parseAndTestFile(MetricManager.MetricNames.flesch,"testDir/java/FleschTestEasyParams.java",params,expected,2);
+});
 test(" test get words", () => {
     const text = "This is a text";
     const splitted_expected = text.split(" ");
@@ -97,9 +103,11 @@ test("test certain term, use additional terms too",()=>{
    
 })
 test("test spelling", () => {
+    let params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.spelling);
+    params.consider_tags=true;
     parseAndTestFile(MetricManager.MetricNames.spelling, "testDir/java/SpellingTest.java",
      
-        undefined, 90.483, 2)
+        undefined, 86.07, 2)
 });
 test("test spelling with additional words", () => {
     let params = MetricManager.getDefaultMetricParam(MetricManager.MetricNames.spelling);
@@ -107,6 +115,10 @@ test("test spelling with additional words", () => {
     params.additional_words.push("clas");
     parseAndTestFile(MetricManager.MetricNames.spelling, "testDir/java/SpellingTestWithAdditional.java",
         params, 95.122, 2)
+});
+test("test spelling with context",()=>{
+    const expected=100;
+    parseAndTestFile(MetricManager.MetricNames.spelling,"testDir/java/SpellingContextTest.java",undefined,expected,1);
 });
 test("nlp matching, null check", () => {
 
@@ -146,5 +158,9 @@ test("test fog index", () => {
 test("test fog index on empty comment", () => {
     const expected = 0;
     parseAndTestFile(MetricManager.MetricNames.gunning_fog, "testDir/java/EmptyCommentTest.java", MetricManager.getDefaultMetricParam(MetricManager.MetricNames.gunning_fog), expected, 3);
+});
+test("fog index on very complex sentence",()=>{
+    const expected = 0;
+    parseAndTestFile(MetricManager.MetricNames.gunning_fog, "testDir/java/FleschTestComplex.java", MetricManager.getDefaultMetricParam(MetricManager.MetricNames.gunning_fog), expected, 3);
 })
 

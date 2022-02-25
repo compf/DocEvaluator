@@ -21,5 +21,10 @@ test("test no formatting", () => {
     const params=MetricManager.getDefaultMetricParam(MetricManager.MetricNames.formatting_good);
     params.accept_no_formatting=false;
     parseAndTestFile(MetricManager.MetricNames.formatting_good,"testDir/java/NoFormattingTest.java",params,expectedResult,2);
-    
+
 });
+test("not closed html and not supported custom tags",()=>{
+    const expected=67.032;
+    parseAndTestFile(MetricManager.MetricNames.formatting_good,"testDir/java/InvalidTagTest.java",undefined,expected,3);
+
+})

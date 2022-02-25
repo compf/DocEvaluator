@@ -72,12 +72,12 @@ export class FleschMetric extends ComponentBasedMetric {
                 }
                 
             }
-            if (params.consider_tags) {
+            if (params.consider_tags) {     
                 for (let tag of component.getComment()?.getTags()!) {
                     if (tag.getDescription() != null) {
-                        let rawText = langHelper.getRawText(component.getComment()?.getGeneralDescription()!)
+                        let rawText = langHelper.getRawText(tag.getDescription()!)
                         if(rawText!=""){
-                            textsToConsider.push(tag.getDescription()!);
+                            textsToConsider.push(rawText);
                         }
                       
                     }
