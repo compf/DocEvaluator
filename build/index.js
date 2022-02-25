@@ -37078,7 +37078,6 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
      * @returns
      */
     calcReadability(vars) {
-        console.log(vars);
         return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
 }
