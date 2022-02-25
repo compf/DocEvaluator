@@ -1,4 +1,4 @@
-import { fstat, rmSync } from "fs";
+import { fstat, unlinkSync } from "fs";
 import { env } from "process";
 import { json } from "stream/consumers";
 import { EnvCommentConfLoader, EvaluatorConf, JSONCommentConfLoader, loadConf, sanitize } from "../../src/conf/EvaluatorConf"
@@ -66,7 +66,7 @@ test("test state saving",()=>{
     const expected=50;
     stateManager.save(expected);
     expect(stateManager.load()).toBe(expected);
-    rmSync("testDir/.evaluator_last_state.txt");
+    unlinkSync("testDir/.evaluator_last_state.txt");
 
     expect(()=>{
         StateManagerFactory.createStateManager("",".");
