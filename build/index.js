@@ -35360,7 +35360,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EnvCommentConfLoader = exports.JSONCommentConfLoader = exports.loadConf = exports.EvaluatorConf = exports.MiniMatchConf = void 0;
+exports.EnvCommentConfLoader = exports.JSONCommentConfLoader = exports.sanitize = exports.loadConf = exports.EvaluatorConf = exports.MiniMatchConf = void 0;
 const chalk_1 = __importDefault(__nccwpck_require__(7349));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
@@ -35424,6 +35424,10 @@ class EvaluatorConf {
          * max tolerable absolute difference from current to last run
          */
         this.relative_threshold = 30;
+        /**
+         * parameters data for the builder,  most builder won't need them
+         */
+        this.builder_params = {};
         for (let s of defaultMetrics) {
             this.metrics.push({ weight: 1.0, metric_name: s, params: metric_manager_1.MetricManager.getDefaultMetricParam(s), unique_name: metric_manager_1.MetricManager.getUniqueName(s) });
         }
@@ -35457,6 +35461,7 @@ function sanitize(conf) {
     }
     return conf;
 }
+exports.sanitize = sanitize;
 class JSONCommentConfLoader {
     constructor(basePath) {
         this.basePath = basePath;
@@ -35475,7 +35480,6 @@ class JSONCommentConfLoader {
 exports.JSONCommentConfLoader = JSONCommentConfLoader;
 class EnvCommentConfLoader {
     updateConf(conf) {
-        //TODO make this automatic
         if (process_1.env.INPUT_INCLUDE) {
             conf.include = JSON.parse(process_1.env.INPUT_INCLUDE);
         }
@@ -35573,15 +35577,15 @@ var StateManagerFactory;
      * @param workingDirectory the directory where the documentation analysis is happening
      * @returns a valid state manager
      */
-    function load(name, workingDirectory) {
+    function createStateManager(name, workingDirectory) {
         switch (name) {
             case "file":
                 return new file_state_manager_1.FileStateManager(workingDirectory);
             default:
-                throw new Error("Could find state manager " + name);
+                throw new Error("Could not find state manager " + name);
         }
     }
-    StateManagerFactory.load = load;
+    StateManagerFactory.createStateManager = createStateManager;
 })(StateManagerFactory = exports.StateManagerFactory || (exports.StateManagerFactory = {}));
 
 
@@ -35753,7 +35757,7 @@ function initializeObjects(conf, workingDirectory) {
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
     let builder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.builder, weightResolverTuple, conf.builder_params);
     let resultByMetric = new Map();
-    let stateManager = state_manager_factory_1.StateManagerFactory.load(conf.state_manager, workingDirectory);
+    let stateManager = state_manager_factory_1.StateManagerFactory.createStateManager(conf.state_manager, workingDirectory);
     return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages) {
@@ -36675,6 +36679,7 @@ exports.ChildrenBasedMetric = ChildrenBasedMetric;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.CommentNameCoherenceMetric = void 0;
+const method_component_1 = __nccwpck_require__(1480);
 const NLP_Helper_1 = __nccwpck_require__(9986);
 const component_based__metric_1 = __nccwpck_require__(1516);
 const documentation_analysis_metric_1 = __nccwpck_require__(6006);
@@ -36685,9 +36690,6 @@ const documentation_analysis_metric_1 = __nccwpck_require__(6006);
  */
 class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, langSpec) {
-        var _a;
-        if (component.getComment() == null || ((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) == null)
-            return;
         let componentNameWords = this.splitByNameConvention(component.getName());
         let rawText = langSpec.getRawText(component.getComment().getGeneralDescription());
         let commentWords = NLP_Helper_1.NLP_Helper.getTokens(rawText);
@@ -36704,6 +36706,13 @@ class CommentNameCoherenceMetric extends component_based__metric_1.ComponentBase
         let messages = [];
         let result = this.processResult(similarWordsCount / commentWords.length, messages);
         this.pushResult(builder, result, this.createLogMessages(messages, component), component);
+    }
+    shallConsider(component) {
+        var _a;
+        let baseClassConsider = super.shallConsider(component);
+        let isMethod = component instanceof method_component_1.MethodComponent;
+        let hasComment = component.getComment() != null && ((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null;
+        return baseClassConsider && isMethod && hasComment;
     }
     processResult(result, messages) {
         let params = this.getParams();
@@ -36999,13 +37008,15 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
             return;
         let sum = 0;
         for (let text of textsToConsider) {
-            let rawText = langSpec.getRawText(text);
-            sum += this.calcReadability(NLP_Helper_1.NLP_Helper.getRelevantVariables(rawText.replace("\n", " ")));
+            sum += this.calcReadability(NLP_Helper_1.NLP_Helper.getRelevantVariables(text.replace("\n", " ")));
         }
         let msgs = [];
         let score = sum / textsToConsider.length;
         let finalScore = this.processResult(score, msgs);
         this.pushResult(builder, finalScore, this.createLogMessages(msgs, component), component);
+    }
+    shallConsider(component) {
+        return super.shallConsider(component) && component.getComment() != null;
     }
     processResult(score, msgs) {
         let finalScore = 0;
@@ -37040,17 +37051,19 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
      * @returns
      */
     getTextsToConsider(component, params, langHelper) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         let textsToConsider = [];
-        if (component.getComment() != null) {
-            if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
-                let rawText = langHelper.getRawText((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
+        if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
+            let rawText = langHelper.getRawText((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
+            if (rawText != "") {
                 textsToConsider.push(rawText);
             }
-            if (params.consider_tags) {
-                for (let tag of (_c = component.getComment()) === null || _c === void 0 ? void 0 : _c.getTags()) {
-                    if (tag.getDescription() != null) {
-                        let rawText = langHelper.getRawText(tag.getDescription());
+        }
+        if (params.consider_tags) {
+            for (let tag of (_c = component.getComment()) === null || _c === void 0 ? void 0 : _c.getTags()) {
+                if (tag.getDescription() != null) {
+                    let rawText = langHelper.getRawText((_d = component.getComment()) === null || _d === void 0 ? void 0 : _d.getGeneralDescription());
+                    if (rawText != "") {
                         textsToConsider.push(tag.getDescription());
                     }
                 }
@@ -37065,6 +37078,7 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
      * @returns
      */
     calcReadability(vars) {
+        console.log(vars);
         return 206.835 - 1.015 * (vars.numWords / vars.numSentences) - 84.6 * (vars.numSyllables / vars.numWords);
     }
 }
@@ -37216,11 +37230,7 @@ class GunningFogMetric extends flesch_metric_1.FleschMetric {
     }
     processResult(score, msgs) {
         let finalScore = 0;
-        if (score < 0) {
-            finalScore = 0;
-            msgs.push("Invalid gunning fog value");
-        }
-        else if (score <= 8) {
+        if (score <= 8) {
             finalScore = (15 / 8) * score + 85;
             if (score <= 4) {
                 msgs.push("The comment is maybe a little bit to easy");
@@ -37545,8 +37555,6 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         }
     }
     analyze(component, builder, langSpec) {
-        if (component.getComment() == null)
-            return;
         let logMessages = [];
         let errorCount = 0;
         if (component.getComment().getGeneralDescription() != null) {
@@ -37561,6 +37569,9 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
         }
         let result = this.processResult(errorCount, logMessages);
         this.pushResult(builder, result, this.createLogMessages(logMessages, component), component);
+    }
+    shallConsider(component) {
+        return super.shallConsider(component) && component.getComment() != null;
     }
     processResult(result, logMessages) {
         let params = this.getParams();
