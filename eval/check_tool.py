@@ -143,7 +143,7 @@ class PMDTool(AbstractCheckTool):
         
         return LogLine(path,line_range,error_code)
     def is_valid_line(self,line:str)->bool:
-        return not("This analysis" in line)
+        return not("This analysis" in line or "Error while" in line)
     def parse_code(self,code:str)->int:
         if code=="CommentContent":
             return MessageCodes.IllegalTerm

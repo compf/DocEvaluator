@@ -9,10 +9,10 @@
        
         <module name="JavadocMethod">
             <property name="allowedAnnotations" value="Override" />
-            <property name="validateThrows" value="false" />
+            <property name="validateThrows" value="true" />
             <property name="allowMissingParamTags" value="false" />
             <property name="allowMissingReturnTag" value="false" />
-            <property name="tokens" value="METHOD_DEF,CTOR_DEF,ANNOTATION_FIELD_DEF,COMPACT_CTOR_DEF" />
+            <property name="tokens" value="METHOD_DEF,CTOR_DEF" />
         </module>     
        
      
@@ -21,17 +21,17 @@
         <module name="MissingJavadocMethod">
             <property name="minLineCount" value="-1" />
             <property name="allowedAnnotations" value="Override" />
-            <property name="scope" value="public" />
+            <property name="scope" value="private" />
             <!--<property name="excludeScope" value="null" />-->
-            <property name="allowMissingPropertyJavadoc" value="false" />
-            <property name="ignoreMethodNamesRegex" value="null" />
-            <property name="tokens" value=" METHOD_DEF,CTOR_DEF,ANNOTATION_FIELD_DEF,COMPACT_CTOR_DEF" />
+            <property name="allowMissingPropertyJavadoc" value="true" />
+            <!--<property name="ignoreMethodNamesRegex" value="null" />-->
+            <property name="tokens" value=" METHOD_DEF,CTOR_DEF" />
         </module>
         <module name="MissingJavadocType">
-            <property name="scope" value="public" />
+            <property name="scope" value="private" />
             <!--<property name="excludeScope" value="null" />-->
             <property name="skipAnnotations" value="Generated" />
-            <property name="tokens" value="INTERFACE_DEF,CLASS_DEF,ENUM_DEF,ANNOTATION_DEF,RECORD_DEF" />
+            <property name="tokens" value="INTERFACE_DEF,CLASS_DEF"/>
         </module>
        
     </module>

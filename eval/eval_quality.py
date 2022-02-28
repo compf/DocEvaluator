@@ -15,8 +15,8 @@ class CoveredComponent:
         self.error_code=error_code
         self.covered_by=set()
     def cover_same_component(self,other)->bool:
-        same_line_range=(self.line_range[0]>=other.line_range[0] and self.line_range[1]>=other.line_range[1]) or \
-            (self.line_range[0]<=other.line_range[0] and self.line_range[1]<=other.line_range[1])
+        same_line_range=(self.line_range[0]>=other.line_range[0] and self.line_range[1]<=other.line_range[1]) or \
+            (self.line_range[0]<=other.line_range[0] and self.line_range[1]>=other.line_range[1])
         return self.path==other.path and same_line_range and self.error_code==other.error_code
 def find_covered_component(to_search,covered_components)->CoveredComponent:
     for c in covered_components:

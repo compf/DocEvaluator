@@ -24,7 +24,7 @@
       "weight": 1,
       "metric_name": "certain_terms",
       "params": {
-        "consider_tags": false,
+        "consider_tags": true,
         "k": 0.1,
         "levenshtein_distance": 1,
         "terms": [
