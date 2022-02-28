@@ -8,6 +8,7 @@ from typing import List,Tuple
 from abc import abstractmethod
 import subprocess
 from check_tool import *
+TOLERANCE=2
 class CoveredComponent:
     def __init__(self,path,line_range,error_code) -> None:
         self.path=path
@@ -15,8 +16,8 @@ class CoveredComponent:
         self.error_code=error_code
         self.covered_by=set()
     def cover_same_component(self,other)->bool:
-        same_line_range=(self.line_range[0]>=other.line_range[0] and self.line_range[1]<=other.line_range[1]) or \
-            (self.line_range[0]<=other.line_range[0] and self.line_range[1]>=other.line_range[1])
+        same_line_range=(self.line_range[0]>=other.line_range[0] and self.line_range[1]-TOLERANCE<=other.line_range[1]) or \
+            (self.line_range[0]<=other.line_range[0] and self.line_range[1]>=other.line_range[1]-TOLERANCE)
         return self.path==other.path and same_line_range and self.error_code==other.error_code
 def find_covered_component(to_search,covered_components)->CoveredComponent:
     for c in covered_components:

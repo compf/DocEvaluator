@@ -298,6 +298,7 @@ export class JavadocParser {
      */
     parseCommentText(text: string): StructuredComment {
         let lines = text.split("\n");
+        let originalLineLength=lines.length;
         let toReplace = ["/**", "*/", "*"]
         for (let i = 0; i < lines.length; i++) {
             for (let replace of toReplace) {
@@ -326,7 +327,7 @@ export class JavadocParser {
                 descriptionLines.push(line)
             }
         }
-        return new StructuredComment(descriptionLines.join("\n"), tags);
+        return new StructuredComment(descriptionLines.join("\n"), tags,originalLineLength);
     }
 }
 /**

@@ -26,7 +26,7 @@
       "params": {
         "consider_tags": true,
         "k": 0.1,
-        "levenshtein_distance": 1,
+        "levenshtein_distance": 0,
         "terms": [
           "aka",
           "e.g.",

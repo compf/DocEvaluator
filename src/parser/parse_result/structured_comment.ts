@@ -4,9 +4,11 @@
 export class StructuredComment {
     private generalDescription: string | null;
     private tags: StructuredCommentTag[] = []
-    constructor(generalDescription: string, tags: StructuredCommentTag[]) {
+    private commentLineCount:number=0
+    constructor(generalDescription: string, tags: StructuredCommentTag[],commentLineCount:number) {
         this.generalDescription = generalDescription;
         this.tags = tags;
+        this.commentLineCount=commentLineCount;
     }
     /**
      * Getter for the general description, these are usually the first lines until the  lines begin with (usually) "@"
@@ -21,6 +23,13 @@ export class StructuredComment {
      */
     getTags(): StructuredCommentTag[] {
         return this.tags;
+    }
+    /**
+     * getter for the number of lines of this comment, including empty lines
+     * @returns  the number of lines
+     */
+    getCommentLinesCount():number{
+        return this.commentLineCount;
     }
 
 }

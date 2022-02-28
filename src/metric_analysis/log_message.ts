@@ -24,7 +24,7 @@ export class LogMessage {
         }
         else{
             let comment=component.getComment()!;
-            let commentLines=comment.getGeneralDescription()?.split("\n").length ?? 0;
+            let commentLines=comment.getCommentLinesCount();
             commentLines+=comment.getTags().length;
             this.lineStart=component.getLineNumber()-commentLines;
             this.lineEnd=component.getLineNumber();

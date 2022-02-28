@@ -101,7 +101,7 @@ class CheckStyleTool(AbstractCheckTool):
         elif code=="JavadocStyle":
             return MessageCodes.JavadocStyle
         elif code=="JavadocMethod":
-            return MessageCodes.MissingDoc
+            return MessageCodes.MethodNotFullyDocumented
         else:
             return MessageCodes.CheckstyleSpecific
 
@@ -143,7 +143,7 @@ class PMDTool(AbstractCheckTool):
         
         return LogLine(path,line_range,error_code)
     def is_valid_line(self,line:str)->bool:
-        return not("This analysis" in line or "Error while" in line)
+        return not("This analysis" in line or "Error while" in line or "encourageToUseIncrementalAnalysis" in line)
     def parse_code(self,code:str)->int:
         if code=="CommentContent":
             return MessageCodes.IllegalTerm
