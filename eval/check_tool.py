@@ -41,7 +41,9 @@ class AbstractCheckTool:
     @abstractmethod
     def get_command(self)->List[str]:
         pass
-
+    @abstractmethod
+    def get_abbrev(self)->str:
+        pass
     @abstractmethod
     def get_out_path(self)->str:
         pass
@@ -60,16 +62,19 @@ class AbstractCheckTool:
         pass
 class CheckStyleTool(AbstractCheckTool):
     JAR_NAME="checkstyle.jar"
-    def __init__(self,project_path:str) -> None:
+    def __init__(self,project_path:str,rule_root:str) -> None:
         super().__init__()
         self.project_path=project_path
+        self.ruleset_root=rule_root
+    def get_abbrev(self)->str:
+        return "CS"
     def get_out_path(self) -> str:
         return "checkstyle_out.txt"
     def get_command(self) -> List[str]:
         #java -jar checkstyle-9.3-all.jar -c ./rulesets/checkstyle.xml ~/data/uni/sem7/github_projects/argouml-VERSION_0_24 >out_checkstyle.txt
         return ["java","-jar",CheckStyleTool.JAR_NAME,"-c",self.get_ruleset_path(),self.project_path]
     def get_ruleset_path(self) -> str:
-        return  "checkstyle.xml"
+        return  os.path.join(self.ruleset_root,"checkstyle.xml")
     def download(self):
         if not os.path.exists(CheckStyleTool.JAR_NAME):
             urllib.request.urlretrieve("https://github.com/checkstyle/checkstyle/releases/download/checkstyle-9.3/checkstyle-9.3-all.jar","checkstyle.jar")
@@ -106,11 +111,14 @@ class CheckStyleTool(AbstractCheckTool):
 class PMDTool(AbstractCheckTool):
     ZIP_NAME="pmd.zip"
     DIR_NAME="pmd-bin-6.42.0"
-    def __init__(self,project_path:str) -> None:
+    def __init__(self,project_path:str,rule_root:str) -> None:
         super().__init__()
         self.project_path=project_path
+        self.ruleset_root=rule_root
     def get_out_path(self) -> str:
         return "pmd_out.txt"
+    def get_abbrev(self)->str:
+        return "PMD"
     def get_command(self) -> List[str]:
         #./run.sh pmd --rulesets ../../rulesets/pmd.xml --dir ~/data/uni/sem7/github_projects/argouml-VERSION_0_24
         return ["pmd-bin-6.42.0/bin/run.sh","pmd", "--rulesets",self.get_ruleset_path(),"--dir",self.project_path]
@@ -119,7 +127,7 @@ class PMDTool(AbstractCheckTool):
         with zipfile.ZipFile(PMDTool.ZIP_NAME, 'r') as zip_ref:
             zip_ref.extractall(".")
     def get_ruleset_path(self) -> str:
-        return "pmd.xml"
+        return os.path.join(self.ruleset_root,"pmd.xml")
     def parse_line(self, line: str) -> LogLine:
         #print(line)
         #print(line)
@@ -146,23 +154,26 @@ class PMDTool(AbstractCheckTool):
 
 
 class DocTool(AbstractCheckTool):
-    def __init__(self,project_path:str) -> None:
+    def __init__(self,project_path:str,rule_root:str) -> None:
         super().__init__()
         self.project_path=project_path
         self.found_log_message=False
+        self.ruleset_root=rule_root
     def get_out_path(self) -> str:
         return "doc_out.txt"
+    def get_abbrev(self)->str:
+        return "DE"
     def get_command(self) -> List[str]:
         #./run.sh pmd --rulesets ../../rulesets/pmd.xml --dir ~/data/uni/sem7/github_projects/argouml-VERSION_0_24
         return ["node","../build/src/index.js",self.project_path]
     def download(self):
-        shutil.copy("comment_conf.json",self.project_path)
+        shutil.copy(self.get_ruleset_path(),self.project_path)
         #shutil.rmtree("DocEvaluator")
         
         #subprocess.run(["git","clone", "-b","action","https://github.com/compf/DocEvaluator.git"])
 
     def get_ruleset_path(self) -> str:
-        return None
+        return os.path.join(self.ruleset_root,"comment_conf.json")
     def parse_line(self, line: str) -> LogLine:
         try:
             splitted=line.split(":")
