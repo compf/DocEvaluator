@@ -49,7 +49,30 @@ Zum Vergleich der drei Programme müssen zunächst Regeln festgelegt werden, bei
 
 Aus der Tabelle lässt sich entnehmen, dass der \doceval mit \textit{Checkstyle} die meisten Übereinstimmungen hat. Beide Programme können die Vollständigkeit der Methodendokumentation und typische Fehler in Javadoc-Kommentaren (wie z.~B. fehlerhaftes HTML) finden. PMD und der \doceval können bestimmte Wörter in der Dokumentation bemängeln, die in einer Dokumentation vermieden werden sollten. Alle drei Programme können das Vorhandensein der Dokumentation überprüfen; dabei kann auch differenziert werden, ob private Komponenten dokumentiert werden sollen oder nicht. Vor allem bei Checkstyle gibt es viele Regeln, die von den anderen beiden Programmen nicht gefunden werden und auf der Webseite \cite{checkstyle_doc_metrics} aufgelistet werden.
 
-Zur Bewertung des \textit{DocEvaluators} sollte daher sowohl die Fehler, welche von allen Tools gefunden werden, als auch die Fehler, die nur von einzelnen Tools gefunden werden, analysiert werden. So kann  geprüft werden, wie viele Fehler von den anderen Tools gefunden werden, die der \doceval aber ignoriert, und wie viele Fehler nur vom \doceval gefunden werden. Die Ergebnisse können dann als Rückmeldung genutzt werden, um  eventuell in einer späteren Version weitere Metriken bzw. Fehler zu implementieren, die in den Open-Source-Projekten besonders häufig auftreten, aber vom \doceval aktuell nicht entdeckt werden. Interessant ist aber auch Vergleich der Ergebnisse, wenn die Regelauswahl so beschränkt wird, dass jedes Programm jeden Fehler finden sollte. 
+Zur Bewertung des \textit{DocEvaluators} sollte daher sowohl die Fehler, welche von allen Tools gefunden werden, als auch die Fehler, die nur von einzelnen Tools gefunden werden, analysiert werden. So kann  geprüft werden, wie viele Fehler von den anderen Tools gefunden werden, die der \doceval aber ignoriert, und wie viele Fehler nur vom \doceval gefunden werden. Die Ergebnisse können dann als Rückmeldung genutzt werden, um  eventuell in einer späteren Version weitere Metriken bzw. Fehler zu implementieren, die in den Open-Source-Projekten besonders häufig auftreten, aber vom \doceval aktuell nicht entdeckt werden. Interessant ist aber auch Vergleich der Ergebnisse, wenn die Regelauswahl so beschränkt wird, dass jedes Programm jeden Fehler finden sollte.
+
+\subsection{Ergebnisse}
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c|c|c}
+    Name & ArgoUml & X & X\\\hline
+    |DE| &1467 & &\\\hline
+    |CS| &855 & &\\\hline
+    |PMD|&1387 & &\\\hline
+    
+    \{DE\} &189 & &\\\hline
+    \{CS\} &20 & &\\\hline
+    \{PMD\} &113 & &\\\hline
+    \{PMD, DE\} &444 & &\\\hline
+    \{CS, DE\} &5 & &\\\hline
+    \{PMD, CS\} & 1& &\\\hline
+    \{PMD, CS, DE\} &829 & &\\\hline
+    \end{tabular}
+    \caption{Ergebnisse der Evaluation}
+    \label{tab:eval_results}
+\end{table}
 \begin{comment}
 \section{Unit-Test}
 Dir grundlegende Vorgehensweise zur Prüfung, ob ein Programm seinen Anforderung genügt, sind Unit-Tests. Bei Unit-Tests oder auch Modul- oder Komponententests wird eine genau abgegrenzte Komponente des Programms getestet. Dabei werden die Komponente zunächst in einem bestimmten Zustand gebracht, indem beispielsweise bestimmte Eingabeparameter vorgegeben werden. Anschließend werden bestimmte Operationen auf der Komponente angewendet. Am Schluss wird der Zustand der Komponente angefragt und geprüft, ob der Zustand der Komponente nach allen Operationen so ist, wie es gemäß den Anforderungen zu erwarten ist. Gibt es Abweichung beim Zustand, so wird der Entwickler sofort informiert. 
