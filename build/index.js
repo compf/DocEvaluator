@@ -35771,10 +35771,17 @@ function processByMetric(root, metric, objects) {
     objects.fileAnalyzer.analyze(root, metric, objects.builder, objects.languageHelper);
 }
 function processByFile(relevantFile, objects) {
-    var root = { root: objects.parser.parse(relevantFile), path: relevantFile };
-    console.log("Looking at " + root.path);
-    for (let metric of objects.metrics) {
-        processByMetric(root, metric, objects);
+    let root;
+    try {
+        root = { root: objects.parser.parse(relevantFile), path: relevantFile };
+        console.log("Looking at " + root.path);
+        for (let metric of objects.metrics) {
+            processByMetric(root, metric, objects);
+        }
+    }
+    catch (ex) {
+        console.log("Could not parse", relevantFile, "will be ignored");
+        return;
     }
 }
 if (require.main === require.cache[eval('__filename')]) {
@@ -36157,7 +36164,6 @@ const path_1 = __importDefault(__nccwpck_require__(1017));
  */
 class LogMessage {
     constructor(msg, component, metricName) {
-        var _a, _b;
         this.path = path_1.default.relative(LogMessage.BasePath, component.getTopParent().getName());
         this.qualifiedName = component.getQualifiedName();
         this.msg = msg;
@@ -36168,7 +36174,7 @@ class LogMessage {
         }
         else {
             let comment = component.getComment();
-            let commentLines = (_b = (_a = comment.getGeneralDescription()) === null || _a === void 0 ? void 0 : _a.split("\n").length) !== null && _b !== void 0 ? _b : 0;
+            let commentLines = comment.getCommentLinesCount();
             commentLines += comment.getTags().length;
             this.lineStart = component.getLineNumber() - commentLines;
             this.lineEnd = component.getLineNumber();
@@ -36639,8 +36645,8 @@ class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMet
     }
     processResult(result, logMessages) {
         let params = this.getParams();
-        if (result > 1) {
-            logMessages.push("More than one forbidden term detected. Forbidden are ", params.terms.join(","));
+        if (result > 0) {
+            logMessages.push("At least one forbidden term detected. Forbidden are ", params.terms.join(","));
         }
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
     }
@@ -50365,6 +50371,7 @@ class JavadocParser {
     parseCommentText(text) {
         var _a;
         let lines = text.split("\n");
+        let originalLineLength = lines.length;
         let toReplace = ["/**", "*/", "*"];
         for (let i = 0; i < lines.length; i++) {
             for (let replace of toReplace) {
@@ -50392,7 +50399,7 @@ class JavadocParser {
                 descriptionLines.push(line);
             }
         }
-        return new structured_comment_1.StructuredComment(descriptionLines.join("\n"), tags);
+        return new structured_comment_1.StructuredComment(descriptionLines.join("\n"), tags, originalLineLength);
     }
 }
 exports.JavadocParser = JavadocParser;
@@ -50936,10 +50943,12 @@ exports.StructuredCommentTag = exports.StructuredCommentTagKind = exports.Struct
  * This class contains a structured comment as it is common in Javadoc and similar documentation systems
  */
 class StructuredComment {
-    constructor(generalDescription, tags) {
+    constructor(generalDescription, tags, commentLineCount) {
         this.tags = [];
+        this.commentLineCount = 0;
         this.generalDescription = generalDescription;
         this.tags = tags;
+        this.commentLineCount = commentLineCount;
     }
     /**
      * Getter for the general description, these are usually the first lines until the  lines begin with (usually) "@"
@@ -50954,6 +50963,13 @@ class StructuredComment {
      */
     getTags() {
         return this.tags;
+    }
+    /**
+     * getter for the number of lines of this comment, including empty lines
+     * @returns  the number of lines
+     */
+    getCommentLinesCount() {
+        return this.commentLineCount;
     }
 }
 exports.StructuredComment = StructuredComment;
