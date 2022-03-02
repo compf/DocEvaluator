@@ -2,6 +2,7 @@
 In diesem Kapitel werden die wichtigen Grundlagen erläutert, die nötig sind, um das Problem mangelhafter Softwaredokumentation zu lösen.  Dazu  wird der Begriff \enquote{Softwaredokumentation} genauer definiert. Außerdem wird eine Einführung in Code-Smells gegeben.  Anschließend gibt es eine Einführung in Javadoc gegeben, dessen Analyse der Schwerpunkt dieser Bachelorarbeit ist. Danach wird die \ac{CI/CD}-Plattform \enquote{GitHub Actions} präsentiert, die genutzt werden soll, um die Dokumentationsqualität regelmäßig zu messen. Am Ende werden weitere Tools vorgestellt, die fehlerhafte Dokumentationen erkennen. Außerdem werden wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Thematik \enquote{Softwaredokumentation} befassen. 
  
 
+\hfill
 \section{Softwaredokumentation}\label{chapter:documentation}
 Um den Begriff \enquote{Softwaredokumentation} zu definieren, sollte zunächst der Begriff \enquote{Dokumentation} definiert werden. Das IEEE  definiert diesen Begriff als jede textliche oder bildliche Information, welche Aktivitäten, Anforderungen, Abläufe oder Ergebnisse beschreibt, definiert, spezifiziert, berichtet oder zertifiziert \cite[S. 28]{IEEEStandardGlossaryofSoftwareEngineeringTerminology}. Somit beschreibt eine Dokumentation, wie sich eine Komponente aufgebaut ist oder wie sie sich verhält.
 
@@ -90,7 +91,7 @@ TypeScript ist eine auf JavaScript aufbauende Programmiersprache, die JavaScript
 
 In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variablen festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wurde TypeScript gewählt, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
 
-\subsubsection{ Node.js}
+\subsubsection{Node.js}
 Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen; folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
 
 \section{GitHub Actions}\label{chapter:github_actions}
@@ -168,7 +169,7 @@ Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generier
 
 \section{Verwandte Arbeiten}
 
-Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. 
+Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. In diesen Arbeiten werden auch Programme vorgestellt. welche diese Metriken nutzen, allerdings sind die Quelltexte bzw.  lauffähige Versionen der Programme ohne Weiteres nicht verfügbar, sodass ein Vergleich mit dem zu entwickelnden Tool nicht möglich ist. 
 
 
 \subsubsection{Quasoledo}\label{chapter:Quasoledo}
@@ -191,13 +192,15 @@ application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern,
 Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet, in der die meisten Java-Methoden passen. Die Kategorien sind Methoden, die eine Ressource oder Objekt erstellen, eine Ressource sperren, auf eine Ressource zugreifen, eine gesperrte Ressource wieder freigeben und Ressourcen schließen. 
 
 Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.~B. im Ausnahmefall ein häufiger Fehler sein kann. 
-
+\begin{comment}
 \subsubsection{iComment}
 Das Programm \enquote{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
 
 Setzt nun die Dokumentation einen Lock voraus, aber der Programmierer hat keinen Lock angefordert, können sehr schnelle und subtile Bugs entstehen, die nur schwer findbar sind. \cite[S. 145ff.]{icomment}
 
 Das Programm wurde auf dem Quellcode des Linux-Kernels und Mozilla angewandt und dabei mögliche Bugs gefunden, die später auch von den Entwicklern bestätigt wurden\cite[S. 146.]{icomment}.
+
+\end{comment}
 \subsubsection{@tComment}\label{@tComment}
 Ein anderer Ansatz, der ebenfalls mit Javadoc arbeitet, wird \enquote{@tComment} genannt \cite[S. 1ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies}. Dabei wurde die Konsistenz der Javadoc-Dokumentation mit dem tatsächlichen Programmcode verglichen. Anders als die vorherigen Ansätze, wird hier das Programm dynamisch ausgeführt. Dabei werden die verschiedenen Methoden und ihr dazugehörige Javadoc-Dokumentation analysiert und daraus mittels einfacher Heuristiken ermittelt, ob ein  Nullwert für einen Parameter eine Inkonsistenz zwischen Dokumentation und Quellcode offenbart.
 

@@ -51,6 +51,16 @@ Aus der Tabelle lässt sich entnehmen, dass der \doceval mit \textit{Checkstyle}
 
 Zur Bewertung des \textit{DocEvaluators} sollte daher sowohl die Fehler, welche von allen Tools gefunden werden, als auch die Fehler, die nur von einzelnen Tools gefunden werden, analysiert werden. So kann  geprüft werden, wie viele Fehler von den anderen Tools gefunden werden, die der \doceval aber ignoriert, und wie viele Fehler nur vom \doceval gefunden werden. Die Ergebnisse können dann als Rückmeldung genutzt werden, um  eventuell in einer späteren Version weitere Metriken bzw. Fehler zu implementieren, die in den Open-Source-Projekten besonders häufig auftreten, aber vom \doceval aktuell nicht entdeckt werden. Interessant ist aber auch Vergleich der Ergebnisse, wenn die Regelauswahl so beschränkt wird, dass jedes Programm jeden Fehler finden sollte.
 
+\subsection{Wahl der zu analysierenden Projekte}
+Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub heruntergeladen. Grundsätzlich kann der Vergleich mit jedem Java-Projekt durchgeführt werden, dennoch wurden einige Bedingungen festgelegt, die bei der Auswahl der Projekte eine wichtige Rolle spielen. Diese Bedingungen werden in der folgenden Auflistung präsentiert:
+
+\begin{enumerate}
+    \item Es werden nur Java-Projekte oder Projekte mit einen überragenden Anteil an Java-Code (mindestens 90 \%)) betrachtet
+    \item Mindestens eine Bibliothek und ein \enquote{Standalone-Programm} (z.~dt. eigenständiges Programm) wird betrachtet
+    \item  Die Projekte sollen möglichst wenige Parsing-Fehler durch ANTRL4 beim \doceval produzieren. Bei mehr als als zwei Fehlern wird dieses Projekt nicht betrachtet
+    
+\end{enumerate}
+
 \subsection{Ergebnisse}
 
 
