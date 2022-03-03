@@ -165,14 +165,27 @@ Um die Qualität der Softwaredokumentation in Javadoc zu bewerten, gibt es berei
 Ein bekanntes Programm ist \cs \cite{Checkstyle}. \cs ist ein Open-Source-Programm, das Verstöße gegen bestimmte Fehlern in Java-Quellcode erkennt und Warnungen dazu anzeigt.   Mit \cs lässt sich beispielsweise prüfen, ob alle Methoden überhaupt ein Javadoc-Block besitzen, der Javadoc-Block korrekt platziert wurde oder ein Javadoc-Tag wie zum Beispiel \enquote{@deprecated} auch mit einer zusätzlichen Begründung versehen wurde. Außerdem kann  \cs überprüfen, ob \ac{HTML}-Tags korrekt geschlossen wurden und jede Zeile im Javadoc-Block mit einem Asteriks beginnt.
 
 
-Für jeden Verstoß gibt \cs  eine Zeile aus, welche dem Anwender bei der Behebung des Problems helfen soll. Diese Zeile enthält den absoluten Pfad der betroffenen Datei, die Zeilen- und Spaltennummer, in der das Problem auftritt, eine Beschreibung des Fehlers und einen Fehlercode. Ein vollständige Auflistung der Fehler, die \cs bezüglich der Dokumentation finden kann,  existiert in \cite{checkstyle_doc_metrics}.
+Für jeden Verstoß gibt \cs  eine Zeile aus, welche dem Anwender bei der Behebung des Problems helfen soll. Listing \ref{lst:checkstyle_out} zeigt eine typische Zeile, die Checkstyle ausgibt, wobei zur Übersichtlichkeit diese einzelne Zeile auf mehrere Zeilen verteilt wurde:
+
+	\begin{figure}[h!]
+			\lstinputlisting
+			[caption={Beispielhafte Konfigurationsdatei für Checkstyle},
+			label={lst:checkstyle_out},
+			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left,language=xml]
+			{figures/chapter2/checkstyle_out.txt}
+		\end{figure}
+		
+Diese Zeile enthält die Schwere des Verstoßes (Z. 1) den absoluten Pfad der betroffenen Datei (Z. 2), welcher hier aufgrund der Länge gekürzt wurde , die Zeilen- und Spaltennummer (Z. 3), in der das Problem auftritt, eine Beschreibung des Fehlers (Z. 4) und einen Fehlercode (Z. 5). Die Schwere eines Verstoßes kann für jeden Fehler konfiguriert werden. Eine vollständige Auflistung der Fehler, die \cs bezüglich der Dokumentation finden kann,  existiert in \cite{checkstyle_doc_metrics}.
 
 			
-\cs lässt sich mit einer Extensible-Markup-Language-Datei konfigurieren, die festlegt, welche Regeln von \cs überprüft werden sollen.  \cs lässt sich zudem in \ac{IDE}s wie \textit{Eclipse} einbinden, um den Entwickler leicht auf Fehler hinzuweisen. 
+\cs lässt sich mit einer Extensible-Markup-Language-Datei konfigurieren, die festlegt, welche Regeln von \cs überprüft werden sollen. Dabei kann beispielsweise festgelegt werden, ob Kommentare bei privaten Komponenten nicht zwingend notwendig sind oder kurze Methoden nicht dokumentiert sein müssen.
+\cs lässt sich zudem in \ac{IDE}s wie \textit{Eclipse} einbinden, um den Entwickler leicht auf Fehler hinzuweisen. 
 \subsubsection{PMD}
-Des Weiteren gibt es das Programm PMD \cite{PMD}, das ebenfalls Fehler in Softwaredokumentationen finden kann.  Anders als Checkstyle unterstützt PMD auch andere Sprachen als Java, sodass beispielsweise einige Fehler in JavaScript gefunden werden kann. 
+Des Weiteren gibt es das Programm PMD \cite{PMD}, das ebenfalls Fehler in Softwaredokumentationen finden kann.  Anders als Checkstyle unterstützt PMD auch andere Sprachen als Java, sodass beispielsweise einige Fehler in JavaScript gefunden werden können. Dazu gehören aber keine Fehler bezüglich der Dokumentation
 
-Im Bereich  Javadoc erkennt \textit{PMD} wie \cs nicht dokumentierte Komponenten. Zudem kann \textit{PMD} bestimmte Wörter erkennen, die als anstößig oder schwieriger verständlich empfunden werden. Auch eine maximale Länge eines Kommentars in puncto maximale Anzahl an Zeichen pro Zeile und maximale Anzahl an Zeilen pro Kommentar kann festgelegt werden. Allerdings sollte beachtet werden, dass diese Regeln für alle Kommentare (einschließlich einzeilige und normale mehrzeilige) gilt und damit nicht auf Javadoc beschränkt ist. 
+Im Bereich  Javadoc erkennt \textit{PMD} wie \cs nicht dokumentierte Komponenten. Zudem kann \textit{PMD} bestimmte Wörter erkennen, die als anstößig oder schwieriger verständlich empfunden werden. Auch eine maximale Länge eines Kommentars in puncto maximale Anzahl an Zeichen pro Zeile und maximale Anzahl an Zeilen pro Kommentar kann festgelegt werden. Allerdings sollte beachtet werden, dass diese Regeln für alle Kommentare (einschließlich einzeilige und normale mehrzeilige) gilt und damit nicht auf Javadoc beschränkt sind. 
+
+Ähnlich wie \cs gibt \textit{PMD} gefundene Verstöße auf der Konsole aus. Die Struktur dieser Ausgabe ähnelt sehr der von \textit{Checkstyle}, da sie ebenfalls den vollständigen Pfad, die Zeilennummer und einen Fehlercode mit einer Beschreibung enthält. Nur die Spaltennummer  und einen Hinweis auf den Schweregrad des Verstoßes existiert nicht. Ähnlich wie \cs kann \textit{PMD} mittels einer Extensible-Markup-Language-Datei konfiguriert werden.
 
 \subsubsection{Javadoc}
 Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generieren der HTML-Datei die Qualität des Javadocs zu prüfen. Dabei werden vor allem fehlende Tags für Parameter etc. bemängelt. Zudem erkennt Javadoc auch Tabellen mit fehlender Überschrift und andere Designmängel, die in der HTML-Seite später auffallen. Auch fehlerhaftes HTML kann erkannt werden.
