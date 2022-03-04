@@ -36605,9 +36605,7 @@ class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMet
         if (component.getComment() == null)
             return;
         let termCount = 0;
-        if (component.getComment().getGeneralDescription() != null) {
-            termCount += this.countSimilarTerms(component.getComment().getGeneralDescription());
-        }
+        termCount += this.countSimilarTerms(component.getComment().getGeneralDescription());
         if (params.consider_tags) {
             for (let tag of component.getComment().getTags()) {
                 if (tag.getDescription() != null) {
@@ -37057,16 +37055,14 @@ class FleschMetric extends component_based__metric_1.ComponentBasedMetric {
      * @returns
      */
     getTextsToConsider(component, params, langHelper) {
-        var _a, _b, _c;
+        var _a, _b;
         let textsToConsider = [];
-        if (((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription()) != null) {
-            let rawText = langHelper.getRawText((_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getGeneralDescription());
-            if (rawText != "") {
-                textsToConsider.push(rawText);
-            }
+        let rawText = langHelper.getRawText((_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getGeneralDescription());
+        if (rawText != "") {
+            textsToConsider.push(rawText);
         }
         if (params.consider_tags) {
-            for (let tag of (_c = component.getComment()) === null || _c === void 0 ? void 0 : _c.getTags()) {
+            for (let tag of (_b = component.getComment()) === null || _b === void 0 ? void 0 : _b.getTags()) {
                 if (tag.getDescription() != null) {
                     let rawText = langHelper.getRawText(tag.getDescription());
                     if (rawText != "") {
@@ -37562,10 +37558,8 @@ class SpellingMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, langSpec) {
         let logMessages = [];
         let errorCount = 0;
-        if (component.getComment().getGeneralDescription() != null) {
-            let rawText = langSpec.getRawText(component.getComment().getGeneralDescription());
-            errorCount += this.getMisspellingCount(rawText, logMessages, component);
-        }
+        let rawText = langSpec.getRawText(component.getComment().getGeneralDescription());
+        errorCount += this.getMisspellingCount(rawText, logMessages, component);
         for (let tag of component.getComment().getTags()) {
             if (tag.getDescription() != null) {
                 let rawText = langSpec.getRawText(tag.getDescription());
