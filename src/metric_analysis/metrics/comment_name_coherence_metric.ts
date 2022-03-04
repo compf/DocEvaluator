@@ -22,7 +22,7 @@ export class CommentNameCoherenceMetric extends ComponentBasedMetric {
 
     analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {
         let componentNameWords = this.splitByNameConvention(component.getName());
-        let rawText = langSpec.getRawText(component.getComment()!.getGeneralDescription()!)
+        let rawText = langSpec.getRawText(component.getComment()!.getGeneralDescription())
         let commentWords = NLP_Helper.getTokens(rawText);
         if (commentWords.length == 0) return;
         let similarWordsCount = 0;

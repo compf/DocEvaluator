@@ -27,4 +27,7 @@ test("not closed html and not supported custom tags",()=>{
     const expected=67.032;
     parseAndTestFile(MetricManager.MetricNames.formatting_good,"testDir/java/InvalidTagTest.java",undefined,expected,3);
 
-})
+});
+test("empty commet certain words",()=>{
+    parseAndTestFile(MetricManager.MetricNames.certain_terms,"testDir/java/EmptyCommentTest.java",undefined,100,1);
+});

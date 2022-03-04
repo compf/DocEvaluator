@@ -30,10 +30,10 @@ export class SpellingMetric extends ComponentBasedMetric {
     analyze(component: Component, builder: MetricResultBuilder, langSpec: LanguageSpecificHelper): void {
         let logMessages: string[] = [];
         let errorCount = 0;
-        if (component.getComment()!.getGeneralDescription() != null) {
-            let rawText = langSpec.getRawText(component.getComment()!.getGeneralDescription()!);
-            errorCount += this.getMisspellingCount(rawText, logMessages, component)
-        }
+
+        let rawText = langSpec.getRawText(component.getComment()!.getGeneralDescription()!);
+        errorCount += this.getMisspellingCount(rawText, logMessages, component)
+
         for (let tag of component.getComment()!.getTags()) {
             if (tag.getDescription() != null) {
                 let rawText = langSpec.getRawText(tag.getDescription()!);
@@ -44,7 +44,7 @@ export class SpellingMetric extends ComponentBasedMetric {
         this.pushResult(builder, result, this.createLogMessages(logMessages, component), component);
     }
     shallConsider(component: Component): boolean {
-        return super.shallConsider(component) && component.getComment()!=null;
+        return super.shallConsider(component) && component.getComment() != null;
     }
     private additionalWords: Set<string>;
     protected processResult(result: number, logMessages: string[]): number {

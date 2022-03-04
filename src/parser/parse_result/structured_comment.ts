@@ -2,7 +2,7 @@
  * This class contains a structured comment as it is common in Javadoc and similar documentation systems
  */
 export class StructuredComment {
-    private generalDescription: string | null;
+    private generalDescription: string;
     private tags: StructuredCommentTag[] = []
     private commentLineCount:number=0
     constructor(generalDescription: string, tags: StructuredCommentTag[],commentLineCount:number) {
@@ -14,7 +14,7 @@ export class StructuredComment {
      * Getter for the general description, these are usually the first lines until the  lines begin with (usually) "@"
      * @returns the general description of the component
      */
-    getGeneralDescription(): string | null {
+    getGeneralDescription(): string  {
         return this.generalDescription;
     }
     /**

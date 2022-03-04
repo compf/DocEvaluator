@@ -193,4 +193,20 @@ test("test parser factory",()=>{
     expect(()=>{
         ParserFactory.createParser("")
     }).toThrow();
-})
+});
+test("test ellipse parsing/ varargs parsing",()=>{
+    let parser=new JavaParser();
+    let res=parser.parse("testDir/java/EllipseMethodParserTest.java");
+    let cls=res.getChildren()[0] as ClassComponent;
+    let meth=cls.getChildren()[0] as MethodComponent;
+
+    let param=meth.getParams()[0];
+    expect(param.type).toBe("int");
+    expect(param.name).toBe("a");
+
+    param=meth.getParams()[1];
+    expect(param.type).toBe("String[]");
+    expect(param.name).toBe("args");
+   
+
+});

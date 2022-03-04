@@ -53,3 +53,7 @@ test("test overriding and java throws", () => {
     parseAndTestFile(MetricNames.method_fully_documented,path,undefined,expectedResult,1);
    
 });
+test(" test bnon existing params but commented",()=>{
+    const expected=2*100.0/3;
+    parseAndTestFile(MetricNames.method_fully_documented,"testDir/java/GhostParamDocumentationTest.java",undefined,expected,3);
+});
