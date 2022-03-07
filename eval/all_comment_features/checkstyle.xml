@@ -24,10 +24,11 @@
         </module>
         <module name="JavadocMethod">
             <property name="allowedAnnotations" value="Override" />
-            <property name="validateThrows" value="false" />
+            <property name="validateThrows" value="true" />
             <property name="allowMissingParamTags" value="false" />
             <property name="allowMissingReturnTag" value="false" />
-            <property name="tokens" value="METHOD_DEF,CTOR_DEF,ANNOTATION_FIELD_DEF,COMPACT_CTOR_DEF" />
+            <property name="tokens" value="METHOD_DEF,CTOR_DEF" />
+
         </module>
         <module name="JavadocMissingLeadingAsterisk">
             <property name="violateExecutionOnNonTightHtml" value="false" />
@@ -47,7 +48,6 @@
             <property name="endOfSentenceFormat" value="([.?!][ \t\n\r\f])|([.?!]$)" />
             <property name="checkEmptyJavadoc" value="false" />
             <property name="checkHtml" value="true" />
-            <property name="tokens" value="ANNOTATION_DEF,ANNOTATION_FIELD_DEF,CLASS_DEF,CTOR_DEF,ENUM_CONSTANT_DEF,ENUM_DEF,INTERFACE_DEF,METHOD_DEF,PACKAGE_DEF,VARIABLE_DEF,RECORD_DEF,COMPACT_CTOR_DEF" />
         </module>
         <module name="JavadocTagContinuationIndentation">
             <property name="violateExecutionOnNonTightHtml" value="false" />
@@ -60,31 +60,26 @@
             <property name="allowMissingParamTags" value="false" />
             <property name="allowUnknownTags" value="false" />
             <property name="allowedAnnotations" value="Generated" />
-            <property name="tokens" value="INTERFACE_DEF,CLASS_DEF,ENUM_DEF,ANNOTATION_DEF,RECORD_DEF" />
         </module>
         <module name="JavadocVariable">
             <property name="scope" value="private" />
             <!--<property name="excludeScope" value="null" />-->
-            <property name="ignoreNamePattern" value="null" />
-            <property name="tokens" value="ENUM_CONSTANT_DEF" />
         </module>
         <module name="MissingJavadocMethod">
             <property name="minLineCount" value="-1" />
             <property name="allowedAnnotations" value="Override" />
-            <property name="scope" value="public" />
+            <property name="scope" value="private" />
             <!--<property name="excludeScope" value="null" />-->
             <property name="allowMissingPropertyJavadoc" value="false" />
-            <property name="ignoreMethodNamesRegex" value="null" />
-            <property name="tokens" value=" METHOD_DEF,CTOR_DEF,ANNOTATION_FIELD_DEF,COMPACT_CTOR_DEF" />
         </module>
         <module name="MissingJavadocPackage">
 
         </module>
         <module name="MissingJavadocType">
-            <property name="scope" value="public" />
+            <property name="scope" value="private" />
+            <property name="tokens" value="INTERFACE_DEF,CLASS_DEF"/>
             <!--<property name="excludeScope" value="null" />-->
             <property name="skipAnnotations" value="Generated" />
-            <property name="tokens" value="INTERFACE_DEF,CLASS_DEF,ENUM_DEF,ANNOTATION_DEF,RECORD_DEF" />
         </module>
         <module name="NonEmptyAtclauseDescription">
             <property name="violateExecutionOnNonTightHtml" value="false" />

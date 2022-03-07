@@ -16,16 +16,6 @@
     },
     {
       "weight": 1,
-      "metric_name": "public_members_only",
-      "params": {
-        "getter_pattern": "(get.*)|(is.*)",
-        "setter_pattern": "set.*",
-        "ignore_getter_setter": false
-      },
-      "unique_name": "public_members_only_0"
-    },
-    {
-      "weight": 1,
       "metric_name": "large_method_commented",
       "params": {
         "ignore_lines": [

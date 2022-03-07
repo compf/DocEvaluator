@@ -22,8 +22,12 @@ export class SimpleMethodDocumentationMetric extends ComponentBasedMetric {
             let comment = method.getComment()!!;
             let paramsResult = this.checkMethodParams(method, logMessages);
             let nonExistingParamResult = this.checkNonExistingDocumentedParameters(method, logMessages);
-            let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.RETURN);
+            let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == StructuredCommentTagKind.RETURN && t.getDescription()!="");
             let returnExistingResult = returnExisting ? MAX_SCORE : MIN_SCORE;
+            if(!returnExisting){
+                this.pushLogMessage(method, "Return value is not documented" , logMessages)
+
+            }
             let results = [paramsResult, nonExistingParamResult, returnExistingResult];
             langSpec.rateDocumentationCompatibility(component, results, logMessages);
             let sum = 0;

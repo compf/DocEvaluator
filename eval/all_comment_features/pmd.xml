@@ -6,19 +6,19 @@
 
     <rule ref="category/java/documentation.xml/CommentContent">
         <properties>
-            <property name="caseSensitive" value="false" />
-            <property name="disallowedTerms" value="idiot|jerk|e.g.|aka|viz" />
+            <property name="caseSensitive" value="true" />
+            <property name="disallowedTerms" value="e.g.|aka|viz|i.e." />
         </properties>
     </rule>
     <rule ref="category/java/documentation.xml/CommentRequired">
         <properties>
             <property name="methodWithOverrideCommentRequirement" value="Ignored" />
-            <property name="accessorCommentRequirement" value="Ignored" />
+            <property name="accessorCommentRequirement" value="Required" />
             <property name="classCommentRequirement" value="Required" />
             <property name="fieldCommentRequirement" value="Required" />
             <property name="publicMethodCommentRequirement" value="Required" />
             <property name="protectedMethodCommentRequirement" value="Required" />
-            <property name="enumCommentRequirement" value="Required" />
+            <property name="enumCommentRequirement" value="Ignored" />
             <property name="serialVersionUIDCommentRequired" value="Ignored" />
             <property name="serialPersistentFieldsCommentRequired" value="Ignored" />
         </properties>

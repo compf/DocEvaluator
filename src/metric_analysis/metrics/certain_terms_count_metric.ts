@@ -27,11 +27,11 @@ export class CertainTermCountMetric extends ComponentBasedMetric {
         let params = this.getParams() as ParamsType;
         if (component.getComment() == null) return;
         let termCount = 0;
-        termCount += this.countSimilarTerms(component.getComment()!.getGeneralDescription()!)
+        termCount += this.countSimilarTerms(component.getComment()!.getGeneralDescription().toLowerCase()!)
         if (params.consider_tags) {
             for (let tag of component.getComment()!.getTags()) {
                 if (tag.getDescription() != null) {
-                    termCount += this.countSimilarTerms(tag.getDescription()!)
+                    termCount += this.countSimilarTerms(tag.getDescription()?.toLowerCase()!)
                 }
             }
         }

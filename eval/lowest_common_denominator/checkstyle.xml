@@ -14,7 +14,9 @@
             <property name="allowMissingReturnTag" value="false" />
             <property name="tokens" value="METHOD_DEF,CTOR_DEF" />
         </module>     
-       
+       <module name="JavadocVariable">
+            <property name="scope" value="private" />
+       </module>
      
  
        
@@ -23,7 +25,7 @@
             <property name="allowedAnnotations" value="Override" />
             <property name="scope" value="private" />
             <!--<property name="excludeScope" value="null" />-->
-            <property name="allowMissingPropertyJavadoc" value="true" />
+            <property name="allowMissingPropertyJavadoc" value="false" />
             <!--<property name="ignoreMethodNamesRegex" value="null" />-->
             <property name="tokens" value=" METHOD_DEF,CTOR_DEF" />
         </module>
