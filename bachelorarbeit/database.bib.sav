@@ -285,17 +285,6 @@ and use of Exstatic, with particular reference to its use in documentation syste
   numpages  = {6},
 }
 
-@InProceedings{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies,
-  author  = {Tan, Shin Hwei and Marinov, Darko and Tan, Lin and Leavens, Gary},
-  title   = {@tComment: Testing Javadoc Comments to Detect Comment-Code Inconsistencies},
-  year    = {2012},
-  volume  = {abs/1201.6078},
-  month   = {04},
-  doi     = {10.1109/ICST.2012.106},
-  file    = {:/home/compf/data/uni/sem7/bachelor/sources/tComment-icst12.pdf:PDF},
-  journal = {CoRR},
-}
-
 @Article{ImplementingSourceCodeMetricsforSoftwarequalityanalysis,
   author  = {Mandeep K. Chawla and Indu Chhabra},
   title   = {Implementing Source Code Metrics for Software quality analysis},
@@ -1195,6 +1184,15 @@ facilitating its maintenance.},
   date    = {2021-07-30},
   url     = {https://www.techrepublic.com/article/microsoft-ceo-accidentally-underplays-githubs-pervasiveness/},
   urldate = {2022-02-24},
+}
+
+@InProceedings{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies,
+  author    = {Tan, Shin Hwei and Marinov, Darko and Tan, Lin and Leavens, Gary T.},
+  title     = {@tComment: Testing Javadoc Comments to Detect Comment-Code Inconsistencies},
+  booktitle = {2012 IEEE Fifth International Conference on Software Testing, Verification and Validation},
+  year      = {2012},
+  pages     = {260-269},
+  doi       = {10.1109/ICST.2012.106},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

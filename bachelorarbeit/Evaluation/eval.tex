@@ -1,10 +1,30 @@
 \newcommand{\checkpmd}{\textit{Checkstyle} und \textit{PMD} }
 \newcommand{\doceval}{\textit{DocEvaluator} }
-In diesem Kapitel soll das Programm evaluiert werden, um zu prüfen, ob das Programm (im Folgenden \textit{DocEvaluator}) den Anforderungen genügt.  Zunächst wird der \textit{DocEvaluator} mit \checkpmd{} verglichen, indem drei exemplarische Open-Source-Projekte mit allen drei Programmen analysiert werden und die Treffergenauigkeit und Geschwindigkeit der Programme verglichen werden. Außerdem wird  erläutert, welche Unit-Tests zur Verifikation des Programmverhaltens eingesetzt wurden.
-\section{Vorgehensweise bei der Evaluation}
-Insgesamt soll die Evaluation zwei Aspekte überprüfen. Zunächst soll die Qualität der drei Programme geprüft werden. Anschließend soll die Geschwindigkeit der Programme analysiert werden.
+In diesem Kapitel soll das Programm evaluiert werden, um zu prüfen, ob das Programm (im Folgenden \textit{DocEvaluator}) eine gute heuristische Aussage über den Stand der Dokumentationsqualität treffen kann. Dazu wird der \textit{DocEvaluator} mit \checkpmd{} verglichen, indem drei exemplarische Open-Source-Projekte mit allen drei Programmen analysiert werden und die Treffergenauigkeit und Geschwindigkeit der Programme verglichen werden. 
 
-\subsection{Analyse der Qualität}
+\section{Wahl der zu analysierenden Projekte}
+Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub heruntergeladen. Grundsätzlich kann der Vergleich mit jedem Java-Projekt durchgeführt werden, dennoch wurden einige Bedingungen festgelegt, die bei der Auswahl der Projekte eine wichtige Rolle spielen. Diese Bedingungen werden in der folgenden Auflistung präsentiert:
+
+\begin{enumerate}
+    \item \label{enum:size} Die Projekte müssen mindestens einen Umfang von 10\,000 \ac{LOC} haben
+    \item \label{enum:already_cited} Die Projekte müssen bereits in einer in dieser Bachelorarbeit zitierten Quelle in puncto Dokumentationsqualität analysiert worden sein
+    \item \label{enum:parsing_error}  Die Projekte sollen möglichst wenige Parsing-Fehler beim \doceval produzieren. Bei mehr als als zwei Fehlern wird ein Projekt nicht betrachtet
+    \item Mindestens ein Projekt sollte deutlich größer sein als die anderen Projekte
+\end{enumerate}
+ Durch die Bedingung in Nr. \ref{enum:size} wird sichergestellt, dass eine ausreichende Anzahl an Fehlern in der Dokumentation zu erwarten ist, um eine gute Analyse der Dokumentationsqualität  und eine aussagekräftige Bewertung der Geschwindigkeit zu ermöglichen. Durch die Bedingung in Nr.  \ref{enum:already_cited} werden nur Projekte in Betracht gezogen, die bereits in der wissenschaftlichen Literatur berücksichtigt wurden und daher (zumindest für den jeweiligen Autor der Quelle) geeignet für eine Analyse der Dokumentation sind. Mit der Bedingung in Nr. \ref{enum:parsing_error} wird eine Verzerrung zugunsten oder zuungunsten des \textit{DocEvaluators} vermieden, denn durch Parsing-Fehler können Komponenten falsch analysiert werden, die von den anderen Tools richtig analysiert werden. Indirekt wird dadurch gefordert, dass ein Projekt keine neueren Java-Funktionen verwendet, da  der \textit{DocEvaluator} nur Java bis Version 8 unterstützt. Die letzte Bedingung ist besonders für die Bewertung der Geschwindigkeit relevant, da so geprüft werden kann, ob der \doceval auch bei größeren Projekten noch in annehmbarer Zeit ein Ergebnis berechnen kann. 
+ 
+ \subsubsection{Analysierte Projekte}
+ Die folgende Auflistung zeigt die gewählten Projekte für die Evaluation. In Klammern dahiner befinden sich die  (gerundeten) \ac{LOC}
+ \begin{itemize}
+    \item ArgoUML (170.000)(
+     \item Log4J (20.000)
+     \item Eclipse \ac{JDT} (400.000)
+ \end{itemize}
+ 
+ ArgoUML und Eclipse wurden in \cite[S. 74] {AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner} bewertet, wobei hier nur Eclipse \ac{JDT} betrachtet werden soll, da das gesamte Eclipse-Projekt zu umfassend ist. Log4J wurde in \cite[S. 267] {@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies} betrachtet. 
+
+ Bei allen Projekten traten zunächst Parsing-Fehler auf. Dies lag allerdings in den meisten Fällen daran, dass auskommentierte Methoden noch einen Javadoc-Präfix hatten. Dies kann vom \doceval nicht korrekt verarbeitet werden. Da diese Methoden offensichtlich nicht verwendet werden und keinen Einfluss auf die Qualität der Dokumentation haben können, wurden sie ersatzlos entfernt. Bei einen Fehler in Eclipse JDT konnte der \doceval eine Datei mit mehr als 3000 Codezeilen nicht verarbeiten. Diese Datei wurde bei der Evaluation ignoriert.
+\section{Analyse der Qualität}
 Zur Durchführung der Evaluation muss zunächst definiert werden, welche Funktionen der einzelnen Programme miteinander verglichen werden können, da die Programme unterschiedliche Aspekte der Dokumentation überprüfen und die Darstellung der Ergebnisse im Vergleich zum \textit{DocEvaluator} abweicht.
 
 \checkpmd können als fehlersuchend bezeichnet werden. Sie prüfen die einzelnen Komponenten eines Programms und finden Abweichungen von vorher definierten Regeln. Eine solche Regel kann beispielsweise sein, dass jede öffentliche Methode dokumentiert sein muss, dass bestimmte Wörter nicht verwendet werden dürfen oder dass die Syntax der Dokumentation Fehler enthält. Damit sind sie vergleichbar mit den Metriken aus den Kapiteln \ref{chapter:metrics_coverage}  und \ref{chapter:metrics_errors}, welche ebenfalls bestimmte Fehler suchen und bei einem Verstoß gegen die Regeln eine Warnmeldung ausgeben. Allerdings berechnen \checkpmd keine Metriken, sondern finden nur die besagten Verstöße gegen die definierten Regeln. Somit kann ein Entwickler sehen, dasś ein Projekt beispielsweise 100 Verstöße gegen die Dokumentationsrichtlinien hat, erfährt aber nicht, ob die Anzahl der Verstöße unter Berücksichtigung der Projektgröße schwerwiegend sind und erhält keine normierte Bewertung, die dem Entwickler bei der Beurteilung der Dokumentationsqualität hilft. 
@@ -33,12 +53,13 @@ Zum Vergleich der drei Programme müssen zunächst Regeln festgelegt werden, bei
      \end{itemize}
       & 
       \begin{itemize}
-          \item Komponente dokumentiert
+          \item  Komponente dokumentiert
+
           \item Bestimmte Wörter in Kommentar verbieten
       \end{itemize}
       & 
        \begin{itemize}
-          \item Komponente dokumentiert
+          \item  Komponente dokumentiert
          
       \end{itemize}
       \\\hline
@@ -47,19 +68,11 @@ Zum Vergleich der drei Programme müssen zunächst Regeln festgelegt werden, bei
     \label{tab:inters_rules}
 \end{table}
 
-Aus der Tabelle lässt sich entnehmen, dass der \doceval mit \textit{Checkstyle} die meisten Übereinstimmungen hat. Beide Programme können die Vollständigkeit der Methodendokumentation und typische Fehler in Javadoc-Kommentaren (wie z.~B. fehlerhaftes HTML) finden. PMD und der \doceval können bestimmte Wörter in der Dokumentation bemängeln, die in einer Dokumentation vermieden werden sollten. Alle drei Programme können das Vorhandensein der Dokumentation überprüfen; dabei kann auch differenziert werden, ob private Komponenten dokumentiert werden sollen oder nicht. Vor allem bei Checkstyle gibt es viele Regeln, die von den anderen beiden Programmen nicht gefunden werden und auf der Webseite \cite{checkstyle_doc_metrics} aufgelistet werden.
+Aus der Tabelle lässt sich entnehmen, dass der \doceval mit \textit{Checkstyle} die meisten Übereinstimmungen hat. Beide Programme können die Vollständigkeit der Methodendokumentation und typische Fehler in Javadoc-Kommentaren (wie z.~B. fehlerhaftes HTML) finden. PMD und der \doceval können bestimmte Wörter in der Dokumentation bemängeln, die in einer Dokumentation vermieden werden sollten. Alle drei Programme können das Vorhandensein der Dokumentation überprüfen. Allerdings ignoriert \textit{PMD} alle privaten Komponenten außer Felder. Vor allem bei Checkstyle gibt es zudem viele Regeln, die von den anderen beiden Programmen nicht gefunden werden und auf der Webseite \cite{checkstyle_doc_metrics} aufgelistet werden.
 
-Zur Bewertung des \textit{DocEvaluators} sollte daher sowohl die Fehler, welche von allen Tools gefunden werden, als auch die Fehler, die nur von einzelnen Tools gefunden werden, analysiert werden. So kann  geprüft werden, wie viele Fehler von den anderen Tools gefunden werden, die der \doceval aber ignoriert, und wie viele Fehler nur vom \doceval gefunden werden. Die Ergebnisse können dann als Rückmeldung genutzt werden, um  eventuell in einer späteren Version weitere Metriken bzw. Fehler zu implementieren, die in den Open-Source-Projekten besonders häufig auftreten, aber vom \doceval aktuell nicht entdeckt werden. Interessant ist aber auch Vergleich der Ergebnisse, wenn die Regelauswahl so beschränkt wird, dass jedes Programm jeden Fehler finden sollte.
+Da ein Vergleich der drei Tools somit nur eingeschränkt ist, wird sich die qualitative Evaluation nur auf den Kernbereich beschränken. Es werden also die Regeln verwendet, die von mindestens zwei Tools unterstützt werden. Dadurch können Fehler im Parsing erkannt werden, welche eine aussagekräftige  Bewertung der Dokumentation hindern können. 
 
-\subsection{Wahl der zu analysierenden Projekte}
-Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub heruntergeladen. Grundsätzlich kann der Vergleich mit jedem Java-Projekt durchgeführt werden, dennoch wurden einige Bedingungen festgelegt, die bei der Auswahl der Projekte eine wichtige Rolle spielen. Diese Bedingungen werden in der folgenden Auflistung präsentiert:
 
-\begin{enumerate}
-    \item Es werden nur Java-Projekte oder Projekte mit einen überragenden Anteil an Java-Code (mindestens 90 \%)) betrachtet
-    \item Mindestens eine Bibliothek und ein \enquote{Standalone-Programm} (z.~dt. eigenständiges Programm) wird betrachtet
-    \item  Die Projekte sollen möglichst wenige Parsing-Fehler durch ANTRL4 beim \doceval produzieren. Bei mehr als als zwei Fehlern wird dieses Projekt nicht betrachtet
-    
-\end{enumerate}
 
 \subsection{Ergebnisse}
 
@@ -67,25 +80,19 @@ Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub
 \begin{table}[]
     \centering
     \begin{tabular}{c|c|c|c}
-    Name & ArgoUml & X & X\\\hline
-    |DE| &1467 & &\\\hline
-    |CS| &855 & &\\\hline
-    |PMD|&1387 & &\\\hline
+    Name & ArgoUml & Log4J & Eclipse JDT\\\hline
+    |DE| & 9.987 & 1.702 & 16.844\\\hline
+    |CS| & 9.953 & 1.574 & 17.597\\\hline
+    |PMD|& 9.032 & 1.008 & 12.695\\\hline
     
-    \{DE\} &189 & &\\\hline
-    \{CS\} &20 & &\\\hline
-    \{PMD\} &113 & &\\\hline
-    \{PMD, DE\} &444 & &\\\hline
-    \{CS, DE\} &5 & &\\\hline
-    \{PMD, CS\} & 1& &\\\hline
-    \{PMD, CS, DE\} &829 & &\\\hline
+    \{DE\} & 79 & 103 & 44\\\hline
+    \{CS\} & 281 & 13 & 250\\\hline
+    \{PMD\} & 377 & 86 & 298\\\hline
+    \{PMD, DE\} & 246 & 41 & 246\\\hline
+    \{CS, DE\} & 1262 & 680 & 5.196\\\hline
+    \{PMD, CS\} & 10 & 3 & 793\\\hline
+    \{PMD, CS, DE\} & 8.399 & 878 & 11.358\\\hline
     \end{tabular}
     \caption{Ergebnisse der Evaluation}
     \label{tab:eval_results}
 \end{table}
-\begin{comment}
-\section{Unit-Test}
-Dir grundlegende Vorgehensweise zur Prüfung, ob ein Programm seinen Anforderung genügt, sind Unit-Tests. Bei Unit-Tests oder auch Modul- oder Komponententests wird eine genau abgegrenzte Komponente des Programms getestet. Dabei werden die Komponente zunächst in einem bestimmten Zustand gebracht, indem beispielsweise bestimmte Eingabeparameter vorgegeben werden. Anschließend werden bestimmte Operationen auf der Komponente angewendet. Am Schluss wird der Zustand der Komponente angefragt und geprüft, ob der Zustand der Komponente nach allen Operationen so ist, wie es gemäß den Anforderungen zu erwarten ist. Gibt es Abweichung beim Zustand, so wird der Entwickler sofort informiert. 
-
-Im Kontext des Programmms wurden die drei Arbeitspakete Traversierung, Parsing und Bewertung durch Metriken getestet.
-\end{comment}
