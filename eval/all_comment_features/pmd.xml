@@ -6,7 +6,7 @@
 
     <rule ref="category/java/documentation.xml/CommentContent">
         <properties>
-            <property name="caseSensitive" value="true" />
+            <property name="caseSensitive" value="false" />
             <property name="disallowedTerms" value="e.g.|aka|viz|i.e." />
         </properties>
     </rule>
