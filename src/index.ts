@@ -105,14 +105,14 @@ function printLogsMessages(logMessages: LogMessage[]) {
     }
 }
 function processByMetric(root: ParseResult, metric: DocumentationAnalysisMetric, objects: SharedObjects) {
-    console.log("Using metric", metric.getUniqueName())
+    //console.log("Using metric", metric.getUniqueName())
     objects.fileAnalyzer.analyze(root, metric, objects.builder, objects.languageHelper);
 }
 function processByFile(relevantFile: string, objects: SharedObjects) {
     let root:ParseResult;
     try{
          root = { root: objects.parser.parse(relevantFile), path: relevantFile };
-         console.log("Looking at " + root.path)
+         //console.log("Looking at " + root.path)
          for (let metric of objects.metrics) {
              processByMetric(root, metric, objects)
          }
