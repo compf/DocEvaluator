@@ -19,8 +19,8 @@
             <property name="publicMethodCommentRequirement" value="Required" />
             <property name="protectedMethodCommentRequirement" value="Required" />
             <property name="enumCommentRequirement" value="Ignored" />
-            <property name="serialVersionUIDCommentRequired" value="Ignored" />
-            <property name="serialPersistentFieldsCommentRequired" value="Ignored" />
+            <property name="serialVersionUIDCommentRequired" value="Required" />
+            <property name="serialPersistentFieldsCommentRequired" value="Required" />
         </properties>
     </rule>
     
