@@ -36601,15 +36601,16 @@ const util_1 = __nccwpck_require__(2363);
  */
 class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMetric {
     analyze(component, builder, langSpec) {
+        var _a;
         let params = this.getParams();
         if (component.getComment() == null)
             return;
         let termCount = 0;
-        termCount += this.countSimilarTerms(component.getComment().getGeneralDescription());
+        termCount += this.countSimilarTerms(component.getComment().getGeneralDescription().toLowerCase());
         if (params.consider_tags) {
             for (let tag of component.getComment().getTags()) {
                 if (tag.getDescription() != null) {
-                    termCount += this.countSimilarTerms(tag.getDescription());
+                    termCount += this.countSimilarTerms((_a = tag.getDescription()) === null || _a === void 0 ? void 0 : _a.toLowerCase());
                 }
             }
         }
@@ -37431,8 +37432,11 @@ class SimpleMethodDocumentationMetric extends component_based__metric_1.Componen
             let comment = method.getComment();
             let paramsResult = this.checkMethodParams(method, logMessages);
             let nonExistingParamResult = this.checkNonExistingDocumentedParameters(method, logMessages);
-            let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == structured_comment_1.StructuredCommentTagKind.RETURN);
+            let returnExisting = method.getName() == "constructor" || method.getReturnType() == "void" || comment.getTags().some((t) => t.getKind() == structured_comment_1.StructuredCommentTagKind.RETURN && t.getDescription() != "");
             let returnExistingResult = returnExisting ? documentation_analysis_metric_1.MAX_SCORE : documentation_analysis_metric_1.MIN_SCORE;
+            if (!returnExisting) {
+                this.pushLogMessage(method, "Return value is not documented", logMessages);
+            }
             let results = [paramsResult, nonExistingParamResult, returnExistingResult];
             langSpec.rateDocumentationCompatibility(component, results, logMessages);
             let sum = 0;
