@@ -35767,14 +35767,14 @@ function printLogsMessages(logMessages) {
     }
 }
 function processByMetric(root, metric, objects) {
-    console.log("Using metric", metric.getUniqueName());
+    //console.log("Using metric", metric.getUniqueName())
     objects.fileAnalyzer.analyze(root, metric, objects.builder, objects.languageHelper);
 }
 function processByFile(relevantFile, objects) {
     let root;
     try {
         root = { root: objects.parser.parse(relevantFile), path: relevantFile };
-        console.log("Looking at " + root.path);
+        //console.log("Looking at " + root.path)
         for (let metric of objects.metrics) {
             processByMetric(root, metric, objects);
         }
@@ -35963,7 +35963,7 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
     rateDocumentationCompatibility(component, results, logMessages) {
         var _a;
         let methodData = component.getComponentMetaInformation();
-        let throwTags = (_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getTags().filter((x) => x.getKind() == "@throws");
+        let throwTags = (_a = component.getComment()) === null || _a === void 0 ? void 0 : _a.getTags().filter((x) => x.getKind() == "@throws" || x.getKind() == "@exception");
         let throwParamInComment = new Set(throwTags === null || throwTags === void 0 ? void 0 : throwTags.map((x) => x.getParam()));
         let throwParamInDecl = new Set(methodData.getThrownException());
         for (let s1 of throwParamInDecl) {
@@ -50363,7 +50363,7 @@ class JavadocParser {
         }
     }
     hasParam(line) {
-        let tagsWithParams = ["@param", "@throws"];
+        let tagsWithParams = ["@param", "@throws", "@exception"];
         return tagsWithParams.some((t) => line.startsWith(t));
     }
     startsWithTag(line) {
