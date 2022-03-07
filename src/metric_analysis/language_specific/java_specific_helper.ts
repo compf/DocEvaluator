@@ -9,7 +9,7 @@ import { LanguageSpecificHelper } from "./language_specific_helper";
 export class JavaSpecificHelper extends LanguageSpecificHelper {
     rateDocumentationCompatibility(component: Component, results: number[], logMessages: LogMessage[]): void {
         let methodData = component.getComponentMetaInformation() as JavaMethodData;
-        let throwTags = component.getComment()?.getTags().filter((x) => x.getKind() == "@throws");
+        let throwTags = component.getComment()?.getTags().filter((x) => x.getKind() == "@throws" || x.getKind()=="@exception");
         let throwParamInComment = new Set(throwTags?.map((x) => x.getParam()));
         let throwParamInDecl = new Set(methodData.getThrownException());
         for (let s1 of throwParamInDecl) {

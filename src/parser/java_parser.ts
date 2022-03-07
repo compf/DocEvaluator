@@ -285,7 +285,7 @@ export class JavadocParser {
 
     }
     hasParam(line: string): boolean {
-        let tagsWithParams = ["@param", "@throws"];
+        let tagsWithParams = ["@param", "@throws","@exception"];
         return tagsWithParams.some((t) => line.startsWith(t));
     }
     startsWithTag(line: string): boolean {
