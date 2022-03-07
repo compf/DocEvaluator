@@ -50558,7 +50558,7 @@ class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor 
         this.returnType = "void";
         this.methodName = "constructor";
         let visitor = new MethodParamsAndThrowVisitor();
-        let paramsThrow = visitor.visit(ctx);
+        let paramsThrow = visitor.visit(ctx.formalParameters());
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
         this.methodBody = new MethodBodyTextVisitor().visit(ctx);
@@ -50567,7 +50567,10 @@ class MethodVisitor extends AbstractParseTreeVisitor_1.AbstractParseTreeVisitor 
         this.returnType = ctx.getChild(0).text;
         this.methodName = ctx.getChild(1).text;
         let visitor = new MethodParamsAndThrowVisitor();
-        let paramsThrow = visitor.visit(ctx);
+        let paramsThrow = visitor.visit(ctx.formalParameters());
+        if (ctx.throwList()) {
+            paramsThrow = visitor.visit(ctx.throwList());
+        }
         this.methodParams = paramsThrow.params;
         this.thrownException = paramsThrow.thrownException;
         this.methodBody = new MethodBodyTextVisitor().visit(ctx);
