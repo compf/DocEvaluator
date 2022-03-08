@@ -35957,8 +35957,6 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
     constructor() {
         super(...arguments);
         this.blockTags = ["@author", "@version", "@param", "@return", "@deprecated", "@since", "@throws", "@exception", "@see", "@serial", "@serialField", "@serialData"];
-        // thes inline tags do not contain the cloding "}" because it might be missing
-        this.inlineTags = ["{@code", "{@docRoot", "{@inheritDoc", "{@link", "{@linkplain", "{@literal"];
     }
     rateDocumentationCompatibility(component, results, logMessages) {
         var _a;
@@ -35983,14 +35981,9 @@ class JavaSpecificHelper extends language_specific_helper_1.LanguageSpecificHelp
         }
         return true;
     }
-    getInlineTagRegex() {
-        return /\{@\w+ \w*\}?/g;
-    }
+    // thes inline tags do not contain the cloding "}" because it might be missing
     isValidBlockTag(tag) {
         return this.blockTags.includes(tag);
-    }
-    isValidInlineTag(tag) {
-        return this.inlineTags.some((t) => tag.startsWith(t) && tag.endsWith("}"));
     }
     getRawTextRegex() {
         return /( |^|\.|,|;)\w+}?/g;
@@ -36049,12 +36042,6 @@ class LanguageSpecificHelper {
      *  return s aregular expression that will identify inline tag lements
      * @param text the text to search
      */
-    getInlineTagRegex() {
-        return this.getImpossibleRegex();
-    }
-    isValidInlineTag(tagName) {
-        return false;
-    }
     /**
      * determines whether a tag is valid
      * @param tag a tag name
@@ -36645,7 +36632,7 @@ class CertainTermCountMetric extends component_based__metric_1.ComponentBasedMet
     processResult(result, logMessages) {
         let params = this.getParams();
         if (result > 0) {
-            logMessages.push("At least one forbidden term detected. Forbidden are ", params.terms.join(","));
+            logMessages.push("At least one forbidden term detected. Forbidden are " + params.terms.join(","));
         }
         return util_1.Utils.boundedGrowth(documentation_analysis_metric_1.MIN_SCORE, documentation_analysis_metric_1.MAX_SCORE, params.k, result);
     }
@@ -37117,30 +37104,13 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
         errorCount += logMessages.length;
         // sum up number of error messages about wrong block tags
         errorCount += this.getInvalidBlockTagCount(text, langSpec, component, params, logMessages);
-        let inlineTags = this.findTags(text, langSpec.getInlineTagRegex());
-        let invalidInlineTagCount = this.getInvalidInlineTagCount(inlineTags, langSpec, logMessages);
-        // sum up number of invalid inline tags
-        errorCount += invalidInlineTagCount;
-        // add number of lines to error count if no formatting is used
-        let validInlineTagCount = inlineTags.length - invalidInlineTagCount;
-        let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null;
-        if (!params.accept_no_formatting && validInlineTagCount == 0 && !htmlPresent) {
+        let htmlPresent = text.match(/<[A-Za-z]\w+( \w+=".*")*>/) != null;
+        if (!params.accept_no_formatting && !htmlPresent) {
             logMessages.push("Documentation contains no formation like links or html");
             // add not less than 0 errors to the error count
             errorCount += Math.max(text.split("\n").length - params.max_lines_no_formatting, 0);
         }
         this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component), component);
-    }
-    getInvalidInlineTagCount(inlineTags, langSpec, logMessages) {
-        let errorCount = 0;
-        let params = this.getParams();
-        for (let tag of inlineTags) {
-            if (!langSpec.isValidInlineTag(tag) && !params.allowed_tags.some((t) => tag.startsWith(t))) {
-                errorCount++;
-                logMessages.push(tag + " is not a valid inline tag");
-            }
-        }
-        return errorCount;
     }
     getInvalidBlockTagCount(text, langSpec, component, params, logMessages) {
         let errorCount = 0;
@@ -37177,7 +37147,7 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
      * @returns a list of errors that occur if the html is not valid
      */
     findHtmlErrors(text) {
-        let regex = /<\/?\w+/g;
+        let regex = /<\/?[a-zA-Z]\w*/g;
         let stack = [];
         let matches = text.match(regex);
         let messages = [];
@@ -37189,7 +37159,7 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
                     let removed = stack.pop();
                     while (removed != undefined && removed != tagName) {
                         if (!this.needNotToBeClosed(removed)) {
-                            messages.push("Tag " + removed + "not closed");
+                            messages.push("Tag " + removed + " not closed");
                         }
                         removed = stack.pop();
                     }
@@ -37200,14 +37170,16 @@ class FormattingGoodMetric extends component_based__metric_1.ComponentBasedMetri
             }
             while (stack.length > 0) {
                 let removed = stack.pop();
-                messages.push("Tag " + removed + "not closed");
+                messages.push("Tag " + removed + " not closed");
             }
             return messages;
         }
         return [];
     }
     needNotToBeClosed(tag) {
-        return tag.includes("p") || tag.includes("li");
+        tag = tag.toLowerCase();
+        return tag.includes("p") || tag.includes("li") || tag.includes("tr") ||
+            tag.includes("td") || tag.includes("th") || tag.includes("dd") || tag.includes("dt") || tag.includes("br");
     }
 }
 exports.FormattingGoodMetric = FormattingGoodMetric;
