@@ -23,11 +23,11 @@ test("test no formatting", () => {
     parseAndTestFile(MetricManager.MetricNames.formatting_good,"testDir/java/NoFormattingTest.java",params,expectedResult,2);
 
 });
-test("not closed html and not supported custom tags",()=>{
-    const expected=67.032;
+test("not closed html ",()=>{
+    const expected=81.873;
     parseAndTestFile(MetricManager.MetricNames.formatting_good,"testDir/java/InvalidTagTest.java",undefined,expected,3);
 
 });
-test("empty commet certain words",()=>{
+test("empty comment certain words",()=>{
     parseAndTestFile(MetricManager.MetricNames.certain_terms,"testDir/java/EmptyCommentTest.java",undefined,100,1);
 });

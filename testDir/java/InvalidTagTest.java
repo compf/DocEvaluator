@@ -1,5 +1,5 @@
 /**
- * <table> {@cool test}
+ * <table> 
  *
  */
 public class InvalidTagTest {

@@ -33,19 +33,12 @@ export class JavaSpecificHelper extends LanguageSpecificHelper {
 
         return true;
     }
-    override getInlineTagRegex(): RegExp {
-        return /\{@\w+ \w*\}?/g;
-
-    }
     private blockTags = ["@author", "@version", "@param", "@return", "@deprecated", "@since", "@throws", "@exception", "@see", "@serial", "@serialField", "@serialData"];
     // thes inline tags do not contain the cloding "}" because it might be missing
-    private inlineTags = ["{@code", "{@docRoot", "{@inheritDoc", "{@link", "{@linkplain", "{@literal"]
     override isValidBlockTag(tag: string): boolean {
         return this.blockTags.includes(tag);
     }
-    override isValidInlineTag(tag: string): boolean {
-        return this.inlineTags.some((t) => tag.startsWith(t) && tag.endsWith("}"));
-    }
+  
     override getRawTextRegex(): RegExp {
         return /( |^|\.|,|;)\w+}?/g;
     }

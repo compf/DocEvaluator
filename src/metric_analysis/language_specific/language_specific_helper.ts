@@ -26,12 +26,7 @@ export class LanguageSpecificHelper {
      *  return s aregular expression that will identify inline tag lements
      * @param text the text to search
      */
-    getInlineTagRegex(): RegExp {
-        return this.getImpossibleRegex();
-    }
-    isValidInlineTag(tagName: string): boolean {
-        return false;
-    }
+
     /**
      * determines whether a tag is valid
      * @param tag a tag name

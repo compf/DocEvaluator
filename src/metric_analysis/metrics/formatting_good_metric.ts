@@ -36,15 +36,8 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
         errorCount += this.getInvalidBlockTagCount(text, langSpec, component, params, logMessages);
 
 
-        let inlineTags = this.findTags(text, langSpec.getInlineTagRegex());
-        let invalidInlineTagCount = this.getInvalidInlineTagCount(inlineTags, langSpec, logMessages);
-        // sum up number of invalid inline tags
-        errorCount += invalidInlineTagCount;
-
-        // add number of lines to error count if no formatting is used
-        let validInlineTagCount = inlineTags.length - invalidInlineTagCount;
-        let htmlPresent = text.match(/<\w+( \w+=".*")*>/) != null
-        if (!params.accept_no_formatting && validInlineTagCount == 0 && !htmlPresent) {
+        let htmlPresent = text.match(/<[A-Za-z]\w+( \w+=".*")*>/) != null
+        if (!params.accept_no_formatting &&  !htmlPresent) {
             logMessages.push("Documentation contains no formation like links or html");
             // add not less than 0 errors to the error count
             errorCount += Math.max(text.split("\n").length - params.max_lines_no_formatting, 0);
@@ -52,18 +45,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
         this.pushResult(builder, this.processResult(errorCount, logMessages), this.createLogMessages(logMessages, component), component);
 
     }
-    private getInvalidInlineTagCount(inlineTags: string[], langSpec: LanguageSpecificHelper, logMessages: string[]) {
-        let errorCount = 0;
-        let params = this.getParams() as ParamType;
-        for (let tag of inlineTags) {
-            if (!langSpec.isValidInlineTag(tag) && !params.allowed_tags.some((t) => tag.startsWith(t))) {
-                errorCount++;
-                logMessages.push(tag + " is not a valid inline tag");
-            }
-
-        }
-        return errorCount;
-    }
+   
 
     private getInvalidBlockTagCount(text: string, langSpec: LanguageSpecificHelper, component: Component, params: ParamType, logMessages: string[]) {
         let errorCount = 0;
@@ -102,7 +84,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
      */
     private findHtmlErrors(text: string) {
 
-        let regex = /<\/?\w+/g;
+        let regex = /<\/?[a-zA-Z]\w*/g;
         let stack: string[] = [];
         let matches = text.match(regex);
         let messages: string[] = [];
@@ -114,7 +96,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
                     let removed = stack.pop();
                     while (removed != undefined && removed != tagName) {
                         if (!this.needNotToBeClosed(removed)) {
-                            messages.push("Tag " + removed + "not closed")
+                            messages.push("Tag " + removed + " not closed")
                         }
 
                         removed = stack.pop();
@@ -127,7 +109,7 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
             }
             while (stack.length > 0) {
                 let removed = stack.pop()!;
-                messages.push("Tag " + removed + "not closed")
+                messages.push("Tag " + removed + " not closed")
             }
             return messages;
         }
@@ -136,7 +118,9 @@ export class FormattingGoodMetric extends ComponentBasedMetric {
 
     }
     private needNotToBeClosed(tag: string) {
-        return tag.includes("p") || tag.includes("li");
+        tag=tag.toLowerCase();
+        return tag.includes("p") || tag.includes("li") || tag.includes("tr") ||
+         tag.includes("td") || tag.includes("th") || tag.includes("dd") ||  tag.includes("dt")|| tag.includes("br");
     }
 
 }

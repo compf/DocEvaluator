@@ -17,6 +17,9 @@
        <module name="JavadocVariable">
             <property name="scope" value="private" />
        </module>
+       <module name="JavadocStyle">
+           <property name="checkFirstSentence" value="false" />
+       </module>
      
  
        

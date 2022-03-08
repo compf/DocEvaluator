@@ -69,7 +69,7 @@ export class CertainTermCountMetric extends ComponentBasedMetric {
     protected override  processResult(result: number, logMessages: string[]): number {
         let params = this.getParams() as ParamsType;
         if (result > 0) {
-            logMessages.push("At least one forbidden term detected. Forbidden are ", params.terms.join(","));
+            logMessages.push("At least one forbidden term detected. Forbidden are "+ params.terms.join(","));
         }
         return Utils.boundedGrowth(MIN_SCORE, MAX_SCORE, params.k, result);
     }
