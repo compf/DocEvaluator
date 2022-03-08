@@ -76,23 +76,48 @@ Da ein Vergleich der drei Tools somit nur eingeschränkt möglich ist, wird sich
 
 \subsection{Ergebnisse}
 
-
+Tabelle \ref{tab:eval_results} listet die Anzahl der gefundenen Fehler auf. In den Spalten werden die die Fehler nach dem Projekt gruppiert. Die ersten drei Zeilen beschreiben, wie viele Fehler die einzelnen Tools pro Projekt gefunden haben. So hat  der \textit{DocEvaluator} 1710 Fehler in \textit{Log4J} gefunden.  In den übrigen Zeilen wird aufgeführt, welche Kombinationen der Tools wie viele Fehler gefunden haben. Die Zeile mit der ersten Spalte \enquote{\{PMD, DE\}} beschreibt beispielsweise, dass \textit{PMD} und der  \textit{DocEvaluator} 41 Fehler bei \textit{Log4J}, 264 Fehler bei \textit{ArgoUML} und 253 Fehler bei \textit{Eclipse JDT} gefunden haben. Diese Fehler wurden nicht von \textit{Checkstyle} gefunden.  
 \begin{table}[]
     \centering
-    \begin{tabular}{c|c|c|c}
-    Name & ArgoUml & Log4J & Eclipse JDT\\\hline
-    |DE| & 10.054 & 1.710 & 17.380\\\hline
-    |CS| & 9.961 & 1.590 & 17.638\\\hline
-    |PMD|& 9.051 & 1.008 & 12.702\\\hline
-    
-    \{DE\} & 124 & 108 & 555\\\hline
-    \{CS\} & 285 & 26 & 273\\\hline
-    \{PMD\} & 377 & 86 & 298\\\hline
-    \{PMD, DE\} & 264 & 41 & 253\\\hline
-    \{CS, DE\} & 1266 & 683 & 5.214\\\hline
-    \{PMD, CS\} & 10 & 3 & 793\\\hline
-    \{PMD, CS, DE\} & 8.400 & 878 & 11.358\\\hline
-    \end{tabular}
+\begin{tabular}{c|c|c|c}
+          & Log4J & ArgoUML & Eclipse JDT \\ \hline
+|DE|            & 1.710 & 10.054  & 17.380      \\ \hline
+|CS|            & 1.590 & 9.961   & 17.638      \\ \hline
+|PMD|           & 1.008 & 9.051   & 12.702      \\ \hline\hline
+\{DE\}          & 108   & 124     & 555         \\ \hline
+\{CS\}          & 26    & 285     & 273         \\ \hline
+\{PMD\}         & 86    & 377     & 298         \\ \hline
+\{PMD, DE\}     & 41    & 264     & 253         \\ \hline
+\{CS, DE\}      & 683   & 1266    & 5.214       \\ \hline
+\{PMD, CS\}     & 3     & 10      & 793         \\ \hline
+\{PMD, CS, DE\} & 878   & 8.400   & 11.358      \\ \hline
+\end{tabular}
     \caption{Ergebnisse der Evaluation}
     \label{tab:eval_results}
 \end{table}
+
+Aus der Tabelle ist ersichtlich, dass die meisten Fehler (also undokumentierte Komponenten) von allen drei Tools gefunden werden. Auch die Kombination vom \textit{DocEvaluator} und \textit{Checkstyle} finden viele gemeinsame Fehler. Nur relativ wenige Fehler werden nur von einem einzigen Tool erkannt. Auffällig ist bei \textit{Eclipse JDT}, dass knapp 800 Fehler von \checkpmd gefunden wurden, aber nicht vom \doceval. 
+
+Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.  Die Abbildungen \ref{fig:log4j_venn}, \ref{fig:argo_venn} und  \ref{fig:eclipse_venn} zeigen für jedes Projekt die Überschneidungen der gefundenen Fehler:
+
+
+
+\begin{figure}
+    \centering
+\includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/log4j.svg}
+    \caption{Überschneidungen der Fehler bei Log4J}
+    \label{fig:log4j_venn}
+\end{figure}
+
+\begin{figure}
+    \centering
+\includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/argo.svg}
+    \caption{Überschneidungen der Fehler bei ArgoUml}
+    \label{fig:argo_venn}
+\end{figure}
+\begin{figure}
+    \centering
+\includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/eclipse.svg}
+    \caption{Überschneidungen der Fehler bei Eclipse JDT}
+    \label{fig:eclipse_venn}
+\end{figure}
