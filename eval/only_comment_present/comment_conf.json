@@ -1,0 +1,28 @@
+{
+  "include": [
+    "*.java"
+  ],
+  "exclude": [],
+  "metrics": [
+    {
+      "weight": 1,
+      "metric_name": "simple_comment",
+      "params": {
+        "getter_pattern": "(get.*)|(is.*)",
+        "setter_pattern": "set.*",
+        "ignore_getter_setter": false
+      },
+      "unique_name": "simple_comment_0"
+    }
+   
+  ],
+  "absolute_threshold": 20,
+  "builder": "default_builder",
+  "parser": "java",
+  "path_weights": [],
+  "component_weights": [],
+  "default_path_weight": 1,
+  "default_component_weight": 1,
+  "state_manager": "file",
+  "relative_threshold": 30
+}

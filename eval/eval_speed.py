@@ -13,16 +13,18 @@ def main(args):
     project=args.project
     rulesets=args.rulesets
     times_by_abbrev=dict()
-    steps=10
+    count=10
     tools=[DocTool(project,rulesets),CheckStyleTool(project,rulesets),PMDTool( project,rulesets)]
     for t in tools:
-        t.download()
         times_by_abbrev[t.get_abbrev()]=[]
-        for i in range(steps):
-            #print(t.get_abbrev(),"round",i)
+    for i in range(count):
+
+    
+        for t in tools:
             elapsed=t.measure_time()/10e9
             times_by_abbrev[t.get_abbrev()].append(elapsed)
-        print(times_by_abbrev[t.get_abbrev()])
+    for t in tools:
+        print(",".join([str(x) for x in times_by_abbrev[t.get_abbrev()]]))
 
 
 
