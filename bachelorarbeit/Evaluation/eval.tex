@@ -13,7 +13,7 @@ Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub
 \end{enumerate}
  Durch die Bedingung in Nr. \ref{enum:size} wird sichergestellt, dass eine ausreichende Anzahl an Fehlern in der Dokumentation zu erwarten ist, um eine gute Analyse der Dokumentationsqualität  und eine aussagekräftige Bewertung der Geschwindigkeit zu ermöglichen. Durch die Bedingung in Nr.  \ref{enum:already_cited} werden nur Projekte in Betracht gezogen, die bereits in der wissenschaftlichen Literatur berücksichtigt wurden und daher (zumindest für den jeweiligen Autor der Quelle) geeignet für eine Analyse der Dokumentation sind. Mit der Bedingung in Nr. \ref{enum:parsing_error} wird eine Verzerrung zugunsten oder zuungunsten des \textit{DocEvaluators} vermieden, denn durch Parsing-Fehler können Komponenten falsch analysiert werden, die von den anderen Tools richtig analysiert werden. Indirekt wird dadurch gefordert, dass ein Projekt keine neueren Java-Funktionen verwendet, da  der \textit{DocEvaluator} nur Java bis Version 8 unterstützt. Die letzte Bedingung ist besonders für die Bewertung der Geschwindigkeit relevant, da so geprüft werden kann, ob der \doceval auch bei größeren Projekten noch in annehmbarer Zeit ein Ergebnis berechnen kann. 
  
- \subsubsection{Analysierte Projekte}
+ \subsubsection{Analysierte Projekte}\label{chapter:eval_projects}
  Die folgende Auflistung zeigt die gewählten Projekte für die Evaluation. In Klammern dahiner befinden sich die  (gerundeten) \ac{LOC}
  \begin{itemize}
     \item ArgoUML (170.000)(
@@ -124,7 +124,16 @@ Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.
 
 \clearpage
  \section{Analyse der Geschwindigkeit}
+ In diesem Abschnitt wird der \doceval mit \checkpmd in Bezug auf die Geschwindigkeit verglichen. Damit soll geprüft werden, ob das Tool neben einer guten Qualität auch in einer angemessenen Zeit ein Ergebnis liefert. Dies ist im \ac{CI/CD}-Kontext wichtig, da bei einer langen Laufzeit des Tools  die Bereitstellung eines geprüften Softwareprojektes verzögert wird und somit die Produktivität reduziert wird. 
+ 
+ \subsection{Durchführung der Geschwindigkeitsevaluation}
+ Zur Durchführung der Evaluation der Geschwindigkeit analysieren die drei Tools die in Kapitel \ref{chapter:eval_projects} Projekte. Damit jedes Programm fair behandelt wird und eine ungefähr gleiche Menge an Analysen durchführen kann, werden die Regeln so beschränkt, dass nur noch das Vorhandensein von Dokumentation geprüft wird. So wird verhindert, dass beispielsweise der \textit{DocEvaluator} und \textit{Checkstyle} die Dokumentation von Methodenparameter überprüfen, während \textit{PMD} dies ignoriert. Bei jeder Analyse wird die Zeit gemessen, die vom Start eines Tools bis zu dessen Beendigung vergehen. 
+ 
+ Die Ausgabe jedes Tools wird auf \enquote{dev/null} umgeleitet, sodass jegliche Ausgabe ignoriert wird. Dadurch können Schwankungen unberücksichtigt bleiben, die bei der Verwendung von Eingabe- und Ausgabegeräten auftreten, damit die Ergebnisse näher an der tatsächlichen Verarbeitungsgeschwindigkeit sind.  Nachteilhaft an diesem Vorgehen ist, dass die Tools im Praxiseinsatz eine Ausgabe produzieren müssen, um überhaupt den Entwickler helfen zu können, sodass dieser wichtige Aspekt hier ignoriert wird. 
+ 
+ Die Analyse jedes Projektes mit jedem Tool wird zehnmal durchgeführt, um Schwankungen durch Hintergrundprozesse oder andere Einflussfaktoren auszugleichen. Die Evaluation der Geschwindigkeit wird auf einem Laptop mit dem Prozessor \enquote{i7-1165G7} mit 16 GB Arbeitsspeicher durchgeführt. Dabei wurden alle Programme geschlossen und die Berechnungen wurden ohne grafische Benutzeroberfläche durchgeführt, um die Schwankungen der Laufzeit zu minimieren.  
  \subsection{Ergebnisse}
+ Die Tabellen \ref{tab:median_speed} und \ref{tab:std_speed} zeigen den Median und die Standardabweichung der benötigten Durchlaufzeit pro Tool und Projekt in Sekunden. Die Rohdaten, also alle zehn Durchlaufszeiten pro Tool und Projekt, sind in Kapitel \ref{chapter:raw_speed_data} zu finden. Die Abbildungen \ref{fig:log4j_box}, \ref{fig:argo_box} und \ref{fig:eclipse_box} visualisieren den Inhalt der Tabellen als Boxplot. 
  \begin{table}[]
      \centering
      \begin{tabular}{c|c|c|c}
@@ -146,7 +155,7 @@ Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.
         Eclipse JDT & 0.160 & 0.027 & 0.027
      \end{tabular}
      \caption{Standardabweichung der Performance in Sekunden}
-     \label{tab:median_speed}
+     \label{tab:std_speed}
  \end{table}
  
  
