@@ -25,7 +25,8 @@ Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub
 
  Bei allen Projekten traten zunächst Parsing-Fehler auf. Dies lag allerdings in den meisten Fällen daran, dass auskommentierte Methoden noch einen Javadoc-Präfix hatten. Dies kann vom \doceval nicht korrekt verarbeitet werden. Da diese Methoden offensichtlich nicht verwendet werden und keinen Einfluss auf die Qualität der Dokumentation haben können, wurden sie ersatzlos entfernt. Bei einen Fehler in Eclipse JDT konnte der \doceval eine Datei mit mehr als 3000 Codezeilen nicht verarbeiten. Diese Datei wurde bei der Evaluation ignoriert.
 \section{Analyse der Qualität}
-Zur Durchführung der Evaluation muss zunächst definiert werden, welche Funktionen der einzelnen Programme miteinander verglichen werden können, da die Programme unterschiedliche Aspekte der Dokumentation überprüfen und die Darstellung der Ergebnisse im Vergleich zum \textit{DocEvaluator} abweicht.
+Durch die Evaluation der Qualität soll geprüft werden, ob der \doceval trotz des in Kapitel \ref{chapter_conception}
+ beschriebenen abstrakten Format eine Java-Datei richtig parsen kann und alle für die Dokumentation relevanten Informationen korrekt extrahieren kann. Zur Durchführung der Evaluation muss zunächst definiert werden, welche Funktionen der einzelnen Programme miteinander verglichen werden können, da die Programme unterschiedliche Aspekte der Dokumentation überprüfen und die Darstellung der Ergebnisse im Vergleich zum \textit{DocEvaluator} abweicht.
 
 \checkpmd können als fehlersuchend bezeichnet werden. Sie prüfen die einzelnen Komponenten eines Programms und finden Abweichungen von vorher definierten Regeln. Eine solche Regel kann beispielsweise sein, dass jede öffentliche Methode dokumentiert sein muss, dass bestimmte Wörter nicht verwendet werden dürfen oder dass die Syntax der Dokumentation Fehler enthält. Damit sind sie vergleichbar mit den Metriken aus den Kapiteln \ref{chapter:metrics_coverage}  und \ref{chapter:metrics_errors}, welche ebenfalls bestimmte Fehler suchen und bei einem Verstoß gegen die Regeln eine Warnmeldung ausgeben. Allerdings berechnen \checkpmd keine Metriken, sondern finden nur die besagten Verstöße gegen die definierten Regeln. Somit kann ein Entwickler sehen, dasś ein Projekt beispielsweise 100 Verstöße gegen die Dokumentationsrichtlinien hat, erfährt aber nicht, ob die Anzahl der Verstöße unter Berücksichtigung der Projektgröße schwerwiegend sind und erhält keine normierte Bewertung, die dem Entwickler bei der Beurteilung der Dokumentationsqualität hilft. 
 
@@ -96,11 +97,31 @@ Tabelle \ref{tab:eval_results} listet die Anzahl der gefundenen Fehler auf. In d
     \label{tab:eval_results}
 \end{table}
 
-Aus der Tabelle ist ersichtlich, dass die meisten Fehler (also undokumentierte Komponenten) von allen drei Tools gefunden werden. Auch die Kombination vom \textit{DocEvaluator} und \textit{Checkstyle} finden viele gemeinsame Fehler. Nur relativ wenige Fehler werden nur von einem einzigen Tool erkannt. Auffällig ist bei \textit{Eclipse JDT}, dass knapp 800 Fehler von \checkpmd gefunden wurden, aber nicht vom \doceval. 
+Aus der Tabelle ist ersichtlich, dass die meisten Fehler (also undokumentierte Komponenten) von allen drei Tools gefunden werden. Auch die Kombination vom \textit{DocEvaluator} und \textit{Checkstyle} finden viele gemeinsame Fehler. Nur relativ wenige Fehler werden nur von einem einzigen Tool erkannt. 
 
 Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.  Die Abbildungen \ref{fig:log4j_venn}, \ref{fig:argo_venn} und  \ref{fig:eclipse_venn} zeigen für jedes Projekt die Überschneidungen der gefundenen Fehler:
 
+Auch hier zeigt der graue Bereich, dass es eine große Überdeckung gibt. Dies ist vor allem bei ArgoUML deutlich. Bei den anderen beiden Projekten ist zudem eine große Überschneidung von \textit{Checkstyle} und \doceval zu erkennen.
 
+Um die Trefferrate mathematisch auszudrücken, kann die Formel
+\begin{equation}\label{eq1}
+    1-\frac{\{DE\}}{|DE|}
+\end{equation} verwendet werden. Diese gibt in Prozent an, wie viele Fehler, die vom \doceval gefunden werden, auch von den anderen beiden Tools gefunden werden. Demgegenüber kann auch ermittelt werden, wie viele Fehler von \textit{Checkstyle} oder \textit{PMD} gefunden wurden, die auch vom \doceval erkannt wurden:
+\begin{equation}\label{eq2}
+    1-\frac{\{CS\}+\{PMD\}+\{CS,PMD\}}{|PMD|+|CS|}
+\end{equation}
+
+Tabelle \ref{tab:hit_rate} zeigt basierend auf den genannten Formeln (\ref{eq1} und \ref{eq2}) die Treffergenauigkeit des \textit{DocEvaluators} für jedes analysierte Projekt:
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c|c|c}
+     & Log4J & ArgoUML & Eclipse JDT \\ \hline
+    \ref{eq1} &  95.57 \%	& 96.47 \% &	95.50 \% \\\hline
+    \ref{eq2} &   93.68 \% &	98.77 \% &	96.81 \% \\\hline
+    \end{tabular}
+    \caption{Trefferrate des \textit{DocEvaluators} gemäß den Formeln \ref{eq1} und \ref{eq2}}
+    \label{tab:hit_rate}
+\end{table}
 
 \begin{figure}
     \centering
@@ -185,7 +206,7 @@ Aus den Tabellen und Boxplot-Diagrammen wird ersichtlich, dass der \doceval im D
 Bei dem Boxplot-Diagramm \ref{fig:log4j_box} zu \textit{Log4J} ist auch erkennbar, dass Ausreißer der Laufzeit nach oben häufiger sind als nach unten, da der Median sich stets im unteren Bereich des Boxplot-Quartile befindet. Bei den anderen Projekten ist dies aufgrund des größeren Zeitabstand  zwischen dem \doceval und den anderen Tools  und der daraus resultierenden Verkleinerung der einzelnen Boxplots  nicht so klar im Boxplot ersichtlich, allerdings stimmt diese Aussage größtenteils auch dort. Nur bei der Analyse von \textit{ArgoUML} durch den \doceval (Abbildung \ref{fig:argo_box}) scheinen Abweichungen nach unten häufiger zu sein.
 
 \subsection{Bewertung der Ergebnisse}
-Insgesamt zeigt die Evaluation der Geschwindigkeit, dass der \doceval langsamer arbeitet als die anderen Programmen. Allerdings  bleibt die Laufzeit auf einen angemessenen Niveau, da die Verarbeitung von dem größten Projekt \enquote{Eclipse JDT} mit 400.000 \ac{LOC} im Durchschnitt nur 7 Sekunden benötigt. Nichtsdestotrotz ignoriert diese Analyse, dass die Ausgabe von Ergebnissen über die Konsole hier nicht berücksichtigt wurde und nur eine einfache Metrik angewendet wurde.
+Insgesamt zeigt die Evaluation der Geschwindigkeit, dass der \doceval langsamer arbeitet als die anderen Programmen. Allerdings  bleibt die Laufzeit auf einen angemessenen Niveau, da die Verarbeitung von dem größten Projekt \enquote{Eclipse JDT} mit 400.000 \ac{LOC} im Durchschnitt nur 7 Sekunden benötigt. Nichtsdestotrotz ignoriert diese Analyse, dass die Ausgabe von Ergebnissen über die Konsole hier nicht berücksichtigt wurde und nur eine einfache Metrik angewendet wurde. Bei einem Experiment mit aktivierter Ausgabe wurden ähnliche Ergebnisse produziert, insbesondere ist der \doceval weiterhin das langsamste Programm. 
 
 Für die schlechtere Laufzeit des \doceval im vergleich zu \checkpmd lassen sich zwei Hauptargumente finden. So soll \textit{Node.Js}, welches die Plattform des Tools ist, langsamer sein als Java, in dem \checkpmd programmiert sind \cite{node_java_speed}.  Außerdem ist zu beachten, dass der \doceval Metriken berechnen soll und daher die Zwischenergebnisse aller Komponenten speichern muss, um daraus ein Gesamtergebnis mittels eines arithmetischen Mittelwerts oder eines anderen Algorithmus' berechnen zu können. Auch wenn dieses Gesamtergebnis bei der Laufzeitevaluation uninteressant ist, wird es dennoch berechnet, was zusätzliche Laufzeit benötigt. Dies erklärt auch die starke Steigerung des Zeitaufwands mit größeren Projekten.
 
