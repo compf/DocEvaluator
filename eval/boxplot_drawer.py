@@ -14,6 +14,7 @@ with open(args.inFile) as f:
     for line in f.readlines():
         tool_times.append([float(s) for s in line.split(",")])
 plt.boxplot(tool_times,labels=["DE","CS","PMD"])
+plt.ylabel("Laufzeit [s]")
 tool_times=np.array(tool_times)
 
 mn=np.mean(tool_times,axis=1).transpose()
