@@ -121,3 +121,52 @@ Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.
     \caption{Überschneidungen der Fehler bei Eclipse JDT}
     \label{fig:eclipse_venn}
 \end{figure}
+
+\clearpage
+ \section{Analyse der Geschwindigkeit}
+ \subsection{Ergebnisse}
+ \begin{table}[]
+     \centering
+     \begin{tabular}{c|c|c|c}
+        & DE & CS & PMD  \\\hline
+        Log4J & 0.254 & 0.230 & 0.191\\\hline 
+        ArgoUML & 1.697 & 0.930 & 0.792 \\\hline
+        Eclipse JDT & 6.912 & 2.732 & 2.159
+     \end{tabular}
+     \caption{Median der Performance in Sekunden}
+     \label{tab:median_speed}
+ \end{table}
+ 
+  \begin{table}[]
+     \centering
+     \begin{tabular}{c|c|c|c}
+        & DE & CS & PMD  \\\hline
+        Log4J & 0.008 & 0.017 & 0.007\\\hline 
+        ArgoUML & 0.020 & 0.008 & 0.016 \\\hline
+        Eclipse JDT & 0.160 & 0.027 & 0.027
+     \end{tabular}
+     \caption{Standardabweichung der Performance in Sekunden}
+     \label{tab:median_speed}
+ \end{table}
+ 
+ 
+ \begin{figure}
+    \centering
+\includesvg[scale=0.5]{figures/chapter5/log4j_speed_boxplot.svg}
+    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt Log4J}
+    \label{fig:log4j_box}
+\end{figure}
+
+ \begin{figure}
+    \centering
+\includesvg[scale=0.3]{figures/chapter5/argo_speed_boxplot.svg}
+    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt ArgoUML}
+    \label{fig:argo_box}
+\end{figure}
+
+ \begin{figure}
+    \centering
+\includesvg[scale=0.3]{figures/chapter5/eclipse_speed_boxplot.svg}
+    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt Eclipse JDT}
+    \label{fig:eclipse_box}
+\end{figure}
