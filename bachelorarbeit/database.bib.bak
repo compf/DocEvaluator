@@ -1195,4 +1195,13 @@ facilitating its maintenance.},
   doi       = {10.1109/ICST.2012.106},
 }
 
+@WWW{node_java_speed,
+  author  = {Alexandra Chikina \& Andrej Suschevich},
+  title   = {Node.js vs Java: Why Compare?},
+  year    = {2019},
+  date    = {2019-07-15},
+  url     = {https://intexsoft.com/blog/node-js-vs-java-why-compare/},
+  urldate = {2022-03-09},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
