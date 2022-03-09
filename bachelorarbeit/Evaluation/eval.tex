@@ -131,9 +131,9 @@ Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.
  
  Die Ausgabe jedes Tools wird auf \enquote{dev/null} umgeleitet, sodass jegliche Ausgabe ignoriert wird. Dadurch können Schwankungen unberücksichtigt bleiben, die bei der Verwendung von Eingabe- und Ausgabegeräten auftreten, damit die Ergebnisse näher an der tatsächlichen Verarbeitungsgeschwindigkeit sind.  Nachteilhaft an diesem Vorgehen ist, dass die Tools im Praxiseinsatz eine Ausgabe produzieren müssen, um überhaupt den Entwickler helfen zu können, sodass dieser wichtige Aspekt hier ignoriert wird. 
  
- Die Analyse jedes Projektes mit jedem Tool wird zehnmal durchgeführt, um Schwankungen durch Hintergrundprozesse oder andere Einflussfaktoren auszugleichen. Die Evaluation der Geschwindigkeit wird auf einem Laptop mit dem Prozessor \enquote{i7-1165G7} mit 16 GB Arbeitsspeicher durchgeführt. Dabei wurden alle Programme geschlossen und die Berechnungen wurden ohne grafische Benutzeroberfläche durchgeführt, um die Schwankungen der Laufzeit zu minimieren.  
+ Die Analyse jedes Projektes mit jedem Tool wird zehnmal durchgeführt, um Schwankungen durch Hintergrundprozesse oder andere Einflussfaktoren auszugleichen. Die Evaluation der Geschwindigkeit wird auf einem Laptop mit dem Prozessor \enquote{i7-1165G7} mit 16 GB Arbeitsspeicher durchgeführt. Dabei wurden alle Programme auf dem Computer geschlossen und die Berechnungen wurden ohne grafische Benutzeroberfläche durchgeführt, um die Schwankungen der Laufzeit zu minimieren.  
  \subsection{Ergebnisse}
- Die Tabellen \ref{tab:median_speed} und \ref{tab:std_speed} zeigen den Median und die Standardabweichung der benötigten Durchlaufzeit pro Tool und Projekt in Sekunden. Die Rohdaten, also alle zehn Durchlaufszeiten pro Tool und Projekt, sind in Kapitel \ref{chapter:raw_speed_data} zu finden. Die Abbildungen \ref{fig:log4j_box}, \ref{fig:argo_box} und \ref{fig:eclipse_box} visualisieren den Inhalt der Tabellen als Boxplot. 
+ Die Tabellen \ref{tab:median_speed} und \ref{tab:std_speed} zeigen den Median und die Standardabweichung der benötigten Durchlaufzeit pro Tool und Projekt in Sekunden. Die Rohdaten, also alle zehn Durchlaufszeiten pro Tool und Projekt, sind in Kapitel \ref{chapter:raw_speed_data} zu finden. Die Abbildungen \ref{fig:log4j_box}, \ref{fig:argo_box} und \ref{fig:eclipse_box} visualisieren den Inhalt der Tabellen als Boxplot: 
  \begin{table}[]
      \centering
      \begin{tabular}{c|c|c|c}
@@ -168,14 +168,25 @@ Die Überschneidungen der Fehler lassen sich gut mit Venn-Diagrammen darstellen.
 
  \begin{figure}
     \centering
-\includesvg[scale=0.3]{figures/chapter5/argo_speed_boxplot.svg}
+\includesvg[scale=0.5]{figures/chapter5/argo_speed_boxplot.svg}
     \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt ArgoUML}
     \label{fig:argo_box}
 \end{figure}
 
  \begin{figure}
     \centering
-\includesvg[scale=0.3]{figures/chapter5/eclipse_speed_boxplot.svg}
-    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt Eclipse JDT}
+\includesvg[scale=0.5]{figures/chapter5/eclipse_speed_boxplot.svg}
+    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt Eclipse JDT }
     \label{fig:eclipse_box}
 \end{figure}
+
+Aus den Tabellen und Boxplot-Diagrammen wird ersichtlich, dass der \doceval im Durchschnitt länger benötigt, um die Projekte zu bewerten. Wie aus dem Boxplot-Diagramm \ref{fig:log4j_box} zu entnehmen ist, gab es nur bei Log4J einen Ausreißer, bei dem \textit{Checkstyle} mehr Zeit benötigt hat.   Ansonsten war \textit{Checkstyle} stets schneller als der \doceval. \textit{PMD} analysiert am schnellsten ein Projekt. Der Unterschied in der Laufzeit zwischen dem \doceval und den anderen Tools steigt stark  mit wachsender Größe des analysierten Projektes.  Bei dem kleinsten Projekt \textit{Log4J} benötigt der \doceval  durchschnittlich die 1.104-fache Zeit im Vergleich zu \textit{Checkstyle}. Bei dem größten Projekt \textit{Eclipse JDT} benötigt der \doceval durchschnittlich 2.53-mal so viel Zeit wie \textit{Checkstyle}. Beim \doceval und \textit{PMD} steigt die Standardabweichung mit der Größe des Projektes, während dieser Trend bei \textit{Checkstyle} nicht so eindeutig ist.
+
+Bei dem Boxplot-Diagramm \ref{fig:log4j_box} zu \textit{Log4J} ist auch erkennbar, dass Ausreißer der Laufzeit nach oben häufiger sind als nach unten, da der Median sich stets im unteren Bereich des Boxplot-Quartile befindet. Bei den anderen Projekten ist dies aufgrund des größeren Zeitabstand  zwischen dem \doceval und den anderen Tools  und der daraus resultierenden Verkleinerung der einzelnen Boxplots  nicht so klar im Boxplot ersichtlich, allerdings stimmt diese Aussage größtenteils auch dort. Nur bei der Analyse von \textit{ArgoUML} durch den \doceval (Abbildung \ref{fig:argo_box}) scheinen Abweichungen nach unten häufiger zu sein.
+
+\subsection{Bewertung der Ergebnisse}
+Insgesamt zeigt die Evaluation der Geschwindigkeit, dass der \doceval langsamer arbeitet als die anderen Programmen. Allerdings  bleibt die Laufzeit auf einen angemessenen Niveau, da die Verarbeitung von dem größten Projekt \enquote{Eclipse JDT} mit 400.000 \ac{LOC} im Durchschnitt nur 7 Sekunden benötigt. Nichtsdestotrotz ignoriert diese Analyse, dass die Ausgabe von Ergebnissen über die Konsole hier nicht berücksichtigt wurde und nur eine einfache Metrik angewendet wurde.
+
+Für die schlechtere Laufzeit des \doceval im vergleich zu \checkpmd lassen sich zwei Hauptargumente finden. So soll \textit{Node.Js}, welches die Plattform des Tools ist, langsamer sein als Java, in dem \checkpmd programmiert sind \cite{node_java_speed}.  Außerdem ist zu beachten, dass der \doceval Metriken berechnen soll und daher die Zwischenergebnisse aller Komponenten speichern muss, um daraus ein Gesamtergebnis mittels eines arithmetischen Mittelwerts oder eines anderen Algorithmus' berechnen zu können. Auch wenn dieses Gesamtergebnis bei der Laufzeitevaluation uninteressant ist, wird es dennoch berechnet, was zusätzliche Laufzeit benötigt. Dies erklärt auch die starke Steigerung des Zeitaufwands mit größeren Projekten.
+
+\section{Fazit der Evaluation}
