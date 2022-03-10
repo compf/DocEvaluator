@@ -85,7 +85,7 @@ Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} 
 Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat.  Zudem kann sich der Median stark ändern, wenn neue Komponenten hinzugefügt oder entfernt werden.
 
 
-\subsubsection{Gewichteter Mittelwert}
+\subsubsection{Gewichteter Mittelwert}\label{chapter:weighted_aggreg}
 Der gewichtete Mittelwert ist in der Klasse \textit{WeightedMetricResultBuilder} implementiert. Die Zuweisung der Gewichte erfolgt, wie in Kapitel \ref{chapter_weights_assign} beschrieben, durch einen \textit{WeightResolver}. Die Gewichte müssen nicht normiert werden, da dies während der Berechnung implizit erledigt wird. Die Resultate jeder Metrik werden multipliziert mit dessen Gewicht, dann aufsummiert und zuletzt durch die Summe aller Gewichte geteilt. 
 
 

@@ -161,10 +161,90 @@ Bei der Suche nach dem passenden Gewicht zu den Dateien und Komponenten kann es 
 
 Jedes \textit{MetricResult}-Objekt enthält ein Tupel von drei Namen, welche die Quelle dieses Ergebnisses repräsentieren (Dateipfad, Komponententyp und eindeutiger Metrikname). Der Dateipfad beschreibt, in welcher Datei die Komponente liegt, die durch dieses Teilergebnis analysiert wurde. Der Komponententyp enthält den Klassennamen der Komponente und gibt somit Aufschluss darüber, ob diese Komponente eine Klasse, Methode etc. ist. Bei einer Klasse würde beispielsweise die Zeichenkette \enquote{ClassComponent} gespeichert werden. Durch den eindeutigen Metrikname (siehe Kapitel \ref{chapter:metric_impl} wird zuletzt festgelegt, welche Metrik dieses Teilresultat produzierte. Alternativ könnte auch hier der Klassenname der Metrik verwendet werden, da aber eine Metrik durch Verwendung verschiedener Parameter auch mehrfach angewendet werden kann und so auch unterschiedlich gewichtet werden könnte, ist ein eindeutiger Name hier sinnvoller.
 
-Durch dieses Tupel kann für jedes Teilergebnis die Gewichtung der Metrik, der Komponente und des Dateipfades  abgerufen werden. Durch Multiplikation  aller Gewichtungen entsteht ein Gesamtgewicht. Entscheidet sich ein Benutzer beispielsweise dafür, eine bestimmte Metrik doppelt zu gewichten und die Datei \enquote{Main.java} dreifach zu gewichten (ansonsten aber keine Komponenten besonders zu gewichten), so würde jedes Einzelergebnis, das aus der Analyse dieser Datei mit der besagten Metrik stammt, mit dem Faktor $2*3*1=6$ gewichtet werden. Alle anderen Dateien, die aber ebenfalls von dieser Metrik analysiert werden, erhalten die Gewichtung $2*1*1=2$.  Teilergebnisse von anderen Metriken, die ebenfalls die \enquote{Main.java} bewerten, würden entsprechend mit dem Faktor $1*3*1=3$ gewichtet werden.
+  \begin{figure}[h!]
+ \begin{tikzpicture}[scale=0.75, every node/.style={scale=0.75}]
+ \pgfmathsetlengthmacro\breite{6cm}
+\pgfmathsetlengthmacro\hoehe{2.567cm}
+\pgfmathsetlengthmacro\InnerSep{0.4cm}
+\node[draw,
+anchor=center, 
+inner sep=0pt, 
+minimum width=5cm, text width=8cm-\InnerSep,
+align=justify,minimum height=1.5cm] (java) {\textbf{class} Main\{\newline 
+\hspace*{0.1cm}\}};
+
+\node[draw,text width=5.5cm, left = of java](java2){
+/** \textbf{Commented} */ \newline
+     \hspace*{0.1cm}\textbf{public} \textbf{void} method()\{\newline
+    \hspace*{0.1cm}\}\newline
+};
+\draw[line width=0.05cm]    (java2) -- (-4,-3.5) ;
+\draw [line width=0.05cm](java) -- (-4,-3.5);
+\draw[thick,line width=0.05cm] (-4,-3.5) -- (-4,-3.5);
+
+\node[above=-0.0 of java2,line width=0cm]{Program.java};
+
+\node[above=-0.0 of java,line width=0cm]{Main.java};
 
 
+\draw [] (-11,-3.5) rectangle(5,-19);
+\begin{scope} {0,-10}
+       \begin{object}[text width=10cm]{builder}{-4,-10}
+        \instanceOf{WeightedMetricResultBuilder}
+        \attribute{resultList={[r1,r2,r3]}}
+      \end{object}
+      \begin{object}[text width=6cm]{r1}{-4,-5 }
+        \instanceOf{MetricResult}
+        \attribute{result=100}
+        \attribute{creators=(Program.java,\newline
+        \hspace*{1.6cm}MethodComponent, \newline
+        \hspace*{1.6cm}simple\_comment)}
+      \end{object}
+      
+        \begin{object}[text width=6cm]{r2}{0,-14 }
+        \instanceOf{MetricResult}
+        \attribute{result=0}
+        \attribute{creators=(Main.java,\newline
+        \hspace*{1.6cm}ClassComponent,\newline
+        \hspace*{1.6cm}simple\_comment)}
+      \end{object}
+      
+           \begin{object}[text width=6cm]{r3}{-7,-14 }
+        \instanceOf{MetricResult}
+        \attribute{result=100}
+        \attribute{creators=(Program.java,\newline
+       \hspace*{1.6cm}MethodComponent,\newline
+       \hspace*{1.6cm}public\_members)}
+      \end{object}
+      
 
+   
+\end{scope}
+\begin{scope}[line width=0.05cm]
+    \aggregation{builder}{}{}{r1}{}{}
+    \aggregation{builder}{}{}{r2}{}{}
+    \aggregation{builder}{}{}{r3}{}{}
+
+\end{scope}
+
+    
+\end{tikzpicture}
+     
+     \caption{ Veranschaulichung der Bildung eines Gesamtergebnisses}
+     \label{fig:metric_weighting}
+ \end{figure}
+Durch dieses Tupel kann für jedes Teilergebnis die Gewichtung der Metrik, der Komponente und des Dateipfades  abgerufen werden. Durch Multiplikation  aller Gewichtungen entsteht ein Gesamtgewicht. Abbildung \ref{fig:metric_weighting} veranschaulicht anhand eines vereinfachten Objektdiagramms wie mittels Gewichtung von verschiedenen Ergebnissen ein Gesamtergebnis entstehen kann, indem der Algorithmus in Kapitel \ref{chapter:weighted_aggreg} verwendet wird. Hier werden zwei Dateien anaylsiert. Die erste Datei \enquote{Program.java} enthält nur eine öffentliche Methode \enquote{method}, was in Java eigentlich nicht möglich ist, aber hier zur Vereinfachung zugelassen sein soll. Die zweite Datei \enquote{Main-java} enthält eine nichtöffentliche Klasse \enquote{Main}. In diesem Beispiel werden zwei Metriken verwendet. Die erste Metrik prüft das Vorhandensein der Dokumentation bei allen Komponenten, während die zweite Metrik nur öffentliche Komponenten betrachtet (siehe Kapitel \ref{chapter:metrics_coverage}). In diesem Beispiel soll die Datei \enquote{Main.java} mit dem Faktor $3$ gewichtet werden. Methoden sollen mit dem Faktor $4$ gewichtet werden. Die zweite Metrik \enquote{public\_members} wird mit dem Faktor $2$ gewichtet. Alle anderen Dateien, Komponenten und Metriken werden mit dem Standardfaktor $1$ gewichtet.
+
+Das erste Teilergebn \textit{r1} ist 100, da es die  Methode \enquote{method} beschreibt, welche dokumentiert ist. Auch das dritte Teilergebnis \textit{r3} hat den Wert 100, da es die gleiche Komponente nur mit der zweiten Metrik beschreibt. Das zweite Teilergebnis \textit{r2} hat den Wert 0, da es die undokumentierte Klasse \enquote{Main} beschreibt.  Es gibt kein weiteres Teilergebnis von \enquote{Main.java}, da die zweite Metrik jegliche nichtöffentliche Komponenten ignoriert. Die Teilergebnisse werden durch den \textit{WeightedMetricResultBuilder} intern gespeichert. 
+
+Das Teilergebnis jeder gefundenen Komponente enthält gemäß den obigen Vorgehen ein Tupel aus Dateiname, Komponentenname und Metrikname. Beispielsweise enthält das erste  Teilergebnis \textit{r1} das Tupel \enquote{(Program.java,MethodComponent, simple\_comment)}, wobei die einzelnen Bestandteile des Tupels Zeichenketten sind. Basierend auf diesen Informationen kann der \textit{WeightedResultBuilder} eine Gewichtung vornehmen. Das erste Teilergebnis würde mit dem Faktor $1*4*1=4$ gewichtet werden, da es von einer Methode stammt  und ansonsten nicht besonders gewichtet wird. Das zweite Teilergebnis erhält das Gewicht $3*1*1=3$, da es von der Datei \enquote{Main.java} stammt. Das dritte Teilresultat besitzt die Gewichtung $1*4*2=2$, da es von der zweiten Metrik berechnet wurde und auch von einer Methode stammt. 
+
+Basierend auf diesen Teilresultaten kann ein Gesamtergebnis berechnet werden. Hierzu wird das jeweilige Ergebnis mit dessen Gewicht multipliziert und anschließend durch die Summe der Gewichte geteilt. Bezogen auf das Beispiel würde die Rechnung folgendermaßen aussehen:
+\begin{equation}
+    \frac{4*100 + 3*0 + 8*100}{4+3+8}=80
+\end{equation}
+Dieses Ergebnis ist dann Maß für die Bewertung der Dokumentationsqualität dieses hypothetischen Projektes. 
+\clearpage
 \subsection{Sprachspezifische Informationen für Metriken}\label{chapter:langSpec}
 Da das Tool für möglichst viele objektorientierte Programmiersprachen konzipiert werden soll, muss eine Generalisierung erfolgen, da jede Sprache ihre Eigenheiten hat und möglicherweise besondere Funktionen anbietet, die nur schwer in einem abstrakten Format zu bringen sind.
 
