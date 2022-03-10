@@ -35,7 +35,6 @@ subsets=(DE_ONLY,CS_ONLY,DE_CS,PMD_ONLY,DE_PMD,CS_PMD,DE_CS_PMD)
 patches=["Abc", "aBc", "ABc", "abC", "AbC", "aBC", "ABC"]
 patches=[ ("".join( ["0" if y.islower() else "1"  for y in x]))  for x in patches]
 titles=["{DE}",	"{CS}","{DE, CS}","{PMD}","{DE, PMD}","{CS, PMD}","{DE, CS, PMD}"]
-print(patches)
 
 v = venn3(subsets=subsets, set_labels = ('DE', 'CS', 'PMD'),set_colors=("red","green","blue"))
 for i,s in enumerate(v.subset_labels):
