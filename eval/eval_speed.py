@@ -21,7 +21,7 @@ def main(args):
 
     
         for t in tools:
-            elapsed=t.measure_time()/10e9
+            elapsed=t.measure_time()/1e9
             times_by_abbrev[t.get_abbrev()].append(elapsed)
     for t in tools:
         print(",".join([str(x) for x in times_by_abbrev[t.get_abbrev()]]))
