@@ -105,10 +105,10 @@ Auch hier zeigt der graue Bereich, dass es eine große Überdeckung gibt. Dies i
 
 Um die Trefferrate mathematisch auszudrücken, kann die Formel
 \begin{equation}\label{eq1}
-    1-\frac{\{DE\}}{|DE|}
+    1-\frac{\text{\{DE\}}}{|\text{DE}|}
 \end{equation} verwendet werden. Diese gibt in Prozent an, wie viele Fehler, die vom \doceval gefunden werden, auch von den anderen beiden Tools gefunden werden. Demgegenüber kann auch ermittelt werden, wie viele Fehler von \textit{Checkstyle} oder \textit{PMD} gefunden wurden, die auch vom \doceval erkannt wurden:
 \begin{equation}\label{eq2}
-    1-\frac{\{CS\}+\{PMD\}+\{CS,PMD\}}{|PMD|+|CS|}
+    1-\frac{\text{\{CS\}}+\text{\{PMD\}}+\text{\{CS,PMD\}}}{|\text{PMD}|+|\text{CS}|}
 \end{equation}
 
 Tabelle \ref{tab:hit_rate} zeigt basierend auf den genannten Formeln (\ref{eq1} und \ref{eq2}) die Treffergenauigkeit des \textit{DocEvaluators} für jedes analysierte Projekt:
@@ -116,13 +116,14 @@ Tabelle \ref{tab:hit_rate} zeigt basierend auf den genannten Formeln (\ref{eq1} 
     \centering
     \begin{tabular}{c|c|c|c}
      & Log4J & ArgoUML & Eclipse JDT \\ \hline
-    \ref{eq1} &  95.57 \%	& 96.47 \% &	95.50 \% \\\hline
-    \ref{eq2} &   93.68 \% &	98.77 \% &	96.81 \% \\\hline
+    \ref{eq1} &   93.68 \% &	98.77 \% &	96.81 \% \\\hline
+     \ref{eq2} & 95.57 \% &	96.47 \% &	95.50 \% \\\hline
+
     \end{tabular}
     \caption{Trefferrate des \textit{DocEvaluators} gemäß den Formeln \ref{eq1} und \ref{eq2}}
     \label{tab:hit_rate}
 \end{table}
-
+Es ist klar erkennbar, dass die Trefferrate unabhängig von der Formel und den analysierten Projekt größer als 90 \% ist, sodass die meisten Fehler, die vom \doceval gefunden werden, von mindestens einem anderen Tool gefunden werden und die meisten Fehler, die von \textit{Checkstyle} oder \textit{PMD} gefunden werden, auch vom \doceval gefunden werden.
 \begin{figure}
     \centering
 \includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/log4j.svg}
@@ -142,6 +143,14 @@ Tabelle \ref{tab:hit_rate} zeigt basierend auf den genannten Formeln (\ref{eq1} 
     \caption{Überschneidungen der Fehler bei Eclipse JDT}
     \label{fig:eclipse_venn}
 \end{figure}
+\subsection{Bewertung der Qualitätsevaluation}
+Insgesamt zeigt die Evaluation der Qualität, dass der \doceval eine hohe Abdeckung mit \checkpmd hat und somit die meisten von diesen Tools gefundenen Fehler auch findet. Somit ist das abstrakte Format zur Repräsentation einer Quellcodedatei geeignet, um die meisten Aspekte, welche für die Dokumentation relevant sind, zu beschreiben. 
+
+Während der Evaluation wurde geprüft, warum einige Fehler nicht vom \doceval gefunden wurden. In einigen Fällen waren dies einfache Fehler, die bereits behoben wurden, sodass dadurch die Trefferrate erhöht wurde. In anderen Fällen gab es größere strukturelle Probleme, die nicht mehr leicht behebbar sind.
+\subsubsection{Klassen in Methoden}
+
+In Java können Klassen in Methoden deklariert werden bzw. anonyme Klassen direkt instantiiert werden. Diese Klassen können ebenfalls Javadoc besitzen, werden allerdings vom \doceval ignoriert, da der \doceval jeglichen Code in Methoden nur unstrukturiert als Zeichenkette speichert und nichnt weiterverarbeitet. Die anderen beiden Tools prüfen auch diese Klasse, sodass sie entsprechend einige Fehler finden, die der \doceval nicht mehr findenj kann. 
+
 
 \clearpage
  \section{Analyse der Geschwindigkeit}
