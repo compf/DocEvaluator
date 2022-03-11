@@ -143,13 +143,31 @@ Es ist klar erkennbar, dass die Trefferrate unabhängig von der Formel und den a
     \caption{Überschneidungen der Fehler bei Eclipse JDT}
     \label{fig:eclipse_venn}
 \end{figure}
+\clearpage
 \subsection{Bewertung der Qualitätsevaluation}
 Insgesamt zeigt die Evaluation der Qualität, dass der \doceval eine hohe Abdeckung mit \checkpmd hat und somit die meisten von diesen Tools gefundenen Fehler auch findet. Somit ist das abstrakte Format zur Repräsentation einer Quellcodedatei geeignet, um die meisten Aspekte, welche für die Dokumentation relevant sind, zu beschreiben. 
 
-Während der Evaluation wurde geprüft, warum einige Fehler nicht vom \doceval gefunden wurden. In einigen Fällen waren dies einfache Fehler, die bereits behoben wurden, sodass dadurch die Trefferrate erhöht wurde. In anderen Fällen gab es größere strukturelle Probleme, die nicht mehr leicht behebbar sind.
+Während der Evaluation wurde geprüft, warum einige Fehler nicht vom \doceval gefunden wurden. In einigen Fällen waren dies einfache Fehler, die bereits behoben wurden, sodass dadurch die Trefferrate erhöht wurde. In anderen Fällen gab es größere strukturelle Probleme, die nicht mehr leicht behebbar sind. Einige dieser Fehler werden im Folgenden präsentiert. 
+\subsubsection{Fehler durch verschiedene Zeilennummerierung}
+
+Einige Fehler sind keine Fehler des \textit{DocEvaluators} an sich, sondern sind in der Methodik der Evaluation begründet. Um gemeinsame Fehler zu finden, müssen die gefundene Fehler pro Tool abgeglichen werden, wozu die Zeilennummer elementar ist. Allerdings gibt es Unterschiede bei der Festlegung der Zeilennummer. Der \doceval verwendet in seiner Logausgabe einen Zeilennummerintervall, der mit Zeile des Bezeichners der Komponente endet und dessen Anfang durch Subtraktion der Anzahl der Zeilen des Dokumentation von letzten Zeile beschrieben wird. Die anderen Tools verwenden die exakte Zeile eines Fehlers. In den meisten Fällen ist dies kein Problem, da diese Zeilennummer von \checkpmd innerhalb des vom \doceval beschriebenen Intervall liegen muss. Listing \ref{lst:multiline_method} zeigt ein Beispiel, wo es problematisch wird.
+
+		\begin{figure}[ht!]
+			\lstinputlisting
+			[caption={Methode auf viele Zeilen verteilt},
+			label={lst:multiline_method},
+			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			{figures/chapter5/multiline_method.java}
+		\end{figure}
+Besonders an dieser Methode ist, dass die Parameter auf verschiedenen Zeilen verteilt ist. Während \textit{Checkstyle} bei einem undokumentierten Parameter die exakte Zeile eines nicht dokumentierten Parameters ausgibt, würde der \doceval die Zeilen 1 bis 4 ausgeben, da die Dokumentation bei Zeile 1 beginnt und der Bezeichner der Komponente in Zeile 4 definiert ist. Ähnlich problematisch ist es, wenn zwischen der Dokumentation und dem Bezeichner noch Annotationen stehen, sodass der Bezeichner um eine Zeile nach unten rutscht.  
+
 \subsubsection{Klassen in Methoden}
 
-In Java können Klassen in Methoden deklariert werden bzw. anonyme Klassen direkt instantiiert werden. Diese Klassen können ebenfalls Javadoc besitzen, werden allerdings vom \doceval ignoriert, da der \doceval jeglichen Code in Methoden nur unstrukturiert als Zeichenkette speichert und nichnt weiterverarbeitet. Die anderen beiden Tools prüfen auch diese Klasse, sodass sie entsprechend einige Fehler finden, die der \doceval nicht mehr findenj kann. 
+In Java können Klassen in Methoden deklariert werden bzw. anonyme Klassen direkt instantiiert werden. Diese Klassen können ebenfalls Javadoc besitzen, werden allerdings vom \doceval ignoriert, da der \doceval jeglichen Code in Methoden nur unstrukturiert als Zeichenkette speichert und nichnt weiterverarbeitet. Die anderen beiden Tools prüfen auch diese Klasse, sodass sie entsprechend einige Fehler finden, die der \doceval nicht mehr finden kann. 
+
+
+\subsubsection{Fehler in einzeiligen Kommentaren bei PMD}
+Anders als der\doceval und \textit{Checkstyle} berücksichtigt \textit{PMD} auch einzeilige Kommentare. Wenn ein einzeiliger Kommentgar ein unzulässiges Wort enthält, so würde \textit{PMD} einen Fehler melden, aber der \doceval nicht, da er nur Javadoc-Kommentare prüft. Dadurch kommt es zu einer Verzerrung und der Anteil der alleinig von \textit{PMD} gefundenen Fehler wird überschätzt.  
 
 
 \clearpage
@@ -210,7 +228,7 @@ In Java können Klassen in Methoden deklariert werden bzw. anonyme Klassen direk
     \label{fig:eclipse_box}
 \end{figure}
 
-Aus den Tabellen und Boxplot-Diagrammen wird ersichtlich, dass der \doceval im Durchschnitt länger benötigt, um die Projekte zu bewerten. Wie aus dem Boxplot-Diagramm \ref{fig:log4j_box} zu entnehmen ist, gab es nur bei Log4J einen Ausreißer, bei dem \textit{Checkstyle} mehr Zeit benötigt hat.   Ansonsten war \textit{Checkstyle} stets schneller als der \textit{DocEvaluator} \textit{PMD} analysiert am schnellsten ein Projekt. Der Unterschied in der Laufzeit zwischen dem \doceval und den anderen Tools steigt stark  mit wachsender Größe des analysierten Projektes.  Bei dem kleinsten Projekt \textit{Log4J} benötigt der \doceval  durchschnittlich die 1.104-fache Zeit im Vergleich zu \textit{Checkstyle}. Bei dem größten Projekt \textit{Eclipse JDT} benötigt der \doceval durchschnittlich 2.53-mal so viel Zeit wie \textit{Checkstyle}. Beim \doceval und \textit{PMD} steigt die Standardabweichung mit der Größe des Projektes, während dieser Trend bei \textit{Checkstyle} nicht so eindeutig ist.
+Aus den Tabellen und Boxplot-Diagrammen wird ersichtlich, dass der \doceval im Durchschnitt länger benötigt, um die Projekte zu bewerten. Wie aus dem Boxplot-Diagramm \ref{fig:log4j_box} zu entnehmen ist, gab es nur bei Log4J einen Ausreißer, bei dem \textit{Checkstyle} mehr Zeit benötigt hat.   Ansonsten war \textit{Checkstyle} stets schneller als der \textit{DocEvaluator} \textit{PMD} analysiert am schnellsten ein Projekt. Der Unterschied in der Laufzeit zwischen dem \doceval und den anderen Tools steigt stark  mit wachsender Größe des analysierten Projektes.  Bei dem kleinsten Projekt \textit{Log4J} benötigt der \doceval  durchschnittlich die 1.103-fache Zeit im Vergleich zu \textit{Checkstyle}. Bei dem größten Projekt \textit{Eclipse JDT} benötigt der \doceval durchschnittlich 2.53-mal so viel Zeit wie \textit{Checkstyle}. Beim \doceval und \textit{PMD} steigt die Standardabweichung mit der Größe des Projektes, während dieser Trend bei \textit{Checkstyle} nicht so eindeutig ist.
 
 Bei dem Boxplot-Diagramm \ref{fig:log4j_box} zu \textit{Log4J} ist auch erkennbar, dass Ausreißer der Laufzeit nach oben häufiger sind als nach unten, da der Median sich stets im unteren Bereich des Boxplot-Quartile befindet. Bei den anderen Projekten ist dies aufgrund des größeren Zeitabstand  zwischen dem \doceval und den anderen Tools  und der daraus resultierenden Verkleinerung der einzelnen Boxplots  nicht so klar im Boxplot ersichtlich, allerdings stimmt diese Aussage größtenteils auch dort. Nur bei der Analyse von \textit{ArgoUML} durch den \doceval (Abbildung \ref{fig:argo_box}) scheinen Abweichungen nach unten häufiger zu sein.
 
@@ -220,3 +238,7 @@ Insgesamt zeigt die Evaluation der Geschwindigkeit, dass der \doceval langsamer 
 Für die schlechtere Laufzeit des \doceval im vergleich zu \checkpmd lassen sich zwei Hauptargumente finden. So soll \textit{Node.Js}, welches die Plattform des Tools ist, langsamer sein als Java, in dem \checkpmd programmiert sind \cite{node_java_speed}.  Außerdem ist zu beachten, dass der \doceval Metriken berechnen soll und daher die Zwischenergebnisse aller Komponenten speichern muss, um daraus ein Gesamtergebnis mittels eines arithmetischen Mittelwerts oder eines anderen Algorithmus' berechnen zu können. Auch wenn dieses Gesamtergebnis bei der Laufzeitevaluation uninteressant ist, wird es dennoch berechnet, was zusätzliche Laufzeit benötigt. Dies erklärt auch die starke Steigerung des Zeitaufwands mit größeren Projekten.
 
 \section{Fazit der Evaluation}
+
+Insgesamt zeigt die Evaluation sowohl bezüglich der Qualität als auch der Geschwindigkeit, dass der \doceval mit den anderen Tools mithalten kann. Zwar wird nicht jeder Fehler gefunden, aber die Trefferrate ist hoch und durch die Verwendung eines abstrakten Formates, das für mehrere Programmiersprachen geeignet ist, sind solche Abstriche nicht vermeidbar. 
+
+Auch bei der Geschwindigkeit zeigt sich, dass der \doceval zwar im Extremfall zweieinhalbmal langsamer ist als die anderen Tools, allerdings ist die Laufzeit mit knapp 70 Sekunden im Extremfalls bei einem großen Projekt noch in einem (relativ) angemessenen Rahmen. Nichtdestotrotz ist es eine Überlegung wert, genauere Analysen durchzuführen, um die Geschwindigkeit des \textit{DocEvaluators} verbessern zu können. 
