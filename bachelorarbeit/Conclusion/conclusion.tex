@@ -1,24 +1,12 @@
-In diesem Kapitel wird ein Ausblick gegeben und ein Fazit gezogen. Dazu wird erläutert, wie das Tool ergänzt werden kann und welche Probleme bei einer Erweiterung auftreten können.
-\section{Erweiterung des Tools}
-Es gibt viele Ideen, um weitere Funktionen für den \textit{DocEvaluator} zu implementieren, die es wegen des begrenzten Bearbeitungszeitraums allerdings nicht in der Abgabeversion geschafft haben. Diese Vorschläge und Ideen werden nachfolgend erläutert.
-\subsubsection{Weitere Programmiersprachen}
-In der ausgelieferten Version unterstützt das Tool nur Java, es wurde aber prinzipiell so konzipiert, dass eine Erweiterung auf weitere Programmiersprachen möglich ist. Dazu muss eine geeignete Parser-Klasse geschrieben werden, die eine Quellcodedatei in das in Kapitel \ref{chapter_conception} beschriebene Format überführt. 
+Ziel dieser Bachelorarbeit war es, ein Tool zu Bewertung der Dokumentation zu entwickeln, das in einem \ac{CI/CD}-Prozess eingebunden werden kann und nicht auf einer Programmiersprache beschränkt ist. Dabei beschränkt sich diese Bachelorarbeit auf strukturierte Kommentaren wie z.~B. Javadoc. 
 
-Da sich die Programmiersprachen in einigen Punkten besondere Funktionen haben, müssen diese geeignet abstrahiert werden. Beispielsweise müssen Eigenschaften in C\# in einer geeigneten Unterklasse von \textit{Component} dargestellt werden. Dazu kann eine neue abgeleitete Klasse erstellt werden. Alternativ kann die Klasse \textit{SingleMemberComponent}  benutzt werden, da sich eine C\#-Eigenschaft von der Benutzung sich kaum von einem gewöhnlichen Feld unterscheidet.
+Durch die allgemein gehaltene Klassenstruktur für das Parsing ist es möglich, Quellcode in anderen Programmiersprachen bewerten zu lassen. Allerdings muss dafür ein entsprechender Parser geschrieben werden, welcher den Quellcode in die vorgegebene Struktur transformiert. Dabei ist es natürlich nicht möglich, jedes Detail abzubilden, sondern es müssen Abstriche gemacht werden. 
 
-Außerdem müssen dann für die Programmiersprache die sprachspezifischen Hilfsmethoden passend überschrieben werden.
-
-\subsubsection{Unterstützung mehrere Programmiersprachen}
-Eine weitere Idee ist es, mehrere Programmiersprachen zu unterstützt, sodass  beispielsweise die Dokumentationsqualität von einen gemixten Java- und Python-Projektes bewertet werden kann. Dazu kann je nach Dateiendung ein passender Parser aufgerufen werden und dann die sprachunabhängigen Metriken angewendet werden.
-
-\subsubsection{Unterstützung weiterer natürlicher Sprachen}
-In der ausgelieferten Fassung unterstützt das Tool nur Englisch als Sprache. Beispielsweise sind alle \ac{NLP}-Metriken sehr auf die englische Sprache bezogen. Eine Erweiterung auf andere Sprachen könnte in Erwägung gezogen werden. 
-
-\subsubsection{Unterstützung von anderen CI/CD-Plattformen}
-Neben GitHub bietet auch GitLab eine Plattform zur automatisierten Ausführung von Programmcode bei bestimmten Ereignissen an. Da GitHub nicht die einzige Plattform zum Arbeiten mit Softwareprojekten ist, wäre eine Erweiterung auf andere Plattformen sinnvoll. Dabei könnte auch eine Abstrahierung geprüft werden, um eine Portierung auf andere \ac{CI/CD}-Plattformen so einfach wie möglich zu machen. 
+Auch das Parsen der strukturierten Kommentare erfolgt recht abstrakt, indem  die meisten Information unstrukturiert als Zeichenketten gespeichert werden, sodass die einzelnen Metriken diese Informationen weiterverarbeiten müssen. Da es Metriken gibt, die mit den einzelnen Wörtern ein eines Kommentars arbeiten (z.~B. \ac{NLP}-Metriken) und auch Metriken, welche die interne Struktur des Kommentars (wie z.~B. \ac{HTML}) analysieren, wäre es ein interessantes Forschungsthema, wie diese zwei Darstellungen besser repräsentiert werden können. 
 
 
+Für die Metriken wurde eine allgemeine Schnittstelle entworfen. Jede Metrik muss diese Schnittstelle implementieren und einen numerischen Wert  zwischen 0 und 100 ermitteln, welche den Stand der Dokumentationsqualität einer Komponente wiedergibt. Die Einzelergebnisse aller Metriken und aller Komponenten können dann mittels Aggregationsalgorithmen zu einem Gesamtergebnis zusammengefasst werden, um so eine Einschätzung über die Dokumentationsqualität des gesamten Projektes zu erhalten. 
 
+Für das Tool wurden bereits einige Metriken entwickelt, welche verschiedene Bereiche der Dokumentation analysieren können (wie z.B. die bloße Existenz oder die Verständlichkeit). Sicherlich lassen sich noch weitere Metriken finden, welche für die Bewertung der Dokumentation geeignet sind. Einige Vorschläge lassen sich beispielsweise von Checkstyle \cite{checkstyle_doc_metrics} übernehmen. Da die Darstellung der strukturierten Kommentare wie oben beschrieben nicht ideal ist, kann insbesondere die Struktur der Dokumentation (HTML-Elemente, Einrückungen oder syntaktische Korrektheit) nur sehr oberflächlich geprüft werden, sodass auch hier eine diesbezügliche Verbesserung der Metriken eine geeigneter Forschungsansatz wäre. Auch die Frage, welche Gewichtung für die einzelnen Metriken sinnvoll ist, kann in dieser Bachelorarbeit nicht beantwortet werden. 
 
-
-
+Um das Tool konfigurierbar zu halten, wurde ein Konzept für eine Konfigurationsdatei im \ac{JSON}-Format vorgestellt, dass alle wichtigen Informationen enthält. Die Konfiguration kann auch über GitHub Actions durchgeführt werden, indem passende Umgebungsvariablen gesetzt werden.  So kann das Tools sowohl als reguläres Programm auf einem System verwendet werden als auch mittels GitHub Actions in den \ac{CI/CD}-Prozess eingebunden werden. Durch die flexible Konfiguration kann ein Nutzer frei entscheiden, welche Metriken er für sinnvoll hält und wie er sie gewichten will.  Außerdem können die Metriken selbst begrenzt konfiguriert werden. 
