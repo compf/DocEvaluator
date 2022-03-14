@@ -1,118 +1,260 @@
-\chapter{Konzeption}
-Im Folgenden wird ein Konzept für die Implementierung des Tools vorgestellt, das  die Ziele der Bachelorarbeit erfüllen soll.
-\section{Traversierung aller relevanten Dateien} 
-Softwareprojekte bestehen aus Hunderten von Dateien, die nicht alle Quellcode enthalten. Beispielsweise gehören Konfigurationsdateien, Ressourcedateien wie Bilder oder binäre Dateien zu den Dateien, bei denen eine Analyse der Softwaredokumentation im Hinblick auf die begrenzte Zeit für die Bachelorarbeit nicht implementierbar ist. Daher ist es sinnvoll, bestimmte Dateien bei der Analyse auszuschließen beziehungsweise nur bestimmte Dateien zu betrachten. Bei einer Weiterentwicklung des Tools nach Abschluss der Bachelorarbeit kann das Tool auf andere Dateitypen ausgeweitet werden, um so ein besseres Gesamtbild über die Softwaredokumentation zu erhalten.
+\begingroup
+\renewcommand{\cleardoublepage}{} % TODO maybe removing this and next
+\renewcommand{\clearpage}{}
+\chapter{Konzeption}\label{chapter_conception}
+\endgroup
+Im Folgenden wird ein Konzept für die Implementierung des Tools vorgestellt, das die Ziele der Bachelorarbeit erfüllen soll. Insbesondere werden dabei die Problemfelder Parsing von Quelltextdateien und Metriken diskutiert, welche zur Bewertung der Dokumentationsqualität gelöst werden müssen. 
 
-Um die relevanten Dateien zu finden, wird zunächst ein übergeordnetes Verzeichnis benötigt, was bei Softwareprojekten aber der Standard sein sollte. Dieses Verzeichnis kann dann rekursiv durchlaufen werden und somit die Liste aller darin gespeicherten Dateien abgerufen werden. Die relevanten Dateien können dann durch Überprüfung ihres Dateinamens mittels bestimmter Regeln ermittelt werden, die der Benutzer des Tools festlegen kann.
 
-Beim JavadocEvaluator wird hierzu die NPM-Bibliothek Minimatch \footnote{\href{https://github.com/isaacs/minimatch}{Minimatch GitHub-Repository (besucht am 07.01.2022)}} verwendet, die es ermöglicht, Dateinamen mit Wildcard-Patterns zu vergleichen. Zum Beispiel könnte der Dateiname \enquote{test.txt} mit der Wildcard \enquote{test.*} verglichen werden und die Bibliothek würde eine Übereinstimmung melden.
+\hfill
+\section{Parsing von Dateien}\label{chapter:parsing}
+Eine Quellcodedatei besteht zunächst aus reinem Text und bietet daher nur indirekt Einblick in die innere Struktur. Damit eine Bewertung der Dokumentationsqualität möglich ist, müssen bestimmte Strukturen aus einer Datei gelesen werden, die für die Dokumentation wichtig sind. Andere Strukturen können dabei ignoriert werden. Für die Bewertung der Dokumentation sind nur wenige Bestandteile relevant. Beispielsweise sind alle Conditional-Branches (wie z.~B.  For-Schleifen und If-Verzweigungen) und viele andere Komponenten in Methodenrümpfen nicht relevant, da diese nur mit normalen Kommentaren und nicht mit Javadoc kommentiert werden; (sie werden dennoch unstrukturiert als Zeichenkette gespeichert, damit Metriken diese Information eventuell nutzen können). Aus diesem Grund müssen die notwendigen Informationen extrahiert werden. Zudem ist es ein Ziel der Arbeit, eine Erweiterbarkeit auf andere objektorientierte Programmiersprachen zu ermöglichen. Daher müssen die Informationen in ein abstraktes Format gebracht werden, welches eine gute Annäherung für die meisten objektorientierten Programmiersprachen ist. Beispielsweise unterscheiden sich die Zugriffsmodifizierer vieler Programmiersprache, sodass eine einheitliche Schnittstelle schwer umsetzbar ist. Daher enthält die abstrakte Repräsentation nur Informationen, ob eine Komponente als öffentlich markiert ist. Dies ist sinnvoll, da öffentliche Komponenten als Teil der öffentlichen Schnittstelle eher dokumentiert werden sollten als nicht öffentliche und eine weitergehende Differenzierung kaum Vorteile bietet. In einigen Programmiersprachen wie z. B. Python gibt es keine expliziten öffentliche Komponenten, jedoch existieren de facto Standards für Bezeichner, sodass beispielsweise private Komponenten zwei Unterstriche als Präfix haben.
 
-\section{Parsing der Java-Dateien} 
-Jede Datei, die relevant sein soll, muss anschließend weiterverarbeitet werden. Für die Bewertung der Dokumentation sind nur wenige Bestandteile relevant. Beispielsweise sind alle For-Schleifen, If-Verzweigungen und viele andere Komponenten in Methodenrümpfen nicht relevant, da diese nur mit normalen Kommentaren und nicht mit Javadoc kommentiert werden; (sie werden dennoch unstrukturiert als Zeichenkette gespeichert, damit Metriken diese Information eventuell nutzen können). Aus diesem Grund müssen die notwendigen Informationen extrahiert werden. Zudem ist es ein Ziel der Arbeit , eine Erweiterbarkeit auf andere objektorientierte Programmiersprachen zu ermöglichen. Daher müssen die Informationen in ein abstraktes Format gebracht werden, welches eine gute Annäherung für die meisten objektorientierten Programmiersprachen ist. Beispielsweise unterscheiden sich die Zugriffsmodifizierer vieler Programmiersprache, sodass eine einheitliche Schnittstelle schwer umsetzbar ist. Daher enthält die abstrakte Repräsentation nur Informationen, ob eine Komponente als öffentlich markiert ist. Dies ist sinnvoll, da öffentliche Komponenten als Teil der öffentlichen Schnittstelle eher dokumentiert werden sollten als nicht öffentliche und eine weitergehende Differenzierung kaum Vorteile bietet. In einigen Programmiersprachen wie z. B. Python gibt es keine expliziten öffentliche Komponenten, jedoch existieren de facto Standards für Bezeichner, sodass beispielsweise private Komponenten zwei Unterstriche als Präfix haben.
-
-Außerdem werden in der abstrakten Repräsentation die Vererbung etwas vereinfacht dargestellt, indem nicht zwischen Basisklassen und Schnittstellen unterschieden wird, da es auch hier Unterschiede zwischen Programmiersprachen gibt, und die Informationen über die Vererbung, falls sie überhaupt von einer Metrik verwendet wird, vermutlich nicht so detailreich sein müsste. Zudem werden Konstruktoren als Methoden mit den Namen \enquote{constructor} und Schnittstellen als Klassen repräsentiert, da auch hier eine zu feine Spezifikation nicht notwendig sein wird.  
+Außerdem werden in der abstrakten Repräsentation die Vererbung etwas vereinfacht dargestellt, indem nicht zwischen Basisklassen und Schnittstellen unterschieden wird, da es auch hier Unterschiede zwischen Programmiersprachen gibt, und die Informationen über die Vererbung, falls sie überhaupt von einer Metrik verwendet werden, vermutlich nicht so detailreich sein müsste. Zudem werden Konstruktoren als Methoden mit den Namen \enquote{constructor} und Schnittstellen als Klassen repräsentiert, da auch hier eine zu feine Spezifikation nicht notwendig sein wird.  
 
   
 
 In anderen Fällen gibt es jedoch viele Gemeinsamkeiten zwischen objektorientierten Programmiersprachen; so gibt es in  allen relevanten Sprachen Klassen, Methoden und Felder, die alle einen Namen haben. Des Weiteren haben Methoden und Felder einen (Rückgabe-)Type und Methoden besitzen Parameter, die ihrerseits durch einen Namen und einen Typen definiert sind. Einige Sprachen sind zwar nicht stark typisiert, jedoch kann für nicht bekannte Datentypen ein Alias wie \enquote{Any} oder  \enquote{Object} verwendet werden.  Zudem sind viele Komponenten hierarchisch; in den meisten Sprachen können beispielsweise Klassen andere Klassen enthalten, sodass diese abstrakte Struktur diese Tatsache berücksichtigen müsste. 
 
-Um dennoch sprachspezifische Funktionen anbieten zu können, besitzt jede Komponente ein Feld mit dem Typen \textit{ComponentMetaInformation}, das wie oben erwähnt die Information enthält, ob eine Komponente als öffentlich angesehen werden soll. Dieser Typ, welches eine Schnittstelle ist, kann von einer Klasse implementiert werden, um Parser für andere Programmiersprachen die Möglichkeit zu geben, zusätzliche sprachspezifische Informationen zu speichern. Beim Java-Parser wird diese Funktion beispielsweise genutzt, um zu speichern welche \enquote{checked} Ausnahmen eine Methode werfen kann, sodass später ein Vergleich mit der Javadoc möglich ist. Die Schnittstelle enthält nur die Anforderung, eine \textit{isPublic}-Methode anzubieten und kann daher für viele andere objektorientierte Programmiersprache Informationen speichern, die für einige Metriken eventuell nützlich sind. 
+Um dennoch sprachspezifische Funktionen anbieten zu können, besitzt jede Komponente ein Feld mit dem Typen \textit{ComponentMetaInformation}, das wie oben erwähnt die Information enthält, ob eine Komponente als öffentlich angesehen werden soll. Dieser Typ, welches eine Schnittstelle ist, kann von einer Klasse implementiert werden, um Parser für andere Programmiersprachen die Möglichkeit zu geben, zusätzliche sprachspezifische Informationen zu speichern. Beim Java-Parser wird diese Funktion beispielsweise genutzt, um zu speichern, welche \enquote{checked} Ausnahmen eine Methode werfen kann, sodass später ein Vergleich mit der Javadoc möglich ist. Die Schnittstelle enthält nur die Anforderung, eine \textit{isPublic}-Methode anzubieten und kann daher für viele andere objektorientierte Programmiersprache Informationen speichern, die für einige Metriken eventuell nützlich sind. 
 
-Abbildung \ref{fig:uml_parsing} gibt einen Überblick über die Klassen, die im Arbeitspaket \enquote{Parsing} verwendet wurden.
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/uml/parsing.png}
-    \caption{UML-Diagramm mit allen wichtigen Klassen für das Parsen}
-    \label{fig:uml_parsing}
-\end{figure}
-\section{ANTLR4}
-Um die Java-Dateien zu parsen, wird die Bibliothek ANTLR4\footnote{\href{https://www.antlr.org/}{ANTLR Website (besucht 07.01.2022)}} verwendet, die kostenlos verfügbar ist. Diese Bibliothek kann nicht nur viele Programmiersprachen, sondern auch selbst geschriebene Sprachen parsen, sofern eine passende Grammatik verfügbar ist. Daneben gibt es noch Bibliotheken wie Bison, PEG.JS, die ebenfalls eine ähnliche Aufgabe erfüllen können. Allerdings gibt es bereits vordefinierte Grammatiken für ANTLR4, sodass ein erheblicher Aufwand gespart werden konnte.  
+ \begin{figure}[ht!]
+ \begin{tikzpicture}
+ \pgfmathsetlengthmacro\breite{6cm}
+\pgfmathsetlengthmacro\hoehe{2.567cm}
+\pgfmathsetlengthmacro\InnerSep{0.4cm}
+\node[draw,
+anchor=center, 
+inner sep=0pt, 
+minimum width=5cm, text width=6cm-\InnerSep,
+align=justify,
+minimum height=\hoehe
+] (java) {
+  \hspace*{0.1cm}\textbf{public} \textbf{class} Main\{.\newline 
+     \hspace*{0.5cm}\textbf{private} \textbf{int} test(\textbf{int} a)\{\newline
+    \hspace*{0.5cm}\}\newline
+\hspace*{0.1cm}\}
 
-Eine andere Möglichkeit zum Parsen der Java-Dateien ist die NPM-Bibliothek \enquote{java-parser} \footnote{\href{https://www.npmjs.com/package/java-parser}{Java-Parser (besucht 07.01.2022)}}. Dies hätte den Vorteil, dass das Parsen, welches nicht der Hauptfokus dieser Bachelorarbeit ist, ausgelagert wird und so Fehler vermieden werden. Allerdings kann diese Bibliothek nicht die Verbindung zwischen einer Komponente und der dazugehörigen Javadoc herstellen, sodass eine Benutzung dieser Bibliothek die Arbeit deutlich erschwert hätte. Daher fiel die Wahl auf \textit{ANTLR4}. Außerdem besteht die Möglichkeit, eine eigene Grammatik für Java zu schreiben, da die originale Grammatik für Java sämtliche Kommentare ignoriert. Da dies jedoch deutlich komplizierter war als erwartet, wurde dennoch entschieden, die von vielen Entwicklern geschriebene Grammatik zu verwenden (siehe Kapitel \ref{chapter:antlr4_impl}).
+};
+\node[draw,text width=5.5cm, left = of java](python){
+\textbf{class} Main:\newline
+     \hspace*{0.5cm}\textbf{def} \_\_test(a:\textbf{int}): -> \textbf{int}\newline
+         \hspace*{1cm}pass
 
-\section{Lexer und Parser}
-Eine Grammatik für Programmiersprachen besteht immer aus einer Lexer-Grammatik und eine Parser-Grammatik, die jeweils vom Lexer bzw. Parser in dieser Reihenfolge verarbeitet werden, um so eine Baumstruktur einer Quellcodedatei zu erhalten. Der Lexer erstellt aus einer Quellcodedatei eine Liste von Tokens. Dabei ist ein Token eine Gruppierung von einem oder mehreren Zeichen, die eine weitergehende Bedeutung haben. Beispielsweise können Schlüsselwörter einer Programmiersprache oder Operatoren als Token klassifiziert werden. Diese Tokens sind grundsätzlich kontextunabhängig, das heißt für die gleiche Zeichenkette wird das gleiche Token verwendet. Jeder Token wird durch seine Zeichenkette und den Tokentyp klassifiziert
+};
+\draw[line width=0.05cm] (python) -- (-4,-2.5) ;
+\draw [line width=0.05cm](java) -- (-4,-2.5);
+\draw[->,thick,line width=0.05cm] (-4,-2.5) -- (-4,-3.5);
+\draw [] (-9,-3.5) rectangle(4,-16);
+\begin{scope} {0,-10}
+       \begin{object}[text width=8cm]{fileObj}{-4,-4}
+        \instanceOf{FileComponent}
+        \attribute{name = "filepath"}
+        \attribute{parent = null}
+        \attribute{children={[}classObj{]}}
+      \end{object}
+      \begin{object}[text width=8cm]{classObj}{-4,-8 }
+        \instanceOf{ClassComponent}
+        \attribute{name="Main"}
+        \attribute{parent=fileObj}
+        \attribute{children={[}methodObj{]}}
+          \attribute{metaInformation=meta}
+      \end{object}
+    \begin{object}[text width=8cm]{methodObj}{-4,-12}
+        \instanceOf{MethodComponent}
+        \attribute{name="test"}
+        \attribute{parent=classObj}
+        \attribute{params={[}paramsObj{]}}
+        \attribute{metaInformation=meta2}
+        \attribute{returnType=int}
+      \end{object}
+      \begin{object}[text width=2.5cm]{paramObj}{2,-10}
+        \attribute{name=a}
+        \attribute{type=int}
+      \end{object}
+    \begin{object}[text width=2.5cm]{meta}{2,-6}
+        \attribute{isPublic=true}
+      \end{object}
+    \begin{object}[text width=2.5cm]{meta2}{2.5,-14.5}
+        \attribute{isPublic=false}
+      \end{object}
+\end{scope}
+\begin{scope}[line width=0.05cm]
+    \aggregation{fileObj}{}{}{classObj}{}{}
+     \aggregation {classObj}{}{}{methodObj}{}{}
+      \aggregation {methodObj}{}{}{paramObj}{}{}
+    \aggregation {classObj}{}{}{meta}{}{}
+        \aggregation {methodObj}{}{}{meta2}{}{}
+\end{scope}
 
-Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
-		\begin{figure} [htbp]
-			\lstinputlisting
-			[caption={Beispielhafte Syntax vom Lexer},
-			label={lst:lexer_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/lexer_example.g4}
-		\end{figure}
-
-Eine Zeile in der Lexer-Grammatik beginnt mit den Namen eines Tokens, gefolgt von einem Doppelpunkt und dann einem regulären Ausdruck, der dieses Token beschreibt. In der beispielhaften Lexer-Grammatik wird ein Javadoc-Kommentar definiert, das mit \enquote{/**} beginnt, dann folgen beliebige Zeichen und endet mit \enquote{*/}. Per Konvention haben die Bezeichner der Tokens nur Großbuchstaben, sie müssen auf jeden Fall mit einem Großbuchstaben beginnen \cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. 
-
-Der nächste Schritt ist das  Parsen. Dabei werden die im vorherigen Schritt generierten Tokens, die als Liste vorliegen, genommen und in eine hierarchische Baumstruktur umgewandelt, wobei hier der Kontext die entscheidende Rolle spielt. ANTLR4 lädt ein Token nach dem anderen und prüft ob es, basierend auf der aktuellen Position in der Baumstruktur, eine Regel gibt, die durch diesen Token erfüllt wird. Wenn es mehrere mögliche Pfade gibt, lädt ANTLR4 so viele Tokens bis die nächste Regel eindeutig feststeht. Gibt es dennoch Uneindeutigkeiten, so wird die Regel genommen, die als erstes in der Parser-Datei geschrieben wurde.\cite[S. 10ff.]{TheDefinitiveANTLR4Reference}
-
-So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren, der eine generelle Methode beschreibt. Eine Methode besteht aus Rückgabetyp, Bezeichner und Parameterliste. Die Parameterliste kann dann als eine Liste von Datentyp-Bezeichner-Paare aufgelöst werden. Der Rückgabetyp einer Methode ist allerdings anders zu verstehen als der Datentyp eines Parameters, da jeder Datentyp eines Parameters auch ein gültiger Rückgabetyp ist, was jedoch nicht umgekehrt der Fall ist; so ist \textit{}{void} ein gültiger Rückgabetyp, aber kein Datentyp. Listing \ref{lst:parser_example} zeigt einen typischen Ausschnitt aus einer Parser-Grammatik, wobei zur Übersichtlichkeit nicht alle Regeln und Tokens aufgelistet sind:
-		\begin{figure} [htbp]
-			\lstinputlisting
-			[caption={Beispielhafte Syntax vom Parser},
-			label={lst:parser_example},
-			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/parser_example.g4}
-		\end{figure}
-		
-Listing \ref{lst:parser_example} beschreibt die notwendigen Regeln, um Methodenparameter zu parsen. Ein Methodenparameter (Z. 1) kann keinen, einen oder mehrere  Modifizierer (Z. 2) enthalten, die ihrerseits eine Java-Annotation oder das Schlüsselwort\textit{final}  sein können (Z. 6-7). Anschließend (Zeile 3) muss ein Datentyp (Z. 9) erfolgen, der wiederum aus einer Annotation bestehen kann (Z. 10), gefolgt von entweder einem primitiven Datentyp oder einem Klassen bzw. Schnittstellentyp (Z.11). Auch die üblichen eckigen Klammern für Arrays in Java können nach diesem Datentyp folgen (Z. 12). Die letzte Voraussetzung für einen gültigen Methodenparameter ist ein valider Bezeichner (Z. 4), der in Zeile 14-16 genauer definiert wird. 
-
-Die Parser-Grammatik ist ähnlich wie die der Lexer-Grammatik aufgebaut. Auch hier wird eine Variante der regulären Ausdrücken verwendet, wobei hier die reguläre Grammatik auf die Tokens angewendet wird. Anstelle des Namens des Tokens kann alternativ auch die Zeichenkette des Tokens verwendet werden (bspw. \enquote{+} statt \enquote{ADD}). Im Gegensatz zum Lexer muss der Bezeichner einer Parser-Regel mit einem Kleinbuchstaben beginnen\cite[S. 3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. So ist eine Unterscheidung zwischen Tokens und den Parserregeln stets möglich. 
+    
+\end{tikzpicture}
+     
+     \caption{Objektdiagramm aus Java- und Python-Code}
+     \label{fig:python_java_comp}
+ \end{figure}
 
 
-Basierend auf dieser Baumstruktur des Parsers kann eine Quellcodedatei analysiert werden und so alle relevanten Informationen gesammelt werden. 
-Dies ist relativ leicht mit dem Visitor-Pattern möglich, da so nur die relevanten  Komponenten genauer betrachtet werden müssen und alle uninteressanten Komponenten automatisiert durchlaufen werden, bis eine relevante Komponente gefunden wird.
+Abbildung \ref{fig:python_java_comp} veranschaulicht, wie eine einfache Datei in die Objektstruktur umgewandelt werden kann. Dabei werden eine einfache Java-Klasse und eine semantisch äquivalente Python-Datei als Beispiel verwendet, um zu zeigen, dass aus beiden Sprachen eine gleiche Objektstruktur erzeugt werden kann. Dabei wurden zur Übersichtlichkeit einige nicht relevanten Attribute entfernt.
 
-		\begin{figure} [htbp]
-			\lstinputlisting
-			[caption={Codeauschnitt aus  Methoden-Visitor},
-			label={lst:visit_method_example},
-			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left]
-			{figures/visit_method_example.java}
-		\end{figure}
-Das Listing \ref{lst:visit_method_example} zeigt einen Ausschnitt vom Visitor für Methodendeklarationen. Hier ist die Baumstruktur leicht sichtbar. Alle Einzelbestandteile einer Methode wie z. B. Bezeichner, Rückgabetyp etc. sind Kindknoten des \textit{RuleContext} und können über die Methode \textit{getChild} abgerufen werden. So werden sowohl der Bezeichner als auch der Rückgabetyp direkt als Text abgerufen. Diese  beiden Bestandteile bestehen wiederum auch aus weiteren Kindknoten, doch eine weitergehende Betrachtung ist nicht nötig, da nur die Bezeichnung als Zeichenkette benötigt wird. Andere Bestandteile wie die Methodenparameter sind jedoch komplexer, aus diesem Grund werden sie von separaten Visitors betrachtet.
+Das Programm in beiden Sprachen besteht aus einer öffentlichen Klasse \textit{Main} und einer privaten Methode \textit{test}, die einen Parameter \textit{a} als Ganzzahl erhält und eine Ganzzahl zurückgibt. Die höchste Hierarchieebene ist immer ein \textit{FileComponent}. Diese Datei enthält hier genau ein Kind namens \textit{classObj}, könnte aber in anderen Fällen auch mehrere Kinder (wie z.~B. Klassen enthalten). Die Klasse besitzt zudem einen Verweis auf ihren Elternteil. Außerdem enthält das \textit{classObj} eine Referenz auf Metainformationen, die hier nur angeben, dass die Klasse öffentlich ist. In diesen Metainformationen könnte auch die Basisklasse und andere relativ sprachspezifische Informationen enthalten. Die Klasse enthält wiederum genau die Methode als einziges Kind. Die Methode hat ebenfalls einen Verweis auf die Metainformationen, welche die Methode als privat markieren. Außerdem hat die Methode einen \textit{returnType} und einen Verweis auf die Liste der Parameter, die wiederum aus einem Namen und einem Datentyp bestehen. Die Beziehungen der Klassen, die für das Parsing zuständig sind, werden in in Abbildung \ref{fig:uml_parsing} als UML-Diagramm nochmal illustriert.
 
+\subsubsection{Repräsentation der strukturierten Kommentare}\label{chapter:structured_comments}
+Neben der hierarchischen Repräsentation der einzelnen Komponenten müssen auch die strukturierten Kommentare wie z.~B. Javadoc) geeignet in eine Datenstruktur umgewandelt werden. Wie in Kapitel \ref{chapter:javadoc}
+ erläutert, besteht ein strukturierter Kommentar in vielen Fällen aus zwei Teilen. Der erste Teil ist eine allgemeine Beschreibung der Komponente. Im zweiten Teil werden bestimmte Strukturen genauer erläutert. So können einzelne Parameter erklärt werden oder der Rückgabewert beschrieben werden. 
+ Dieser Aufbau findet sich auch in \textit{Doxygen} \cite{doxygen} oder \textit{Docstring} \cite{docstring}, sodass diese Struktur als Grundlage genommen wird. 
+ 
+ Ein strukturierter Kommentar besteht also aus einer generellen Beschreibung, die auch weggelassen werden kann. Anschließend folgen null bis beliebig viele Tags. Jeder Tag besteht aus einem Typ (z.~B. \enquote{@param},\enquote{@return} oder \enquote{@throws}), einem optionalen Parameter, welcher von einigen Tags benötigt wird und der Beschreibung des Tags. Die Namen der Tags sind generalisiert, dies bedeutet, dass unabhängig von der Programmiersprache der Tag zur Beschreibung eines Parameters immer \enquote{@param} heißen muss. Dies muss bei der Entwicklung eines Parsers beachtet werden. 
+ 
+ Wird kein strukturierter Kommentar angegeben, so ist liefert der entsprechende Getter \textit{getComment} den Wert \enquote{null} zurück. 
 \section{Konzeption der Metriken}
-Die Informationen aus dem Parsing-Prozess werden nun von dem Metriken genutzt, um die Dokumentationsqualität zu ermitteln. Jede Metrik muss durch eine separate Klasse, welche die Schnittstelle \textit{DocumentationAnalysisMetric} implementiert, in das Tool eingebunden werden. Die standardmäßig implementierten Metriken werden später in Kapitel \ref{chapter:metrics} genauer erläutert. 
-Dabei können zwei verschiedene Kategorien unterschieden. Die Metriken der ersten Kategorie arbeiten nur auf eine Komponente und der dazugehörigen Dokumentation. Andere Metriken sind nur mit hierarchischen Komponenten kompatibel und analysieren die Kommentare all ihrer Kinder. Dies ist beispielsweise für die Metrik in Kapitel \ref{chapter:metrics_loc_ratio} sinnvoll
- 
-Die Metriken werden ein einziges Mal in einem Metrikmanager instantiiert, sodass es von jeder Metrik nur eine Instanz existiert. Daraus folgt auch, dass eine Metrik keinen inneren Zustand haben sollte, da dieser Zustand dann über verschiedene Komponenten  oder Dateien geteilt werden würde, was Ergebnisse verfälschen würde.
-Diese Designentscheidung wurde getroffen, damit der Metrikmanager die Kontrolle über die Verwaltung der Metriken erhält und eine Zuordnung von Gewichten für den gewichteten Mittelwert bzw. Median zu den Metriken leicht möglich ist. Diese Zuordnung könnte auch durch einen eindeutigen Namen ermöglicht werden, was aber einige Umstrukturierung erfordert, da die Metriken ihren eigenen Namen nicht kennen.
+Nachdem eine Datei in ihre einzelnen Komponenten zerlegt wurde, kann die Qualität der Softwaredokumentation überprüft werden. Jede gefundene Komponente besitzt einen Verweis auf die dazugehörige Dokumentation, die bei Nichtvorhandensein auch null sein kann. Anhand dieser Referenz kann geprüft werden, ob die Softwaredokumentation der Komponente ausreichend ist. Zur Bewertung der Dokumentation gibt es verschiedene  Möglichkeiten. Beispielsweise könnte überprüft werden, ob eine Komponente dokumentiert oder undokumentiert ist. Eine weitere Möglichkeit wäre es, die Verständlichkeit der Dokumentation zu prüfen. Alle diese Vorgehen basiert auf eine Metrik, die auf wissenschaftliche Studien beruht oder zumindest plausibel ist. In diesem Abschnitt wird ein Konzept erläutert, um eine Metrik zu implementieren. Anschließend wird beschrieben, wie die Ergebnisse jeder Metrik zusammengefasst werden, um ein Endresultat zu erhalten. 
 
-Jede Implementation einer Metrik gibt eine numerische Bewertung ab, die eine Aussage über die Dokumentationsqualität trifft. Hier wurde eine 0 für sehr schlechte bis nicht existente Dokumentation und 100 für eine exzellente Dokumentation gewählt, sodass die Bewertung sich als Prozent lesen lassen kann. Die Implementierung einer Metrik sollte diesen Wertebereich nicht verlassen, da eine Fehlerbehandlung nicht implementiert ist. Bei Metriken, die per Design schon eine prozentualen Wert zurückgeben z.~B. \ref{chapter:metrics_simple_comment} wird diese Vorgabe stets eingehalten. Bei anderen Metriken (z.~B. \ref{chapter:metrics_flesh} sollte eine mathematische Funktion gefunden werden, die das Ergebnis der Metrik auf den Wertebereich 0 bis 100 mappt. Die genaue Umsetzung hängt von der Metrik ab. In jedem Falle sollte es für eine Metrik Rückgabewerte geben, die auf eine gute bzw. schlechte Dokumentation hindeuten, damit diese auf 100 bzw. 0 abgebildet werden können. Nur durch diese Einschränkung auf einen fixen Wertebereich ist es möglich, den Mittelwert, Median etc. zu bilden und so eine Vergleichbarkeit zu ermöglichen. 
+\subsection{Implementation einer Metrik}\label{chapter:metric_impl}
+Damit eine Metrik die Dokumentation bewerten kann, benötigt sie Zugriff auf die Komponente. Außerdem muss sie ihr Ergebnis irgendwie veröffentlichen bzw. zwischenspeichern, damit es später weiterverarbeitet werden kann. Des Weiteren ist nicht jede Metrik mit jeder Komponente kompatibel. Eine Metrik, die überprüft, ob jeder Methodenparameter dokumentiert ist, kann mit anderen Komponentenarten weniger anfangen. Zudem sollte es die Möglichkeit geben, das Verhalten einer Metrik mittels Parameter anzupassen, damit die Metrik konfigurierbar bleibt. Zuletzt sollte eine Metrik bei der Bewertung auch begründen, warum die Dokumentation einer Komponente nicht ausreichend ist. Außerdem soll der Benutzer des Tools selbst auswählen können, welche Metriken angewendet werden sollen, da nicht jede Metrik immer sinnvoll ist. 
 
-Die Implementation der  Metrik kann sich aber auch dafür entscheiden, eine Komponente komplett zu ignorieren, sodass sie für diese Metrik als nicht existent betrachtet wird.
+Eine Möglichkeit, diese Anforderung für eine Metrik umzusetzen, wäre die Verwendung einer Methode pro Metrik, welche die Komponente und die Parameter als Eingabe erhält und daraus die Bewertung und eventuelle Begründung ermittelt und zurückgibt. Allerdings ist dieser Ansatz sehr prozedural; es gibt beispielsweise keine Kapselung zwischen den Metriken.  
 
-Zudem können die Implementation der Metriken Warn- oder Fehlermeldungen werfen, um den Anwender des Programms auf schlechte Dokumentation aufmerksam zu machen. Diese Fehlermeldung enthalten auch den Komponentennamen und die Zeilennummern, damit der Programmierer schnell auf die verwendete Komponente zugreifen kann.
+Ein anderer Ansatz, der hier auch gewählt wird, ist es, jede gewünschte Metrik als Klasse zu implementieren. Jede implementierte Metrik kann somit die notwendigen Berechnungen abgekapselt von anderen Metriken erledigen, was die Wartbarkeit verbessert. Um trotzdem für eine einheitliche Schnittstelle zu sorgen, muss jede zu implementierende Metrik von einer abstrakten Basisklasse \textit{(DocumentationAnalysisMetric)} erben. Wenn eine neue Metrik implementiert werden soll, muss eine neue Klasse erstellt werden, die von dieser abstrakten Basisklasse erbt. Eine Instanz dieser Klasse wird im Folgenden Metrikobjekt genannt und repräsentiert eine konkrete Implementierung der Metrik, die bei der Bewertung der Dokumentation berücksichtigt werden kann. Um diese Bewertung durchzuführen, muss geprüft werden, ob eine Metrik mit einer Komponente kompatibel ist. Dies wird durch die  Methode \textit{shallConsider} erledigt,  welche dementsprechend einen Wahrheitswert zurückgibt. Die anschließende Analyse erfolgt durch die Methode \textit{analyze}. Diese führt den metrikspezifischen Algorithmus aus und speichert das Ergebnis wie in Kapitel \ref{chapter:store_metric} beschrieben, damit es zu einem Gesamtergebnis verarbeitet werden kann.
 
+Da eine Metrik auch parametrisierbar sein soll, müssen bei der Instanziierung  eines Metrikobjektes Parameter übergeben werden, die von der Implementation der Metrik zur Modifikation des Verhaltens der Metrik verwendet werden können. Diese Parameter werden sehr abhängig von der Metrik sein, sodass eine einheitliche Schnittstelle nur schwer umsetzbar ist. Daher werden die Parameter als Datentyp \textit{any} übergeben, sodass es keine Typüberprüfung gibt. Alternativ wäre eine assoziative Liste möglich, bei dem ein Parametername als Zeichenkette ein Wert zugeordnet wird, aber auch hier könnte keine Überprüfung eines Datentypes vorgenommen werden. 
 
-
-  
-
-\subsection{Resultate der Metriken anwenden}
-Da in einer Datei mehrere Komponenten durchaus Standard sind, müssen die Bewertungen jeder Komponente passend aggregiert werden. Dazu wurde ein \textit{MetricResultBuilder} entwickelt. Dieser kann durch die Methode \textit{processResult} das Resultat einer Metrik verarbeiten, indem es das Ergebnis in einer Liste speichert. Wenn alle Metriken verarbeitet sind, muss daraus ein Gesamtresultat gebildet werden. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein arithmetischer Mittelwert gebildet. Es sind auch aber auch andere \enquote{ResultBuilder} standardmäßig implementiert, sodass der Benutzer des Tools einen geeigneten Algorithmus (z.~B. Median) auswählen kann. Ein \textit{ResultBuilder} basiert auf dem Vorbild des Design-Patterns \enquote{Builder} aus \cite[S.139-149]{gamma2015design}, da es aus einzelnen Metrikresultaten ein vollständiges Metrikergebnis baut. 
-
-In den folgenden Unterabschnitten wird jeder Algorithmus kurz erläutert und dabei kurz auf die Vor- und Nachteile eingegangen. 
-
-\subsubsection{Einfacher Mittelwert}
-Der arithmetische Mittelwert wird bereits durch die Klasse \textit{MetricResultBuilder} implementiert. Dieser Algorithmus berücksichtigt jedes Ergebnis gleichermaßen. Dies ist insbesondere für die Aggregierung der Ergebnisse der einzelnen Dateien sinnvoll, da jede Datei gleich behandelt werden sollte und eine Gewichtung von möglicherweise Tausenden von Dateien nur schwer umsetzbar ist. Es sollte allerdings auch beachtet werden, dass der Mittelwert extreme Ausreißer berücksichtigt. Dies ist hier manchmal sinnvoll, da sehr schlechte Dokumentation besser berücksichtigt wird und so ein verlässliches Gesamtergebnis geliefert wird.
+Eine  weitere Voraussetzung für ein Metrikobjekt ist ein eindeutiger Name. Dadurch kann die gleiche Metrik mit unterschiedlichen Parametern verwendet werden. Außerdem wird so eine Zuordnung von Gewichten vereinfacht. Standardmäßig besteht dieser eindeutige Name aus dem Namen der implementierten Metrik, gefolgt von einem Unterstrich und einer fortlaufenden Nummer. Eine vollständige Darstellung der Klassen, die für die Berechnung der Dokumentationsqualität zuständig sind, findet sich in Abbildung \ref{fig:uml_metrics} im Anhang.
 
 
-\subsubsection{Median}
-Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultate nach den bekannten Median-Algorithmus verarbeitet. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnissen gebildet. 
+\subsubsection{Bewertung der Dokumentation}
+Die Methode \textit{analyze} muss eine Bewertung darüber abgeben, ob die Qualität der Dokumentation ausreichend ist. Für die Repräsentation dieser Bewertung gibt es viele Möglichkeiten, allerdings ist eine numerische Bewertung mittels einer Intervallskala am sinnvollsten, da so der arithmetische Mittelwert, der Median etc. berechnet werden kann, was für die Bildung des Gesamtergebnisses wichtig ist.
+Die numerische Bewertung soll eine Aussage über die Dokumentationsqualität liefern. Eine Bewertung von 0 steht für eine sehr schlechte bis nicht existente Dokumentation und die Bewertung 100 steht für eine exzellente Dokumentation, sodass die Bewertung sich als Prozent lesen lassen kann. Das Ergebnis einer implementierten Metrik sollte diesen Wertebereich nicht verlassen, da eine Fehlerbehandlung nicht implementiert ist. Bei Metriken, die per Design schon einen prozentualen Wert zurückgeben, wird diese Vorgabe stets eingehalten. Bei anderen Metriken (z.~B. die Flesch-Metrik in Kapitel \ref{chapter:metrics_semantic}) sollte eine mathematische Funktion gefunden werden, die das Ergebnis der Metrik auf den Wertebereich 0 bis 100 abbildet. Die genaue Umsetzung hängt von der Metrik ab. In jedem Falle sollte es für eine Metrik Ergebnisse geben, die auf eine gute bzw. schlechte Dokumentation hindeuten, damit diese auf 100 bzw. 0 abgebildet werden können. Nur durch diese Einschränkung auf einen fixen Wertebereich ist es möglich, den Mittelwert, Median etc. zu bilden und so eine Vergleichbarkeit zu ermöglichen. 
 
-Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat. Bei der überschaubaren Anzahl an Metriken wird dies weniger relevant sein, bei einer Anwendung des Medians auf vielen Dateien durchaus wohl.
+\subsubsection{Verwaltung der Metriken}
 
+Für die spätere Ausführung der Metriken ist es sinnvoll, eine zentrale Stelle zu haben, welche die Verwaltung der Metriken übernimmt. Diese zentrale Stelle entkoppelt die Verwaltung der Metriken von dem restlichen Programmcode und sorgt so für eine bessere Struktur des Programms. Diese zentrale Komponente ist der \textbf{Metrikmanager}. Der Metrikmanager ist eine statische Klasse, die von allen Modulen des Tools benutzt werden kann, welche mit den Metriken arbeiten müssen.  
 
-\subsubsection{Gewichteter Mittelwert}
-Der gewichtete Mittelwert ist in der Klasse \textit{WeightedMetricResultBuilder} implementiert. Dabei wird dem Konstruktor dieser Klasse eine assoziative Liste übergeben, die einem Metrikobjekt ein Gewicht zuordnet.  Es wird dabei davon ausgegangen, dass jede Metrik nur von einer Instanz repräsentiert wird. Dies ist nur möglich, da die Metriken keinen inneren Zustand haben und nur mittels lokale Variablen und Parameter arbeiten. Jedes Einzelresultat speichert zudem den Erzeuger des Ergebnisses, sodass für jede Metrik ein Gewicht abgerufen werden kann. Die Gewichte müssen nicht normiert werden, da dies während der Berechnung implizit erledigt wird. Die Resultate jeder Metrik werden multipliziert mit dessen Gewicht, dann aufsummiert und zuletzt durch die Summe aller Gewichte geteilt. 
+Eine wichtige Funktion des Metrikmanagers ist das Erzeugen neuer Metriken. Zwar wäre es möglich, die Metriken direkt zu instanziieren, wenn sie benötigt werden, allerdings entsteht dadurch eine direkte Abhängigkeit zwischen der Metrik und dem Modul, welches eine Metrik erzeugen möchte. Zur Vermeidung dieser direkten Abhängigkeit können Fabrikmethoden verwendet werden, bei dem ein Objekt nicht direkt erzeugt wird, sondern mittels einer Abfrage durch eine bestimmte Methode erzeugt wird und anschließend an das anfragende Objekt zurückgegeben wird \cite[S. 149-161]{gamma2015design}.
 
+Basierend auf dieser Idee kann ein Modul, das ein konkretes Metrikobjekt benötigt, den Metrikmanager mit der Instanziierung zu beauftragen. Dabei benötigt der Metrikmanager eine Zeichenkette, um eine konkrete abgeleitete Klasse zu identifizieren, von der das neue Metrikobjekt instanziiert werden soll. Diese Zeichenkette wird eindeutig einer bestimmten abgeleiteten Klasse zugeordnet, sodass bei der Implementation einer neuen Metrik ein neuer Name spezifiziert werden muss. Alle Zeichenketten, die für eine bestimmte Metrik stehen, werden in einer Konstantensammlung  (\textit{Enum}) definiert, die ebenfalls bei der Definition einer neuen Metrik ergänzt werden muss.  Das neue Metrikobjekt benötigt, wie in Kapitel \ref{chapter:metric_impl} beschrieben, zudem einen eindeutigen Namen und Parameter, damit es eindeutig auffindbar ist und korrekt arbeiten kann. Dieses neue Metrikobjekt wird zudem vom Metrikmanager registriert und in einer Liste gespeichert, damit es später möglich sein wird, über alle erzeugten Metriken zu iterieren. 
 
-Dieser Algorithmus ermöglicht es, bestimmte Metriken zu bevorzugen bzw. zu benachteiligen. Dies ist sinnvoll, da nicht jede Metrik immer ein aussagekräftiges Ergebnis liefert und bestimmte Metriken je nach Situation ein besseres Bild über die Dokumentationsqualität liefern. Allerdings ist auch zu beachten, dass die Wahl der Gewichte nicht trivial ist und ein Vergleich von Ergebnissen, die verschiedene Gewichte verwenden, nicht sinnvoll ist.
+Der Metrikmanager bietet zudem eine Methode an, mit denen der Standardwerte für die Parameter einer Metrik abgerufen werden können, sodass diese an einer Stelle verwaltet werden können. Außerdem kann der Metrikmanager auch einen \textit{MetricResultBuilder} erzeugen, um Teilergebnisse zu einem Gesamtresultat zu aggregieren. Dies geschieht ebenfalls über eine Fabrikmethode sodass auch hier eine Entkopplung stattfindet. 
 
-\subsubsection{Gewichteter Median}
-Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} implementiert. Dabei wird zunächst die Summe der Gewichte berechnet und die Resultate nach ihrem Gewicht sortiert. Anschließend werden die sortierten Resultate und ihre Gewichte so lange aufsummiert, bis diese temporäre Summe die Hälfte der Gesamtsumme überschreitet. Das Metrikergebnis, bei der diese Bedingung zutrifft, ist das gesuchte Gesamtergebnis. Die Vor- und Nachteile dieses Algorithmus entsprechen den Vor- und Nachteilen des gewichteten Mittelwerts und des Medians. So muss auch hier eine Sortierung durchgeführt werden und die Wahl der richtigen Gewichte ist nicht trivial. 
+\subsection{Einzelergebnisse verarbeiten}\label{chapter:store_metric}
 
+Das berechnete Ergebnis einer Komponente muss nun gespeichert werden, damit es später ausgewertet werden kann. Dazu wird ein \textit{MetricResult}-Objekt erstellt, welches das im vorherigen Unterabschnitt berechnete Ergebnis enthält. Außerdem werden hier eventuelle Begründungen und Hinweise gespeichert, die dem Anwender dabei unterstützen, die Qualität der Dokumentation zu verbessern. Jede Begründung enthält den Dateipfad der betroffenen Datei, die bemängelte Komponente und die Zeilennummer, sodass der Benutzer die problematische Stelle schnell finden kann. Zuletzt werden noch Informationen gespeichert, die beschreiben, in welchen Kontext das Ergebnis produziert wurde. Dies ist für die Gewichtung der Einzelergebnisse notwendig und wird in Kapitel \ref{chapter_weights_assign} genauer erläutert. 
+
+Für die Speicherung des Objektes gibt es zwei Möglichkeiten. Die erste Möglichkeit wäre es, dass die \textit{analyze}-Methode das \textit{MetricResult}-Objekt einfach zurückgibt, sodass der Aufrufer damit arbeiten kann. Bei der zweiten Möglichkeit wird das Ergebnis einem anderen Objekt übergeben, der dann die Weiterverarbeitung vornimmt. Dies hat den Vorteil, dass eine Metrik kein Ergebnis zurückliefern muss, wenn es kein sinnvolles Ergebnis berechnen kann. Bei einem Rückgabewert müsste ansonsten ein ungültiger Wert wie z.~B. \textit{null} vereinbart werden. Außerdem kann eine Metrik auch mehrere Resultate speichern, was bei komplexeren Komponenten in Betracht gezogen werden könnte. Dieses weitere Objekt ist ein  \textit{MetricResultBuilder}, der wie in nächsten Unterabschnitt beschrieben, die Softwaredokumentationsqualität jeder Komponente sammelt und daraus ein Gesamtergebnis berechnet.  
+
+\subsubsection{Einzelergebnisse aggregieren}
+Da ein Softwareprojekt aus Tausenden von Dateien bestehen kann, die wiederum aus verschiedenen Komponenten bestehen, müssen die Einzelergebnisse aggregiert werden, um so am Ende ein Gesamtergebnis zu erhalten, das zur Einschätzung der Qualität der Softwaredokumentation genutzt werden kann.
+
+Dazu wird dem \textit{MetricResultBuilder} jedes Ergebnis mittels der \textit{processResult}-Methode mitgeteilt, welches das Ergebnis in einer Liste speichert. Wenn alle Metriken verarbeitet sind, wird daraus ein Gesamtresultat gebildet. Dies geschieht durch die Methode \textit{getAggregratedResult}. Dabei wird standardmäßig ein arithmetischer Mittelwert gebildet. Durch Ableitung kann diese Methode überschrieben werden, um den Median oder eine Gewichtung bei der Bildung des Gesamtergebnisses zu verwenden, sodass die Wahl des Algorithmus flexibel bleibt. Ein \textit{ResultBuilder} basiert auf dem Vorbild des Design-Patterns \enquote{Builder} aus \cite[S.139-149]{gamma2015design}, da es aus einzelnen Metrikresultaten ein vollständiges Metrikergebnis baut.
 
 
  
+\subsubsection{Zuordnung der Gewichte}\label{chapter_weights_assign}
+Für einige Algorithmen muss eine Gewichtung vorgenommen werden, um bestimmte Ergebnisse besser oder schlechter zu bewerten. Dazu muss jedes Teilergebnis ein Gewicht zugeordnet werden. 
+
+Insgesamt kann ein Teilergebnis anhand von drei Kategorien gewichtet werden. Durch die Gewichtung aufgrund der verwendeten Metrik können bestimmten Metriken einen größeren Einfluss auf das Gesamtergebnis haben, wenn diese als vertrauenswürdiger empfunden werden. Durch die Gewichtung von Dateien kann beispielsweise die öffentliche \ac{API} einen größeren Einfluss auf die Bewertung nehmen, da diese Komponenten bzw. Dateien sehr kritisch sein können und daher gut verstanden werden müssen. Auch eine Gewichtung nach Komponenten kann in bestimmten Situationen sinnvoll sein. So kann beispielsweise argumentiert werden, dass Methoden, die durch ihre Parameter, Rückgabewerte und geworfene Ausnahmen komplexer als Felder sind, höher gewichtet werden sollen.
+
+Die Zuordnung der Gewichte erfolgt über einen \textit{WeightResolver}, welches eine Schnittstelle anbietet, um einen Bezeichner auf ein Gewicht abzubilden. Bei dem eindeutigen Namen eines Metrikobjektes kann hierfür eine assoziative Liste verwendet werden. Auch bei Komponenten, die durch ihren Klassennamen (wie z.~B. \textit{ClassComponent}) repräsentiert werden, ist  eine solche assoziative Liste sinnvoll, da es nur eine begrenzte Anzahl an Metriken bzw. Komponenten existieren kann.
+Für Dateipfade ist dies allerdings nicht praktikabel, da es eine Vielzahl an Dateien geben kann. Stattdessen können hier ähnlich wie bei der Filterung von Dateien in Kapitel \ref{chapter:traversing} Wildcard-Patterns verwendet werden. Eine assoziative Liste kann dazu jedes Wildcard-Patterns und das dazugehörige Gewicht speichern. Bei einer Abfrage kann das Gewicht des ersten Eintrages zurückgegeben werden, bei dem der Dateipfad mit dem Wildcard-Pattern kompatibel ist. Dies ermöglicht es, ganze Verzeichnisse oder Dateien mit bestimmten Namen stärker zu gewichten. 
+
+Bei der Suche nach dem passenden Gewicht zu den Dateien und Komponenten kann es vorkommen, dass das passende Gewicht nicht gefunden wird. Um hierdurch entstehende Probleme zu vermeiden, wird ein dann ein Standardwert genommen (z.~B. 1). 
+
+Jedes \textit{MetricResult}-Objekt enthält ein Tupel von drei Namen, welche die Quelle dieses Ergebnisses repräsentieren (Dateipfad, Komponententyp und eindeutiger Metrikname). Der Dateipfad beschreibt, in welcher Datei die Komponente liegt, die durch dieses Teilergebnis analysiert wurde. Der Komponententyp enthält den Klassennamen der Komponente und gibt somit Aufschluss darüber, ob diese Komponente eine Klasse, Methode etc. ist. Bei einer Klasse würde beispielsweise die Zeichenkette \enquote{ClassComponent} gespeichert werden. Durch den eindeutigen Metrikname (siehe Kapitel \ref{chapter:metric_impl} wird zuletzt festgelegt, welche Metrik dieses Teilresultat produzierte. Alternativ könnte auch hier der Klassenname der Metrik verwendet werden, da aber eine Metrik durch Verwendung verschiedener Parameter auch mehrfach angewendet werden kann und so auch unterschiedlich gewichtet werden könnte, ist ein eindeutiger Name hier sinnvoller.
+
+  \begin{figure}[h!]
+ \begin{tikzpicture}[scale=0.75, every node/.style={scale=0.75}]
+ \pgfmathsetlengthmacro\breite{6cm}
+\pgfmathsetlengthmacro\hoehe{2.567cm}
+\pgfmathsetlengthmacro\InnerSep{0.4cm}
+\node[draw,
+anchor=center, 
+inner sep=0pt, 
+minimum width=5cm, text width=8cm-\InnerSep,
+align=justify,minimum height=1.5cm] (java) {\textbf{class} Main\{\newline 
+\hspace*{0.1cm}\}};
+
+\node[draw,text width=5.5cm, left = of java](java2){
+/** \textbf{Commented} */ \newline
+     \hspace*{0.1cm}\textbf{public} \textbf{void} method()\{\newline
+    \hspace*{0.1cm}\}\newline
+};
+\draw[line width=0.05cm]    (java2) -- (-4,-3.5) ;
+\draw [line width=0.05cm](java) -- (-4,-3.5);
+\draw[thick,line width=0.05cm] (-4,-3.5) -- (-4,-3.5);
+
+\node[above=-0.0 of java2,line width=0cm]{Program.java};
+
+\node[above=-0.0 of java,line width=0cm]{Main.java};
+
+
+\draw [] (-11,-3.5) rectangle(5,-19);
+\begin{scope} {0,-10}
+       \begin{object}[text width=10cm]{builder}{-4,-10}
+        \instanceOf{WeightedMetricResultBuilder}
+        \attribute{resultList={[r1,r2,r3]}}
+      \end{object}
+      \begin{object}[text width=6cm]{r1}{-4,-5 }
+        \instanceOf{MetricResult}
+        \attribute{result=100}
+        \attribute{creators=(Program.java,\newline
+        \hspace*{1.6cm}MethodComponent, \newline
+        \hspace*{1.6cm}simple\_comment)}
+      \end{object}
+      
+        \begin{object}[text width=6cm]{r2}{0,-14 }
+        \instanceOf{MetricResult}
+        \attribute{result=0}
+        \attribute{creators=(Main.java,\newline
+        \hspace*{1.6cm}ClassComponent,\newline
+        \hspace*{1.6cm}simple\_comment)}
+      \end{object}
+      
+           \begin{object}[text width=6cm]{r3}{-7,-14 }
+        \instanceOf{MetricResult}
+        \attribute{result=100}
+        \attribute{creators=(Program.java,\newline
+       \hspace*{1.6cm}MethodComponent,\newline
+       \hspace*{1.6cm}public\_members)}
+      \end{object}
+      
+
+   
+\end{scope}
+\begin{scope}[line width=0.05cm]
+    \aggregation{builder}{}{}{r1}{}{}
+    \aggregation{builder}{}{}{r2}{}{}
+    \aggregation{builder}{}{}{r3}{}{}
+
+\end{scope}
+
+    
+\end{tikzpicture}
+     
+     \caption{ Veranschaulichung der Bildung eines Gesamtergebnisses}
+     \label{fig:metric_weighting}
+ \end{figure}
+Durch dieses Tupel kann für jedes Teilergebnis die Gewichtung der Metrik, der Komponente und des Dateipfades  abgerufen werden. Durch Multiplikation  aller Gewichtungen entsteht ein Gesamtgewicht. Abbildung \ref{fig:metric_weighting} veranschaulicht anhand eines vereinfachten Objektdiagramms wie mittels Gewichtung von verschiedenen Ergebnissen ein Gesamtergebnis entstehen kann, indem der Algorithmus in Kapitel \ref{chapter:weighted_aggreg} verwendet wird. Hier werden zwei Dateien analysiert. Die erste Datei \enquote{Program.java} enthält nur eine öffentliche Methode \enquote{method}, was in Java eigentlich nicht möglich ist, aber hier zur Vereinfachung zugelassen sein soll. Die zweite Datei \enquote{Main-java} enthält eine nichtöffentliche Klasse \enquote{Main}. In diesem Beispiel werden zwei Metriken verwendet. Die erste Metrik prüft das Vorhandensein der Dokumentation bei allen Komponenten, während die zweite Metrik nur öffentliche Komponenten betrachtet (siehe Kapitel \ref{chapter:metrics_coverage}). In diesem Beispiel soll die Datei \enquote{Main.java} mit dem Faktor $3$ gewichtet werden. Methoden sollen mit dem Faktor $4$ gewichtet werden. Die zweite Metrik \enquote{public\_members} wird mit dem Faktor $2$ gewichtet. Alle anderen Dateien, Komponenten und Metriken werden mit dem Standardfaktor $1$ gewichtet.
+
+Das erste Teilergebnis \textit{r1} ist 100, da es die  Methode \enquote{method} beschreibt, welche dokumentiert ist. Auch das dritte Teilergebnis \textit{r3} hat den Wert 100, da es die gleiche Komponente nur mit der zweiten Metrik beschreibt. Das zweite Teilergebnis \textit{r2} hat den Wert 0, da es die undokumentierte Klasse \enquote{Main} beschreibt.  Es gibt kein weiteres Teilergebnis von \enquote{Main.java}, da die zweite Metrik jegliche nichtöffentliche Komponenten ignoriert. Die Teilergebnisse werden durch den \textit{WeightedMetricResultBuilder} intern gespeichert. 
+
+Das Teilergebnis jeder gefundenen Komponente enthält gemäß den obigen Vorgehen ein Tupel aus Dateiname, Komponentenname und Metrikname. Beispielsweise enthält das erste  Teilergebnis \textit{r1} das Tupel \enquote{(Program.java,MethodComponent, simple\_comment)}, wobei die einzelnen Bestandteile des Tupels Zeichenketten sind. Basierend auf diesen Informationen kann der \textit{WeightedResultBuilder} eine Gewichtung vornehmen. Das erste Teilergebnis würde mit dem Faktor $1*4*1=4$ gewichtet werden, da es von einer Methode stammt  und ansonsten nicht besonders gewichtet wird. Das zweite Teilergebnis erhält das Gewicht $3*1*1=3$, da es von der Datei \enquote{Main.java} stammt. Das dritte Teilresultat besitzt die Gewichtung $1*4*2=2$, da es von der zweiten Metrik berechnet wurde und auch von einer Methode stammt. 
+
+Basierend auf diesen Teilresultaten kann ein Gesamtergebnis berechnet werden. Hierzu wird das jeweilige Ergebnis mit dessen Gewicht multipliziert und anschließend durch die Summe der Gewichte geteilt. Bezogen auf das Beispiel würde die Rechnung folgendermaßen aussehen:
+\begin{equation}
+    \frac{4*100 + 3*0 + 8*100}{4+3+8}=80
+\end{equation}
+Dieses Ergebnis ist dann Maß für die Bewertung der Dokumentationsqualität dieses hypothetischen Projektes. 
+\clearpage
+\subsection{Sprachspezifische Informationen für Metriken}\label{chapter:langSpec}
+Da das Tool für möglichst viele objektorientierte Programmiersprachen konzipiert werden soll, muss eine Generalisierung erfolgen, da jede Sprache ihre Eigenheiten hat und möglicherweise besondere Funktionen anbietet, die nur schwer in einem abstrakten Format zu bringen sind.
+
+Nichtsdestotrotz können solche sprachspezifischen Eigenheiten auch in der Dokumentation erwähnt werden. Daher ist es eine sinnvolle Idee, dass Metriken auch diese Besonderheiten benutzen, um ein genaueres Bild der Dokumentationsqualität zu erfahren, ohne jedoch zu wissen, welche Programmiersprache gerade analysiert wird. Beispielsweise können die Checked-Ausnahmen in Java mit den Informationen in der Javadoc verglichen werden. Des Weiteren können. Komponenten einer Schnittstelle oder abstrakten Klasse, die es nicht jeder Programmiersprache gibt, stärker geprüft werden und bei mangelhafter Dokumentation stärker gewichtet werden, da dort die Erfüllung eines Vertrages wichtig ist und daher eine gute Dokumentation wichtiger ist. Auch eine feinere Abstufung je nach Zugriffsmodifizierer einer Komponente wäre so möglich, sodass eine undokumentierte öffentliche Komponente schlechter bewertet wird als eine Komponente mit dem Zugriffsmodifizierer  \textit{protected}. 
+
+Um solche sprachspezifischen Analysen zu erlauben, besitzt jede Metrik Zugriff auf ein Objekt der Klasse \textit{LanguageSpecificHelper}. Wenn eine neue Programmiersprache hinzugefügt werden soll, kann von dieser geerbt werden. In der Klasse \textit{LanguageSpecificHelper} sind bereits einige Methoden definiert, die einigen Metriken bei der Bewertung helfen. So bewertet die Methode \textit{rateDocumentationCompatibility}, ob die Dokumentation alle sprachspezifischen Informationen erläutert (z.~B. \textit{@throws}). Die Methode \textit{shallConsider} kann genutzt werden, um überschriebene Methoden zu ignorieren. 
+
+Um eigene Methoden hinzuzufügen, muss diese in der Basisklasse definiert werden. Diese Methode sollte in der Basisklasse keine Aktionen durchführen, sondern entweder gar nichts tun oder Rückgabewerte haben, die keinen Einfluss auf Metriken haben. Anschließend kann diese Methode in einer sprachspezifischen abgeleiteten Klasse der Basisklasse korrekt implementiert werden. Die entsprechende Methode kann dann durch Änderung des Quellcodes der Metrik an den passenden Stellen von der Metrik verwendet werden. So kann beispielsweise das Resultat einer Metrik modifiziert werden oder weitere Ergebnisse mittels des \textit{MetricResultBuilder} angefügt werden.
+
+
+
+
+

@@ -1,17 +1,18 @@
 \documentclass[a4paper,12pt,oneside, bibliography=totoc]
 {scrbook}
 \usepackage[utf8]{inputenc}
-
+\usepackage{pgf-umlcd}
 % Schrift und -kodierung
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-
+\usepackage{tcolorbox}
 % Sprache/Silbentrennung
 \usepackage[german]{babel} %TODO change to german if desired
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{floatflt}
 \usepackage{float} 
+\usepackage{verbatim}
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{pbox}
@@ -81,7 +82,8 @@
 	\end{center}
 	}
 	\subject{Bachelorarbeit}
-	\title{Entwicklung eines Tools zur Analyse von Javadoc mit Einbindung in Github Actions }
+	\title{Entwicklung einer Anwendung zur Bewertung der Dokumentation von Quellcode mithilfe von GitHub Actions
+ }
 	\author{Timo Schoemaker\\ Immatrikulationsnummer: 978621} %engl. Matriculation Number
 
 	\date{\today\\
@@ -105,19 +107,23 @@
 
 
 
-
-
-\mainmatter %switch roman auf arabic page numbers
+\input{Misc/langDef}
 \input{Misc/Acronyms} %See inside for usage of acronmys
+\mainmatter %switch roman auf arabic page numbers
+
+
+
 \chapter{Einführung}
 \setcounter{page}{1} %Seitenzahlen hier mit 1 anfangen
 
 	%Include text from other files into the document --> great for structuring
 	\input{Introduction/introduction}
-
-
-
+\begingroup
+\renewcommand{\cleardoublepage}{} % TODO maybe removing this and next
+\renewcommand{\clearpage}{}
 \chapter{Grundlagen}
+\endgroup
+
 	%Multiple input files for larger chapters are also possible
 	\input{Background/grundlagen}
 
@@ -127,7 +133,7 @@
 \input{Main/umsetzung}
 %\input{Main/main}
 
-\clearpage
+
 \input{Main/Metriken}
 
 \chapter{Evaluation}

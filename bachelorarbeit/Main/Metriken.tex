@@ -1,77 +1,128 @@
-\section{Metriken}\label{chapter:metrics}
-Im Folgenden werden die Metriken präsentiert, die in der finalen Version des \textit{JavadocEvaluator} implementiert worden sind. Dabei werden pro Metrik einige Vor- und Nachteile genannt, um den zukünftigen Anwender eine Entscheidungshilfe zu bieten. 
-\subsection{Metrik: Anteil dokumentierter Komponenten an allen Komponenten}\label{chapter:metrics_simple_comment}
-Bei dieser Metrik werden dokumentierte Komponenten mit hundert Punkten bewertet, während undokumentierte Komponenten null Punkte erhalten. Dabei ist es irrelevant, wie gut die Dokumentation ist. Selbst die leere Dokumentation \textbf{/***/} würde ein Rating von 100 erhalten, da hier eine weitergehende Differenzierung zwar umsetzbar ist, aber dafür eine davon abgeleitete Metrik besser geeignet wäre. Vorteilhaft an dieser Metrik ist die Einfachheit der Implementierung. Außerdem ist sie als grober Indikator gut geeignet, die Qualität der Dokumentation abzuschätzen. Ein Nachteil an dieser Metrik ist, dass sie auch sinnlose Kommentare, die leer oder nichts mit der dokumentierten Komponente zu tun haben, mit der vollen Punktzahl bewertet werden. Außerdem bestehen moderne Softwareprojekte aus vielen verschiedenen Komponenten, wobei einige Komponenten nur an einigen wenigen Stellen verwendet werden und daher nur selten dokumentiert wurden. Aus diesen Grund würde diese Metrik die \enquote{wahre} Dokumentationsqualität unterschätzen. 
-Diese Metrik wurde unter anderem in \cite[S. 5]{HowDocumentationEvolvesoverTime} erläutert und dort als \enquote{ANYJ} bezeichnet. Da dies einfache Metrik ist und für eine grobe Einschätzung der Qualität der Dokumentation geeignet ist, wurde diese Metrik im Tool implementiert.
+\section{Implementierte Metriken}\label{chapter:metrics}
+In diesem Abschnitt wird ein Überblick über einige Metriken gegeben, die in der finalen Version des Tools implementiert sind. Dabei werden die Hintergründe der Metriken erläutert und Vor- und Nachteile der einzelnen Metriken genannt. Die implementierten Metriken lassen sich, abhängig davon, welche Aspekte der Dokumentation berücksichtigt werden,  grob in drei Kategorien einteilen.
 
-\subsection{Metrik: Anteil dokumentierter öffentlicher Komponenten an allen öffentlichen Komponenten }
-Diese Metrik basiert auf der vorherigen Metrik und verwendet sie sogar intern. Im Unterschied zu dieser werden hier nur öffentliche Komponenten betrachtet. Dies bedeutet, dass alle nicht öffentlichen Komponenten so betrachtet werden, als wären sie nicht existent. Die öffentlichen Komponenten dagegen werden wie oben mit hundert bzw. null Punkten bewertet. Dies hat den Vorteil, dass nur die Komponenten, die wahrscheinlich von anderen Komponenten verwendet werden müssen und daher auch gut verstanden werden müssen, bei der Bewertung der Qualität der Dokumentation berücksichtigt werden. So hat der Entwickler einen guten Überblick über die Stellen, die nach gängiger Erfahrung unbedingt besser dokumentiert werden müssen. Auf der anderen Seite werden sinnlose Kommentare weiterhin akzeptiert und nicht öffentliche Komponenten werden ohne Berücksichtigung ihrer Wichtigkeit ignoriert, obwohl auch hier eine gute Dokumentation Fehler vermeiden kann und zu einer besseren Softwarequalität führen kann. 
+\subsection{Metriken, welche die Abdeckung überprüfen}\label{chapter:metrics_coverage}
+Eine grundsätzliche Möglichkeit zur Bewertung der Dokumentationsqualität ist es, die Abdeckung der Dokumentation zu prüfen. Dabei wird aus einer  Teilmenge aller Komponenten die Anzahl der dokumentierten Komponenten ermittelt und dieser Wert  durch die Anzahl aller Komponenten in dieser Teilmenge geteilt. Diese Metriken werden in der wissenschaftlichen Literatur als \textit{ANYJ} oder \textit{DIR} bezeichnet \cite[S. 5]{HowDocumentationEvolvesoverTime}.
 
-Diese Metrik wurde unter anderem von \cite{Doautomaticrefactoringsimprovemaintainability?Anindustrialcasestudy} verwendet, um die Wirkung von Refactorings zu analysieren, Auch PMD und Checkstyle besitzen Optionen, um nur öffentliche Komponenten zu analysieren, sodass diese Metrik durchaus Relevanz hat und daher implementiert wurde.
+Bei der Wahl der Teilmenge gibt es zwei nahe liegenden Möglichkeiten. Bei der ersten Möglichkeit werden alle Komponenten überprüft, sodass die Teilmenge gleich der Gesamtmenge der Komponenten ist. Für eine gute Bewertung wird somit verlangt, dass möglichst jede Komponente dokumentiert wird. Bei der zweiten Möglichkeit werden nur die öffentlichen Komponenten untersucht und alle nicht öffentlichen Komponenten so behandelt, als ob sie nicht existieren würden. Dies hat den Vorteil, dass nur Komponenten untersucht werden, die wahrscheinlich von anderen Komponenten verwendet werden und somit besser verstanden werden müssen \cite[S. 253]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}. 
 
- 
- \subsection{Metrik: Vollständigkeit der Dokumentation von  Methoden}
- 
-Viele Methoden in objektorientierten Programmiersprachen besitzen Parameter und haben einen Rückgabewert. Diese stellen die Eingabe und Ausgabe der Methode dar und müssen genau verstanden werden, um sie korrekt anzuwenden. Dazu ist eine gute Dokumentation sinnvoll. In Javadoc und vielen anderen Dokumentationssystemen können einzelne Parameter dokumentiert werden. Zur Bewertung der Dokumentation kann geprüft werden, wie viele Parameter der Methode dokumentiert sind. Demgegenüber können auch Parameter dokumentiert werden, die gar nicht mehr existieren. Dies kann beispielsweise das Resultat von einem Refactoring sein. Diese \enquote{Phantomparameter} können verwirren und zu Problemen führen, sodass es auch hier sinnvoll ist, die fehlerhaft dokumentierten Parameter gezählt werden können. In dieser Metrik jeweils der Anteil der falsch dokumentierten Parameter (seien sie existent aber nicht dokumentiert oder dokumentiert aber nicht existent) berechnet und so eine Bewertung ermittelt.
- 
- Dazu sollte auch der Rückgabewert überprüft werden. Eine Methode ohne Dokumentation des Rückgabewertes wird mit null Punkten bewertet, während eine Methode mit dokumentierten Rückgabewert mit hundert Punkten bewertet wird. Natürlich werden dabei Methoden, die \enquote{void} zurückgeben oder Konstruktoren auch mit hundert Punkten bewertet, da diese keinen dokumentierbaren Rückgabewert besitzen. 
- 
- Diese Metrik wird auch in Checkstyle implementiert, das auf nicht dokumentierte Parameter hinweist. In der wissenschaftlichen Literatur wird diese Metrik unter anderem in \cite[S. 5]{HowDocumentationEvolvesoverTime} genannt und dort als \enquote{DIR} bezeichnet. Da eine vollständig dokumentierte Methode zu einer guten Dokumentationsqualität beiträgt, wurde auch diese Metrik aufgenommen.
 
-\subsection{Metrik: Ignorieren von Getter und Setter }
-Getter und Setter sind typische Konstrukte in objektorientierten Programmiersprachen, die es ermöglichen, auf ein gekapseltes Feld zu lesen oder es zu verändern. Dadurch ermöglichen sie einen kontrollierten Zugriff auf die Felder und können so Fehler vermeiden \cite[S. 235]{OntheUseofPropertiesinJavaApplications}. Viele dieser Getter- und Setter-Methoden werden oft nicht dokumentiert, da sie nur triviale Codezeilen enthalten und sehr kurz sind, sodass eine Dokumentierung den Code aufbläht und keine Vorteile bietet. \cite[S. 254]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}. Auch Checkstyle bietet die Option an, diese trivialen Methoden bei der Analyse der Softwaredokumentation auszuschließen. 
+Durch diese prozentuale Angabe lässt sich überprüfen, ob ausreichend viele Komponenten dokumentiert sind. Allerdings überprüfen diese Metriken nur, ob die Komponente dokumentiert ist oder nicht. Ein leerer, sinnloser oder sachfremder Kommentar würde dennoch mit 100 Punkten bewertet werden. Falls alle Komponenten untersucht werden, kann außerdem das Problem auftreten, dass einige Komponenten nur einem kleinen Bereich des Programms verwendet wird, sodass sie für die Dokumentationsqualität weniger relevant sein können. 
 
-Nicht trivial ist dagegen die Implementierung einer Metrik, die Getter- und Setter-Methoden ausschließt. Laut der JavaBeans-Spezifikation \cite[S. 55]{javabeans} sollen diese Zugriffsmethoden mit dem Präfix \enquote{get} bzw. \enquote{set} beginnen. Außerdem besitzt ein Getter keine Parameter und besitzt einen Rückgabetyp. Ein Setter sollte den Rückgabetyp \enquote{void} haben und exakt ein Parameter übergeben bekommen. Abweichend davon können Getter, die einen Boolean zurückgeben, mit dem Präfix \enquote{is} beginnen. Die Namenskonvention ist allerdings sprachspezifisch und noch kein eindeutiges Indiz für einen Getter bzw. Setter. Nichtsdestotrotz wurde entschieden die Filterung nach den JavaBeans-Kriterien durchzuführen und dafür eine Möglichkeit anzubieten, die Namenskonvention nach eigenen Wünschen zu konfigurieren. 
+Als Erweiterung der Abdeckungsmetriken kann bei Methoden überprüft werden, ob auch ihre Parameter und der Rückgabewert dokumentiert sind. Dies ist sinnvoll, da diese auch Teil der Methode sind und zum Verständnis der Methode beitragen \cite[S. 5]{HowDocumentationEvolvesoverTime}. Zudem kann es sinnvoll sein, triviale Getter und Setter, die den Wert eines privaten Feldes auslesen oder verändern, bei der Bewertung auszuschließen. Schließlich haben diese Methoden einen klaren Zweck, der oft keiner weiteren Kommentierung bedarf \cite[S. 254]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}.
 
-Der Vorteil des Ausschließens von Getter und Setter wurde bereits genannt. Die Kommentare von diesen Zugriffsmethoden sind oft repetitiv und enthalten keinen Mehrwert, sodass sie überlesen werden und der größere Code sogar unübersichtlicher wird. Allerdings sollte die dazugehörigen Felder trotzdem dokumentiert werden, um ihren Sinn und Zweck zu begründen. Dies wird hier nicht durchgesetzt, sodass es dazu kommen kann, dass Felder nicht dokumentiert sind und auch die dazugehörigen Zugriffsmethoden keine Hilfe bieten. Dies führt vermutlich zu einer schlechteren Lesbarkeit, da jedes Feld eine Bedeutung hat, die nicht immer offensichtlich ist.
-\subsection{Flesch-Reading Ease Score}\label{chapter:metrics_flesh}
-Der Flesch-Reading-Ease-Score\cite[S. 21]{ThePrinciplesofReadability} ist eine einfache Formel zur heuristischen Ermittlung der Lesbarkeit eines englischsprachigen Textes. Dabei werden die Anzahl der Sätze, die Anzahl der Wörter und die Anzahl der Silben im Text als Eingabeparameter. Die Formel lautet:
+Bei der Abdeckung der Dokumentation von Methoden könnte auch die Länge der Methode berücksichtigt werden, was aber in der Literatur nicht erwähnt wird. Dabei wird jede Methode mit ihrem \ac{LOC} gewichtet und die Summe der \ac{LOC} der dokumentierten Methoden durch die Summe der \ac{LOC} aller Methoden geteilt wird. Dies hat den Vorteil, dass undokumentierte Getter und Setter, die nur wenige Codezeilen haben, das Ergebnis nicht so stark beeinflussen, aber trotzdem berücksichtigt werden. 
+
+
+\subsection{Metriken, welche die Semantik überprüfen}\label{chapter:metrics_semantic}
+
+Da nicht nur das Vorhandensein, sondern auch die Aussagekraft und Verständlichkeit der Dokumentation wichtig sind, bietet das Tool weitere Metriken an. Diese Metriken überprüfen die Semantik, also den Inhalt, der Dokumentation und können so Aufschluss darüber geben, ob die Dokumentation tatsächlich hilfreich ist. 
+
+Zur Bewertung der Verständlichkeit eines englischsprachigen Textes ist der Flesch-Score sehr bekannt \cite[S. 21]{ThePrinciplesofReadability}. Dies ist eine Formel zur heuristischen Bewertung der Lesbarkeit eines Textes, welches die Anzahl der Sätze, Silben und Wörter berücksichtigt. Die Formel lautet:
 \begin{equation}
    206.835-1.015*\frac{W}{S}-84.6*\frac{H}{W}
-\end{equation}. Dabei ist $S$ die Anzahl der Sätze, $W$ die Anzahl der Wörter und $H$ die Anzahl der Silben. 
+\end{equation}
 
-Die Formel liefert normalerweise einen Wert von 0 bis 100 zurück. Dabei bedeutet der Wert 0, dass der Text sehr kompliziert geschrieben ist und nur von Personen mit akademischer Bildung gut verstanden werden kann. Ein Wert von 100 bedeutet dagegen, dass der Text sehr einfach aufgebaut ist und daher schon von einem Fünftklässler verstanden werden kann. Diese Formel und verwandte Formeln werden auch von verschiedenen US-Behörden verwendet, um die Lesbarkeit ihrer Dokumente zu verbessern\cite[S. 72]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}
+Dabei ist $S$ die Anzahl der Sätze, $W$ die Anzahl der Wörter und $H$ die Anzahl der Silben. Die Formel liefert einen Wert von 0 bis 100 zurück, wobei 0 auf einen sehr komplizierten und 100 auf einen leichten Text hindeutet. Diese Formel und verwandte Formeln werden auch von verschiedenen US-Behörden verwendet, um die Lesbarkeit ihrer Dokumente zu verbessern \cite[S. 72]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. Die Implementation der Metrik nimmt an, dass ein Flesh-Score von 70 mit 100 Punkten bewertet werden sollte, da mehr als 80 \% der US-Bevölkerung solche Texte verstehen können und diese Texte weder zu leicht als zu schwer sein sollen \cite[S. 22]{ThePrinciplesofReadability}. Für kleinere Flesch-Score werden weniger Punkte vergeben. Für größere Flesch-Scores werden ebenfalls Punkte abgezogen, aber nicht mehr als 15, da sehr leichte Texte besser sind als schwierige Texte. 
+Bei der Verwendung des Flesh-Scores sollte beachtet werden, dass die Bestimmung der Silbenzahl eines Wortes nicht immer trivial ist; bei der Entwicklung des Tools musste bei einem Austausch einer Bibliothek die Testmethode angepasst werden, da das Wort \enquote{themselves} plötzlich drei statt zwei Silben hatte. Dies hängt natürlich auch von der Aussprache und somit von kulturellen Gegebenheiten ab. Dies gilt natürlich auch für Wörter und Sätze. 
 
-Die Flesch-Metrik nutzt diese Formeln, um eine Bewertung der Softwaredokumentation zu erhalten. Dabei wird angenommen, dass ein Flesch-Score von ca. 70 optimal ist. Dokumente mit einer Bewertung von 60 - 70 werden von etwas mehr als 80 Prozent der erwachsenen US-Bevölkerung verstanden, sodass diese Texte lesbar genug sein sollten.
+Der Gunning-Fog-Index ist eine ähnliche Formel. Sie berücksichtigt nicht die Anzahl der Silben, sondern die Zahl der komplizierten Wörter. Ein Wort gilt dabei als kompliziert, wenn es mehr als zwei Silben hat. Dabei gibt der Gunning-Fog-Index die Anzahl an Schuljahren zurück, die ein Leser absolviert haben muss, um den Text gut verstehen zu können. Die Definition des komplizierten Wortes ist aber umstritten. So ist beispielsweise das Wort \enquote{vacation} drei Silben lang, aber nicht unbedingt kompliziert \cite[S. 10]{bogert1985defense}.
 
-Aus diesen Grund wurde eine mathematische Funktion ermittelt, die für einen Flesch-Score von 70 eine Bewertung von 100 zurückgibt. Für einen größeren Flesch-Score wird eine lineare Funktion verwendet, die für einen sehr leichten Text (Flesh-Score 100 oder darüber) eine Bewertung von 85 zurückgibt. Damit sollen Programmierer für sehr leichte Texte nicht stark bestraft, aber trotzdem ermuntert werden einen für technische Dokumentationen angemessenen Text zu schreiben.
+\bigskip
+Eine weitere Möglichkeit, den Inhalt einer Dokumentation zu bewerten, ist es, ihn mit dem Namen der dokumentierten Komponente zu vergleichen. Ein Kommentar, der einen Großteil des Namens der Komponente wiederholt bietet keinen Mehrwert. Auch ein Kommentar, der keinen Zusammenhang mit der dokumentierten Komponente erkennen lässt, verliert an Nutzen \cite[S. 86]{Qualityanalysisofsourcecodecomments}.
+Um diese Kohärenz zu messen, kann die Anzahl der gemeinsamen Wörter zwischen Dokumentation und des Namens der dokumentierten Komponente ermittelt werden und dies durch die Zahl der Wörter der Dokumentation geteilt werden. Die Autoren in \cite[S. 87]{Qualityanalysisofsourcecodecomments} vertreten die Ansicht, dass dieser \textbf{Kohärenzkoeffizient} von mehr als 0.5 und gleich 0 auf eine schlechte Dokumentation hindeutet, da es im ersteren Fall eine starke Ähnlichkeit zwischen dem Namen und der Dokumentation gibt und im zweiten Fall überhaupt keine Gemeinsamkeiten existiert. Die Implementation der Metrik bewertet in beiden Fällen die Dokumentation mit 0 Punkten, in allen anderen Fällen vergibt sie 100 Punkte.
 
-Für einen Flesch-Score unter 70 wird eine quadratische Funktion verwendet, die einen Flesch-Score von 60 noch sehr fair behandelt, aber kleinere Flesch-Scores, die auf einen komplizierten Text hindeuten, deutlich schlechter bewertet werden. Damit sollen Entwickler dazu ermuntert werden, ihre Texte nicht allzu kompliziert zu gestalten. Dies hilft nachfolgenden Entwicklern, aber auch dem Erzeuger der Dokumentation, beim Verständnis des Quellcodes und verhindert so potenzielle Bugs.
+	\begin{figure}
+			\lstinputlisting
+			[caption={Zwei Methoden mit mangelhafter Kohärenz},
+			label={lst:coherence_example},
+			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			{figures/metrics/coherence.java}
+	\end{figure}
+		
+ Listing \ref{lst:coherence_example} zeigt zwei Methoden, bei denen die Kohärenz nicht gut ist. Bei der ersten Methode ist der Kohärenzkoeffizient 0.75, da alle Wörter des Kommentars außer \enquote{the} im Komponentennamen auftreten. Zur Verbesserung der Kohärenz könnte beispielsweise erwähnt werden, wie sich die Methode bei negativen Werten verhält. Bei der zweiten Methode gibt es überhaupt keine Gemeinsamkeiten zwischen den Namen der Komponente und der Dokumentation, sodass der Kohärenzkoeffizient gleich 0 ist. Hier könnte z.~B. zur Verbesserung  das Wort \enquote{absolute} in der Dokumentation erwähnt werden.
 
-Bei der Verwendung des Flesch-Scores sollte beachtet werden, dass die Bewertung von Flesch bei kurzen Texten, zum Beispiel aus nur einem Satz, stark fluktuiert. Außerdem ist die Bestimmung der Silbenzahl eines Wortes nicht immer trivial; bei der Entwicklung des Tools musste bei einem Austausch einer Bibliothekt die Testmethode angepasst werden, da das Wort \enquote{themselves} plötzlich drei statt zwei Silben hatte. Dies hängt natürlich auch von der Aussprache und somit von kulturellen Gegebenheiten ab. Dies gilt natürlich auch für Wörter und Sätze. 
-\subsubsection{Parameter}
-\begin{itemize}
-    \item \textit{considerTags} Wenn true, berechne den Mittelwert aus allen Flesch-Score der einzelnen Tags und der allgemeinen Beschreibung des Javadocs, standardmäßig false
-\end{itemize}
+Die Kohärenzmetrik hilft den Entwickler dabei, dass die Dokumentation zu dem Namen der dokumentierten Komponente passt und gleichzeitig einen Mehrwert bietet, sodass die Dokumentation nützlich ist. Allerdings können Synonyme den Wert verfälschen, da dann keine gemeinsamen Wörter gefunden werden. Auch durch Füllwörter (wie z.~B. \textit{the}, \textit{of} etc.) kann die Bewertung unterschätzt werden.
 
- \section{Eigene Metriken}
- Im Folgenden werden Metriken aufgegriffen, die kaum in der wissenschaftlichen Literatur erwähnt werden, aber durchaus eine Betrachtung wert sind. Auch hier werden einige Vor- und Nachteile der jeweiligen Metrik genannt.
- \subsection{Metrik: Bestrafung von undokumentierten langen Methoden}
-Es wird grundsätzlich empfohlen, möglichst kurze Methoden zu schreiben und längere Methoden in mehrere kleinere Methoden aufzuspalten. Jede Methode sollte dabei nicht mehr als vier Codezeilen lang sein \cite[S. 34]{martin2009clean}.
+\subsection{Metriken, die  nach Fehlern suchen}\label{chapter:metrics_errors}
+
+Die letzte Kategorie an Metriken analysiert die Dokumentation und sucht nach dem Vorkommen von bestimmten Fehlern, welche die Qualität der Dokumentation negativ beeinflussen können. Solche Fehler können beispielsweise Rechtschreibfehler oder fehlerhafte Formatierung (wie z.~B. nicht konformes \ac{HTML}) sein. In der offiziellen Javadoc-Dokumentation wird außerdem geraten, bestimmte Abkürzungen (wie z.~B. \textit{e.~g.}, \textit{aka.} oder \textit{i.~e.}) zu vermeiden \cite{HowtoWriteDocCommentsfortheJavadocTool}. 
+
+		\begin{figure}
+			\lstinputlisting
+			[caption={Methode mit unvollständiger Erklärung der Behandlung von Nullwerten},
+			label={lst:null_handling_example},
+			captionpos=b,language=java, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left]
+			{figures/metrics/null_handling.java}
+		\end{figure}
+		
+Bei Methoden sollte zudem darauf eingegangen werden, ob die Methode \textit{null} als Parameterwert akzeptiert oder \textit{null} zurückgeben kann, damit der Benutzer die Methode korrekt verwenden kann \cite{javadoc_coding_standards}. Listing \ref{lst:null_handling_example} zeigt eine Methode, bei denen die Behandlung von \textit{null} nur teilweise erwähnt wird. Beim ersten Parameter wird erwähnt, dass der Parameter niemals null sein kann und daher ein Nullwert zu einer Ausnahme führen kann.  Beim zweiten Parameter ist dies nicht klar und der Benutzer der Dokumentation wird im Unklaren gelassen, was zu einer fehlerhaften Verwendung der Methode führen kann.
+
+In allen Fällen sollte ein Verstoß gegen diese Konventionen zu Punkteabzug führen.
+Dazu können pro Verstoß Fehlerpunkte vergeben werden. Diese Fehlerpunkte können dann der Funktion 
+\begin{equation}
+     B(l)=S-(S-B_0)*e^{-k*l}
+ \end{equation} 
  
- Dennoch wird diese Empfehlung nicht immer befolgt. Im Kontext der Softwaredokumentation sollten diese größeren Methoden allerdings umso eher dokumentiert werden, da es ansonsten schwieriger ist, die Bedeutung der verschiedenen Parameter, des Rückgabewertes und allgemeinen Rolle der Funktion zu erfassen. Daher macht es Sinn undokumentierte Methoden mit vielen Codezeilen schlechter zu bewerten.
+ übergeben werden, die eine beschränkt fallende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung,  $k$ eine Konstante für die Wachstumsrate und $l$ die Zahl der Fehlerpunkte. Durch diese Funktion erhalten Kommentare mit vielen Fehlerpunkten eine geringere Bewertung als Kommentar mit keinen oder wenigen Fehlerpunkten. Die Wachstumsrate $k$ kann dabei parametrisiert sein und sollte auch von der jeweiligen Fehlerkategorie abhängen. So kann beispielsweise argumentiert werden, dass Rechtschreibfehler weniger gravierend sind als fehlerhaftes HTML. 
  
- Genau dafür wurde diese Metrik entwickelt. Jede Methode enthält unstrukturiert alle Befehle, Verzweigungen etc. Durch Splitten am Zeilenende lässt sich eine grobe Schätzung für die Anzahl der Codezeilen finden. Anschließend wird diese Information  an die Funktion
+ Bei allen Metriken sollte allerdings beachtet werden, dass diese nur nach relativ einfachen Fehlern suchen. Bei einer Prüfung des \ac{HTML}-Inhaltes werden beispielsweise nur nicht geschlossene Tags detektiert. Auch falsch-positive Ergebnisse können auftreten, wenn beispielsweise bei der Rechtschreibprüfung ein nicht im Wörterbuch vorkommendes Wort, das aber korrekt geschrieben ist, bemängelt wird.   
+ 
+ Als weitere Möglichkeit, die in der Literatur nicht erwähnt wird,könnten lange Methoden, die bestimmte Fehler aufweisen, härter bestraft werden. So kann beispielsweise argumentiert werden, dass lange Methoden, die sowieso vermieden werden sollten \cite[S. 34]{martin2009clean}, eher dokumentiert werden sollten, da sie komplexer sind. Daher können längere undokumentierte Methoden schlechter bewertet werden, indem sie mit Fehlerpunkten, welche äquivalent zu ihren \ac{LOC} sind, bestraft werden. 
+
+ \section{Algorithmen zur Bildung eines Gesamtergebnisses}
+Zur Bildung eines Gesamtergebnisses aus verschiedenen Teilresultaten gibt es verschiedene Möglichkeiten, die in diesen Abschnitt vorgestellt werden. Jeder vorgestellte Algorithmus hat bestimmte Voraussetzungen und ist nicht in jeder Situation gut geeignet.
+
+\subsection{Klassische Algorithmen}
+Die klassischen Algorithmen zur Berechnung eines Ergebnisses aus mehreren Ergebnissen sind hinlänglich bekannt. Sie alle basieren auf der Annahme, dass die dahinter liegende Verteilung symmetrisch ist. Im Kontext der besprochenen Metriken bedeutet dies, dass die Wahrscheinlichkeit für eine gute Bewertung ungefähr genauso sein sollte wie eine schlechte Bewertung. Bei vielen Metriken zur Bewertung der Softwarequalität kann diese Annahme nicht getroffen werden \cite[S. 313]{Youcantcontroltheunfamiliar:Astudyontherelationsbetweenaggregationtechniquesforsoftwaremetrics}. Auch bei den vorgestellten Metriken muss diese Annahme nicht zwangsläufig stimmen, sodass die Gesamtbewertung stets kritisch hinterfragt werden sollte. 
+\subsubsection{Arithmetischer Mittelwert}
+Der arithmetische Mittelwert wird durch die Klasse \textit{MetricResultBuilder} implementiert. Dieser Algorithmus berücksichtigt jedes Ergebnis gleichermaßen. Dies ist insbesondere dann sinnvoll, wenn keine guten Kriterien für die Gewichtung von Metriken, Dateien oder Komponenten gefunden werden können. Es sollte allerdings auch beachtet werden, dass der Mittelwert extreme Ausreißer berücksichtigt. Dies kann hier sinnvoll sein, da eine in Teilen sehr schlechte Dokumentation besser berücksichtigt wird und so ein verlässliches Gesamtergebnis geliefert wird.
+
+
+\subsubsection{Median}
+Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultate nach den bekannten Median-Algorithmus verarbeitet. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnisse gebildet. 
+
+Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat.  Zudem kann sich der Median stark ändern, wenn neue Komponenten hinzugefügt oder entfernt werden.
+
+
+\subsubsection{Gewichteter Mittelwert}\label{chapter:weighted_aggreg}
+Der gewichtete Mittelwert ist in der Klasse \textit{WeightedMetricResultBuilder} implementiert. Die Zuweisung der Gewichte erfolgt, wie in Kapitel \ref{chapter_weights_assign} beschrieben, durch einen \textit{WeightResolver}. Die Gewichte müssen nicht normiert werden, da dies während der Berechnung implizit erledigt wird. Die Resultate jeder Metrik werden multipliziert mit dessen Gewicht, dann aufsummiert und zuletzt durch die Summe aller Gewichte geteilt. 
+
+
+Dieser Algorithmus ermöglicht es, bestimmte Metriken zu bevorzugen bzw. zu benachteiligen. Dies ist sinnvoll, da nicht jede Metrik immer ein aussagekräftiges Ergebnis liefert und bestimmte Metriken je nach Situation ein besseres Bild über die Dokumentationsqualität liefern. Allerdings ist auch zu beachten, dass die Wahl der Gewichte nicht trivial ist und ein Vergleich von Ergebnissen, die verschiedene Gewichte verwenden, nicht sinnvoll ist.
+
+\subsubsection{Gewichteter Median}
+Der gewichtete Median wurde leicht abweichend nach \cite[S. 37]{YAGER199835} implementiert. Dabei wird zunächst die Summe der Gewichte berechnet und die Resultate nach ihrem Gewicht sortiert. Anschließend werden die sortierten Resultate und ihre Gewichte so lange aufsummiert, bis diese temporäre Summe die Hälfte der Gesamtsumme überschreitet. Das Metrikergebnis, bei der diese Bedingung zutrifft, ist das gesuchte Gesamtergebnis. Die Vor- und Nachteile dieses Algorithmus entsprechen den Vor- und Nachteilen des gewichteten Mittelwerts und des Medians. So muss auch hier eine Sortierung durchgeführt werden und die Wahl der richtigen Gewichte ist nicht trivial. 
+
+ \subsection{Algorithmen aus der Ökonomie}
+ 
+ Als Alternative zu den klassischen Algorithmen wurden Verfahren aus den Wirtschaftswissenschaften vorgestellt, die eine bessere Aggregierung der Einzelergebnisse ermöglichen sollen. Diese Verfahren werden in der Ökonomie benutzt, um die Ungleichheit von Einkommen mathematisch darzustellen. So besitzen in den meisten Staaten viele Menschen nur wenig Einkommen und nur einige Menschen ein sehr hohes Einkommen. Auch auf Softwareprojekten lässt sich diese Erfahrung übertragen, da beispielsweise es nur sehr wenige Methoden mit sehr viel Codezeilen geben wird, aber dafür sehr viele Methoden mit einer relativ kleinen Anzahl an Zeilen. Beispiele für diese Algorithmen sind Gini, Theil oder Atkinson \cite[S. 314]{Youcantcontroltheunfamiliar:Astudyontherelationsbetweenaggregationtechniquesforsoftwaremetrics}. Einige Metriken  basierend auf die Anzahl der \ac{LOC}, sodass eine Anwendung der klassischen Algorithmen problematisch sein kann, wenn die Verteilung sehr asymmetrisch ist. 
+ 
+ Allerdings beschreiben diese Algorithmen nur, ob die Ergebnisse der Metriken ungleich verteilt sind und nicht, wie gut die Ergebnisse sind. Ein Projekt, bei dem alle Metriken schlechte Resultate liefern, würde dann ein ähnliches Gesamtergebnis liefern als ein Projekt, welches überall gut bewertet wird \cite[S. 1121]{Softwarequalitymetricsaggregationinindustry}.  Im Kontext der Bachelorarbeit könnte dies bedeuten, dass eine nicht vorhandene Dokumentation genauso gut bewertet wird wie eine exzessive Kommentierung aller Komponenten. 
+ 
+ Daher werden diese Algorithmen vom Tool in der ausgelieferten Fassung nicht implementiert. Sie können aber in Verbindung mit anderen Aggregationsalgorithmen interessant sein, um mehr über eventuelle Ungleichheiten bei der Dokumentation zu erfahren.
+ 
+ \subsection{Squale}
+ Eine andere Möglichkeit zur Aggregierung von Metrikergebnissen wird in \cite[S. 1124]{Softwarequalitymetricsaggregationinindustry} vorgestellt. Das sogenannte Squale-Modell berechnet aus verschiedenen Teilergebnissen von Metriken ein Gesamtergebnis und kann dabei besonders schlechte Ergebnisse stärker gewichten, damit eventuelle Probleme schnell erkannt werden können. 
+ 
+ Im ersten Schritt werden die Ergebnisse der einzelnen Metriken, die auf unterschiedliche Skalen basieren, auf einer Skala normalisiert. Die Autoren nutzen dafür das Intervall 0 bis 3, da so eine Einteilung in Ziel nicht erfüllt (0 bis 1), Ziel größtenteils erfüllt (1 bis 2) und Ziel erfüllt (2 bis 3) möglich ist. Diese normalisierten Ergebnisse werden von den Autoren als \enquote{Individual marks (IM)} (z.~dt. individuelle Bewertungen) bezeichnet \cite[S. 142]{AnEmpiricalModelforContinuousandWeightedMetricAggregation}. 
+ 
+ Im nächsten Schritt werden die einzelnen Ergebnisse aggregiert. Dazu wird jeder IM mittels der Funktion
  \begin{equation}
-     B(l))S-(S-B_0)*e^(-k*l)
- \end{equation} übergeben, die eine beschränkt wachsende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung und $k$ eine Konstante für die Wachstumsrate. Um lange undokumentierte Methoden besser bestrafen zu können, wird eine Fallunterscheidung vorgenommen.
+     g(IM)=\lambda^{-IM}
+ \end{equation} übergeben. Dabei ist $\lambda$ eine Konstante, welche bei der Gewichtung der Ergebnisse hilft. Sollen schlechte Ergebnisse sehr hart bestraft werden, sodass bereits einige Fehler zu einer schlechten Bewertung führen, so muss $\lambda$ eine große Zahl sein. Durch die Wahl einer kleineren Zahl kann die Bewertung toleranter ausfallen. Aus den Ergebnissen der Funktion $g(IM)$ wird anschließend der Mittelwert $W_{avg}$ gebildet.
  
- Bei kurzen Methoden unter zehn Zeilen beträgt die untere Schranke 90, da kurze Methoden nicht allzu schlecht bewertet werden sollen. Für Methoden mit mindestens zehn Zeilen sollte eine strengere Bewertung existieren, da diese wahrscheinlich unübersichtlicher sind. Aus diesem Grund werden längere Methoden mit nicht mehr als 90 Punkten und minimal null Punkten bewertet, sodass die Spannweite größer ist und die Bewertung schneller gegen null tendiert.
+ Im Anschluss daran muss der Mittelwert wieder in den ursprünglichen Wertebereich abgebildet werden. Dazu wird die Umkehrfunktion
+ \begin{equation}
+     g^{-1}(W_{avg})=-\log_\lambda (W_{avg})
+ \end{equation} angewendet. Dieses Ergebnis wird von den Autoren als \enquote{global mark (IM)} (z.~dt. globale Bewertung) bezeichnet und repräsentiert das endgültige Ergebnis.
  
- Die Konstante $k$ kann vom Benutzer der Metrik frei ermittelt werden; ein Wert von $k=0.2$ scheint jedoch passend zu sein, da Methoden mit bis zu zehn Zeilen noch relativ gut bewertet werden und längere Methoden gut bestraft werden.
+ Durch diese Aggregierung werden Metriken/Komponenten/Dateien mit schlechten Ergebnissen stärker gewichtet und haben so einen größeren Einfluss auf das Gesamtergebnis. Allerdings kann dies bei der Dokumentation dazu führen, dass nur wenige schlecht dokumentierte Komponenten die Bewertung stark nach unten ziehen, sodass das Erreichen einer guten Bewertung einen hohen Aufwand erfordert. 
  
- Diese Metrik wird allerdings nur auf undokumentierte Methoden angewendet, sodass dokumentierte Methoden wie bei der Metrik \textit{SimpleCommentPresentMetric} mit 100 Punkten bewertet werden. Andere Komponenten wie zum Beispiel Klassen werden hier vollständig ignoriert, sodass sie keinen Einfluss auf das Gesamtergebnis haben.
- \subsubsection{Parameter}
- \begin{itemize}
-     \item \textit{k} Die Wachstumsrate des beschränktes Wachstum
-     \item \textit{ignoreLines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
- \end{itemize}
-     
+ Im Tool wird dieser Algorithmus ebenfalls unterstützt. Die Konstante $\lambda$ kann über den Konfigurationsparameter \textit{builderParams} für die einzelnen \textit{MetricResultBuilder} (Dateien, Komponenten oder Metriken) festgelegt werden. Standardmäßig ist er 9, was für eine mittlere Bestrafung von schlechter Dokumentationsqualität führt \cite[S. 1127]{Softwarequalitymetricsaggregationinindustry}. Intern werden die Teilergebnisse in das Intervall 0 bis 3 konvertiert, da ein Intervall von 0 bis 100 zu einer hohen negativen Potenz führen kann und dementsprechend mit Rundungsungenauigkeiten behaftet ist. Am Ende wird das Ergebnis wieder in das originale Intervall von 0 bis 100 gebracht. 
+ 
+ 
+ 
 
- \subsection{Anteil dokumentierter Methoden an allen Methoden unter Berücksichtigung der LOC}\label{chapter:metrics_loc_ratio}
-Diese Metrik ist relativ ähnlich zu der vorherigen Metrik. Allerdings arbeitet diese Metrik auf dem Level von hierarchischen Komponenten (z. B. Klassen) und summiert die \ac{LOC} der dokumentierten und undokumentierten Methoden und ermittelt daraus den Anteil der dokumentierten \ac{LOC} an allen \ac{LOC}. Dadurch werden längere Methoden wichtiger als kürzere, wodurch undokumentierter Getter- oder Setter-Methoden nicht so negativ bewertet werden. In Unterschied zu der vorherigen Metrik werden auch kommentierte Methoden nach ihrer Länge bewertet, anstatt wie bei der vorherigen Metrik stets mit 100 Prozent. Dies hat den Vorteil, dass jede dokumentierte Methode anhand ihres Gewichts in puncto \ac{LOC} gewichtet wird und der Entwickler für viele dokumentierte Methoden, die in vielen Fällen mehrere Codezeilen lang sind, eher belohnt wird als bei der vorherigen Metrik. Allerdings sollte auch erwähnt werden, dass hierdurch lange Methoden, auch wenn diese kommentiert sind, positiv bewertet werden, was eindeutig gegen die Grundsätze aus \cite[S. 34]{martin2009clean} verstößt. Zudem sollte es klar sein, dass eine undokumentierte lange Methode wahrscheinlich unverständlicher ist als eine gleich lange dokumentierte Methode. Da diese beiden Methoden sich dann bei dieser Metrik ausgleichen, würde die Qualität der Softwaredokumentation nur unzureichend widergespiegelt werden.
-  \subsubsection{Parameter}
-  \begin{itemize}
-     \item \textit{ignoreLines} Zeilen, die bei der Berechnung der \ac{LOC} ignoriert werden sollen
- \end{itemize}
+ 
  

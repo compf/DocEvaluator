@@ -6,8 +6,8 @@ formalParameter:
 variableModifier: 
 	FINAL | annotation;
 
-typeType
-    : annotation* 
+typeType:
+	 annotation* 
 	(classOrInterfaceType | primitiveType)
 	(annotation* '[' ']')*;
     

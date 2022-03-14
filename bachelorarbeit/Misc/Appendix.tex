@@ -7,13 +7,13 @@
 \begin{table}[h!]
     \centering
     \begin{tabular}{m{0.75cm}|m{4cm}|m{10cm}}
-        Zeile & Änderung & Begründung \\
+        \textbf{Zeile} & \textbf{Änderung} & \textbf{Begründung} \\
          \hline
         116 & Deklaration Kommentar & Hier wird ein mehrzeiliger Kommentar definiert, dies ist hier ein Alias für den Token \textit{JCOMMENT}\\
         \hline
-        128 & \textit{comment} als möglicher Präfix in Klassenmember & Hier wird dem Parser mitgeteilt, dass ein Bestandteil einer Klasse wie z. B. eine Methode einen Javadoc-Kommentar besitzen kann\\
+        127-128 & \textit{comment} als mögliches Präfix in Klassenmember & Hier wird dem Parser mitgeteilt, dass ein Bestandteil einer Klasse wie z. B. eine Methode einen Javadoc-Kommentar besitzen kann\\
         \hline
-        47 & \textit{comment} als möglicher Präfix vor Datentyp & Hier wird dem Parser mitgeteilt, dass ein Datentyp (Klasse, Schnittstelle etc. ) einen Javadoc-Kommentar haben kann \\
+        47 & \textit{comment} als mögliches Präfix vor Datentyp & Hier wird dem Parser mitgeteilt, dass ein Datentyp (Klasse, Schnittstelle etc. ) einen Javadoc-Kommentar haben kann \\
         \hline
         404 & Zulassung von Javadoc in Methoden & Da Javadoc-Kommentare an beliebigen Stellen auftauchen können, auch wenn es nicht empfohlen wird und keinen Mehrwert bietet, wird hier sichergestellt, dass solche Kommentare nicht zu Warnungen oder Fehler von ANTLR4 führen. Diese Javadoc-Kommentare werden nichtsdestotrotz später ignoriert.\\
         \hline
@@ -22,7 +22,7 @@
         105 & Zulassung von Kommentaren bei Enumerationen & Zwar werden Javadoc-Kommentare in Enumerationen mit diesem Tool nicht betrachtet, sie führen aber dennoch zu Warnungen und Fehlermeldungen. Daher werden sie hier zugelassen, aber später ignoriert. \\
         \hline
         82, 83 & Erzeugung eines separaten Knotens für \textit{Extends}- und \textit{Implements}-Deklarationen & In der originalen Version der Parserdatei wurde die Definition der Basisklasse bzw. der implementierten Schnittstellen direkt über die Tokens \textit{EXTENDS} bzw. \textit{IMPLEMENTS} gelöst. Dies wurde in einem neuen Knoten \textit{extendClass} bzw. \textit{implementInterfaces} ausgegliedert, um so das Parsing etwas zu vereinfachen.  \\
-         \hline
+         
     \end{tabular}
     \caption{Änderungen an der Parserdatei}
     \label{tab:parser_changes}
@@ -30,38 +30,212 @@
 
 \chapter{UML-Diagramm: Parser}
 \begin{figure}[ht!]
+\fontsize{5}{10}\selectfont
     \centering
-    \includegraphics[height=7cm,keepaspectratio,angle=90]{figures/uml/parsing.png}
+    \includegraphics[height=9cm,keepaspectratio,angle=90]{figures/uml/parsing.png}
     \caption{UML-Diagramme aller Klassen, die relevant für das Parsen sind}
     \label{fig:uml_parsing}
 \end{figure}
 \chapter{UML-Diagramm: Metriken}
 \begin{figure}[ht!]
+\fontsize{5}{10}\selectfont
     \centering
     \includegraphics[height=10cm,keepaspectratio,angle=90]{figures/uml/metriken.png}
     \caption{UML-Diagramme aller Klassen, die relevant für die Metriken sind}
     \label{fig:uml_metrics}
 \end{figure}
 \chapter{Konfiguration des Tools}
-\begin{table}[h]
-    \centering
-    \begin{tabular}{m{4cm}|m{11cm}}
-    \hline
-        Parameter & Beschreibung  \\
-        \hline
-        include & Alle Dateien, die bei der Bewertung der Dokumentationsqualität berücksichtigt werden müssen\\
-        \hline
-        Exclude & Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen\\
-        \hline
-        metrics & Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Strukur \enquote{(name,weight,params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist( Bei Algorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name (oder Aliasname) der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik\\\hline
-        global\_threshold & Mindestwert der Bewertung ,der erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert\\\hline
-        metric\_result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse der Metriken verarbeitet und so das Gesamtergebnis berechnet.\\\hline
-          single\_file\_result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse einer Datei verarbeitet\\\hline
-        files\_result\_builder & Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse aller Dateien verarbeitet
+\begin{description}
+        \item[include]  Alle Dateien, die bei der Bewertung der Dokumentationsqualität berücksichtigt werden müssen
+        \item[Exclude]  Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen
+        \item[metrics]  Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Struktur \enquote{(name,weight,unique\_name,params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist( Bei Algorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name (oder Aliasname) der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik
+        \item[absolute\_threshold] Mindestwert der Bewertung, die erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert
+       
+          \item[builder] Der Algorithmus/\textit{ResultBuilder}, der die einzelnen Ergebnisse verarbeitet.
         
+        \item[parser]  Kann verwendet, um die zu parsende Programmiersprache zu wählen. Dazu muss \textit{ParserFactory} angepasst werden
+        
+        \item[path\_weights] Ein Array von Objekten der Struktur \enquote{(path,weight)}. Wird verwendet, um einzelne Pfade höher oder niedriger zu gewichtet
+        
+         \item[component\_weights] Ein Array von Objekten der Struktur \enquote{(name,weight)}. Wird verwendet, um einzelne Komponenten höher oder niedriger zu gewichtet
+         
+         \item[default\_path\_weight] Das Standardgewicht für eine Datei, wenn keine passende Gewichtung gefunden wurde
+         
+         \item[default\_component\_weight] Das Standardgewicht einer Komponente, wenn keine passende Gewichtung gefunden wurde
+         
+         \item[state\_manager] Kann verwendet werden, um festzulegen, wie das letzte Ergebnis der Dokumentationsqualität gespeichert werden soll. Weitere Möglichkeiten können durch Erweiterung der \textit{StateManagerFactory} hinzugefügt werden.
+         
+         \item[relative\_threshold] Der maximale  relative Abstand zur letzten Dokumentationsqualität bevor eine Fehlermeldung geworfen wird.
+        
+        
+        
+    \label{enum:tool_javadoc_conf}
+\end{description}
+\chapter{Implementierte Metriken}\label{appendix_metrics}
+\section{Anteil dokumentierter Komponenten an allen Komponenten}
+\begin{description}
+    \item [Metrikname]  simple\_comment
+    \item [Klassenname] SimpleCommentPresentMetric
+    \item[Beschreibung] Berechnet den Anteil der dokumentierten Komponenten an allen Komponenten, kann Getter und Setter ignorieren
+\end{description}
+
+\section{Anteil öffentlicher dokumentierter Komponenten an allen öffentlichen Komponenten}
+\begin{description}
+    \item [Metrikname]  public\_members\_only
+    \item [Klassenname] SimplePublicMembersOnlyMetric
+    \item[Beschreibung] Berechnet den Anteil der öffentlichen dokumentierten Komponenten an allen öffentlichen Komponenten, kann Getter und Setter ignorieren
+\end{description}
+
+\section{Bestrafung langer undokumentierter Methoden}
+\begin{description}
+    \item [Metrikname]  large\_method\_commented
+    \item [Klassenname] SimpleLargeMethodCommentedMetric
+    \item[Beschreibung] Bestraft undokumentierte Methoden je nach ihrer Länge
+\end{description}
+
+\section{Vollständigkeit der Dokumentation von Methoden}
+\begin{description}
+    \item [Metrikname]  method\_fully\_documented
+    \item [Klassenname] SimpleMethodDocumentationMetric
+    \item[Beschreibung] Prüft, ob alle Methodenparameter und Rückgabewert dokumentiert sind
+\end{description}
+
+\section{Anteil dokumentierter Methoden an allen Methoden unter
+Berücksichtigung der LOC}
+\begin{description}
+    \item [Metrikname]  commented\_lines
+    \item [Klassenname] CommentedLinesRatioMetric
+    \item[Beschreibung]  Berechnet den Anteil der \ac{LOC} der dokumentierten Methoden an allen \ac{LOC} aller Methoden
+\end{description}
+
+\section{Kohärenz zwischen Kommentar und
+Komponentenname}
+\begin{description}
+    \item [Metrikname]  comment\_name\_coherence
+    \item [Klassenname] CommentNameCoherenceMetric
+    \item[Beschreibung]  Prüft, ob der Kommentar und der Name der dokumentierten Komponente sehr ähnlich sind oder keine Ähnlichkeit haben, arbeitet nur mit Methoden
+\end{description}
+
+\section{Verwendung bestimmter Wörter bestrafen}
+\begin{description}
+    \item [Metrikname]  certain\_terms
+    \item [Klassenname] CertainTermCountMetric
+    \item[Beschreibung]  Bestraft das Vorkommen bestimmter Wörter (wie z.~B. Abkürzungen)
+\end{description}
+
+\section{Bewertung der Formatierung}
+\begin{description}
+    \item [Metrikname]  formatting\_good
+    \item [Klassenname] FormattingGoodMetric
+    \item[Beschreibung] Überprüft, ob korrekte Tags verwendet wurde, HTML-Tags geschlossen wurden und bei langen Methoden überhaupt eine Formatierung verwendet wurden
+\end{description}
+
+
+\section{Bewertung der Formatierung}
+\begin{description}
+    \item [Metrikname]  spellling
+    \item [Klassenname] SpellingMetric
+    \item[Beschreibung]Sucht nach Rechtschreibfehlern und bestraft sie
+\end{description}
+
+\section{Erwähnung von Randfällen bei Methodenparameter
+und -rückgabewerte}
+\begin{description}
+    \item [Metrikname]  edge\_case
+    \item [Klassenname] EdgeCaseMetric
+    \item[Beschreibung] Prüft, ob bei der Dokumentation von Parametern die Behandlung des Wertes \textit{null} erwähnt wird
+\end{description}
+
+
+\section{Gunning-Fog-Index}
+\begin{description}
+    \item [Metrikname]  gunning\_fog
+    \item [Klassenname] GunningFogMetric
+    \item[Beschreibung] Berechnet den Gunnin-Fog-Index des Kommentars und bewertet so, ob der Kommentar verständlich ist
+\end{description}
+ 
+
+\begin{comment}
+\begin{table}[ht!]
+    \centering
+    \begin{tabular}{m{4.5cm}|m{6.8cm}|m{5cm}}
+        \textbf{Metrikname} & \textbf{Klassenname} & \textbf{Beschreibung}  \\\hline
+          simple\_comment & SimpleCommentPresentMetric & Berechnet den Anteil der dokumentierten Komponenten an allen Komponenten\\\hline
+        public\_members\_only & SimplePublicMembersOnlyMetric &   Berechnet den Anteil der öffentlichen dokumentierten Komponenten an allen öffentlichen Komponenten\\\hline
+        large\_method\_commented & SimpleLargeMethodCommentedMetric & Bestraft undokumentierte Methoden je nach ihrer Länge\\\hline
+     method\_fully\_documented & SimpleMethodDocumentationMetric & Prüft, ob alle Methodenparameter und Rückgabewert dokumentiert sind\\\hline
+       commented\_lines\_ratio& CommentedLinesRatioMetric & Berechnet den Anteil der \ac{LOC} der dokumentierten Methoden an allen \ac{LOC} aller Methoden\\\hline
+       flesch& FleschMetric & Berechnet den Flesch-Score des Kommentars und bewertet so, ob der Kommentar verständlich ist\\\hline
+        comment\_name\_coherence&CommentNameCoherenceMetric & Prüft, ob der Kommentar und der Name der dokumentierten Komponente sehr ähnlich sind oder keine Ähnlichkeit haben\\\hline
+     certain\_terms&CertainTermCountMetric & Bestraft das Vorkommen bestimmter Wörter (wie z.~B. Abkürzungen)\\\hline
+          formatting\_good&FormattingGoodMetric & Überprüft, ob korrekte Tags verwendet wurde, HTML-Tags geschlossen wurden und bei langen Methoden überhaupt eine Formatierung verwendet wurden\\\hline
+          spellling&SpellingMetric & Sucht nach Rechtschreibfehlern und bestraft sie\\\hline
+        edge\_case&EdgeCaseMetric & Prüft, ob bei der Dokumentation von Parametern die Behandlung des Wertes \textit{null} erwähnt wird\\\hline
+        gunning\_fog&GunningFogMetri& Berechnet den Gunnin-Fog-Index des Kommentars und bewertet so, ob der Kommentar verständlich ist\\
     \end{tabular}
-    \caption{Parameter zur Konfiguration des Tools}
-    \label{tab:tool_javadoc_conf}
+    \caption{Alle implementierten Metriken}
+    \label{table:metrics_name}
+\end{table}
+\end{comment}
+
+\chapter{Rohdaten der Geschwindigkeitsmessung}\label{chapter:raw_speed_data}
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c|c}
+DE & CS &PMD\\\hline
+2.633196686&2.483289894&1.824414998 \\\hline
+2.64006405&2.457651397&1.806654002 \\\hline
+2.543649241&2.315317292&2.006561234 \\\hline
+2.5325986680000003&2.260201392&1.9712752450000002 \\\hline
+2.601681236&2.285445018&1.882370141 \\\hline
+2.403925164&2.275096742&2.023840331 \\\hline
+2.5144551170000002&2.644689887&1.941663686 \\\hline
+2.411928027&2.238652704&1.917447884 \\\hline
+2.57910174&2.743849296&1.889603109 \\\hline
+2.521742852&2.215090902&1.896623537 \\\hline
+    \end{tabular}
+    \caption{benötigte Zeitdauer bei Log4J in Sekunden}
+    \label{tab:raw_log4j}
+\end{table}
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c|c}
+DE & CS &PMD\\\hline
+16.71861372&9.383898886&8.036244700000001 \\\hline
+17.111019714&9.430781613&7.63082216 \\\hline
+16.714703572&9.212230905&7.657740619 \\\hline
+17.08938707&9.414144533&8.197047168000001 \\\hline
+16.485562434000002&9.169483079&7.984978324999999 \\\hline
+16.933776094&9.302882658&7.918363976 \\\hline
+17.003134887&9.386701181&7.8839586090000005 \\\hline
+17.032788651&9.268623165&7.913107171 \\\hline
+16.997054179&9.298773291&7.916403471 \\\hline
+16.71220304&9.267821851&7.944092811 \\\hline
+    \end{tabular}
+    \caption{benötigte Zeitdauer bei ArgoUML in Sekunden}
+    \label{tab:raw_argo}
+\end{table}
+
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c|c|c}
+DE & CS &PMD\\\hline
+69.867318479&27.581150355&22.234601051 \\\hline
+69.178903757&27.43872873&21.842876370000003 \\\hline
+69.11771960600001&27.849399899999998&21.738449441 \\\hline
+69.038423174&27.285275714999997&21.59403561 \\\hline
+68.619945501&27.078542705&21.561346807 \\\hline
+68.408704667&27.215509622&21.450707481000002 \\\hline
+69.76469946&27.346349856&21.178031731 \\\hline
+74.259500164&27.225599019&21.577278996000004 \\\hline
+70.197300921&27.238578384999997&21.558096699 \\\hline
+69.018029079&27.909271507&21.879938796 \\\hline
+    \end{tabular}
+    \caption{benötigte Zeitdauer bei Eclipse JDT in Sekunden}
+    \label{tab:raw_eclipse}
 \end{table}
 \end{appendices}
 	
