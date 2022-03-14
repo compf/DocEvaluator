@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='-30 -17 882 520' xmlns:xlink='http://www.w3.org/1999/xlink' width='882.0px' font-size='13' font-family='Arial, LiberationSans' version='1.1' height='520.0px'>
+  <defs>
+<style type='text/css'><![CDATA[svg text {text-rendering: geometricPrecision;}]]></style>    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='03a7ba0e-443d-49af-b92e-6602c10a088c' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='b0442f89-9c6e-4ee4-a8dd-8973676622e6' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='bdbb62b1-6694-4e2c-a7a9-798e8a38b039' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='fa71b2db-4ea8-4614-b2bb-28d1171d46cd' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='d3ef31ed-a2b6-49e9-be64-c63d89be2e07' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='3d5313e7-ffba-4c09-8de3-2f7b9ad90f3e' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='2e7210d1-615b-405a-9575-a93791ea62c3' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='fe2e4653-8862-45b4-8708-17fe6be81ef9' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='db08c1e4-3827-4fac-8983-c3980e5e4d8e' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='1e95b0af-040e-4172-adaf-8f4125e85ba1' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+    <linearGradient y1='0.0%' x1='0.0%' y2='100.0%' x2='0.0%' id='d3e2ee9b-af86-492c-a3ed-57811c15213a' spreadMethod='pad'>
+      <stop stop-opacity='1' offset='0' stop-color='rgb(255, 255, 255)'/>
+      <stop stop-opacity='1' offset='100' stop-color='rgb(238, 238, 238)'/>
+    </linearGradient>
+  </defs>
+  <desc>ClassDiagram</desc>
+  <g transform='translate(0.0,227.0)' id='_T8mI4COiEDqw_ueO7rIpXA'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='283.0px' y='0.0' stroke-width='1.0' fill='url(#03a7ba0e-443d-49af-b92e-6602c10a088c)' stroke='rgb(187, 187, 187)' look='allInOne' height='85.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='141.5' y='18.0' font-size='12' fill='rgb(105, 105, 105)'>« Interface »</text>
+    <text font-weight='bold' text-anchor='middle' x='141.5' y='35.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>DocumentationAnalysisMetric</text>
+    <line y1='42.0' x1='0.0' y2='42.0' x2='283.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <g transform='translate(0.0,42.0)' id='_V4z98iOiEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>analyze(Component, MetricResultBuilder)</text>
+    </g>
+    <g transform='translate(0.0,62.0)' id='_C19JoHe4EDqIwo7oN-XHlA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>shallConsider(Component): Boolean</text>
+    </g>
+  </g>
+  <g transform='translate(626.0,123.0)' id='_YzDhgCOiEDqw_ueO7rIpXA'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='150.0px' y='0.0' stroke-width='1.0' fill='url(#b0442f89-9c6e-4ee4-a8dd-8973676622e6)' stroke='rgb(187, 187, 187)' look='allInOne' height='90.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='75.0' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricResult</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='150.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <g transform='translate(0.0,26.0)' id='_aDZIACOiEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getResult(): Real</text>
+    </g>
+    <g transform='translate(0.0,46.0)' id='_dXTv0COiEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getLogMessages()</text>
+    </g>
+    <g transform='translate(0.0,66.0)' id='_-TBHgEAgEDqRCZewk3szsA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getCreator(): any</text>
+    </g>
+  </g>
+  <g transform='translate(348.0,13.0)' id='_j6CdACOiEDqw_ueO7rIpXA'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='243.0px' y='0.0' stroke-width='1.0' fill='url(#bdbb62b1-6694-4e2c-a7a9-798e8a38b039)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='121.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricResultBuilder</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='243.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <g transform='translate(0.0,26.0)' id='_oVoekCOiEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>processResult(MetricResult)</text>
+    </g>
+    <g transform='translate(0.0,46.0)' id='_sWGYcCOkEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getAggregratedResult(): MetricResult</text>
+    </g>
+  </g>
+  <g transform='translate(0.0,383.0)' id='_4pDX0COkEDqw_ueO7rIpXA'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='360.0px' y='0.0' stroke-width='1.0' fill='url(#fa71b2db-4ea8-4614-b2bb-28d1171d46cd)' stroke='rgb(187, 187, 187)' look='allInOne' height='90.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='180.0' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MetricManager</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='360.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <g transform='translate(0.0,26.0)' id='_OA9JgCOlEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' text-decoration='underline' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>createMetricByName(String)</text>
+    </g>
+    <g transform='translate(0.0,46.0)' id='_2_dMkEAbEDq5T6ACUlsKrQ'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' text-decoration='underline' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getNewMetricResultBuilder(String, Map&lt;Any,number&gt;)</text>
+    </g>
+    <g transform='translate(0.0,66.0)' id='_FOF1gEAcEDq5T6ACUlsKrQ'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' text-decoration='underline' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>getDefaultMetricParam(String): any</text>
+    </g>
+  </g>
+  <g transform='translate(678.0,268.0)' id='_z7-40COxEDqw_ueO7rIpXA'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='91.0px' y='0.0' stroke-width='1.0' fill='url(#d3ef31ed-a2b6-49e9-be64-c63d89be2e07)' stroke='rgb(187, 187, 187)' look='allInOne' height='50.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='45.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>LogMessage</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='91.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+    <g transform='translate(0.0,26.0)' id='_5ZzMYCOxEDqw_ueO7rIpXA'>
+      <image x='4.0' width='16.0' y='5.0' xlink:href='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAG8dAAB6pAAA9NYAAIZwAAB37gAA9bAAADqjAAAVsi1zQqwAAAMAUExURQAAAP///8HBw6Ky1rfD3Ymh0au73Ku62Yag0aq72bPB27fD2b7J3YWh0Ieiz4ahzomk0Z2z2Ki72bPD3L7J23eXyIajz7TE27PD2rTD2maPxbvK38PP32OMwGSMvYamz7PE2LXE10V/vkh/v0d/vEiAvUh+vFGEu1OEvGaEpqC40kaBvUWAukd/ukmBvGGQvmSGqWOEpZ+61QA9cwA8cgA7cQI7cAM8czZ0rT16sEF9s0J9tUSBuE6GuVGFt2OGpmSHp2OEo2WGpWSFpAA8cAA9cAA7bwA8bgA9bgA7bQI8bgI8bD18slCGtWKFo2OGpGSHpQA9bAA7aDR3rAWBSUOcbHGxdf///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADH1d5AAAABYdFJOU////////////////////////////////////////////////////////////////////////////////////////////////////////////////////wB4m8IIAAAA2UlEQVR42lSPzUoCURhAz/0cUrhjTYzuIu0PicZFy57ABxjQdxR8iQQJYmrTDYJZNEZQC2fGHPIndVyUkGdz4OyO6rCL/Mqkj//Ce8iR8Uge/sJzNUqG+etocH4PqA6TQEpfUzWvlBoOFDyKrsnOLnQi1weAEKRG37iTWWs8iJ9AqN9Ns/0sqL3oVf8YCl7UGO05lbKTDRer0FxZXNL8CE/tNMaHHgLx9+zkU9++gUDXgqK45Z8YH8DHAh3Z9tIGAWFtATUID2GNykFtb7vgq7y3vYV2G3JgMwDzTEnCPC8r9AAAAABJRU5ErkJggg==' height='16.0'/>
+      <text x='22.0' y='16.0' font-size='12' fill='rgb(105, 105, 105)'></text>
+      <text text-anchor='start' x='24.0' y='16.0' font-size='13' font-style='normal' fill='rgb(0, 0, 0)'>print()</text>
+    </g>
+  </g>
+  <g transform='translate(447.0,128.0)' id='_adUo0EAbEDq5T6ACUlsKrQ'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='141.0px' y='0.0' stroke-width='1.0' fill='url(#3d5313e7-ffba-4c09-8de3-2f7b9ad90f3e)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='70.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>MedianResultBuilder</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='141.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+  </g>
+  <g transform='translate(214.0,128.0)' id='_gXjyoEAbEDq5T6ACUlsKrQ'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='193.0px' y='0.0' stroke-width='1.0' fill='url(#2e7210d1-615b-405a-9575-a93791ea62c3)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='96.5' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>WeightedMetricResultBuilder</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='193.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+  </g>
+  <g transform='translate(328.0,257.0)' id='_twOc4EAbEDq5T6ACUlsKrQ'>
+    <rect rx='3.0' ry='3.0' x='0.0' width='200.0px' y='0.0' stroke-width='1.0' fill='url(#fe2e4653-8862-45b4-8708-17fe6be81ef9)' stroke='rgb(187, 187, 187)' look='allInOne' height='80.0px'/>
+    <text font-weight='bold' text-anchor='middle' x='100.0' y='19.0' font-size='13' font-style='normal' fill='rgb(3, 54, 86)'>WeightedMedianResultBuilder</text>
+    <line y1='26.0' x1='0.0' y2='26.0' x2='200.0' stroke-width='1.0' stroke='rgb(187, 187, 187)' look='border'/>
+  </g>
+  <g transform='translate(654.0,256.0)' id='_XBGUUCiHEDqWpPAAdsnMKA'/>
+  <g transform='translate(513.0,126.0)' id='_mUdwsCiHEDqWpPAAdsnMKA'/>
+  <g transform='translate(15.0,363.0)' id='_wGvRcHe3EDqIwo7oN-XHlA'/>
+  <g id='_XAyyUSiHEDqWpPAAdsnMKA'>
+    <line y1='213.0' x1='723.0' y2='241.0' x2='723.0' id='_XA78QiiHEDqWpPAAdsnMKA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(723.0,213.0) rotate(-0.0)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-4.0,8.0 0.0,0.0 4.0,8.0 0.0,16.0'/>
+  </g>
+  <g id='_XAyyUSiHEDqWpPAAdsnMKA'>
+    <line y1='241.0' x1='723.0' y2='240.0' x2='723.0' id='_XA78RSiHEDqWpPAAdsnMKA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_XAyyUSiHEDqWpPAAdsnMKA'>
+    <line y1='240.0' x1='723.0' y2='268.0' x2='723.0' id='_XA78RiiHEDqWpPAAdsnMKA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_mUOgIiiHEDqWpPAAdsnMKA'>
+    <line y1='168.0' x1='626.0' y2='168.0' x2='609.0' id='_mUWb8iiHEDqWpPAAdsnMKA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polyline transform='translate(626.0,168.0) rotate(90.0)' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)' points='-5.0,10.0 0.0,0.0 5.0,10.0'/>
+  </g>
+  <g id='_mUOgIiiHEDqWpPAAdsnMKA'>
+    <line y1='168.0' x1='609.0' y2='53.0' x2='608.0' id='_mUXDACiHEDqWpPAAdsnMKA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_mUOgIiiHEDqWpPAAdsnMKA'>
+    <line y1='53.0' x1='608.0' y2='53.0' x2='591.0' id='_mUXDASiHEDqWpPAAdsnMKA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_fUcIwEAbEDq5T6ACUlsKrQ'>
+    <line y1='128.0' x1='517.0' y2='110.0' x2='517.0' id='_fUo9EkAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_fUcIwEAbEDq5T6ACUlsKrQ'>
+    <line y1='110.0' x1='517.0' y2='111.0' x2='517.0' id='_fUpkIEAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_fUcIwEAbEDq5T6ACUlsKrQ'>
+    <line y1='111.0' x1='517.0' y2='93.0' x2='517.0' id='_fUqLMEAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(517.0,93.0) rotate(-0.0)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_k5SRYEAbEDq5T6ACUlsKrQ'>
+    <line y1='128.0' x1='377.0' y2='110.0' x2='377.0' id='_k5Xw8kAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_k5SRYEAbEDq5T6ACUlsKrQ'>
+    <line y1='110.0' x1='377.0' y2='111.0' x2='377.0' id='_k5Xw80AbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_k5SRYEAbEDq5T6ACUlsKrQ'>
+    <line y1='111.0' x1='377.0' y2='93.0' x2='377.0' id='_k5YYAEAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(377.0,93.0) rotate(-0.0)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_veOPwEAbEDq5T6ACUlsKrQ'>
+    <line y1='257.0' x1='367.0' y2='232.0' x2='367.0' id='_vebrIUAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_veOPwEAbEDq5T6ACUlsKrQ'>
+    <line y1='232.0' x1='367.0' y2='233.0' x2='367.0' id='_vecSMEAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_veOPwEAbEDq5T6ACUlsKrQ'>
+    <line y1='233.0' x1='367.0' y2='208.0' x2='367.0' id='_vecSMUAbEDq5T6ACUlsKrQ' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+    <polygon transform='translate(367.0,208.0) rotate(-0.0)' stroke-width='1.0' fill='rgb(255, 255, 255)' stroke='rgb(0, 0, 0)' points='-6.0,10.0 0.0,0.0 6.0,10.0'/>
+  </g>
+  <g id='_wGNtAHe3EDqIwo7oN-XHlA'>
+    <line y1='383.0' x1='141.0' y2='347.0' x2='141.0' id='_wGQJQ3e3EDqIwo7oN-XHlA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_wGNtAHe3EDqIwo7oN-XHlA'>
+    <line y1='347.0' x1='141.0' y2='348.0' x2='141.0' id='_wGQwUHe3EDqIwo7oN-XHlA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+  <g id='_wGNtAHe3EDqIwo7oN-XHlA'>
+    <line y1='348.0' x1='141.0' y2='312.0' x2='141.0' id='_wGQwUXe3EDqIwo7oN-XHlA' stroke-width='1.0' fill='none' stroke='rgb(0, 0, 0)'/>
+  </g>
+</svg>
