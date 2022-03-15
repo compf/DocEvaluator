@@ -30,7 +30,7 @@ minimum width=5cm, text width=6cm-\InnerSep,
 align=justify,
 minimum height=\hoehe
 ] (java) {
-  \hspace*{0.1cm}\textbf{public} \textbf{class} Main\{.\newline 
+  \hspace*{0.1cm}\textbf{public} \textbf{class} Main\{\newline 
      \hspace*{0.5cm}\textbf{private} \textbf{int} test(\textbf{int} a)\{\newline
     \hspace*{0.5cm}\}\newline
 \hspace*{0.1cm}\}
@@ -105,6 +105,8 @@ Neben der hierarchischen Repräsentation der einzelnen Komponenten müssen auch 
  Dieser Aufbau findet sich auch in \textit{Doxygen} \cite{doxygen} oder \textit{Docstring} \cite{docstring}, sodass diese Struktur als Grundlage genommen wird. 
  
  Ein strukturierter Kommentar besteht also aus einer generellen Beschreibung, die auch weggelassen werden kann. Anschließend folgen null bis beliebig viele Tags. Jeder Tag besteht aus einem Typ (z.~B. \enquote{@param},\enquote{@return} oder \enquote{@throws}), einem optionalen Parameter, welcher von einigen Tags benötigt wird und der Beschreibung des Tags. Die Namen der Tags sind generalisiert, dies bedeutet, dass unabhängig von der Programmiersprache der Tag zur Beschreibung eines Parameters immer \enquote{@param} heißen muss. Dies muss bei der Entwicklung eines Parsers beachtet werden. 
+ 
+ Ein strukturierter Kommentar kann ebenfalls spezielle Elemente wie z.~B. \ac{HTML}-Elemente oder Inline-Tags enthalten. Hier werden diese Elemente unverarbeitet gelassen, also unverändert mit dem Rest des Kommentars als Zeichenkette gespeichert. Metriken, die diese Informationen benötigen, müssen diese Elemente also selbstständig extrahieren. Andere Metriken (wie z.~B. die Metriken in Kapitel \ref{chapter:metrics_semantic}) benötigen diese speziellen Elemente nicht, sodass eine einheitliche Schnittstelle, die sowohl die natürliche Sprache als auch die speziellen Elemente berücksichtigt und  zudem relativ programmiersprachenunabhängig sein müsste, viele Herausforderungen mit sich bringt.   
  
  Wird kein strukturierter Kommentar angegeben, so ist liefert der entsprechende Getter \textit{getComment} den Wert \enquote{null} zurück. 
 \section{Konzeption der Metriken}
