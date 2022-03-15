@@ -32,7 +32,7 @@ Der Gunning-Fog-Index ist eine ähnliche Formel. Sie berücksichtigt nicht die A
 Eine weitere Möglichkeit, den Inhalt einer Dokumentation zu bewerten, ist es, ihn mit dem Namen der dokumentierten Komponente zu vergleichen. Ein Kommentar, der einen Großteil des Namens der Komponente wiederholt bietet keinen Mehrwert. Auch ein Kommentar, der keinen Zusammenhang mit der dokumentierten Komponente erkennen lässt, verliert an Nutzen \cite[S. 86]{Qualityanalysisofsourcecodecomments}.
 Um diese Kohärenz zu messen, kann die Anzahl der gemeinsamen Wörter zwischen Dokumentation und des Namens der dokumentierten Komponente ermittelt werden und dies durch die Zahl der Wörter der Dokumentation geteilt werden. Die Autoren in \cite[S. 87]{Qualityanalysisofsourcecodecomments} vertreten die Ansicht, dass dieser \textbf{Kohärenzkoeffizient} von mehr als 0.5 und gleich 0 auf eine schlechte Dokumentation hindeutet, da es im ersteren Fall eine starke Ähnlichkeit zwischen dem Namen und der Dokumentation gibt und im zweiten Fall überhaupt keine Gemeinsamkeiten existiert. Die Implementation der Metrik bewertet in beiden Fällen die Dokumentation mit 0 Punkten, in allen anderen Fällen vergibt sie 100 Punkte.
 
-	\begin{figure}
+	\begin{figure}[ht!]
 			\lstinputlisting
 			[caption={Zwei Methoden mit mangelhafter Kohärenz},
 			label={lst:coherence_example},
@@ -48,7 +48,7 @@ Die Kohärenzmetrik hilft den Entwickler dabei, dass die Dokumentation zu dem Na
 
 Die letzte Kategorie an Metriken analysiert die Dokumentation und sucht nach dem Vorkommen von bestimmten Fehlern, welche die Qualität der Dokumentation negativ beeinflussen können. Solche Fehler können beispielsweise Rechtschreibfehler oder fehlerhafte Formatierung (wie z.~B. nicht konformes \ac{HTML}) sein. In der offiziellen Javadoc-Dokumentation wird außerdem geraten, bestimmte Abkürzungen (wie z.~B. \textit{e.~g.}, \textit{aka.} oder \textit{i.~e.}) zu vermeiden \cite{HowtoWriteDocCommentsfortheJavadocTool}. 
 
-		\begin{figure}
+		\begin{figure}[ht!]
 			\lstinputlisting
 			[caption={Methode mit unvollständiger Erklärung der Behandlung von Nullwerten},
 			label={lst:null_handling_example},

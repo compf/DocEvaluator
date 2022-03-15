@@ -18,86 +18,15 @@ In anderen Fällen gibt es jedoch viele Gemeinsamkeiten zwischen objektorientier
 
 Um dennoch sprachspezifische Funktionen anbieten zu können, besitzt jede Komponente ein Feld mit dem Typen \textit{ComponentMetaInformation}, das wie oben erwähnt die Information enthält, ob eine Komponente als öffentlich angesehen werden soll. Dieser Typ, welches eine Schnittstelle ist, kann von einer Klasse implementiert werden, um Parser für andere Programmiersprachen die Möglichkeit zu geben, zusätzliche sprachspezifische Informationen zu speichern. Beim Java-Parser wird diese Funktion beispielsweise genutzt, um zu speichern, welche \enquote{checked} Ausnahmen eine Methode werfen kann, sodass später ein Vergleich mit der Javadoc möglich ist. Die Schnittstelle enthält nur die Anforderung, eine \textit{isPublic}-Methode anzubieten und kann daher für viele andere objektorientierte Programmiersprache Informationen speichern, die für einige Metriken eventuell nützlich sind. 
 
- \begin{figure}[ht!]
- \begin{tikzpicture}
- \pgfmathsetlengthmacro\breite{6cm}
-\pgfmathsetlengthmacro\hoehe{2.567cm}
-\pgfmathsetlengthmacro\InnerSep{0.4cm}
-\node[draw,
-anchor=center, 
-inner sep=0pt, 
-minimum width=5cm, text width=6cm-\InnerSep,
-align=justify,
-minimum height=\hoehe
-] (java) {
-  \hspace*{0.1cm}\textbf{public} \textbf{class} Main\{\newline 
-     \hspace*{0.5cm}\textbf{private} \textbf{int} test(\textbf{int} a)\{\newline
-    \hspace*{0.5cm}\}\newline
-\hspace*{0.1cm}\}
 
-};
-\node[draw,text width=5.5cm, left = of java](python){
-\textbf{class} Main:\newline
-     \hspace*{0.5cm}\textbf{def} \_\_test(a:\textbf{int}): -> \textbf{int}\newline
-         \hspace*{1cm}pass
 
-};
-\draw[line width=0.05cm] (python) -- (-4,-2.5) ;
-\draw [line width=0.05cm](java) -- (-4,-2.5);
-\draw[->,thick,line width=0.05cm] (-4,-2.5) -- (-4,-3.5);
-\draw [] (-9,-3.5) rectangle(4,-16);
-\begin{scope} {0,-10}
-       \begin{object}[text width=8cm]{fileObj}{-4,-4}
-        \instanceOf{FileComponent}
-        \attribute{name = "filepath"}
-        \attribute{parent = null}
-        \attribute{children={[}classObj{]}}
-      \end{object}
-      \begin{object}[text width=8cm]{classObj}{-4,-8 }
-        \instanceOf{ClassComponent}
-        \attribute{name="Main"}
-        \attribute{parent=fileObj}
-        \attribute{children={[}methodObj{]}}
-          \attribute{metaInformation=meta}
-      \end{object}
-    \begin{object}[text width=8cm]{methodObj}{-4,-12}
-        \instanceOf{MethodComponent}
-        \attribute{name="test"}
-        \attribute{parent=classObj}
-        \attribute{params={[}paramsObj{]}}
-        \attribute{metaInformation=meta2}
-        \attribute{returnType=int}
-      \end{object}
-      \begin{object}[text width=2.5cm]{paramObj}{2,-10}
-        \attribute{name=a}
-        \attribute{type=int}
-      \end{object}
-    \begin{object}[text width=2.5cm]{meta}{2,-6}
-        \attribute{isPublic=true}
-      \end{object}
-    \begin{object}[text width=2.5cm]{meta2}{2.5,-14.5}
-        \attribute{isPublic=false}
-      \end{object}
-\end{scope}
-\begin{scope}[line width=0.05cm]
-    \aggregation{fileObj}{}{}{classObj}{}{}
-     \aggregation {classObj}{}{}{methodObj}{}{}
-      \aggregation {methodObj}{}{}{paramObj}{}{}
-    \aggregation {classObj}{}{}{meta}{}{}
-        \aggregation {methodObj}{}{}{meta2}{}{}
-\end{scope}
-
-    
-\end{tikzpicture}
-     
-     \caption{Objektdiagramm aus Java- und Python-Code}
-     \label{fig:python_java_comp}
- \end{figure}
-
+\input{figures/chapter3/parsing_object_diagram}
 
 Abbildung \ref{fig:python_java_comp} veranschaulicht, wie eine einfache Datei in die Objektstruktur umgewandelt werden kann. Dabei werden eine einfache Java-Klasse und eine semantisch äquivalente Python-Datei als Beispiel verwendet, um zu zeigen, dass aus beiden Sprachen eine gleiche Objektstruktur erzeugt werden kann. Dabei wurden zur Übersichtlichkeit einige nicht relevanten Attribute entfernt.
 
-Das Programm in beiden Sprachen besteht aus einer öffentlichen Klasse \textit{Main} und einer privaten Methode \textit{test}, die einen Parameter \textit{a} als Ganzzahl erhält und eine Ganzzahl zurückgibt. Die höchste Hierarchieebene ist immer ein \textit{FileComponent}. Diese Datei enthält hier genau ein Kind namens \textit{classObj}, könnte aber in anderen Fällen auch mehrere Kinder (wie z.~B. Klassen enthalten). Die Klasse besitzt zudem einen Verweis auf ihren Elternteil. Außerdem enthält das \textit{classObj} eine Referenz auf Metainformationen, die hier nur angeben, dass die Klasse öffentlich ist. In diesen Metainformationen könnte auch die Basisklasse und andere relativ sprachspezifische Informationen enthalten. Die Klasse enthält wiederum genau die Methode als einziges Kind. Die Methode hat ebenfalls einen Verweis auf die Metainformationen, welche die Methode als privat markieren. Außerdem hat die Methode einen \textit{returnType} und einen Verweis auf die Liste der Parameter, die wiederum aus einem Namen und einem Datentyp bestehen. Die Beziehungen der Klassen, die für das Parsing zuständig sind, werden in in Abbildung \ref{fig:uml_parsing} als UML-Diagramm nochmal illustriert.
+
+
+Das Programm in beiden Sprachen besteht aus einer öffentlichen Klasse \textit{Main} und einer privaten Methode \textit{test}, die einen Parameter \textit{a} als Ganzzahl erhält und eine Ganzzahl zurückgibt. Die höchste Hierarchieebene ist immer ein \textit{FileComponent}. Diese Datei enthält hier genau ein Kind namens \textit{classObj}, könnte aber in anderen Fällen auch mehrere Kinder (wie z.~B. Klassen enthalten). Die Klasse besitzt zudem einen Verweis auf ihren Elternteil. Außerdem enthält das \textit{classObj} eine Referenz auf Metainformationen, die hier nur angeben, dass die Klasse öffentlich ist. In diesen Metainformationen könnten auch andere relativ sprachspezifische Informationen definiert werden, falls sie für Metriken relevant sein könnten. Die Klasse enthält wiederum genau die Methode als einziges Kind. Die Methode hat ebenfalls einen Verweis auf die Metainformationen, welche die Methode als privat markieren. Außerdem hat die Methode einen \textit{returnType} und einen Verweis auf die Liste der Parameter, die wiederum aus einem Namen und einem Datentyp bestehen. Die Beziehungen der Klassen, die für das Parsing zuständig sind, werden in in Abbildung \ref{fig:uml_parsing} als UML-Diagramm nochmal illustriert.
 
 \subsubsection{Repräsentation der strukturierten Kommentare}\label{chapter:structured_comments}
 Neben der hierarchischen Repräsentation der einzelnen Komponenten müssen auch die strukturierten Kommentare wie z.~B. Javadoc) geeignet in eine Datenstruktur umgewandelt werden. Wie in Kapitel \ref{chapter:javadoc}
@@ -154,7 +83,7 @@ Dazu wird dem \textit{MetricResultBuilder} jedes Ergebnis mittels der \textit{pr
 \subsubsection{Zuordnung der Gewichte}\label{chapter_weights_assign}
 Für einige Algorithmen muss eine Gewichtung vorgenommen werden, um bestimmte Ergebnisse besser oder schlechter zu bewerten. Dazu muss jedes Teilergebnis ein Gewicht zugeordnet werden. 
 
-Insgesamt kann ein Teilergebnis anhand von drei Kategorien gewichtet werden. Durch die Gewichtung aufgrund der verwendeten Metrik können bestimmten Metriken einen größeren Einfluss auf das Gesamtergebnis haben, wenn diese als vertrauenswürdiger empfunden werden. Durch die Gewichtung von Dateien kann beispielsweise die öffentliche \ac{API} einen größeren Einfluss auf die Bewertung nehmen, da diese Komponenten bzw. Dateien sehr kritisch sein können und daher gut verstanden werden müssen. Auch eine Gewichtung nach Komponenten kann in bestimmten Situationen sinnvoll sein. So kann beispielsweise argumentiert werden, dass Methoden, die durch ihre Parameter, Rückgabewerte und geworfene Ausnahmen komplexer als Felder sind, höher gewichtet werden sollen.
+Insgesamt kann ein Teilergebnis anhand von drei Kategorien gewichtet werden. Durch die Gewichtung aufgrund der verwendeten Metrik können bestimmten Metriken einen größeren Einfluss auf das Gesamtergebnis haben, wenn diese als vertrauenswürdiger empfunden werden. Durch die Gewichtung von Dateien kann beispielsweise die öffentliche Schnittstelle einen größeren Einfluss auf die Bewertung nehmen, da diese Komponenten bzw. Dateien sehr kritisch sein können und daher gut verstanden werden müssen. Auch eine Gewichtung nach Komponenten kann in bestimmten Situationen sinnvoll sein. So kann beispielsweise argumentiert werden, dass Methoden, die durch ihre Parameter, Rückgabewerte und geworfene Ausnahmen komplexer als Felder sind, höher gewichtet werden sollen.
 
 Die Zuordnung der Gewichte erfolgt über einen \textit{WeightResolver}, welches eine Schnittstelle anbietet, um einen Bezeichner auf ein Gewicht abzubilden. Bei dem eindeutigen Namen eines Metrikobjektes kann hierfür eine assoziative Liste verwendet werden. Auch bei Komponenten, die durch ihren Klassennamen (wie z.~B. \textit{ClassComponent}) repräsentiert werden, ist  eine solche assoziative Liste sinnvoll, da es nur eine begrenzte Anzahl an Metriken bzw. Komponenten existieren kann.
 Für Dateipfade ist dies allerdings nicht praktikabel, da es eine Vielzahl an Dateien geben kann. Stattdessen können hier ähnlich wie bei der Filterung von Dateien in Kapitel \ref{chapter:traversing} Wildcard-Patterns verwendet werden. Eine assoziative Liste kann dazu jedes Wildcard-Patterns und das dazugehörige Gewicht speichern. Bei einer Abfrage kann das Gewicht des ersten Eintrages zurückgegeben werden, bei dem der Dateipfad mit dem Wildcard-Pattern kompatibel ist. Dies ermöglicht es, ganze Verzeichnisse oder Dateien mit bestimmten Namen stärker zu gewichten. 
@@ -163,79 +92,10 @@ Bei der Suche nach dem passenden Gewicht zu den Dateien und Komponenten kann es 
 
 Jedes \textit{MetricResult}-Objekt enthält ein Tupel von drei Namen, welche die Quelle dieses Ergebnisses repräsentieren (Dateipfad, Komponententyp und eindeutiger Metrikname). Der Dateipfad beschreibt, in welcher Datei die Komponente liegt, die durch dieses Teilergebnis analysiert wurde. Der Komponententyp enthält den Klassennamen der Komponente und gibt somit Aufschluss darüber, ob diese Komponente eine Klasse, Methode etc. ist. Bei einer Klasse würde beispielsweise die Zeichenkette \enquote{ClassComponent} gespeichert werden. Durch den eindeutigen Metrikname (siehe Kapitel \ref{chapter:metric_impl} wird zuletzt festgelegt, welche Metrik dieses Teilresultat produzierte. Alternativ könnte auch hier der Klassenname der Metrik verwendet werden, da aber eine Metrik durch Verwendung verschiedener Parameter auch mehrfach angewendet werden kann und so auch unterschiedlich gewichtet werden könnte, ist ein eindeutiger Name hier sinnvoller.
 
-  \begin{figure}[h!]
- \begin{tikzpicture}[scale=0.75, every node/.style={scale=0.75}]
- \pgfmathsetlengthmacro\breite{6cm}
-\pgfmathsetlengthmacro\hoehe{2.567cm}
-\pgfmathsetlengthmacro\InnerSep{0.4cm}
-\node[draw,
-anchor=center, 
-inner sep=0pt, 
-minimum width=5cm, text width=8cm-\InnerSep,
-align=justify,minimum height=1.5cm] (java) {\textbf{class} Main\{\newline 
-\hspace*{0.1cm}\}};
+\input{figures/chapter3/metrics_object_diagram}
+Durch dieses Tupel kann für jedes Teilergebnis die Gewichtung der Metrik, der Komponente und des Dateipfades  abgerufen werden. Durch Multiplikation  aller Gewichtungen entsteht ein Gesamtgewicht.
 
-\node[draw,text width=5.5cm, left = of java](java2){
-/** \textbf{Commented} */ \newline
-     \hspace*{0.1cm}\textbf{public} \textbf{void} method()\{\newline
-    \hspace*{0.1cm}\}\newline
-};
-\draw[line width=0.05cm]    (java2) -- (-4,-3.5) ;
-\draw [line width=0.05cm](java) -- (-4,-3.5);
-\draw[thick,line width=0.05cm] (-4,-3.5) -- (-4,-3.5);
-
-\node[above=-0.0 of java2,line width=0cm]{Program.java};
-
-\node[above=-0.0 of java,line width=0cm]{Main.java};
-
-
-\draw [] (-11,-3.5) rectangle(5,-19);
-\begin{scope} {0,-10}
-       \begin{object}[text width=10cm]{builder}{-4,-10}
-        \instanceOf{WeightedMetricResultBuilder}
-        \attribute{resultList={[r1,r2,r3]}}
-      \end{object}
-      \begin{object}[text width=6cm]{r1}{-4,-5 }
-        \instanceOf{MetricResult}
-        \attribute{result=100}
-        \attribute{creators=(Program.java,\newline
-        \hspace*{1.6cm}MethodComponent, \newline
-        \hspace*{1.6cm}simple\_comment)}
-      \end{object}
-      
-        \begin{object}[text width=6cm]{r2}{0,-14 }
-        \instanceOf{MetricResult}
-        \attribute{result=0}
-        \attribute{creators=(Main.java,\newline
-        \hspace*{1.6cm}ClassComponent,\newline
-        \hspace*{1.6cm}simple\_comment)}
-      \end{object}
-      
-           \begin{object}[text width=6cm]{r3}{-7,-14 }
-        \instanceOf{MetricResult}
-        \attribute{result=100}
-        \attribute{creators=(Program.java,\newline
-       \hspace*{1.6cm}MethodComponent,\newline
-       \hspace*{1.6cm}public\_members)}
-      \end{object}
-      
-
-   
-\end{scope}
-\begin{scope}[line width=0.05cm]
-    \aggregation{builder}{}{}{r1}{}{}
-    \aggregation{builder}{}{}{r2}{}{}
-    \aggregation{builder}{}{}{r3}{}{}
-
-\end{scope}
-
-    
-\end{tikzpicture}
-     
-     \caption{ Veranschaulichung der Bildung eines Gesamtergebnisses}
-     \label{fig:metric_weighting}
- \end{figure}
-Durch dieses Tupel kann für jedes Teilergebnis die Gewichtung der Metrik, der Komponente und des Dateipfades  abgerufen werden. Durch Multiplikation  aller Gewichtungen entsteht ein Gesamtgewicht. Abbildung \ref{fig:metric_weighting} veranschaulicht anhand eines vereinfachten Objektdiagramms wie mittels Gewichtung von verschiedenen Ergebnissen ein Gesamtergebnis entstehen kann, indem der Algorithmus in Kapitel \ref{chapter:weighted_aggreg} verwendet wird. Hier werden zwei Dateien analysiert. Die erste Datei \enquote{Program.java} enthält nur eine öffentliche Methode \enquote{method}, was in Java eigentlich nicht möglich ist, aber hier zur Vereinfachung zugelassen sein soll. Die zweite Datei \enquote{Main-java} enthält eine nichtöffentliche Klasse \enquote{Main}. In diesem Beispiel werden zwei Metriken verwendet. Die erste Metrik prüft das Vorhandensein der Dokumentation bei allen Komponenten, während die zweite Metrik nur öffentliche Komponenten betrachtet (siehe Kapitel \ref{chapter:metrics_coverage}). In diesem Beispiel soll die Datei \enquote{Main.java} mit dem Faktor $3$ gewichtet werden. Methoden sollen mit dem Faktor $4$ gewichtet werden. Die zweite Metrik \enquote{public\_members} wird mit dem Faktor $2$ gewichtet. Alle anderen Dateien, Komponenten und Metriken werden mit dem Standardfaktor $1$ gewichtet.
+Abbildung \ref{fig:metric_weighting} veranschaulicht anhand eines vereinfachten Objektdiagramms wie mittels Gewichtung von verschiedenen Ergebnissen ein Gesamtergebnis entstehen kann, indem der Algorithmus in Kapitel \ref{chapter:weighted_aggreg} verwendet wird. Hier werden zwei Dateien analysiert. Die erste Datei \enquote{Program.java} enthält nur eine öffentliche Methode \enquote{method}, was in Java eigentlich nicht möglich ist, aber hier zur Vereinfachung zugelassen sein soll. Die zweite Datei \enquote{Main.java} enthält eine nichtöffentliche Klasse \enquote{Main}. In diesem Beispiel werden zwei Metriken verwendet. Die erste Metrik prüft das Vorhandensein der Dokumentation bei allen Komponenten, während die zweite Metrik nur öffentliche Komponenten betrachtet (siehe Kapitel \ref{chapter:metrics_coverage}). In diesem Beispiel soll die Datei \enquote{Main.java} mit dem Faktor $3$ gewichtet werden. Methoden sollen mit dem Faktor $4$ gewichtet werden. Die zweite Metrik \enquote{public\_members} wird mit dem Faktor $2$ gewichtet. Alle anderen Dateien, Komponenten und Metriken werden mit dem Standardfaktor $1$ gewichtet.
 
 Das erste Teilergebnis \textit{r1} ist 100, da es die  Methode \enquote{method} beschreibt, welche dokumentiert ist. Auch das dritte Teilergebnis \textit{r3} hat den Wert 100, da es die gleiche Komponente nur mit der zweiten Metrik beschreibt. Das zweite Teilergebnis \textit{r2} hat den Wert 0, da es die undokumentierte Klasse \enquote{Main} beschreibt.  Es gibt kein weiteres Teilergebnis von \enquote{Main.java}, da die zweite Metrik jegliche nichtöffentliche Komponenten ignoriert. Die Teilergebnisse werden durch den \textit{WeightedMetricResultBuilder} intern gespeichert. 
 
@@ -246,7 +106,8 @@ Basierend auf diesen Teilresultaten kann ein Gesamtergebnis berechnet werden. Hi
     \frac{4*100 + 3*0 + 8*100}{4+3+8}=80
 \end{equation}
 Dieses Ergebnis ist dann Maß für die Bewertung der Dokumentationsqualität dieses hypothetischen Projektes. 
-\clearpage
+
+
 \subsection{Sprachspezifische Informationen für Metriken}\label{chapter:langSpec}
 Da das Tool für möglichst viele objektorientierte Programmiersprachen konzipiert werden soll, muss eine Generalisierung erfolgen, da jede Sprache ihre Eigenheiten hat und möglicherweise besondere Funktionen anbietet, die nur schwer in einem abstrakten Format zu bringen sind.
 

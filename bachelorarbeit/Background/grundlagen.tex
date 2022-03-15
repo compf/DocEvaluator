@@ -57,7 +57,7 @@ In der folgenden Auflistung werden beispielhaft einige Javadoc-Tags aufgelistet 
 
 Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. 
 
-Eine \ac{IDE} kann die Informationen auslesen und dann beispielsweise bei der Autovervollständigung nutzen, um den Entwickler beim Schreiben des Programmcodes unterstützen. So kann sich ein Programmierer auch in einer fremden \ac{API} leichter zurechtfinden.
+Eine \ac{IDE} kann die Informationen auslesen und dann beispielsweise bei der Autovervollständigung nutzen, um den Entwickler beim Schreiben des Programmcodes unterstützen. So kann sich ein Programmierer auch in einer fremden Programmbibliothek leichter zurechtfinden.
 
 Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist eine Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. Mit \textit{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden.
 
@@ -100,15 +100,16 @@ GitHub Actions \cite{GithubActions} ist eine von GitHub angebotene Plattform zur
 
 Der gesamte Programmcode wird im Kontext von GitHub Actions auch als \textbf{Workflow (Ablauf)} bezeichnet und führt einen oder mehrere \textbf{Jobs} aus. Diese Jobs sind eine Ansammlung von \textbf{Steps (Schritte)}, die man als Befehle interpretieren kann. Die Jobs werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird. Ein Step kann ein Befehl sein, der auf einer Kommandozeile ausgeführt werden kann, oder ein Verweis auf eine andere GitHub Action, die dann ausgeführt wird \cite[S. 5-7]{github_action_book}. 
 
-
-Abbildung \ref{fig:workflow_schema} zeigt schematisch wie ein Workflow in einem GitHub-Projekt ausgeführt werden kann. Eine Benutzer löst beispielsweise durch einen Push ein Ereignis aus. Daraufhin werden für jeden Job ein Runner initialisiert, die aus dem Repository das Projekt klonen, um so mit einer geklonten Kopie zu arbeiten.  Das Klonen des Repositorys ist dabei nicht obligatorisch, ist aber notwendig, falls mit dem Quelltext des Projektes gearbeitet werden soll.  Anschließend werden die Jobs gestartet, die ihrerseits wieder die Steps ausführen. Jeder Job wird auf einen separaten Runner ausgeführt und läuft parallel, außer der Benutzer gibt explizit eine Abhängigkeit zwischen den Jobs an. 
 \begin{figure}[ht!]
 \fontsize{7}{10}\selectfont
     \centering
-\includesvg[scale=0.8]{figures/chapter2/workflow_schema.svg}
+\includesvg[scale=0.75]{figures/chapter2/workflow_schema.svg}
     \caption{Schema: Workflows}
     \label{fig:workflow_schema}
 \end{figure}
+
+Abbildung \ref{fig:workflow_schema} zeigt schematisch wie ein Workflow in einem GitHub-Projekt ausgeführt werden kann. Eine Benutzer löst beispielsweise durch einen Push ein Ereignis aus. Daraufhin werden für jeden Job ein Runner initialisiert, die aus dem Repository das Projekt klonen, um so mit einer geklonten Kopie zu arbeiten.  Das Klonen des Repositorys ist dabei nicht obligatorisch, ist aber notwendig, falls mit dem Quelltext des Projektes gearbeitet werden soll.  Anschließend werden die Jobs gestartet, die ihrerseits wieder die Steps ausführen. Jeder Job wird auf einen separaten Runner ausgeführt und läuft parallel, außer der Benutzer gibt explizit eine Abhängigkeit zwischen den Jobs an. 
+
 
 Schlägt der Programmcode fehl, kann der Nutzer den Grund des Fehlers über die  \enquote{Actions}-Registerkarte herausfinden. Dort kann der Nutzer auch sämtliche Ausgaben des Programms ansehen, die auf der Konsole ausgegeben werden.
 
@@ -126,7 +127,7 @@ Auch die Qualität des Codes kann mit geeigneten Actions geprüft werden, was im
 Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird.
 
 
-\begin{figure}[h!]
+\begin{figure}[ht!]
 	\lstinputlisting
 			[caption={Beispielhafte Workflow-Datei},
 			label={lst:simple_workflow},
@@ -138,13 +139,15 @@ In Zeile 1 wird der Name des Workflows festgelegt. Anschließend werden die Bedi
 \subsubsection{Ausführung von Workflows}
 Sobald ein Workflow durch ein Ereignis ausgeführt wird, kann ein Benutzer den Programmablauf live über die Registerkarte \enquote{Actions} einsehen. Nachdem der Workflow abgeschlossen wurde, können hier auch Informationen über den Erfolg bzw. Misserfolg abgerufen werden. Beispielsweise können die Ausgaben auf der Konsole angesehen werden, die bis zu 90 Tage gespeichert werden.  Des Weiteren kann ein Benutzer auch erfahren, wie viel Zeit der Workflow benötigt hat, wobei hier auch der Zeitbedarf der einzelnen Steps angezeigt wird. 
 
-Abbildung \ref{fig:workflow_output} zeigt, wie ein Benutzer den Ablauf eines Workflows einsehen kann. Der Nutzer kann durch einklappbare Gruppen die Ausgaben der einzelnen Steps einsehen, sodass Steps für die Initialisierung etc. nicht die Übersicht stören. Zudem befindet sich auf der rechten Seite der Zeitbedarf eines Steps. Durch das rote Kreuz erfährt ein Nutzer, dass dieser Step fehlgeschlagen ist. 
-\begin{figure}
+\begin{figure}[ht!]
     \centering
-    \includegraphics[width=\columnwidth]{figures/chapter2/workflow_output.png}
+    \includegraphics[width=0.9\columnwidth]{figures/chapter2/workflow_output.png}
     \caption{Ausgabe eines Workflows}
     \label{fig:workflow_output}
 \end{figure}
+
+Abbildung \ref{fig:workflow_output} zeigt, wie ein Benutzer den Ablauf eines Workflows einsehen kann. Der Nutzer kann durch einklappbare Gruppen die Ausgaben der einzelnen Steps einsehen, sodass Steps für die Initialisierung etc. nicht die Übersicht stören. Zudem befindet sich auf der rechten Seite der Zeitbedarf eines Steps. Durch das rote Kreuz erfährt ein Nutzer, dass dieser Step fehlgeschlagen ist. 
+
 
 \subsubsection{Erstellung einer eigenen Action}
 Um eine eigene GitHub Action zu erstellen, muss in dem Hauptverzeichnis des Repositorys, in dem der Programmcode der Action liegt, eine Datei namens \enquote{action.yaml} oder \enquote{action.yml} erstellt werden. Listing \ref{lst:create_action_example} zeigt eine beispielhafte \enquote{action.yaml}.
@@ -233,4 +236,4 @@ Beispielsweise kann die Dokumentation einer Java-Methode beschreiben, dass ein P
 
 Falls Nullwerte explizit erlaubt sind, sollte die Methode sich dann stets korrekt verhalten und keine Ausnahmen werfen. 
 
-\enquote{@tComment} kann mit diesen einfachen Regeln jede Methode ausführen und prüfen, ob sich die Methode tatsächlich verhält, wie die Dokumentation es beschreibt. Dabei verwendet das Programm einfache \ac{NLP}-Heuristiken in der englischen Sprache; zum Beispiel prüft das Programm, ob die kurz vor dem Wort \enquote{null} ein negierendes Wort wie \enquote{not} oder \enquote{never} auftaucht und klassifiziert dann den dazugehörigen Parameter als Parameter, der nie null sein darf. 
+\enquote{@tComment} kann mit diesen einfachen Regeln jede Methode ausführen und prüfen, ob sich die Methode tatsächlich verhält, wie die Dokumentation es beschreibt. Dabei verwendet das Programm einfache  semantische Heuristiken in der englischen Sprache; zum Beispiel prüft das Programm, ob die kurz vor dem Wort \enquote{null} ein negierendes Wort wie \enquote{not} oder \enquote{never} auftaucht und klassifiziert dann den dazugehörigen Parameter als Parameter, der nie null sein darf. 

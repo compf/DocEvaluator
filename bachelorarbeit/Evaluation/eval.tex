@@ -8,7 +8,7 @@ Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub
 \begin{enumerate}
     \item \label{enum:size} Die Projekte müssen mindestens einen Umfang von 10\,000 \ac{LOC} haben
     \item \label{enum:already_cited} Die Projekte müssen bereits in einer in dieser Bachelorarbeit zitierten Quelle in puncto Dokumentationsqualität analysiert worden sein
-    \item \label{enum:parsing_error}  Die Projekte sollen möglichst wenige Parsing-Fehler beim \doceval produzieren. Bei mehr als als zwei Fehlern wird ein Projekt nicht betrachtet
+    \item \label{enum:parsing_error}  Die Projekte sollen möglichst wenige Parsing-Fehler beim \doceval produzieren. Bei mehr als als zwei Fehlern wird ein Projekt nicht betrachtet. Können jedoch Fehler folgenlos behoben werden, so kann das Projekt dennoch betrachtet werden.
     \item Mindestens ein Projekt sollte deutlich größer sein als die anderen Projekte
 \end{enumerate}
  Durch die Bedingung in Nr. \ref{enum:size} wird sichergestellt, dass eine ausreichende Anzahl an Fehlern in der Dokumentation zu erwarten ist, um eine gute Analyse der Dokumentationsqualität  und eine aussagekräftige Bewertung der Geschwindigkeit zu ermöglichen. Durch die Bedingung in Nr.  \ref{enum:already_cited} werden nur Projekte in Betracht gezogen, die bereits in der wissenschaftlichen Literatur berücksichtigt wurden und daher (zumindest für den jeweiligen Autor der Quelle) geeignet für eine Analyse der Dokumentation sind. Mit der Bedingung in Nr. \ref{enum:parsing_error} wird eine Verzerrung zugunsten oder zuungunsten des \textit{DocEvaluators} vermieden, denn durch Parsing-Fehler können Komponenten falsch analysiert werden, die von den anderen Tools richtig analysiert werden. Indirekt wird dadurch gefordert, dass ein Projekt keine neueren Java-Funktionen verwendet, da  der \textit{DocEvaluator} nur Java bis Version 8 unterstützt. Die letzte Bedingung ist besonders für die Bewertung der Geschwindigkeit relevant, da so geprüft werden kann, ob der \doceval auch bei größeren Projekten noch in annehmbarer Zeit ein Ergebnis berechnen kann. 
@@ -23,7 +23,7 @@ Zur Durchführung der Evaluation wurden verschiedene Softwareprojekte aus GitHub
  
  ArgoUML und Eclipse wurden in \cite[S. 74] {AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner} bewertet, wobei hier nur Eclipse \ac{JDT} betrachtet werden soll, da das gesamte Eclipse-Projekt zu umfassend ist. Log4J wurde in \cite[S. 267] {@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies} betrachtet. 
 
- Bei allen Projekten traten zunächst Parsing-Fehler auf. Dies lag allerdings in den meisten Fällen daran, dass auskommentierte Methoden noch einen Javadoc-Präfix hatten. Dies kann vom \doceval nicht korrekt verarbeitet werden. Da diese Methoden offensichtlich nicht verwendet werden und keinen Einfluss auf die Qualität der Dokumentation haben können, wurden sie ersatzlos entfernt. Bei einen Fehler in Eclipse JDT konnte der \doceval eine Datei mit mehr als 3000 Codezeilen nicht verarbeiten. Diese Datei wurde bei der Evaluation ignoriert.
+ Bei allen Projekten traten zunächst Parsing-Fehler auf. Dies lag allerdings in den meisten Fällen daran, dass auskommentierte Methoden noch einen Javadoc-Präfix hatten. Dies kann vom \doceval nicht korrekt verarbeitet werden. Da diese Methoden offensichtlich nicht verwendet werden und keinen Einfluss auf die Qualität der Dokumentation haben können, wurden sie ersatzlos entfernt. Bei einen Fehler in Eclipse \ac{JDT} konnte der \doceval eine Datei mit mehr als 3000 Codezeilen nicht verarbeiten. Diese Datei wurde bei der Evaluation ignoriert.
 \section{Analyse der Qualität}
 Durch die Evaluation der Qualität soll geprüft werden, ob der \doceval trotz des in Kapitel \ref{chapter_conception}
  beschriebenen abstrakten Format eine Java-Datei richtig parsen kann und alle für die Dokumentation relevanten Informationen korrekt extrahieren kann. Zur Durchführung der Evaluation muss zunächst definiert werden, welche Funktionen der einzelnen Programme miteinander verglichen werden können, da die Programme unterschiedliche Aspekte der Dokumentation überprüfen und die Darstellung der Ergebnisse im Vergleich zum \textit{DocEvaluator} abweicht.
@@ -77,11 +77,11 @@ Da ein Vergleich der drei Tools somit nur eingeschränkt möglich ist, wird sich
 
 \subsection{Ergebnisse}
 
-Tabelle \ref{tab:eval_results} listet die Anzahl der gefundenen Fehler auf. In den Spalten werden die die Fehler nach dem Projekt gruppiert. Die ersten drei Zeilen beschreiben, wie viele Fehler die einzelnen Tools pro Projekt gefunden haben. So hat  der \textit{DocEvaluator} 1710 Fehler in \textit{Log4J} gefunden.  In den übrigen Zeilen wird aufgeführt, welche Kombinationen der Tools wie viele Fehler gefunden haben. Die Zeile mit der ersten Spalte \enquote{\{PMD, DE\}} beschreibt beispielsweise, dass \textit{PMD} und der  \textit{DocEvaluator} 41 Fehler bei \textit{Log4J}, 264 Fehler bei \textit{ArgoUML} und 253 Fehler bei \textit{Eclipse JDT} gefunden haben. Diese Fehler wurden nicht von \textit{Checkstyle} gefunden.  
+Tabelle \ref{tab:eval_results} listet die Anzahl der gefundenen Fehler auf. In den Spalten werden die die Fehler nach dem Projekt gruppiert. Die ersten drei Zeilen beschreiben, wie viele Fehler die einzelnen Tools pro Projekt gefunden haben. So hat  der \textit{DocEvaluator} 1710 Fehler in \textit{Log4J} gefunden.  In den übrigen Zeilen wird aufgeführt, welche Kombinationen der Tools wie viele Fehler gefunden haben. Die Zeile mit der ersten Spalte \enquote{\{PMD, DE\}} beschreibt beispielsweise, dass \textit{PMD} und der  \textit{DocEvaluator} 41 Fehler bei \textit{Log4J}, 264 Fehler bei \textit{ArgoUML} und 253 Fehler bei \textit{Eclipse \ac{JDT}} gefunden haben. Diese Fehler wurden nicht von \textit{Checkstyle} gefunden.  
 \begin{table}[]
     \centering
 \begin{tabular}{c|c|c|c}
-          & Log4J & ArgoUML & Eclipse JDT \\ \hline
+          & Log4J & ArgoUML & Eclipse \ac{JDT} \\ \hline
 |DE|            & 1.710 & 10.054  & 17.380      \\ \hline
 |CS|            & 1.590 & 9.961   & 17.638      \\ \hline
 |PMD|           & 1.008 & 9.051   & 12.702      \\ \hline\hline
@@ -115,7 +115,7 @@ Tabelle \ref{tab:hit_rate} zeigt basierend auf den genannten Formeln (\ref{eq1} 
 \begin{table}[]
     \centering
     \begin{tabular}{c|c|c|c}
-     & Log4J & ArgoUML & Eclipse JDT \\ \hline
+     & Log4J & ArgoUML & Eclipse \ac{JDT} \\ \hline
     \ref{eq1} &   93.68 \% &	98.77 \% &	96.81 \% \\\hline
      \ref{eq2} & 95.57 \% &	96.47 \% &	95.50 \% \\\hline
 
@@ -124,26 +124,34 @@ Tabelle \ref{tab:hit_rate} zeigt basierend auf den genannten Formeln (\ref{eq1} 
     \label{tab:hit_rate}
 \end{table}
 Es ist klar erkennbar, dass die Trefferrate unabhängig von der Formel und den analysierten Projekt größer als 90 \% ist, sodass die meisten Fehler, die vom \doceval gefunden werden, von mindestens einem anderen Tool gefunden werden und die meisten Fehler, die von \textit{Checkstyle} oder \textit{PMD} gefunden werden, auch vom \doceval gefunden werden.
-\begin{figure}
+
+\begin{figure}[ht!]
+
+   \begin{subfigure}[b]{0.6\textwidth}
     \centering
-\includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/log4j.svg}
-    \caption{Überschneidungen der Fehler bei Log4J}
+\includesvg[scale=0.7,width=\textwidth]{figures/chapter5/log4j.svg}
+    \caption{Venn-Diagramm:Log4J}
     \label{fig:log4j_venn}
+\end{subfigure}
+\hfill
+\begin{subfigure}[b]{0.6\textwidth}
+    \centering
+\includesvg[scale=0.7,width=\textwidth]{figures/chapter5/argo.svg}
+    \caption{Venn-Diagramm: ArgoUML}
+    \label{fig:argo_venn}
+\end{subfigure}
+\hspace{10cm}
+\begin{subfigure}[b]{0.6\textwidth}
+    \centering
+\includesvg[scale=0.7,width=\textwidth]{figures/chapter5/eclipse.svg}
+    \caption{Venn-Diagramm: Eclipse \ac{JDT}}
+    \label{fig:eclipse_venn}
+\end{subfigure}
 \end{figure}
 
-\begin{figure}
-    \centering
-\includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/argo.svg}
-    \caption{Überschneidungen der Fehler bei ArgoUml}
-    \label{fig:argo_venn}
-\end{figure}
-\begin{figure}
-    \centering
-\includesvg[scale=0.5,width=\columnwidth]{figures/chapter5/eclipse.svg}
-    \caption{Überschneidungen der Fehler bei Eclipse JDT}
-    \label{fig:eclipse_venn}
-\end{figure}
-\clearpage
+
+
+
 \subsection{Bewertung der Qualitätsevaluation}
 Insgesamt zeigt die Evaluation der Qualität, dass der \doceval eine hohe Abdeckung mit \checkpmd hat und somit die meisten von diesen Tools gefundenen Fehler auch findet. Somit ist das abstrakte Format zur Repräsentation einer Quellcodedatei geeignet, um die meisten Aspekte, welche für die Dokumentation relevant sind, zu beschreiben. 
 
@@ -163,7 +171,7 @@ Besonders an dieser Methode ist, dass die Parameter auf verschiedenen Zeilen ver
 
 \subsubsection{Klassen in Methoden}
 
-In Java können Klassen in Methoden deklariert werden bzw. anonyme Klassen direkt instantiiert werden. Diese Klassen können ebenfalls Javadoc besitzen, werden allerdings vom \doceval ignoriert, da der \doceval jeglichen Code in Methoden nur unstrukturiert als Zeichenkette speichert und nichnt weiterverarbeitet. Die anderen beiden Tools prüfen auch diese Klasse, sodass sie entsprechend einige Fehler finden, die der \doceval nicht mehr finden kann. 
+In Java können Klassen in Methoden deklariert werden bzw. anonyme Klassen direkt instantiiert werden. Diese Klassen können ebenfalls Javadoc besitzen, werden allerdings vom \doceval ignoriert, da der \doceval jeglichen Code in Methoden nur unstrukturiert als Zeichenkette speichert und nicht weiterverarbeitet. Die anderen beiden Tools prüfen auch diese Klasse, sodass sie entsprechend einige Fehler finden, die der \doceval nicht mehr finden kann. 
 
 
 \subsubsection{Fehler in einzeiligen Kommentaren bei PMD}
@@ -171,6 +179,7 @@ Anders als der\doceval und \textit{Checkstyle} berücksichtigt \textit{PMD} auch
 
 
 \clearpage
+
  \section{Analyse der Geschwindigkeit}
  In diesem Abschnitt wird der \doceval mit \checkpmd in Bezug auf die Geschwindigkeit verglichen. Damit soll geprüft werden, ob das Tool neben einer guten Qualität auch in einer angemessenen Zeit ein Ergebnis liefert. Dies ist im \ac{CI/CD}-Kontext wichtig, da bei einer langen Laufzeit des Tools  die Bereitstellung eines geprüften Softwareprojektes verzögert wird und somit die Produktivität reduziert wird. 
  
@@ -188,7 +197,7 @@ Anders als der\doceval und \textit{Checkstyle} berücksichtigt \textit{PMD} auch
         & DE & CS & PMD  \\\hline
         Log4J & 2.538 & 2.30 & 1.907\\\hline 
         ArgoUML & 16.965 & 9.301 & 7.917 \\\hline
-        Eclipse JDT & 69.148 & 27.316 & 21.586
+        Eclipse \ac{JDT} & 69.148 & 27.316 & 21.586
      \end{tabular}
      \caption{Median der Performance in Sekunden}
      \label{tab:median_speed}
@@ -200,40 +209,43 @@ Anders als der\doceval und \textit{Checkstyle} berücksichtigt \textit{PMD} auch
         & DE & CS & PMD  \\\hline
         Log4J & 0.077 &  0.174 &  0.068\\\hline 
         ArgoUML & 0.197 &  0.083 & 0.157 \\\hline
-        Eclipse JDT & 1.594 & 0.265 & 0.270\\\hline
+        Eclipse \ac{JDT} & 1.594 & 0.265 & 0.270\\\hline
      \end{tabular}
      \caption{Standardabweichung der Performance in Sekunden}
      \label{tab:std_speed}
  \end{table}
  
- 
  \begin{figure}
+    \begin{subfigure}[b]{0.6\textwidth}
     \centering
-\includesvg[scale=0.5]{figures/chapter5/log4j_speed_boxplot.svg}
-    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt Log4J}
+\includesvg[scale=0.5,width=\textwidth]{figures/chapter5/log4j_speed_boxplot.svg}
+    \caption{Boxplot: Log4J}
     \label{fig:log4j_box}
-\end{figure}
-
- \begin{figure}
+\end{subfigure}
+\hfill
+ \begin{subfigure}[b]{0.6\textwidth}
     \centering
-\includesvg[scale=0.5]{figures/chapter5/argo_speed_boxplot.svg}
-    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt ArgoUML}
+\includesvg[scale=0.5,width=\textwidth]{figures/chapter5/argo_speed_boxplot.svg}
+    \caption{Boxplot: ArgoUML}
     \label{fig:argo_box}
-\end{figure}
+\end{subfigure}
 
- \begin{figure}
+ \begin{subfigure}[b]{0.8\textwidth}
     \centering
-\includesvg[scale=0.5]{figures/chapter5/eclipse_speed_boxplot.svg}
-    \caption{Boxplot-Darstellung der Geschwindigkeit beim Projekt Eclipse JDT }
+\includesvg[scale=0.5,width=\textwidth]{figures/chapter5/eclipse_speed_boxplot.svg}
+    \caption{Boxplot: Eclipse \ac{JDT} }
     \label{fig:eclipse_box}
-\end{figure}
+\end{subfigure}
+   
+ \end{figure}
+ 
 
-Aus den Tabellen und Boxplot-Diagrammen wird ersichtlich, dass der \doceval im Durchschnitt länger benötigt, um die Projekte zu bewerten. Wie aus dem Boxplot-Diagramm \ref{fig:log4j_box} zu entnehmen ist, gab es nur bei Log4J einen Ausreißer, bei dem \textit{Checkstyle} mehr Zeit benötigt hat.   Ansonsten war \textit{Checkstyle} stets schneller als der \textit{DocEvaluator} \textit{PMD} analysiert am schnellsten ein Projekt. Der Unterschied in der Laufzeit zwischen dem \doceval und den anderen Tools steigt stark  mit wachsender Größe des analysierten Projektes.  Bei dem kleinsten Projekt \textit{Log4J} benötigt der \doceval  durchschnittlich die 1.103-fache Zeit im Vergleich zu \textit{Checkstyle}. Bei dem größten Projekt \textit{Eclipse JDT} benötigt der \doceval durchschnittlich 2.53-mal so viel Zeit wie \textit{Checkstyle}. Beim \doceval und \textit{PMD} steigt die Standardabweichung mit der Größe des Projektes, während dieser Trend bei \textit{Checkstyle} nicht so eindeutig ist.
+Aus den Tabellen und Boxplot-Diagrammen wird ersichtlich, dass der \doceval im Durchschnitt länger benötigt, um die Projekte zu bewerten. Wie aus dem Boxplot-Diagramm \ref{fig:log4j_box} zu entnehmen ist, gab es nur bei Log4J einen Ausreißer, bei dem \textit{Checkstyle} mehr Zeit benötigt hat.   Ansonsten war \textit{Checkstyle} stets schneller als der \textit{DocEvaluator} \textit{PMD} analysiert am schnellsten ein Projekt. Der Unterschied in der Laufzeit zwischen dem \doceval und den anderen Tools steigt stark  mit wachsender Größe des analysierten Projektes.  Bei dem kleinsten Projekt \textit{Log4J} benötigt der \doceval  durchschnittlich die 1.103-fache Zeit im Vergleich zu \textit{Checkstyle}. Bei dem größten Projekt \textit{Eclipse \ac{JDT}} benötigt der \doceval durchschnittlich 2.53-mal so viel Zeit wie \textit{Checkstyle}. Beim \doceval und \textit{PMD} steigt die Standardabweichung mit der Größe des Projektes, während dieser Trend bei \textit{Checkstyle} nicht so eindeutig ist.
 
 Bei dem Boxplot-Diagramm \ref{fig:log4j_box} zu \textit{Log4J} ist auch erkennbar, dass Ausreißer der Laufzeit nach oben häufiger sind als nach unten, da der Median sich stets im unteren Bereich des Boxplot-Quartile befindet. Bei den anderen Projekten ist dies aufgrund des größeren Zeitabstand  zwischen dem \doceval und den anderen Tools  und der daraus resultierenden Verkleinerung der einzelnen Boxplots  nicht so klar im Boxplot ersichtlich, allerdings stimmt diese Aussage größtenteils auch dort. Nur bei der Analyse von \textit{ArgoUML} durch den \doceval (Abbildung \ref{fig:argo_box}) scheinen Abweichungen nach unten häufiger zu sein.
 
 \subsection{Bewertung der Ergebnisse}
-Insgesamt zeigt die Evaluation der Geschwindigkeit, dass der \doceval langsamer arbeitet als die anderen Programmen. Allerdings  bleibt die Laufzeit auf einen angemessenen Niveau, da die Verarbeitung von dem größten Projekt \enquote{Eclipse JDT} mit 400.000 \ac{LOC} im Durchschnitt nur etwas mehr als einer Minute benötigt. Nichtsdestotrotz ignoriert diese Analyse, dass die Ausgabe von Ergebnissen über die Konsole hier nicht berücksichtigt wurde und nur eine einfache Metrik angewendet wurde. Bei einem Experiment mit aktivierter Ausgabe wurden ähnliche Ergebnisse produziert, insbesondere ist der \doceval weiterhin das langsamste Programm. 
+Insgesamt zeigt die Evaluation der Geschwindigkeit, dass der \doceval langsamer arbeitet als die anderen Programmen. Allerdings  bleibt die Laufzeit auf einen angemessenen Niveau, da die Verarbeitung von dem größten Projekt \enquote{Eclipse \ac{JDT}} mit 400.000 \ac{LOC} im Durchschnitt nur etwas mehr als einer Minute benötigt. Nichtsdestotrotz ignoriert diese Analyse, dass die Ausgabe von Ergebnissen über die Konsole hier nicht berücksichtigt wurde und nur eine einfache Metrik angewendet wurde. Bei einem Experiment mit aktivierter Ausgabe wurden ähnliche Ergebnisse produziert, insbesondere ist der \doceval weiterhin das langsamste Programm. 
 
 Für die schlechtere Laufzeit des \doceval im vergleich zu \checkpmd lassen sich zwei Hauptargumente finden. So soll \textit{Node.Js}, welches die Plattform des Tools ist, langsamer sein als Java, in dem \checkpmd programmiert sind \cite{node_java_speed}.  Außerdem ist zu beachten, dass der \doceval Metriken berechnen soll und daher die Zwischenergebnisse aller Komponenten speichern muss, um daraus ein Gesamtergebnis mittels eines arithmetischen Mittelwerts oder eines anderen Algorithmus' berechnen zu können. Auch wenn dieses Gesamtergebnis bei der Laufzeitevaluation uninteressant ist, wird es dennoch berechnet, was zusätzliche Laufzeit benötigt. Dies erklärt auch die starke Steigerung des Zeitaufwands mit größeren Projekten.
 
