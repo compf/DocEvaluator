@@ -202,7 +202,7 @@ Anders als der\doceval und \textit{Checkstyle} berücksichtigt \textit{PMD} auch
  
  Die Analyse jedes Projektes mit jedem Tool wird zehnmal durchgeführt, um Schwankungen durch Hintergrundprozesse oder andere Einflussfaktoren auszugleichen. Die Evaluation der Geschwindigkeit wird auf einem Laptop mit dem Prozessor \enquote{i7-1165G7} mit 16 GB Arbeitsspeicher durchgeführt. Dabei wurden alle Programme auf dem Computer geschlossen und die Berechnungen wurden ohne grafische Benutzeroberfläche durchgeführt, um die Schwankungen der Laufzeit zu minimieren.  
  \subsection{Ergebnisse}\label{chapter:eval_speed_result}
- Die Tabellen \ref{tab:median_speed} und \ref{tab:std_speed} zeigen den Median und die Standardabweichung der benötigten Durchlaufzeit pro Tool und Projekt in Sekunden. Die Rohdaten, also alle zehn Durchlaufszeiten pro Tool und Projekt, sind in Kapitel \ref{chapter:raw_speed_data} zu finden. Die Abbildungen \ref{fig:log4j_box}, \ref{fig:argo_box} und \ref{fig:eclipse_box} visualisieren den Inhalt der Tabellen als Boxplot. Diese Abbildungen sind ebenfalls im Anhang \ref{appendix:boxplots} in maximaler Größe dargestellt: 
+ Die Tabellen \ref{tab:median_speed} und \ref{tab:std_speed} zeigen den Median und die Standardabweichung der benötigten Durchlaufzeit pro Tool und Projekt in Sekunden. Die Rohdaten, also alle zehn Durchlaufszeiten pro Tool und Projekt, sind im Anhang \ref{chapter:raw_speed_data} zu finden. Die Abbildungen \ref{fig:log4j_box}, \ref{fig:argo_box} und \ref{fig:eclipse_box} visualisieren den Inhalt der Tabellen als Boxplot. Diese Abbildungen sind ebenfalls im Anhang \ref{appendix:boxplots} in maximaler Größe dargestellt: 
  \begin{table}[ht!]
      \centering
      \begin{tabular}{c|c|c|c}
@@ -228,23 +228,23 @@ Anders als der\doceval und \textit{Checkstyle} berücksichtigt \textit{PMD} auch
  \end{table}
  
  \begin{figure}
-    \begin{subfigure}[b]{0.6\textwidth}
+    \begin{subfigure}[b]{0.5\textwidth}
     \centering
-\includesvg[scale=0.5,width=\textwidth]{figures/chapter5/log4j_speed_boxplot.svg}
+\includesvg[width=\textwidth]{figures/chapter5/log4j_speed_boxplot.svg}
     \caption{Boxplot: Log4J}
     \label{fig:log4j_box}
 \end{subfigure}
-\hfill
- \begin{subfigure}[b]{0.6\textwidth}
+\hspace{0.1cm}
+ \begin{subfigure}[b]{0.5\textwidth}
     \centering
-\includesvg[scale=0.5,width=\textwidth]{figures/chapter5/argo_speed_boxplot.svg}
+\includesvg[width=\textwidth]{figures/chapter5/argo_speed_boxplot.svg}
     \caption{Boxplot: ArgoUML}
     \label{fig:argo_box}
 \end{subfigure}
 
- \begin{subfigure}[b]{0.8\textwidth}
+ \begin{subfigure}[b]{0.7\textwidth}
     \centering
-\includesvg[scale=0.5,width=\textwidth]{figures/chapter5/eclipse_speed_boxplot.svg}
+\includesvg[,width=\textwidth]{figures/chapter5/eclipse_speed_boxplot.svg}
     \caption{Boxplot: Eclipse \ac{JDT} }
     \label{fig:eclipse_box}
 \end{subfigure}
