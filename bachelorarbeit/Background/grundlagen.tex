@@ -12,11 +12,9 @@ Im Kontext dieser Bachelorarbeit sollen allerdings nur bestimmte Arten der Softw
 
 Aus diesem Grunde konzentriert sich diese Bachelorarbeit nur auf Kommentare. Studien zeigen, dass Kommentare eine hohe Relevanz in der Softwareentwicklung haben, sodass eine Analyse der Kommentare eine gute Annäherung an die tatsächliche Qualität der Dokumentation geben kann \cite[S. 71]{AStudyoftheDocumentationEssentialtoSoftwareMaintenance}. Dabei sollen nicht alle Kommentare betrachtet werden, sondern nur eine bestimmte Kategorie von Kommentaren, die besonders leicht verarbeitbar sind, sodass aus ihnen viele Informationen extrahiert werden können und die Bewertung dadurch genauer werden kann. 
 
-Für diese Bachelorarbeit werden daher nur bestimmte Inline-Kommentare im Quellcode betrachtet, die ein Spezialfall von normalen mehrzeiligen Kommentaren sind.
-Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Nichtsdestotrotz haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichte Verarbeitung durch Computerprogramme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. In vielen Fällen werden diese Kommentare einer bestimmten Komponente zugeordnet, wobei dies dadurch geschieht, dass der Kommentar direkt vor dieser Komponente steht. 
-\begin{comment}
-Ein Beispiel dafür ist Javadoc, da jeder Javadoc-Kommentar auch ein gültiger mehrzeiliger Kommentar ist.
-\end{comment}
+Für diese Bachelorarbeit werden daher nur bestimmte Inline-Kommentare im Quellcode betrachtet, die ein Spezialfall von mehrzeiligen Kommentaren sind.
+Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Dennoch haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichtere Verarbeitung durch Programme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. Diese Kommentare stehen als Präfix vor einer bestimmten Komponente und werden ihr so eindeutig zugeordnet. Im Folgenden werden diese Kommentare auch \textbf{strukturierte Kommentare} genannt. 
+
 
 
 
