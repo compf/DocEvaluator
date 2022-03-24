@@ -12,5 +12,5 @@ typeType:
 	(annotation* '[' ']')*;
     
 variableDeclaratorId:
- IDENTIFIER 
- ('[' ']')*;
+	IDENTIFIER 
+	('[' ']')*;

@@ -103,7 +103,7 @@ Diese Heuristik sollte die gängigsten Javadoc-Blöcke verarbeiten können. Alte
 \section{Konfiguration des Tools}\label{chapter:conf}
 Zur Nutzung des Tools werden bestimmte Informationen benötigt, die aus verschiedenen Quellen bezogen werden. Zunächst benötigt das Tool den Pfad, der die Quelldateien enthält, die nach Kapitel \ref{chapter:traversing} traversiert werden sollen. Dieser wird als namenloser Parameter über die Kommandozeile übergeben. Er ist optional, da bei dessen Fehlen das aktuelle Arbeitsverzeichnis genommen wird. Die weiteren Informationen werden aus zwei Quellen bezogen. Die erste Quelle ist eine \ac{JSON}-Datei namens \enquote{comment\_conf.json},welche als notwendige Daten für die Arbeit des Programms dienen. Listing \ref{lst:example_conf} zeigt eine beispielhafte \ac{JSON}-Datei:
 
-\begin{figure}
+\begin{figure}[htbp]
 \lstinputlisting
 [caption={Beispielhafte Konfigurationsdatei für das Tool},
 label={lst:example_conf},
