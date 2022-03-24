@@ -3,7 +3,7 @@
   {
     name:,on:,jobs:,steps:,uses:,run:,echo,workflow_dispatch:,description:,inputs:,required:,default:,runs:,using:,main:,with:,author:, absolute_threshold:
   },
-  keywordstyle=\color{blue}\bfseries,
+  keywordstyle=\color{black}\bfseries,
   ndkeywords={false,compf/JavaDocEvaluator@action},
   ndkeywordstyle=\color{black}\bfseries,
   identifierstyle=\color{black},
@@ -11,7 +11,7 @@
   comment=[l]{//},
   morecomment=[s]{/*}{*/},
   commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
+  %stringstyle=\color{red}\ttfamily,
   morestring=[b]',
   morestring=[b]",
   alsodigit={:},
@@ -22,19 +22,16 @@
 
 
 \lstdefinelanguage{ANTLR}{
-  morekeywords=
+  keywords=
   {
-   %formalParameter:,variableModifier:,FINAL,typeType:,variableDeclaratorId:,IDENTIFIER,JCOMMENT:
+   formalParameter:,variableModifier:,typeType:,variableDeclaratorId:,JCOMMENT:
   },
-  keywordstyle=\color{black}\bfseries,
-  ndkeywords={class, export, boolean, throw, implements, import, this},
-  ndkeywordstyle=\color{darkgray}\bfseries,
+  keywordstyle=\color{black}\itshape,
   identifierstyle=\color{black},
   sensitive=false,
   comment=[l]{//},
   morecomment=[s]{/*}{*/},
   commentstyle=\color{purple}\ttfamily,
-  stringstyle=\color{red}\ttfamily,
   morestring=[b]',
   morestring=[b]",
   alsodigit={:},
@@ -44,9 +41,10 @@
     tabsize             = 4,
     showstringspaces    = false,
     keywords            = {false,true,include,exclude,metrics,metric_name,weight,unique_name,params,absolute_threshold,builder,relative_threshold},
-    alsoletter          = 0123456789.,
-    stringstyle         = \color{black},
-    basicstyle          = \ttfamily
+    alsoletter          = 0123456789.*,
+    ndkeywordstyle         = \color{red},
+    basicstyle          = \ttfamily,
+  keywordstyle=\color{black}\bfseries,
 }
 
 
@@ -97,3 +95,15 @@
 }
 \end{comment}
 
+\lstdefinelanguage{javascript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break,let,this,private},
+  keywordstyle=\color{black}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]",
+}
