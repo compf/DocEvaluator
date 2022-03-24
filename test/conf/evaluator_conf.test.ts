@@ -62,10 +62,9 @@ test("test sanitizing conf",()=>{
 });
 test("test state saving",()=>{
     let stateManager=StateManagerFactory.createStateManager("file","testDir");
-    expect(stateManager.load()).toBeNull();
     const expected=50;
     stateManager.save(expected);
-    expect(stateManager.load()).toBe(expected);
+    expect(stateManager.relativeLossTooHigh(expected,0)).toBeFalsy();
     unlinkSync("testDir/.evaluator_last_state.txt");
 
     expect(()=>{

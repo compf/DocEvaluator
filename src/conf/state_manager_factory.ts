@@ -12,8 +12,20 @@ export namespace StateManagerFactory {
         switch (name) {
             case "file":
                 return new FileStateManager(workingDirectory);
+            case "none":
+                return new NoneStateManager();
             default:
                 throw new Error("Could not find state manager " + name);
         }
+    }
+    class NoneStateManager implements StateManager{
+        relativeLossTooHigh(newResult: number, relativeThreshold: number): boolean {
+            return false;
+        }
+        save(num: number): void {
+            // do nothing
+        }
+       
+        
     }
 }

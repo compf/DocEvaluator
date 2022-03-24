@@ -36,7 +36,7 @@ export function main(args: string[]) {
     LogMessage.BasePath = workingDirectory; //TODO don't use global variables
     let conf = loadConf(workingDirectory);
     let objects = initializeObjects(conf, workingDirectory);
-    let lastResult = objects.stateManager.load();
+
 
 
     let finalResult = calculateResult(workingDirectory, conf, objects);
@@ -46,9 +46,11 @@ export function main(args: string[]) {
     objects.stateManager.save(finalResult);
 
     if (finalResult < conf.absolute_threshold) {
+        objects.stateManager.save(finalResult);
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult > finalResult && Math.abs(lastResult - finalResult) >= conf.relative_threshold) {
+    else if (objects.stateManager.relativeLossTooHigh(finalResult,conf.relative_threshold)) {
+        objects.stateManager.save(finalResult);
         throw new Error("Difference from last run is too high");
 
     }

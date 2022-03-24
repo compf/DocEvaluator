@@ -11,5 +11,5 @@ export interface StateManager {
      * gets the stored number o null if no number was stored
      * @return the stored number or null if number has not been stored
      */
-    load(): number | null;
+    relativeLossTooHigh(newResult:number,relativeThreshold:number): boolean;
 }

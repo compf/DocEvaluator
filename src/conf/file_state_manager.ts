@@ -15,12 +15,13 @@ export class FileStateManager implements StateManager {
     constructor(workingDirectory: string) {
         this.path = join(workingDirectory, STATE_PATH);
     }
-    load(): number | null {
+    relativeLossTooHigh(newResult:number,relativeThreshold:number): boolean{
         if (existsSync(this.path)) {
-            return parseFloat(readFileSync(this.path).toString());
+            let lastResult= parseFloat(readFileSync(this.path).toString());
+            return  lastResult > newResult && Math.abs(lastResult - newResult) >= relativeThreshold;
         }
         else {
-            return null;
+            return false;
         }
 
     }
