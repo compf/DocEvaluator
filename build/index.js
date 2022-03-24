@@ -35547,12 +35547,13 @@ class FileStateManager {
     save(num) {
         (0, fs_1.writeFileSync)(this.path, num + "");
     }
-    load() {
+    relativeLossTooHigh(newResult, relativeThreshold) {
         if ((0, fs_1.existsSync)(this.path)) {
-            return parseFloat((0, fs_1.readFileSync)(this.path).toString());
+            let lastResult = parseFloat((0, fs_1.readFileSync)(this.path).toString());
+            return lastResult > newResult && Math.abs(lastResult - newResult) >= relativeThreshold;
         }
         else {
-            return null;
+            return false;
         }
     }
 }
@@ -35581,11 +35582,21 @@ var StateManagerFactory;
         switch (name) {
             case "file":
                 return new file_state_manager_1.FileStateManager(workingDirectory);
+            case "none":
+                return new NoneStateManager();
             default:
                 throw new Error("Could not find state manager " + name);
         }
     }
     StateManagerFactory.createStateManager = createStateManager;
+    class NoneStateManager {
+        relativeLossTooHigh(newResult, relativeThreshold) {
+            return false;
+        }
+        save(num) {
+            // do nothing
+        }
+    }
 })(StateManagerFactory = exports.StateManagerFactory || (exports.StateManagerFactory = {}));
 
 
@@ -35703,16 +35714,17 @@ function main(args) {
     log_message_1.LogMessage.BasePath = workingDirectory; //TODO don't use global variables
     let conf = (0, EvaluatorConf_1.loadConf)(workingDirectory);
     let objects = initializeObjects(conf, workingDirectory);
-    let lastResult = objects.stateManager.load();
     let finalResult = calculateResult(workingDirectory, conf, objects);
     printLogsMessages(logMessages);
     printResultByMetric(objects);
     console.log("The result was " + finalResult);
     objects.stateManager.save(finalResult);
     if (finalResult < conf.absolute_threshold) {
+        objects.stateManager.save(finalResult);
         throw new Error("Threshold was not reached");
     }
-    else if (lastResult != null && lastResult > finalResult && Math.abs(lastResult - finalResult) >= conf.relative_threshold) {
+    else if (objects.stateManager.relativeLossTooHigh(finalResult, conf.relative_threshold)) {
+        objects.stateManager.save(finalResult);
         throw new Error("Difference from last run is too high");
     }
 }
