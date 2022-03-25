@@ -13,7 +13,7 @@ Im Kontext dieser Bachelorarbeit sollen allerdings nur bestimmte Arten der Softw
 Aus diesem Grunde konzentriert sich diese Bachelorarbeit nur auf Kommentare. Studien zeigen, dass Kommentare eine hohe Relevanz in der Softwareentwicklung haben, sodass eine Analyse der Kommentare eine gute Annäherung an die tatsächliche Qualität der Dokumentation geben kann \cite[S. 71]{AStudyoftheDocumentationEssentialtoSoftwareMaintenance}. Dabei sollen nicht alle Kommentare betrachtet werden, sondern nur eine bestimmte Kategorie von Kommentaren, die besonders leicht verarbeitbar sind, sodass aus ihnen viele Informationen extrahiert werden können und die Bewertung dadurch genauer werden kann. 
 
 Für diese Bachelorarbeit werden daher nur bestimmte Inline-Kommentare im Quellcode betrachtet, die ein Spezialfall von mehrzeiligen Kommentaren sind.
-Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Dennoch haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichtere Verarbeitung durch Programme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. Diese Kommentare stehen als Präfix vor einer bestimmten Komponente und werden ihr so eindeutig zugeordnet. Im Folgenden werden diese Kommentare auch \textbf{strukturierte Kommentare} genannt. 
+Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Bestandteil des kompilierten Programms. Dennoch haben diese spezifischen Kommentare aber eine bestimmte Struktur, die eine leichtere Verarbeitung durch Programme ermöglicht und gleichzeitig trotzdem für Menschen lesbar bleibt. Diese Kommentare stehen als Präfix vor einer bestimmten Komponente und werden ihr so eindeutig zugeordnet. Im Folgenden werden diese Kommentare auch \textbf{strukturierte Kommentare} genannt. Ein Beispiel für solche strukturierte Kommentare ist Javadoc. 
 
 
 
@@ -36,14 +36,14 @@ Javadoc \cite{HowtoWriteDocCommentsfortheJavadocTool} ist ein Tool zur Generieru
 			{figures/chapter2/ternary.java}
 		\end{figure}
 
-Listing \ref{lst:simple_javadoc} zeigt ein Beispiel für eine gelungene Verwendung von Javadoc.
+Listing \ref{lst:simple_javadoc} zeigt beispielhaft, wie eine Methode mittels Javadoc dokumentiert werden kann:
 
 \begin{comment}Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert (Z.~3-5). Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes (Z.~6), welche am besten auch jeden möglichen Fall abdeckt. Um bestimmte Infomrationen \enquote{\{@code ...\}}, der auch kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
 \end{comment}
 
 		
 		
-Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente stehen  (Z.~2). Danach können sogenannte Block-Tags ( Tags z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente.Hier werden alle Parameter einer Methode beschrieben (Z.~ 3-5). Auch der Rückgabewert einer Methode kann so genauer erläutert werden (Z.~6). Mittels sogenannter Inline-Tags können zudem Abschnitte in einer Dokumentation besonders gekenntzeichnet werden. Hier wird mittels \enquote{\{@code ...\}} deutlich gemacht, dass das Wort \enquote{condition} nicht als Wort zu verstehen ist, sondern als Verweis auf den Parameter \textit{condition} verstanden werden soll. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
+Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente stehen  (Z.~2). Danach können sogenannte Block-Tags ( Tags z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. Hier werden alle Parameter einer Methode beschrieben (Z.~ 3-5). Auch der Rückgabewert einer Methode kann so genauer erläutert werden (Z.~6). Mittels sogenannter Inline-Tags können zudem Abschnitte in einer Dokumentation besonders gekenntzeichnet werden. Hier wird mittels \enquote{\{@code ...\}} deutlich gemacht, dass das Wort \enquote{condition} nicht als Wort zu verstehen ist, sondern als Verweis auf den Parameter \textit{condition} verstanden werden soll. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
 
 In der folgenden Auflistung werden beispielhaft einige Javadoc-Tags aufgelistet und beschrieben. Inline-Tags werden mit geschweiften Klammern umschlossen:
 \begin{description}
@@ -178,7 +178,7 @@ Für jeden Verstoß gibt \cs  eine Zeile aus, welche dem Anwender bei der Behebu
 
 	\begin{figure}[h!]
 			\lstinputlisting
-			[caption={Beispielhafte Konfigurationsdatei für Checkstyle},
+			[caption={Beispielhafte Ausgabe von Checkstyle},
 			label={lst:checkstyle_out},
 			captionpos=b, basicstyle=\footnotesize, tabsize=1, showstringspaces=false,  numbers=left,language=xml]
 			{figures/chapter2/checkstyle_out.txt}
@@ -214,7 +214,7 @@ Eine weitere Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der 
 Insgesamt verwendeten die Autoren viele Metriken aus dem Tool \hyperref[chapter:Quasoledo]{Quasoledo}, führen aber neue auch Metriken ein. dazu gehört eine Metrik, welche Anzahl der Abkürzungen zählen, da diese laut der Arbeit vermieden werden sollten. Auch die durchschnittliche Anzahl an Wörtern pro Javadoc-Kommentar wird als Metrik verwendet. 
 
 Anschließend wenden die Autoren das Tool auf den Quellcode von \textit{ArgoUML} und \textit{Eclipse} an und prüfen, ob es eine Korrelation zwischen der Anzahl an Bugs und der Qualität der Dokumentation nach den benannten Metriken und finden dabei heraus, dass die Kincaid-Metrik nur wenig mit der Anzahl der Bugs korreliert, während es bei anderen Metriken wie z.~B. \textit{ANYJ} eine starke negative Korrelation gibt. 
-
+\begin{comment}
 \subsubsection{Doc2Spec}
 Die Autoren in \cite[S. 307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} stellen ein Tool namens \enquote{Doc2Spec} vor und erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
 
@@ -224,6 +224,13 @@ application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern,
 Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet, in der die meisten Java-Methoden passen. Die Kategorien sind Methoden, die eine Ressource oder Objekt erstellen, eine Ressource sperren, auf eine Ressource zugreifen, eine gesperrte Ressource wieder freigeben und Ressourcen schließen. 
 
 Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.~B. im Ausnahmefall ein häufiger Fehler sein kann. 
+\end{comment}
+
+\subsubsection{Verstöße-Verstöße in Open-Source- Software}
+In \cite[S. 249ff.]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} analysieren die Autoren 163 Open-Source-Projekte aus GitHub, die in Java geschrieben sind, und prüfen, wie oft Komponenten nicht mit Javadoc kommentiert sind oder die Dokumentation unvollständig ist. Dabei werden private Komponenten, Getter und Setter von der Analyse ausgeschlossen, da sie laut den Autoren nicht zwangsläufig dokumentiert sein müssen. 
+
+Das Ergebnis der Studie lautet, dass Methoden besonders oft Javadoc-Fehler aufweisen. Wird dies allerdings in Relation zur Häufigkeit der jeweiligen Komponente gestellt, so haben Konstruktoren eine hohe Wahrscheinlichkeit, fehlerhaftes Javadoc zu besitzen. Dies könnte laut den Autoren daran liegen, dass Konstruktoren als selbsterklärend wahrgenommen werden. Außerdem ist der Grund für Javadoc-Fehler in den meisten Fällen, dass eine Komponente komplett undokumentiert ist. Auch undokumentierte \enquote{@throws}-Tags, welche die möglichen Ausnahmen einer Methode beschreiben, gibt es in knapp 50~\% der Fälle. Deutlich seltener als undokumentierte Ausnahmen sind undokumentierte Parameter und Rückgabewerte (ca. 10~\% der Fälle). Außerdem stellt die Studie fest, dass solche Javadoc-Fehler im Mittel über zwei Jahre nicht behoben werden, sodass die Softwaredokumentation oft unvollständig ist. 
+
 \begin{comment}
 \subsubsection{iComment}
 Das Programm \enquote{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
