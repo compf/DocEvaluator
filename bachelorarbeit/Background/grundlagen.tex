@@ -1,5 +1,5 @@
 \label{sec:background}
-In diesem Kapitel werden die wichtigen Grundlagen erläutert, die nötig sind, um das Problem mangelhafter Softwaredokumentation zu lösen.  Dazu  wird der Begriff \enquote{Softwaredokumentation} genauer definiert. Außerdem wird eine Einführung in Code-Smells gegeben.  Anschließend gibt es eine Einführung in Javadoc gegeben, dessen Analyse der Schwerpunkt dieser Bachelorarbeit ist. Danach wird die \ac{CI/CD}-Plattform \enquote{GitHub Actions} präsentiert, die genutzt werden soll, um die Dokumentationsqualität regelmäßig zu messen. Am Ende werden weitere Tools vorgestellt, die fehlerhafte Dokumentationen erkennen. Außerdem werden wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Thematik \enquote{Softwaredokumentation} befassen. 
+In diesem Kapitel werden die wichtigen Grundlagen erläutert, die nötig sind, um das Problem mangelhafter Softwaredokumentation zu lösen.  Dazu  wird der Begriff \enquote{Softwaredokumentation} genauer definiert. Außerdem wird eine Einführung in Code-Smells gegeben.  Anschließend gibt es eine Einführung in Javadoc, dessen Analyse der Schwerpunkt dieser Bachelorarbeit ist. Danach wird die \ac{CI/CD}-Plattform \enquote{GitHub Actions} präsentiert, die genutzt werden soll, um die Dokumentationsqualität regelmäßig zu messen. Am Ende werden weitere Tools vorgestellt, die fehlerhafte Dokumentationen erkennen. Außerdem werden wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Thematik \enquote{Softwaredokumentation} befassen. 
  
 
 \hfill
@@ -59,11 +59,11 @@ In der folgenden Auflistung werden beispielhaft einige Javadoc-Tags aufgelistet 
 
 
 
-Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine HTML-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls HTML-Inhalte besitzen, die dann von Javadoc in die HTML-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. 
+Diese Javadoc-Blöcke können dann von dem gleichnamigen Tool in eine \ac{HTML}-Datei umgewandelt werden und ermöglichen den Entwicklern damit einen komfortablen Überblick über alle Komponenten eines Moduls. Zudem könne Javadoc-Blöcke ebenfalls \ac{HTML}-Inhalte besitzen, die dann von Javadoc in die \ac{HTML}-Datei übernommen werden, sodass der Entwickler beispielsweise Tabellen zur übersichtlichen Präsentation  von Informationen verwenden kann. 
 
 Eine \ac{IDE} kann die Informationen auslesen und dann beispielsweise bei der Autovervollständigung nutzen, um den Entwickler beim Schreiben des Programmcodes unterstützen. So kann sich ein Programmierer auch in einer fremden Programmbibliothek leichter zurechtfinden.
 
-Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist eine Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. Mit \textit{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden.
+Ein Javadoc-Kommentar wird vererbt und muss daher für eine abgeleitete Klasse nicht neu geschrieben oder redundant geklont werden. Dies ist sinnvoll, da abgeleitete Klassen einen Vertrag erfüllen müssen, der bei einer guten Dokumentation auch schon in der Javadoc-Dokumentation beschrieben wird. Auch bei Methoden, die aufgrund einer Schnittstelle implementiert werden müssen, ist eine Neudefinition des Javadoc-Kommentar unnötig. Falls sinnvoll, kann aber dennoch ein eigener Javadoc-Kommentar erstellt werden, der allerdings den Kommentar der Quelle vollständig ersetzt. Mit \enquote{@inheritDoc} kann der ursprüngliche Kommentar aber trotzdem eingefügt werden.
 
 Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite, die beim Schreiben von Javadoc beachtet werden sollten \cite{HowtoWriteDocCommentsfortheJavadocTool}:
 \begin{itemize}
@@ -73,13 +73,13 @@ Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite, d
     \item  Beschreibungen von Methoden sollten mit einem Verb beginnen
     \item Keine lateinischen Ausdrücke wie \enquote{e.g.}, \enquote{aka} oder \enquote{i.e.} verwenden
     \item Bei einem Verweis auf das aktuelle Objekt sollte das spezifische \textit{this} statt des allgemeineren \textit{the} verwendet werden, bspw. \enquote{opens the connection of \textbf{this} object} statt \enquote{opens the connection of \textbf{the} object}
-    \item Bezeichner sollten mit \textit{<code></code>} umschlossen werden, um deutlich zu machen, dass dies eine andere Komponente ist
+    \item Bezeichner sollten mit \enquote{<code></code>} umschlossen werden, um deutlich zu machen, dass dies eine andere Komponente ist
     \item Der Kommentar sollte eventuelle Unterschiede unter verschiedene Plattformen erläutern
     \item Die Dokumentation sollte erläutern, wie sich die Komponente in Randfällen verhält
     
 \end{itemize}
 
-Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche Funktionen anbieten und bei denen die Dokumentationen mit einer relativ ähnlichen Syntax erstellt werden. Dazu gehören beispielsweise Doxygen für C++-Programme oder der PHP-Documentor für PHP-Programme. 
+Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche Funktionen anbieten und bei denen die Dokumentationen mit einer relativ ähnlichen Syntax erstellt werden. Dazu gehören beispielsweise \textit{Doxygen} \cite{doxygen} für C++-Programme oder \textit{Docstring} \cite{docstring} für Python-Programme. 
 
 
 \section{JavaScript, Node und TypeScript}
@@ -96,15 +96,15 @@ TypeScript ist eine auf JavaScript aufbauende Programmiersprache, die JavaScript
 In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variablen festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wurde TypeScript gewählt, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
 
 \subsubsection{Node.js}
-Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen; folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
+Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen. Folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
 
 \section{GitHub Actions}\label{chapter:github_actions}
 
-GitHub Actions \cite{GithubActions} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  GitHub Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z. B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenen System ausgeführt werden. Dieses System wird auch als \textbf{Runner} bezeichnet.
+GitHub Actions \cite{GithubActions} ist eine von GitHub angebotene Plattform zur Vereinfachung des \ac{CI/CD}'s. Mithilfe von  GitHub Actions wird Programmcode ausgeführt, wenn ein bestimmtes Ereignis stattfindet. Dieses Ereignis kann z.~B. ein Push-Ereignis sein, bei dem neuer Quellcode in das GitHub-Repository hochgeladen wird oder eine neue Version des Programms zum Release freigegeben wird. Der Programmcode kann wahlweise auf einem von  GitHub vorbereiteten System ausgeführt oder auf einem eigenen System ausgeführt werden. Dieses System wird auch als \textbf{Runner} bezeichnet.
 
 Der gesamte Programmcode wird im Kontext von GitHub Actions auch als \textbf{Workflow (Ablauf)} bezeichnet und führt einen oder mehrere \textbf{Jobs} aus. Diese Jobs sind eine Ansammlung von \textbf{Steps (Schritte)}, die man als Befehle interpretieren kann. Die Jobs werden standardmäßig parallel ausgeführt, da keine Abhängigkeit zwischen den Jobs vermutet wird. Ein Step kann ein Befehl sein, der auf einer Kommandozeile ausgeführt werden kann, oder ein Verweis auf eine andere GitHub Action, die dann ausgeführt wird \cite[S. 5-7]{github_action_book}. 
 
-\begin{figure}[ht!]
+\begin{figure}[htpb!]
 \fontsize{7}{10}\selectfont
     \centering
 \includesvg[scale=0.75]{figures/chapter2/workflow_schema.svg}
@@ -128,7 +128,7 @@ Auch die Qualität des Codes kann mit geeigneten Actions geprüft werden, was im
 
 
 \subsubsection{Erstellung eines Workflows}
-Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \textit{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird.
+Ein Workflow kann über die Registerkarte \enquote{Actions} erstellt werden und wird intern in dem Verzeichnis \enquote{.github/workflows} gespeichert. Abbildung \ref{lst:simple_workflow} illustriert eine typische Workflow-Datei, die standardmäßig erstellt wird.
 
 
 \begin{figure}[ht!]
@@ -197,7 +197,7 @@ Im Bereich  Javadoc erkennt \textit{PMD} wie \cs nicht dokumentierte Komponenten
 Ähnlich wie \cs gibt \textit{PMD} gefundene Verstöße auf der Konsole aus. Die Struktur dieser Ausgabe ähnelt sehr der von \textit{Checkstyle}, da sie ebenfalls den vollständigen Pfad, die Zeilennummer und einen Fehlercode mit einer Beschreibung enthält. Nur die Spaltennummer  und einen Hinweis auf den Schweregrad des Verstoßes existiert nicht. Ähnlich wie \cs kann \textit{PMD} mittels einer Extensible-Markup-Language-Datei konfiguriert werden.
 
 \subsubsection{Javadoc}
-Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generieren der HTML-Datei die Qualität des Javadocs zu prüfen. Dabei werden vor allem fehlende Tags für Parameter etc. bemängelt. Zudem erkennt Javadoc auch Tabellen mit fehlender Überschrift und andere Designmängel, die in der HTML-Seite später auffallen. Auch fehlerhaftes HTML kann erkannt werden.
+Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generieren der HTML-Datei die Qualität des Javadocs zu prüfen. Dabei werden vor allem fehlende Tags für Parameter etc. bemängelt. Zudem erkennt Javadoc auch Tabellen mit fehlender Überschrift und andere Designmängel, die in der \ac{HTML}-Seite später auffallen. Auch fehlerhaftes \ac{HTML} kann erkannt werden.
 
 \section{Verwandte Arbeiten}
 
@@ -226,10 +226,10 @@ Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie pass
 Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.~B. im Ausnahmefall ein häufiger Fehler sein kann. 
 \end{comment}
 
-\subsubsection{Verstöße-Verstöße in Open-Source- Software}
+\subsubsection{Javadoc-Fehler in Open-Source-Software}
 In \cite[S. 249ff.]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} analysieren die Autoren 163 Open-Source-Projekte aus GitHub, die in Java geschrieben sind, und prüfen, wie oft Komponenten nicht mit Javadoc kommentiert sind oder die Dokumentation unvollständig ist. Dabei werden private Komponenten, Getter und Setter von der Analyse ausgeschlossen, da sie laut den Autoren nicht zwangsläufig dokumentiert sein müssen. 
 
-Das Ergebnis der Studie lautet, dass Methoden besonders oft Javadoc-Fehler aufweisen. Wird dies allerdings in Relation zur Häufigkeit der jeweiligen Komponente gestellt, so haben Konstruktoren eine hohe Wahrscheinlichkeit, fehlerhaftes Javadoc zu besitzen. Dies könnte laut den Autoren daran liegen, dass Konstruktoren als selbsterklärend wahrgenommen werden. Außerdem ist der Grund für Javadoc-Fehler in den meisten Fällen, dass eine Komponente komplett undokumentiert ist. Auch undokumentierte \enquote{@throws}-Tags, welche die möglichen Ausnahmen einer Methode beschreiben, gibt es in knapp 50~\% der Fälle. Deutlich seltener als undokumentierte Ausnahmen sind undokumentierte Parameter und Rückgabewerte (ca. 10~\% der Fälle). Außerdem stellt die Studie fest, dass solche Javadoc-Fehler im Mittel über zwei Jahre nicht behoben werden, sodass die Softwaredokumentation oft unvollständig ist. 
+Das Ergebnis der Studie lautet, dass Methoden besonders oft Javadoc-Fehler aufweisen. Wird dies allerdings in Relation zur Häufigkeit der jeweiligen Komponente gestellt, so haben Konstruktoren eine hohe Wahrscheinlichkeit, fehlerhaftes Javadoc zu besitzen. Dies könnte laut den Autoren daran liegen, dass Konstruktoren als selbsterklärend wahrgenommen werden. Außerdem ist der Grund für Javadoc-Fehler in den meisten Fällen, dass eine Komponente komplett undokumentiert ist. Auch undokumentierte \enquote{@throws}-Tags, welche die möglichen Ausnahmen einer Methode beschreiben, sind sehr häufig. Deutlich seltener als undokumentierte Ausnahmen sind undokumentierte Parameter und Rückgabewerte. Außerdem stellt die Studie fest, dass solche Javadoc-Fehler im Mittel über zwei Jahre nicht behoben werden, sodass die Softwaredokumentation oft unvollständig ist. 
 
 \begin{comment}
 \subsubsection{iComment}

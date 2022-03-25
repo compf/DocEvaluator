@@ -5,6 +5,6 @@
  * @param ifFalse will be returned if {@code condition} is false
  * @return either {@code ifTrue} or {@code ifFalse}
  */
-Object ternary(boolean condition, Object ifTrue,Object ifFalse){
+Object ternary(boolean condition, Object ifTrue, Object ifFalse){
     return condition ? ifTrue :ifFalse;
 }
