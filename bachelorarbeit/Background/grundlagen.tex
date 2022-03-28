@@ -1,5 +1,4 @@
-\label{sec:background}
-In diesem Kapitel werden die wichtigen Grundlagen erläutert, die nötig sind, um das Problem mangelhafter Softwaredokumentation zu lösen.  Dazu  wird der Begriff \enquote{Softwaredokumentation} genauer definiert. Außerdem wird eine Einführung in Code-Smells gegeben.  Anschließend gibt es eine Einführung in Javadoc, dessen Analyse der Schwerpunkt dieser Bachelorarbeit ist. Danach wird die \ac{CI/CD}-Plattform \enquote{GitHub Actions} präsentiert, die genutzt werden soll, um die Dokumentationsqualität regelmäßig zu messen. Am Ende werden weitere Tools vorgestellt, die fehlerhafte Dokumentationen erkennen. Außerdem werden wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Thematik \enquote{Softwaredokumentation} befassen. 
+In diesem Kapitel werden die wichtigen Grundlagen erläutert, die nötig sind, um das Problem mangelhafter Softwaredokumentation zu lösen.  Dazu  wird der Begriff \enquote{Softwaredokumentation} genauer definiert (Kapitel \ref{chapter:documentation}). Anschließend gibt es eine Einführung in Javadoc, dessen Analyse der Schwerpunkt dieser Bachelorarbeit ist (Kapitel \ref{chapter:javadoc}). In Kapitel \ref{chapter:code_smell} wird eine Einführung in Code-Smells gegeben.  Im daruffolgenden Kapitel \ref{chapter:github_actions} wird die \ac{CI/CD}-Plattform \enquote{GitHub Actions} präsentiert, die genutzt werden soll, um die Dokumentationsqualität regelmäßig zu messen. In Kapitel \ref{chapter:related_tools} werden weitere Tools vorgestellt, die fehlerhafte Dokumentationen erkennen. Außerdem werden in Kapitel \ref{chapter:related_science} wissenschaftliche Arbeiten zusammengefasst, die sich ebenfalls mit der Thematik \enquote{Softwaredokumentation} befassen. 
  
 
 \hfill
@@ -19,10 +18,7 @@ Diese Kommentare werden wie normale Kommentare erkannt und werden daher nicht Be
 
 
 
-\section{Code-Smells}\label{chapter:code_smell}
-Der Begriff \enquote{Code-Smell} (z.~dt. übel riechender Code)  wurde von Kent Beck in \cite[S.~71 ff.]{fowler2019refactoring}  vorgeschlagen, um Quellcode zu beschreiben, bei dem Refactoring (z.~dt. Restrukturierung) sinnvoll ist. Bestimmte Strukturen im Quellcode deuten darauf hin, dass der Code verbessert werden sollte, da ansonsten die zukünftige Wartbarkeit des Codes verringert wird. Beispiele sind schlecht gewählte Namen für Variablen oder Methoden, duplizierter Code, lange Methoden oder globale Daten. In bestimmten Situationen werden Kommentare ebenfalls als Code-Smell klassifiziert, da sie auf komplizierten  Code hindeuten können oder der Name einer Komponente schlecht gewählt wurde. Daher sollte geprüft werden, ob nach einem Refactoring die Kommentare noch notwendig sind.
 
-Nach \cite[S.~249-250]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} kann eine mangelhafte Dokumentation als Code-Smell bezeichnet werden, da sie die Wartbarkeit der Software beeinträchtigen kann. Dies gilt besonders, wenn die Dokumentation vom Code abweicht und damit bei den Entwicklern zu Verwirrung führt. Eine fehlerhaft dokumentierte Methode, bei der beispielsweise ein Parameter nicht dokumentiert ist, deutet stark auf Code-Smells hin, da der Code von der Dokumentation divergiert. Zudem kann eine \ac{IDE} die Informationen von strukturierten Kommentaren nutzen, um beispielsweise den Benutzer einer Methode Hinweise zur Benutzung zu geben. Dies ist bei normalen Kommentaren nicht möglich. 
 
 \section{Javadoc}\label{chapter:javadoc}
 Javadoc \cite{HowtoWriteDocCommentsfortheJavadocTool} ist ein Tool zur Generierung von Dokumentationen, das sich als de facto Standard für Dokumentationen in der Programmiersprache Java etabliert hat \cite[S.~249]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}.  Javadoc besteht aus speziellen Java-Kommentaren, die an bestimmten Stellen im Quellcode eingefügt werden und daher bei der Kompilation nicht berücksichtigt werden. Ein Javadoc-Block beschreibt immer ein bestimmtes Modul (z. B. eine Klasse, Methode oder Feld). Es beginnt mit der Zeichenkette \enquote{/**}, wobei die ersten beiden Zeichen \enquote{/*} den Beginn eines mehrzeiligen Kommentars in Java einläuten, und endet mit \enquote{*/}. Durch das zusätzliche \enquote{*} unterscheidet sich ein Javadoc-Kommentar von einem normalen mehrzeiligen Kommentar, der zwar zur Kommentierung eines Blocks verwendet werden kann, aber vom Javadoc-Tool ignoriert wird und daher einen geringeren Mehrwert hat. 
@@ -39,10 +35,7 @@ Javadoc \cite{HowtoWriteDocCommentsfortheJavadocTool} ist ein Tool zur Generieru
 Listing \ref{lst:simple_javadoc} zeigt beispielhaft, wie eine Methode mittels Javadoc dokumentiert werden kann.
 \begin{comment}Zunächst wird der Zweck der Methode beschrieben, anschließend wird jeder Parameter erläutert (Z.~3-5). Dabei sollte in komplexeren Fällen auch erklärt werden, welche Werte gültig für den Parameter sind. Danach folgt eine Beschreibung des Rückgabewertes (Z.~6), welche am besten auch jeden möglichen Fall abdeckt. Um bestimmte Infomrationen \enquote{\{@code ...\}}, der auch kann auf einen Parameter referenziert werden. Mit diesen Informationen kann der Programmierer leicht überblicken, wie eine Methode genutzt werden, sodass die Einarbeitungszeit und die Fehleranfälligkeit reduziert werden kann.  
 \end{comment}
-
-		
-		
-Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente stehen  (Z.~2). Danach können sogenannte Block-Tags ( Tags z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. Hier werden alle Parameter einer Methode beschrieben (Z.~ 3-5). Auch der Rückgabewert einer Methode kann so genauer erläutert werden (Z.~6). Mittels sogenannter Inline-Tags können zudem Abschnitte in einer Dokumentation besonders gekenntzeichnet werden. Hier wird mittels \enquote{\{@code ...\}} deutlich gemacht, dass das Wort \enquote{condition} nicht als Wort zu verstehen ist, sondern als Verweis auf den Parameter \textit{condition} verstanden werden soll. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
+Zunächst sollte am Anfang des Blocks eine generelle Zusammenfassung der Komponente stehen  (Z.~2). Danach können sogenannte Block-Tags ( -Tags z.~dt. Auszeichner), die mit dem \enquote{@}-Zeichen beginnen, benutzt werden. Diese beschreiben wiederum einen bestimmten Teilbereich einer Komponente. In den Zeilen 3 bis 5 werden alle Parameter einer Methode beschrieben. Auch der Rückgabewert einer Methode kann so genauer erläutert werden (Z.~6). Mittels sogenannter Inline-Tags können zudem Abschnitte in einer Dokumentation besonders gekenntzeichnet werden. Hier wird mittels \enquote{\{@code ...\}} deutlich gemacht, dass das Wort \enquote{condition} nicht als Wort zu verstehen ist, sondern als Verweis auf den Parameter \textit{condition} verstanden werden soll. Es ist zudem Konvention, dass jede Zeile in einem Javdoc-Block mit einem Asterisk beginnt. 
 
 In der folgenden Auflistung werden beispielhaft einige Javadoc-Tags aufgelistet und beschrieben. Inline-Tags werden mit geschweiften Klammern umschlossen:
 \begin{description}
@@ -79,23 +72,60 @@ Nachfolgend ist ein Auszug von empfehlenswerten Tipps von der Oracle-Webseite, d
 \end{itemize}
 
 Für andere Programmiersprachen gibt es vergleichbare Werkzeuge, die ähnliche Funktionen anbieten und bei denen die Dokumentationen mit einer relativ ähnlichen Syntax erstellt werden. Dazu gehören beispielsweise \textit{Doxygen} \cite{doxygen} für C++-Programme oder \textit{Docstring} \cite{docstring} für Python-Programme. 
+\section{Code-Smells}\label{chapter:code_smell}
+Der Begriff \enquote{Code-Smell} (z.~dt. übel riechender Code)  wurde von Kent Beck in \cite[S.~71 ff.]{fowler2019refactoring}  vorgeschlagen, um Quellcode zu beschreiben, bei dem Refactoring (z.~dt. Restrukturierung) sinnvoll ist. Bestimmte Strukturen im Quellcode deuten darauf hin, dass der Code verbessert werden sollte, da ansonsten die zukünftige Wartbarkeit des Codes verringert wird. Beispiele sind schlecht gewählte Namen für Variablen oder Methoden, duplizierter Code, lange Methoden oder globale Daten. In bestimmten Situationen werden Kommentare ebenfalls als Code-Smell klassifiziert, da sie auf komplizierten  Code hindeuten können oder der Name einer Komponente schlecht gewählt wurde. Daher sollte geprüft werden, ob nach einem Refactoring die Kommentare noch notwendig sind.
 
+Nach \cite[S.~249-250]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} kann eine mangelhafte Dokumentation als Code-Smell bezeichnet werden, da sie die Wartbarkeit der Software beeinträchtigen kann. Dies gilt besonders, wenn die Dokumentation vom Code abweicht und damit bei den Entwicklern zu Verwirrung führt. Eine fehlerhaft dokumentierte Methode, bei der beispielsweise ein Parameter nicht dokumentiert ist, deutet stark auf Code-Smells hin, da der Code von der Dokumentation divergiert. Zudem kann eine \ac{IDE} die Informationen von strukturierten Kommentaren nutzen, um beispielsweise den Benutzer einer Methode Hinweise zur Benutzung zu geben. Dies ist bei normalen Kommentaren nicht möglich. 
 
 \section{JavaScript, Node und TypeScript}
 Das Tool wird mittels der \textit{Node.js}-Bibliothek und TypeScript entwickelt.
 In diesem Abschnitt werden daher die grundlegenden Programmiersprachen und Bibliotheken vorgestellt, die zur Entwicklung des Tools als Desktopanwendung notwendig sind. Außerdem wird begründet, warum TypeScript und \enquote{Node.js} für die Entwicklung des Tools verwendet wurden. 
 \subsubsection{JavaScript}
-JavaScript ist eine dynamisch typisierte Programmiersprache, die sich als de facto Standard  für Browserskripte etabliert hat, die auf dem Client (z.~dt. Klienten) ausgeführt werden. Zum Beispiel lassen sich mittels JavaScript Webseiten dynamisieren, Eingaben von Formularen validieren oder nachträglich Daten von anderen Servern laden. 
+JavaScript \cite{javascript} ist eine dynamisch typisierte Programmiersprache, die sich als de facto Standard  für Browserskripte etabliert hat, die auf dem Client (z.~dt. Klienten) ausgeführt werden. Zum Beispiel lassen sich mittels JavaScript Webseiten dynamisieren, Eingaben von Formularen validieren oder nachträglich Daten von anderen Servern laden. 
 
 Die Syntax von JavaScript basiert wie bei der Programmiersprache Java auf C, dennoch sollten Java und JavaScript nicht verwechselt werden. Die eingangs erwähnte dynamische Typisierung bedeutet im Gegensatz zur statischen Typisierung, dass eine Variable anders als in Java keinen fixen Datentyp hat, sondern der Datentyp sich stets nach den aktuellen Wert richtet. Eine Variable \textit{foo} kann mit dem Befehl \textit{ let foo = true} deklariert werden und ist dann vom Datentyp \textit{Bool}. Daraufhin kann der gleichen Variable eine Zeichenkette zugewiesen werden, sodass die Variable nun vom Datentyp \textit{String} ist. Durch die dynamische Typisierung ist der Programmierer flexibler, jedoch zeigt eine Studie, dass die Softwarequalität bei Projekten mit statischer Typisierung etwas besser ist als mit dynamischer Typisierung \cite[S.~155ff.]{Ray2014}.
 
 \subsubsection{TypeScript}
-TypeScript ist eine auf JavaScript aufbauende Programmiersprache, die JavaScript um statische Typisierung ergänzt. Jeder JavaScript-Code ist gültiger TypeScript-Code, sodass TypeScript als Obermenge von JavaScript angesehen werden kann. Der TypeScript-Code kann nicht direkt ausgeführt werden, sondern wird in gültiges JavaScript transkribiert, sodass er von einem Client mit JavaScript-Unterstützung ausgeführt werden kann. 
+TypeScript \cite{typescript} ist eine auf JavaScript aufbauende Programmiersprache, die JavaScript um statische Typisierung ergänzt. Jeder JavaScript-Code ist gültiger TypeScript-Code, sodass TypeScript als Obermenge von JavaScript angesehen werden kann. Der TypeScript-Code kann nicht direkt ausgeführt werden, sondern wird in gültiges JavaScript transkribiert, sodass er von einem Client mit JavaScript-Unterstützung ausgeführt werden kann. 
 
-In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variablen festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wurde TypeScript gewählt, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
+In TypeScript können Typannotationen verwendet werden, die den Datentyp einer Variablen festlegen. Eine Variable \textit{foo} kann in TypeScript dem Befehl \textit{let foo:boolean=true} als \textit{Boolean} deklariert werden. Durch die Angabe \enquote{:boolean} ist der Datentyp fix und kann nicht geändert werden. Eine Zuweisung einer Zeichenkette zu \textit{foo} würde TypeScript mit einer Fehlermeldung quittieren. Auch viele Funktionen, die in objektorientierten Programmiersprachen verbreitet sind, wie z.~B. Schnittstellen, generische Typen oder Namensräumen werden von TypeScript unterstützt und helfen so dabei, komplexere Programme zu schreiben. Aus diesen Gründen wird TypeScript für die Entwicklung des Projektes verwendet, denn eine Verwendung von statischen Typen und anderen objektorientierten Funktionen ermöglicht eine bessere Abstraktion der einzelnen Schritte (Traversierung, Parsing, Anwendung der Metriken etc.). 
 
 \subsubsection{Node.js}
-Die Bibliothek  \textit{Node.js} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen. Folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
+Die Bibliothek  \textit{Node.js} \cite{nodejs} ist eine beliebte Bibliothek, um JavaScript-Programme nicht nur im Browser, sondern auch als eigenständige Applikation zu programmieren. Dadurch haben sie im Gegensatz zu den klassischen Browser-Skripten freien Zugriff auf das Dateisystem und Netzwerkfunktionen.  Die Bibliothek läuft auf den meisten Systemen und  wird von GitHub Actions nativ unterstützt. Außerdem gibt es über dem Paketmanager \textit{NPM} eine große Auswahl an kleineren Bibliotheken, die kleinere Probleme lösen können und damit Entwicklungsaufwand bei Aufgaben sparen, welche nicht im Kernbereich dieser Bachelorarbeit liegen. Folglich wurde diese Bibliothek als Fundament für die Entwicklung des Tools genutzt. 
+\section{ANTLR4}
+Um die Java-Dateien zu parsen (siehe Kapitel \ref{chapter:parsing}, wird die Bibliothek ANTLR4 \cite{ANTLR} verwendet, die kostenlos verfügbar ist. Diese Bibliothek kann nicht nur viele Programmiersprachen, sondern auch selbst geschriebene Sprachen parsen, sofern eine passende Grammatik verfügbar ist. Daneben gibt es noch Bibliotheken wie Bison oder PEG.JS, die ebenfalls eine ähnliche Aufgabe erfüllen können. Allerdings gibt es bereits vordefinierte Grammatiken für ANTLR4, sodass ein erheblicher Aufwand gespart werden konnte.  
+
+Eine andere Möglichkeit zum Parsen der Java-Dateien ist die NPM-Bibliothek \enquote{java-parser} \cite{Java-parser}. Dies hätte den Vorteil, dass das Parsen, welches nicht der Hauptfokus dieser Bachelorarbeit ist, ausgelagert wird und so Fehler vermieden werden. Allerdings kann diese Bibliothek nicht die Verbindung zwischen einer Komponente und der dazugehörigen Javadoc herstellen, sodass eine Benutzung dieser Bibliothek die Arbeit deutlich erschwert hätte. Daher fiel die Wahl auf \textit{ANTLR4}. Außerdem besteht die Möglichkeit, eine eigene Grammatik für Java zu schreiben, da die originale Grammatik für Java sämtliche Kommentare ignoriert. Da dies jedoch deutlich komplizierter war als erwartet, wird die von vielen Entwicklern geschriebene Grammatik verwendet.
+
+\subsection{Lexer und Parser}
+Eine Grammatik für Programmiersprachen besteht immer aus einer Lexer-Grammatik und eine Parser-Grammatik, die jeweils vom Lexer bzw. Parser in dieser Reihenfolge verarbeitet werden, um so eine Baumstruktur einer Quellcodedatei zu erhalten. Der Lexer erstellt aus einer Quellcodedatei eine Liste von Tokens. Dabei ist ein Token eine Gruppierung von einem oder mehreren Zeichen, die eine weitergehende Bedeutung haben. Beispielsweise können Schlüsselwörter einer Programmiersprache oder Operatoren als Token klassifiziert werden. Diese Tokens sind grundsätzlich kontextunabhängig, das heißt für die gleiche Zeichenkette wird das gleiche Token verwendet. Jeder Token wird durch seine Zeichenkette und den Tokentyp klassifiziert.
+
+Listing \ref{lst:lexer_example} zeigt zur Verdeutlichung der Syntax eine Zeile aus der Lexer-Grammatik. 
+		\begin{figure} [htbp]
+			\lstinputlisting
+			[caption={Beispielhafte Syntax vom Lexer},
+			label={lst:lexer_example},
+			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=ANTLR]
+			{figures/chapter4/lexer_example.g4}
+		\end{figure}
+
+Eine Zeile in der Lexer-Grammatik beginnt mit den Namen eines Tokens, gefolgt von einem Doppelpunkt und dann einem regulären Ausdruck, der dieses Token beschreibt. In der beispielhaften Lexer-Grammatik wird ein Javadoc-Kommentar definiert, das mit \enquote{/**} beginnt, dann folgen beliebige Zeichen und endet mit \enquote{*/}. Per Konvention haben die Bezeichner der Tokens nur Großbuchstaben, sie müssen auf jeden Fall mit einem Großbuchstaben beginnen \cite[S.~3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. 
+
+Der nächste Schritt ist das  Parsen. Dabei werden die im vorherigen Schritt generierten Tokens, die als Liste vorliegen, genommen und in eine hierarchische Baumstruktur umgewandelt, wobei hier der Kontext die entscheidende Rolle spielt. ANTLR4 lädt ein Token nach dem anderen und prüft, ob es, basierend auf der aktuellen Position in der Baumstruktur, eine Regel gibt, die durch dieses Token erfüllt wird. Wenn es mehrere mögliche Pfade gibt, lädt ANTLR4 so viele Tokens, bis die nächste Regel eindeutig feststeht. Gibt es dennoch Uneindeutigkeiten, so wird die Regel genommen, die als Erstes in der Parser-Datei geschrieben wurde \cite[S.~10ff.]{TheDefinitiveANTLR4Reference}.
+
+So kann eine vereinfachte Parser-Grammatik für Java einen Baumknoten definieren, der eine generelle Methode beschreibt. Eine Methode besteht aus Rückgabetyp, Bezeichner und Parameterliste. Die Parameterliste kann dann als eine Liste von Datentyp-Bezeichner-Paare aufgelöst werden. Der Rückgabetyp einer Methode ist allerdings anders zu verstehen als der Datentyp eines Parameters, da jeder Datentyp eines Parameters auch ein gültiger Rückgabetyp ist, was jedoch nicht umgekehrt der Fall ist; so ist \textit{}{void} ein gültiger Rückgabetyp, aber kein Datentyp. Listing \ref{lst:parser_example} zeigt einen typischen Ausschnitt aus einer Parser-Grammatik, wobei zur Übersichtlichkeit nicht alle Regeln und Tokens aufgelistet sind:
+		\begin{figure} [htbp]
+			\lstinputlisting
+			[caption={Beispielhafte Syntax vom Parser},
+			label={lst:parser_example},
+			captionpos=b, basicstyle=\footnotesize, tabsize=2, showstringspaces=false,  numbers=left,language=ANTLR]
+			{figures/chapter4/parser_example.g4}
+		\end{figure}
+		
+Listing \ref{lst:parser_example} beschreibt die notwendigen Regeln, um Methodenparameter zu parsen. Ein Methodenparameter (Z. 1) kann keinen, einen oder mehrere  Modifizierer (Z. 2) enthalten, die ihrerseits eine Java-Annotation oder das Schlüsselwort\textit{final}  sein können (Z. 6-7). Anschließend (Zeile 3) muss ein Datentyp (Z. 9) erfolgen, der wiederum aus einer Annotation bestehen kann (Z. 10), gefolgt von entweder einem primitiven Datentyp oder einem Klassen- bzw. Schnittstellentyp (Z.11). Auch die üblichen eckigen Klammern für Arrays in Java können nach diesem Datentyp folgen (Z. 12). Die letzte Voraussetzung für einen gültigen Methodenparameter ist ein valider Bezeichner (Z. 4), der in Zeile 14-16 genauer definiert wird. 
+
+Die Parser-Grammatik ist ähnlich wie die der Lexer-Grammatik aufgebaut. Auch hier wird eine Variante der regulären Ausdrücke verwendet, wobei hier die reguläre Grammatik auf die Tokens angewendet wird. Anstelle des Namens des Tokens kann alternativ auch die Zeichenkette des Tokens verwendet werden (bspw. \enquote{+} statt \enquote{ADD}). Im Gegensatz zum Lexer muss der Bezeichner einer Parser-Regel mit einem Kleinbuchstaben beginnen \cite[S.~3]{ANTLR:APredicated-<i>LLk</i>ParserGenerator}. So ist eine Unterscheidung zwischen Tokens und den Parserregeln stets möglich. 
+
 
 \section{GitHub Actions}\label{chapter:github_actions}
 
@@ -166,7 +196,7 @@ Zunächst wird der Name der Action und eine Beschreibung definiert (Z.~1-2). Ans
 \subsubsection{Verhindern von Merge}
 
 Eine fehlgeschlagene GitHub Action kann verwendet werden, um einen Push-Request bzw.  einen Merge zu verhindern. Dies geschieht allerdings nicht automatisch, sondern muss explizit aktiviert werden. Dazu muss in den Einstellungen des Repositorys, bei dem durch eine fehlgeschlagene Aktion ein Merge verhindert werden soll, eine \enquote{Branch protection rule (z.~dt. Zweigschutzregel)} aktiviert werden. In dieser Regel kann festgelegt werden, dass ein Merge abgelehnt wird, wenn ein bestimmter Job eines Workflows nicht erfolgreich war. Ein Pull-Request bzw. Merge kann trotz des Fehlschlages durch einen Administrator erzwungen werden. 
-\section{Verwandte Werkzeuge}
+\section{Verwandte Werkzeuge}\label{chapter:related_tools}
 Um die Qualität der Softwaredokumentation in Javadoc zu bewerten, gibt es bereits einige Programme. In vielen Fällen handelt es sich dabei um Programme, die nicht auf die Bewertung der Softwaredokumentation beschränkt sind, sondern auch andere Fälle von unsauberem Code erkennen können. Da die Bewertung der Dokumentation nicht der primäre Zweck der Programme ist, sind die verwendeten Algorithmen recht allgemein und erkennen viele Problemfälle nicht. Nichtsdestotrotz sind diese Programme, dadurch dass sie viele \enquote{Code-Smells} erkennen, gut geeignet, um sich ein gutes Bild über die Qualität des Quellcodes zu verschaffen und den Entwickler zu Clean-Code zu motivieren. 
 \subsubsection{Checkstyle}
 \newcommand{\cs}{\textit{Checkstyle }}
@@ -198,7 +228,7 @@ Im Bereich  Javadoc erkennt \textit{PMD} wie \cs nicht dokumentierte Komponenten
 \subsubsection{Javadoc}
 Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generieren der HTML-Datei die Qualität des Javadocs zu prüfen. Dabei werden vor allem fehlende Tags für Parameter etc. bemängelt. Zudem erkennt Javadoc auch Tabellen mit fehlender Überschrift und andere Designmängel, die in der \ac{HTML}-Seite später auffallen. Auch fehlerhaftes \ac{HTML} kann erkannt werden.
 
-\section{Verwandte Arbeiten}
+\section{Verwandte Arbeiten}\label{chapter:related_science}
 
 Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. In diesen Arbeiten werden auch Programme vorgestellt. welche diese Metriken nutzen, allerdings sind die Quelltexte bzw.  lauffähige Versionen der Programme ohne Weiteres nicht verfügbar, sodass ein Vergleich mit dem zu entwickelnden Tool nicht möglich ist. 
 
@@ -213,7 +243,7 @@ Eine weitere Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der 
 Insgesamt verwendeten die Autoren viele Metriken aus dem Tool \hyperref[chapter:Quasoledo]{Quasoledo}, führen aber neue auch Metriken ein. dazu gehört eine Metrik, welche Anzahl der Abkürzungen zählen, da diese laut der Arbeit vermieden werden sollten. Auch die durchschnittliche Anzahl an Wörtern pro Javadoc-Kommentar wird als Metrik verwendet. 
 
 Anschließend wenden die Autoren das Tool auf den Quellcode von \textit{ArgoUML} und \textit{Eclipse} an und prüfen, ob es eine Korrelation zwischen der Anzahl an Bugs und der Qualität der Dokumentation nach den benannten Metriken und finden dabei heraus, dass die Kincaid-Metrik nur wenig mit der Anzahl der Bugs korreliert, während es bei anderen Metriken wie z.~B. \textit{ANYJ} eine starke negative Korrelation gibt. 
-\begin{comment}
+
 \subsubsection{Doc2Spec}
 Die Autoren in \cite[S.~307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} stellen ein Tool namens \enquote{Doc2Spec} vor und erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
 
@@ -223,14 +253,14 @@ application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern,
 Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie passend gruppiert. Außerdem werden die Aktionen in fünf Kategorien eingeordnet, in der die meisten Java-Methoden passen. Die Kategorien sind Methoden, die eine Ressource oder Objekt erstellen, eine Ressource sperren, auf eine Ressource zugreifen, eine gesperrte Ressource wieder freigeben und Ressourcen schließen. 
 
 Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.~B. im Ausnahmefall ein häufiger Fehler sein kann. 
-\end{comment}
+
 
 \subsubsection{Javadoc-Fehler in Open-Source-Software}
 In \cite[S.~249ff.]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} analysieren die Autoren 163 Open-Source-Projekte aus GitHub, die in Java geschrieben sind, und prüfen, wie oft Komponenten nicht mit Javadoc kommentiert sind oder die Dokumentation unvollständig ist. Dabei werden private Komponenten, Getter und Setter von der Analyse ausgeschlossen, da sie laut den Autoren nicht zwangsläufig dokumentiert sein müssen. 
 
 Das Ergebnis der Studie lautet, dass Methoden besonders oft Javadoc-Fehler aufweisen. Wird dies allerdings in Relation zur Häufigkeit der jeweiligen Komponente gestellt, so haben Konstruktoren eine hohe Wahrscheinlichkeit, fehlerhaftes Javadoc zu besitzen. Dies könnte laut den Autoren daran liegen, dass Konstruktoren als selbsterklärend wahrgenommen werden. Außerdem ist der Grund für Javadoc-Fehler in den meisten Fällen, dass eine Komponente komplett undokumentiert ist. Auch undokumentierte \enquote{@throws}-Tags, welche die möglichen Ausnahmen einer Methode beschreiben, sind sehr häufig. Deutlich seltener als undokumentierte Ausnahmen sind undokumentierte Parameter und Rückgabewerte. Außerdem stellt die Studie fest, dass solche Javadoc-Fehler im Mittel über zwei Jahre nicht behoben werden, sodass die Softwaredokumentation oft unvollständig ist. 
 
-\begin{comment}
+
 \subsubsection{iComment}
 Das Programm \enquote{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
 
@@ -238,7 +268,7 @@ Setzt nun die Dokumentation einen Lock voraus, aber der Programmierer hat keinen
 
 Das Programm wurde auf dem Quellcode des Linux-Kernels und Mozilla angewandt und dabei mögliche Bugs gefunden, die später auch von den Entwicklern bestätigt wurden\cite[S.~146.]{icomment}.
 
-\end{comment}
+
 \subsubsection{@tComment}\label{@tComment}
 Ein anderer Ansatz, der ebenfalls mit Javadoc arbeitet, wird \enquote{@tComment} genannt \cite[S.~1ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies}. Dabei wurde die Konsistenz der Javadoc-Dokumentation mit dem tatsächlichen Programmcode verglichen. Anders als die vorherigen Ansätze, wird hier das Programm dynamisch ausgeführt. Dabei werden die verschiedenen Methoden und ihr dazugehörige Javadoc-Dokumentation analysiert und daraus mittels einfacher Heuristiken ermittelt, ob ein  Nullwert für einen Parameter eine Inkonsistenz zwischen Dokumentation und Quellcode offenbart.
 
