@@ -35716,26 +35716,21 @@ function main(args) {
     let objects = initializeObjects(conf, workingDirectory);
     let finalResult = calculateResult(workingDirectory, conf, objects);
     printLogsMessages(logMessages);
-    printResultByMetric(objects);
     console.log("The result was " + finalResult);
-    objects.stateManager.save(finalResult);
     if (finalResult < conf.absolute_threshold) {
         objects.stateManager.save(finalResult);
-        throw new Error("Threshold was not reached");
+        throw new Error("Threshold was not reached: The minimum value must be " + conf.absolute_threshold);
     }
     else if (objects.stateManager.relativeLossTooHigh(finalResult, conf.relative_threshold)) {
         objects.stateManager.save(finalResult);
-        throw new Error("Difference from last run is too high");
+        throw new Error("Difference from last run is too high: The maximum allowed difference is " + conf.relative_threshold);
+    }
+    else {
+        objects.stateManager.save(finalResult);
+        console.log("The documentation quality check passed");
     }
 }
 exports.main = main;
-function printResultByMetric(objects) {
-    /*console.log("Results by metric:");
-    for (let m of objects.resultByMetric) {
-        let res = m[1].getAggregatedResult("").getResult();
-        console.log(m[0], res);
-    }*/
-}
 let logMessages = [];
 function calculateResult(workingDirectory, conf, objects) {
     let traverser = new directory_traverser_1.DirectoryTraverser(workingDirectory, conf);
@@ -35768,9 +35763,8 @@ function initializeObjects(conf, workingDirectory) {
     let parser = parser_factory_1.ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new file_analyzer_1.FileAnalyzer();
     let builder = metric_manager_1.MetricManager.getNewMetricResultBuilder(conf.builder, weightResolverTuple, conf.builder_params);
-    let resultByMetric = new Map();
     let stateManager = state_manager_factory_1.StateManagerFactory.createStateManager(conf.state_manager, workingDirectory);
-    return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
+    return { parser, fileAnalyzer, builder, metrics, languageHelper, stateManager };
 }
 function printLogsMessages(logMessages) {
     console.log("Log messages:");
