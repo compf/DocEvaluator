@@ -26,7 +26,6 @@ interface SharedObjects {
     builder: MetricResultBuilder,
    
     metrics: DocumentationAnalysisMetric[],
-    resultByMetric: Map<string, MetricResultBuilder>,
     languageHelper: LanguageSpecificHelper,
     stateManager: StateManager
 }
@@ -41,27 +40,24 @@ export function main(args: string[]) {
 
     let finalResult = calculateResult(workingDirectory, conf, objects);
     printLogsMessages(logMessages);
-    printResultByMetric(objects);
     console.log("The result was " + finalResult);
-    objects.stateManager.save(finalResult);
+   
 
     if (finalResult < conf.absolute_threshold) {
         objects.stateManager.save(finalResult);
-        throw new Error("Threshold was not reached");
+        throw new Error("Threshold was not reached: The minimum value must be "+conf.absolute_threshold);
     }
     else if (objects.stateManager.relativeLossTooHigh(finalResult,conf.relative_threshold)) {
         objects.stateManager.save(finalResult);
-        throw new Error("Difference from last run is too high");
+        throw new Error("Difference from last run is too high: The maximum allowed difference is "+conf.relative_threshold);
 
     }
+    else{
+        objects.stateManager.save(finalResult);
+        console.log("The documentation quality check passed")
+    }
 }
-function printResultByMetric(objects: SharedObjects) {
-    /*console.log("Results by metric:");
-    for (let m of objects.resultByMetric) {
-        let res = m[1].getAggregatedResult("").getResult();
-        console.log(m[0], res);
-    }*/
-}
+
 let logMessages:LogMessage[]=[]
 function calculateResult(workingDirectory: string, conf: EvaluatorConf, objects: SharedObjects): number {
     let traverser = new DirectoryTraverser(workingDirectory, conf);
@@ -95,10 +91,9 @@ function initializeObjects(conf: EvaluatorConf, workingDirectory: string): Share
     let parser = ParserFactory.createParser(conf.parser);
     let fileAnalyzer = new FileAnalyzer();
     let builder = MetricManager.getNewMetricResultBuilder(conf.builder,weightResolverTuple , conf.builder_params);
-    let resultByMetric: Map<string, MetricResultBuilder> = new Map();
     let stateManager = StateManagerFactory.createStateManager(conf.state_manager, workingDirectory);
 
-    return { parser, fileAnalyzer, builder, metrics, resultByMetric, languageHelper, stateManager };
+    return { parser, fileAnalyzer, builder, metrics,  languageHelper, stateManager };
 }
 function printLogsMessages(logMessages: LogMessage[]) {
     console.log("Log messages:");
