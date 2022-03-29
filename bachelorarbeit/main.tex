@@ -135,12 +135,17 @@
 
 
 \input{Main/Metriken}
-
-\chapter{Evaluation}
-	\label{sec:evaluation}
+\begingroup
+\renewcommand{\cleardoublepage}{} % TODO maybe removing this and next
+\renewcommand{\clearpage}{}
+\chapter{Evaluation}\label{sec:evaluation}
+\endgroup
 	\input{Evaluation/eval.tex}
-
-\chapter{Fazit}
+\begingroup
+\renewcommand{\cleardoublepage}{} % TODO maybe removing this and next
+\renewcommand{\clearpage}{}
+\chapter{Fazit}\label{chapter:conclusion}
+\endgroup
 \label{sec:conclusion}
 \input{Conclusion/conclusion}
 

@@ -1,4 +1,5 @@
  \begin{figure}[ht!]
+ \centering
  \scalebox{0.8}{
  \begin{tikzpicture}
  \pgfmathsetlengthmacro\breite{6cm}
@@ -30,20 +31,20 @@ minimum height=\hoehe
 \begin{scope} {0,-10}
        \begin{object}[text width=8cm]{fileObj}{-4,-4}
         \instanceOf{FileComponent}
-        \attribute{name = "filepath"}
+        \attribute{name = filepath}
         \attribute{parent = null}
         \attribute{children={[}classObj{]}}
       \end{object}
       \begin{object}[text width=8cm]{classObj}{-4,-8 }
         \instanceOf{ClassComponent}
-        \attribute{name="Main"}
+        \attribute{name="Main}
         \attribute{parent=fileObj}
         \attribute{children={[}methodObj{]}}
           \attribute{metaInformation=meta}
       \end{object}
     \begin{object}[text width=8cm]{methodObj}{-4,-12}
         \instanceOf{MethodComponent}
-        \attribute{name="test"}
+        \attribute{name=test}
         \attribute{parent=classObj}
         \attribute{params={[}paramsObj{]}}
         \attribute{metaInformation=meta2}

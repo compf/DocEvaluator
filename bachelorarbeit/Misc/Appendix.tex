@@ -4,6 +4,7 @@
 
 
 \chapter{Änderungen an der Parserdatei}
+
 \begin{table}[h!]
     \centering
     \begin{tabular}{m{0.75cm}|m{4cm}|m{10cm}}
@@ -66,7 +67,7 @@
          \item[state\_manager] Kann verwendet werden, um festzulegen, wie das letzte Ergebnis der Dokumentationsqualität gespeichert werden soll. Weitere Möglichkeiten können durch Erweiterung der \textit{StateManagerFactory} hinzugefügt werden.
          
          \item[relative\_threshold] Der maximale  relative Abstand zur letzten Dokumentationsqualität bevor eine Fehlermeldung geworfen wird.
-         \item[builder\_params] Parameter für die \textit{MetricResultBuilder}. Diese wird aktuell nur von dem Squale-Builder (Kapitel (Kapitel \ref{chapter:squale}) genutzt
+         \item[builder\_params] Parameter für die \textit{MetricResultBuilder}. Diese wird aktuell nur von dem Squale-Builder (Kapitel \ref{chapter:squale}) genutzt
         
         
         
@@ -194,9 +195,10 @@ und -rückgabewerte]
 
 
 \chapter{Rohdaten der Geschwindigkeitsmessung}\label{chapter:raw_speed_data}
-\begin{table}[]
+Diese drei Tabellen beschreiben die Rohdaten der Geschwindigkeitsmessung. Alle Werte sind in Sekunden und auf drei Nachkommastellen gerundet. 
+\begin{table}[ht!]
     \centering
-    \begin{tabular}{c|c|c}
+    \subfloat[Zeitdauer: Log4j]{\begin{tabular}{c|c|c}
 DE & CS &PMD\\\hline
 2.633 &	2.483&	1.824\\\hline
 		
@@ -217,16 +219,9 @@ DE & CS &PMD\\\hline
 2.579&	2.744&	1.890\\\hline
 		
 2.522&	2.215&	1.897\\\hline
-  \end{tabular}
-    \caption{Benötigte Zeitdauer bei Log4J in Sekunden}
-    \label{tab:raw_log4j}
-\end{table}
-
-
-\begin{table}[]
-    \centering
-    \sisetup{round-mode=places,round-precision=3}
-    \begin{tabular}{c|c|c}
+  \end{tabular}}
+  \hspace{0.5cm}
+  \subfloat[Zeitdauer: Eclipse]{ \begin{tabular}{c|c|c}
 DE & CS &PMD\\\hline
 
 16.719&	9.384&	8.036\\\hline
@@ -248,13 +243,12 @@ DE & CS &PMD\\\hline
 16.997&	9.299&	7.916\\\hline
 		
 16.712&	9.268&	7.944\\\hline
-    \end{tabular}
-    \caption{Benötigte Zeitdauer bei ArgoUML in Sekunden}
-    \label{tab:raw_argo}
+    \end{tabular}}
 \end{table}
 
 
-\begin{table}[]
+
+\begin{table}[ht!]
     \centering
     \begin{tabular}{c|c|c}
 DE & CS &PMD\\\hline
@@ -269,7 +263,7 @@ DE & CS &PMD\\\hline
 70.197&27.239&21.558\\\hline
 69.018&27.909&21.880\\\hline
     \end{tabular}
-    \caption{Benötigte Zeitdauer bei Eclipse JDT in Sekunden}
+    \caption{Zeitdauer: Eclipse JDT}
     \label{tab:raw_eclipse}
 \end{table}
 \chapter{Boxplots: Geschwindigkeitsevaluation}\label{appendix:boxplots}
@@ -293,5 +287,20 @@ Nachfolgend werden die Boxplots aus Kapitel \ref{chapter:eval_speed_result} in v
     \caption{Boxplot: Eclipse \ac{JDT} }
   
 \end{figure}
+\chapter{Bilder des Tools}
+In diesem Kapitel sind zwei Bilder des \textit{DoxEvaluators} abgedruckt, welche die zwei möglichen Ausgaben des Programms zeigen (Dokumentationsqualität ausreichend und nicht ausreichend):
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/appendix/passed.png}
+    \caption{Foto vom Tool: Dokumentationsqualität ausreichend}
+    \label{fig:passed}
+\end{figure}
+\begin{figure}[htbp!]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/appendix/absolute_threshold.png}
+    \caption{Foto vom Tool: Dokumentationsqualität zu schlecht}
+    \label{fig:absolute}
+\end{figure}
+
 \end{appendices}
 	
