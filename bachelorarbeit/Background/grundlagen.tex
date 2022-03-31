@@ -232,20 +232,23 @@ Das oben erwähnte Javadoc-Tool bietet ebenfalls die Möglichkeit, beim Generier
 
 Neben den praktischen Tools, die den Softwareentwickler bei der Bewertung der Softwaredokumentation unterstützen, wurden auch einige wissenschaftliche Arbeiten veröffentlicht, die sich mit Metriken über Softwaredokumentation auseinandersetzen. In diesen Arbeiten werden auch Programme vorgestellt. welche diese Metriken nutzen, allerdings sind die Quelltexte bzw.  lauffähige Versionen der Programme ohne Weiteres nicht verfügbar, sodass ein Vergleich mit dem zu entwickelnden Tool nicht möglich ist. 
 
+Einige wissenschaftliche Arbeiten haben im weiteren Verlauf der Bachelorarbeit keine Relevanz und werden daher nur der Vollständigkeit halber erwähnt. Beispielsweise ermöglicht das Programm \textit{iComment}, welches in  \cite[S.~145ff.]{icomment} beschrieben wird, Inkonsistenzen zwischen Dokumentationen und Quellcode in C-Programmen zu finden. Die Autoren verwenden hierfür komplexere \ac{NLP}-Techniken und führen eine statische Quellcodeanalyse durch. Da diese Themenblöcke den Rahmen dieser Bachelorarbeit sprengen würden, werden sie nicht weiter verfolgt.
+
 
 \subsubsection{Quasoledo}\label{chapter:Quasoledo}
-In \cite[S.~4-10]{HowDocumentationEvolvesoverTime} geben die Autoren einige Metriken an, die sie für die Bewertung der Softwaredokumentation als nützlich erachten, und stellen ein Programm namens \enquote{Quasoledo} vor, dass mittels dieser Metriken Softwaredokumentationen analysieren kann. Zu den Metriken gehören z.~B.  \textit{ANYJ},  welches den Anteil der dokumentierten Deklarationen an allen Deklarationen beschreibt und \textit{KINCAID}, welches die Lesbarkeit von Texten beschreibt.
+In \cite[S.~4-10]{HowDocumentationEvolvesoverTime} geben die Autoren einige Metriken an, die sie für die Bewertung der Softwaredokumentation als nützlich erachten, und stellen ein Programm namens \textit{}{Quasoledo} vor, dass mittels dieser Metriken Softwaredokumentationen analysieren kann. Zu den Metriken gehören z.~B.  \textit{ANYJ},  welches den Anteil der dokumentierten Deklarationen an allen Deklarationen beschreibt und \textit{KINCAID}, welches die Lesbarkeit von Texten beschreibt.
 
 Die Arbeit wertet anschließend die Javadoc-Dokumentation von Eclipse aus und findet heraus, dass öffentliche Methoden häufiger dokumentiert sind und ihre Dokumentation oft lesbarer ist. Außerdem wenden die Autoren das Tool auf die gesamte Versionshistorie von Eclipse bis zum 8. April 2006 an und plotten den Verlauf der Dokumentationsqualität über diesem Zeitraum. Dabei wird sichtbar, dass die Qualität am Anfang des Projektes noch sehr stark schwankt, aber nach einiger Zeit recht konstant bleibt. 
 \subsubsection{JavaDocMiner}
-Eine weitere Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der \enquote{JavaDocMiner} \cite[S.~68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In diesem Konferenzpapier wird ein Programm beschrieben, welches mittels einfacher Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Das Tool extrahiert aus XML-Dateien, die mittels eines selbst geschriebene Doclet aus Javadoc erstellt wurden, die notwendigen Informationen und wendet dann auf diese XML-Struktur die Metriken an. 
+Eine weitere Arbeit, die eine der Grundlagen dieser Bachelorarbeit ist, ist der \textit{JavaDocMiner} \cite[S.~68-79]{AutomaticQualityAssessmentofSourceCodeComments:TheJavadocMiner}. In diesem Konferenzpapier wird ein Programm beschrieben, welches mittels einfacher Heuristiken eine Einschätzung der Softwaredokumentation beschrieben. Das Tool extrahiert aus XML-Dateien, die mittels eines selbst geschriebene Doclet aus Javadoc erstellt wurden, die notwendigen Informationen und wendet dann auf diese XML-Struktur die Metriken an. 
 
 Insgesamt verwendeten die Autoren viele Metriken aus dem Tool \hyperref[chapter:Quasoledo]{Quasoledo}, führen aber neue auch Metriken ein. dazu gehört eine Metrik, welche Anzahl der Abkürzungen zählen, da diese laut der Arbeit vermieden werden sollten. Auch die durchschnittliche Anzahl an Wörtern pro Javadoc-Kommentar wird als Metrik verwendet. 
 
 Anschließend wenden die Autoren das Tool auf den Quellcode von \textit{ArgoUML} und \textit{Eclipse} an und prüfen, ob es eine Korrelation zwischen der Anzahl an Bugs und der Qualität der Dokumentation nach den benannten Metriken und finden dabei heraus, dass die Kincaid-Metrik nur wenig mit der Anzahl der Bugs korreliert, während es bei anderen Metriken wie z.~B. \textit{ANYJ} eine starke negative Korrelation gibt. 
 
+\begin{comment}
 \subsubsection{Doc2Spec}
-Die Autoren in \cite[S.~307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} stellen ein Tool namens \enquote{Doc2Spec} vor und erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
+Die Autoren in \cite[S.~307ff.]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation} stellen ein Tool namens \textit{Doc2Spec} vor und erläutern ein Verfahren, um herauszufinden, ob eine API korrekt verwendet wurde. Dabei werden die Javadoc-Kommentare einer API analysiert und dann mit der Verwendung der API verglichen, um Fehler bei der Handhabung der API zu finden. 
 
 Für jede dokumentierte Methode der API wird ein Aktion-Ressource-Paar erstellt. Diese beschreibt, welche Aktion auf welche Ressource ausgeführt wird. Bei einer Methode namens \textit{close}, die mit dem englischen Text \enquote{Initiates close of the connection handle at the
 application level} dokumentiert wird, lässt sich beispielsweise schlussfolgern, dass das Aktion-Ressource-Paar \textit{(close,connection)} sein kann; denn die Aktion \textit{close} bezieht sich auf die Ressource \textit{connection}. Dabei sind aber manchmal mehrere Aktion-Ressource-Paare möglich \cite[S.~308]{InferringResourceSpecificationsfromNaturalLanguageAPIDocumentation}.
@@ -254,23 +257,23 @@ Anschließend werden die gefundenen Ressourcen anhand der Klassenhierarchie pass
 
 Mit diesen generierten Informationen kann dann bei Quelltext, welches diese API verwendet, geprüft werden, ob die Methoden dieser Ressource in der richtigen Reihenfolge aufgerufen werden. Beispielsweise muss eine Ressource zuerst erzeugt und gesperrt werden, bevor irgendwelche Manipulationen angewendet werden. Außerdem kann geprüft werden, ob eine Ressource auch wieder freigegeben und geschlossen wird, sodass Speicherlecks verhindert werden. Dabei werden alle möglichen Ausführungspfade einer Methode geprüft, da ein fehlendes Freigeben von Ressourcen z.~B. im Ausnahmefall ein häufiger Fehler sein kann. 
 
-
+\end{comment}
 \subsubsection{Javadoc-Fehler in Open-Source-Software}
 In \cite[S.~249ff.]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware} analysieren die Autoren 163 Open-Source-Projekte aus GitHub, die in Java geschrieben sind, und prüfen, wie oft Komponenten nicht mit Javadoc kommentiert sind oder die Dokumentation unvollständig ist. Dabei werden private Komponenten, Getter und Setter von der Analyse ausgeschlossen, da sie laut den Autoren nicht zwangsläufig dokumentiert sein müssen. 
 
 Das Ergebnis der Studie lautet, dass Methoden besonders oft Javadoc-Fehler aufweisen. Wird dies allerdings in Relation zur Häufigkeit der jeweiligen Komponente gesetzt, so haben Konstruktoren eine hohe Wahrscheinlichkeit, fehlerhaftes Javadoc zu besitzen. Dies könnte laut den Autoren daran liegen, dass Konstruktoren als selbsterklärend wahrgenommen werden. Außerdem ist der Grund für Javadoc-Fehler in den meisten Fällen, dass eine Komponente komplett undokumentiert ist. Auch undokumentierte \enquote{@throws}-Tags, welche die möglichen Ausnahmen einer Methode beschreiben, sind sehr häufig. Deutlich seltener als undokumentierte Ausnahmen sind undokumentierte Parameter und Rückgabewerte. Außerdem stellt die Studie fest, dass solche Javadoc-Fehler im Mittel über zwei Jahre nicht behoben werden, sodass die Softwaredokumentation oft unvollständig ist. 
 
-
+\begin{comment}
 \subsubsection{iComment}
-Das Programm \enquote{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
+Das Programm \textit{iComment}  wurde hauptsächlich für C-Programme entwickelt, um Probleme zwischen der Dokumentation und dem Quellcode zu finden. Dabei konzentriert sich das Programm auf das Finden von Synchronisationsproblemen, die bei Programmen mit mehreren Threads auftauchen können.  Bei einem exklusiven Ausschluss besitzt eine Methode einen sogenannten Lock auf ein Objekt und nur diese Methode darf mit dem Objekt arbeiten.
 
 Setzt nun die Dokumentation einen Lock voraus, aber der Programmierer hat keinen Lock angefordert, können sehr schnelle und subtile Bugs entstehen, die nur schwer findbar sind. \cite[S.~145ff.]{icomment}
 
 Das Programm wurde auf dem Quellcode des Linux-Kernels und Mozilla angewandt und dabei mögliche Bugs gefunden, die später auch von den Entwicklern bestätigt wurden\cite[S.~146.]{icomment}.
-
+\end{comment}
 
 \subsubsection{@tComment}\label{@tComment}
-Ein anderer Ansatz, der ebenfalls mit Javadoc arbeitet, wird \enquote{@tComment} genannt \cite[S.~1ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies}. Dabei wurde die Konsistenz der Javadoc-Dokumentation mit dem tatsächlichen Programmcode verglichen. Anders als die vorherigen Ansätze, wird hier das Programm dynamisch ausgeführt. Dabei werden die verschiedenen Methoden und ihr dazugehörige Javadoc-Dokumentation analysiert und daraus mittels einfacher Heuristiken ermittelt, ob ein  Nullwert für einen Parameter eine Inkonsistenz zwischen Dokumentation und Quellcode offenbart.
+Ein anderer Ansatz, der ebenfalls mit Javadoc arbeitet, wird \textit{@tComment} genannt \cite[S.~1ff.]{@tComment:TestingJavadocCommentstoDetectComment-CodeInconsistencies}. Dabei wurde die Konsistenz der Javadoc-Dokumentation mit dem tatsächlichen Programmcode verglichen. Anders als die vorherigen Ansätze, wird hier das Programm dynamisch ausgeführt. Dabei werden die verschiedenen Methoden und ihr dazugehörige Javadoc-Dokumentation analysiert und daraus mittels einfacher Heuristiken ermittelt, ob ein  Nullwert für einen Parameter eine Inkonsistenz zwischen Dokumentation und Quellcode offenbart.
 
 Beispielsweise kann die Dokumentation einer Java-Methode beschreiben, dass ein Parameter nicht null sein darf. Daraus kann gefolgert werden, dass ein Nullwert für diesen Parameter zu einer Ausnahme führt. Wenn diese Ausnahme dann auch genauer in der Dokumentation genauer spezifiziert ist, sollte genau diese Ausnahme bei einem Nullwert geworfen werden. 
 
