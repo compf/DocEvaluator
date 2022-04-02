@@ -29,7 +29,7 @@ Bei der Verwendung des Flesh-Scores sollte beachtet werden, dass die Bestimmung 
 Der \textbf{Gunning-Fog-Index} ist eine ähnliche Formel. Sie berücksichtigt nicht die Anzahl der Silben, sondern die Zahl der komplizierten Wörter. Ein Wort gilt dabei als kompliziert, wenn es mehr als zwei Silben hat. Dabei gibt der Gunning-Fog-Index die Anzahl an Schuljahren zurück, die ein Leser absolviert haben muss, um den Text gut verstehen zu können. Die Definition des komplizierten Wortes ist aber umstritten. So ist beispielsweise das Wort \enquote{vacation} drei Silben lang, aber nicht unbedingt kompliziert \cite[S.~10]{bogert1985defense}.
 
 \bigskip
-Eine weitere Möglichkeit zu Bewertung der Semantik der Dokumentation ist, die Dokumentation mit dem Namen der dokumentierten Komponente zu vergleichen. Ein Kommentar, der einen Großteil des Namens der Komponente wiederholt bietet keinen Mehrwert. Auch ein Kommentar, der keinen Zusammenhang mit der dokumentierten Komponente erkennen lässt, verliert an Nutzen \cite[S.~86]{Qualityanalysisofsourcecodecomments}.
+Eine weitere Möglichkeit zu Bewertung der Semantik der Dokumentation ist ein Vergleich der Dokumentation mit dem Namen der dokumentierten Komponente. Ein Kommentar, der einen Großteil des Namens der Komponente wiederholt bietet keinen Mehrwert. Auch ein Kommentar, der keinen Zusammenhang mit der dokumentierten Komponente erkennen lässt, verliert an Nutzen \cite[S.~86]{Qualityanalysisofsourcecodecomments}.
 Um diese \textbf{Kohärenz} zu messen, kann die Anzahl der gemeinsamen Wörter zwischen Dokumentation und des Namens der dokumentierten Komponente ermittelt werden und dies durch die Zahl der Wörter der Dokumentation geteilt werden. Die Autoren in \cite[S.~87]{Qualityanalysisofsourcecodecomments} vertreten die Ansicht, dass dieser \textbf{Kohärenzkoeffizient} von mehr als 0,5 oder gleich 0 auf eine schlechte Dokumentation hindeutet, da es im ersteren Fall eine starke Ähnlichkeit zwischen dem Namen und der Dokumentation gibt und im zweiten Fall überhaupt keine Gemeinsamkeiten existiert. Die Implementation der Metrik bewertet in beiden Fällen die Dokumentation mit 0 Punkten, in allen anderen Fällen vergibt sie 100 Punkte.
 
 	\begin{figure}[ht!]
@@ -64,7 +64,7 @@ Dazu können pro Verstoß Fehlerpunkte vergeben werden. Diese Fehlerpunkte könn
      B(l)=S-(S-B_0)*e^{-k*l}
  \end{equation} 
  
- übergeben werden, die eine beschränkt fallende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die beste Bewertung,  $k$ eine Konstante für die Wachstumsrate und $l$ die Zahl der Fehlerpunkte. Durch diese Funktion erhalten Kommentare mit vielen Fehlerpunkten eine geringere Bewertung als Kommentar mit keinen oder wenigen Fehlerpunkten. Die Wachstumsrate $k$ kann dabei parametrisiert sein und sollte auch von der jeweiligen Fehlerkategorie abhängen. So kann beispielsweise argumentiert werden, dass Rechtschreibfehler weniger gravierend sind als fehlerhaftes \ac{HTML}. 
+ übergeben werden, die eine beschränkt fallende Exponentialfunktion ist. Dabei ist $S$ die untere Schranke für die Bewertung, $B_0$ die bestmögliche Bewertung,  $k$ eine Konstante für die Wachstumsrate und $l$ die Zahl der Fehlerpunkte. Durch diese Funktion erhalten Kommentare mit vielen Fehlerpunkten eine geringere Bewertung als Kommentar mit keinen oder wenigen Fehlerpunkten. Die Wachstumsrate $k$ kann dabei parametrisiert sein und sollte auch von der jeweiligen Fehlerkategorie abhängen. So kann beispielsweise argumentiert werden, dass Rechtschreibfehler weniger gravierend sind als fehlerhaftes \ac{HTML}. 
  
  Bei allen Metriken sollte allerdings beachtet werden, dass diese nur nach relativ einfachen Fehlern suchen. Bei einer Prüfung des \ac{HTML}-Inhaltes werden beispielsweise nur nicht geschlossene Tags detektiert. Auch falsch-positive Ergebnisse können auftreten, wenn beispielsweise bei der Rechtschreibprüfung ein nicht im Wörterbuch vorkommendes Wort, das aber korrekt geschrieben ist, bemängelt wird.   
  
@@ -80,9 +80,9 @@ Der arithmetische Mittelwert wird durch die Klasse \textit{MetricResultBuilder} 
 
 
 \subsubsection{Median}
-Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultate nach den bekannten Median-Algorithmus verarbeitet. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnisse gebildet. 
+Der Median der Einzelresultate wird von der Klasse \textit{MedianResultBuilder} berechnet. Dabei werden die Einzelresultate nach dem bekannten Median-Algorithmus verarbeitet. Bei einer geraden Anzahl an Elementen wird der Median aus dem Mittelwert der zwei infrage kommenden Ergebnisse gebildet. 
 
-Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat.  Zudem kann sich der Median stark ändern, wenn neue Komponenten hinzugefügt oder entfernt werden.
+Der Median berücksichtigt einzelne Ausreißer nicht und kann daher interessant sein, wenn ein allgemeines Bild von der Dokumentationsqualität erhalten werden soll. Es sollte aber beachtet werden, dass die Anwendung des Medians ein Sortiervorgang benötigt, der in den meisten Fällen eine Komplexität von $O(n*log(n))$ hat.  Zudem kann sich der Median stark ändern, wenn einzelne Komponenten hinzugefügt oder entfernt werden.
 
 
 \subsubsection{Gewichteter Mittelwert}\label{chapter:weighted_aggreg}
