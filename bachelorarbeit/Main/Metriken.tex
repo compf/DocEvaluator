@@ -107,7 +107,7 @@ Der gewichtete Median wurde leicht abweichend nach \cite[S.~37]{YAGER199835} imp
  
  Im ersten Schritt werden die Ergebnisse der einzelnen Metriken, die auf unterschiedliche Skalen basieren, auf einer Skala normalisiert. Die Autoren nutzen dafür das Intervall 0 bis 3, da so eine Einteilung in Ziel nicht erfüllt (0 bis 1), Ziel größtenteils erfüllt (1 bis 2) und Ziel erfüllt (2 bis 3) möglich ist. Diese normalisierten Ergebnisse werden von den Autoren als \enquote{Individual marks (IM)} (z.~dt. individuelle Bewertungen) bezeichnet \cite[S.~142]{AnEmpiricalModelforContinuousandWeightedMetricAggregation}. 
  
- Im nächsten Schritt werden die einzelnen Ergebnisse aggregiert. Dazu wird jeder IM mittels der Funktion
+ Im nächsten Schritt werden die einzelnen Ergebnisse aggregiert. Dazu wird jeder IM der Funktion
  \begin{equation}
      g(\text{IM})=\lambda^{-\text{IM}}
  \end{equation} übergeben. Dabei ist $\lambda$ eine Konstante, welche bei der Gewichtung der Ergebnisse hilft. Sollen schlechte Ergebnisse sehr hart bestraft werden, sodass bereits einige Fehler zu einer schlechten Bewertung führen, so muss $\lambda$ eine große Zahl sein. Durch die Wahl einer kleineren Zahl kann die Bewertung toleranter ausfallen. Aus den Ergebnissen der Funktion $g(IM)$ wird anschließend der Mittelwert $W_{avg}$ gebildet.
