@@ -31,28 +31,28 @@ minimum height=\hoehe
 \begin{scope} {0,-10}
        \begin{object}[text width=8cm]{fileObj}{-4,-4}
         \instanceOf{FileComponent}
-        \attribute{name = filepath}
+        \attribute{name = \enquote{path}}
         \attribute{parent = null}
         \attribute{children={[}classObj{]}}
       \end{object}
       \begin{object}[text width=8cm]{classObj}{-4,-8 }
         \instanceOf{ClassComponent}
-        \attribute{name="Main}
+        \attribute{name=\enquote{Main}}
         \attribute{parent=fileObj}
         \attribute{children={[}methodObj{]}}
           \attribute{metaInformation=meta}
       \end{object}
     \begin{object}[text width=8cm]{methodObj}{-4,-12}
         \instanceOf{MethodComponent}
-        \attribute{name=test}
+        \attribute{name=\enquote{test}}
         \attribute{parent=classObj}
         \attribute{params={[}paramsObj{]}}
         \attribute{metaInformation=meta2}
         \attribute{returnType=int}
       \end{object}
       \begin{object}[text width=2.5cm]{paramObj}{2,-10}
-        \attribute{name=a}
-        \attribute{type=int}
+        \attribute{name=\enquote{a}}
+        \attribute{type=\enquote{int}}
       \end{object}
     \begin{object}[text width=2.5cm]{meta}{2,-6}
         \attribute{isPublic=true}
