@@ -11,7 +11,7 @@ Durch diese Metriken kann geprüft werden, ob ausreichend viele Komponenten doku
 
 Als Erweiterung der Abdeckungsmetriken kann bei Methoden überprüft werden, ob auch ihre Parameter und der Rückgabewert dokumentiert sind. Dies ist sinnvoll, da diese auch Teil der Methode sind und zum Verständnis der Methode beitragen \cite[S.~5]{HowDocumentationEvolvesoverTime}. Zudem kann es sinnvoll sein, triviale Getter und Setter, die den Wert eines privaten Feldes auslesen oder verändern, bei der Bewertung auszuschließen. Schließlich haben diese Methoden einen klaren Zweck, der oft keiner weiteren Kommentierung bedarf \cite[S.~254]{JavadocViolationsandTheirEvolutioninOpen-SourceSoftware}.
 
-Bei der Abdeckung der Dokumentation von Methoden könnte auch die Länge der Methode berücksichtigt werden, was aber in der Literatur nicht erwähnt wird. Dabei wird jede Methode mit ihrem \ac{LOC} gewichtet und die Summe der \ac{LOC} der dokumentierten Methoden durch die Summe der \ac{LOC} aller Methoden geteilt wird. Dies hat den Vorteil, dass undokumentierte Getter und Setter, die nur wenige Codezeilen haben, das Ergebnis nicht so stark beeinflussen, aber trotzdem berücksichtigt werden. 
+Bei der Abdeckung der Dokumentation von Methoden könnte auch die Länge der Methode berücksichtigt werden, was aber in der Literatur nicht erwähnt wird. Dabei wird jede Methode mit ihrem \ac{LOC} gewichtet und die Summe der \ac{LOC} der dokumentierten Methoden innerhalb einer Klasse wird durch die Summe der \ac{LOC} aller Methoden der Klasse geteilt. Dies hat den Vorteil, dass undokumentierte Getter und Setter, die nur wenige Codezeilen haben, das Ergebnis nicht so stark beeinflussen, aber trotzdem berücksichtigt werden. 
 
 
 \subsection{Metriken, welche die Semantik überprüfen}\label{chapter:metrics_semantic}
@@ -115,7 +115,7 @@ Der gewichtete Median wurde leicht abweichend nach \cite[S.~37]{YAGER199835} imp
  Im Anschluss daran muss der Mittelwert wieder in den ursprünglichen Wertebereich abgebildet werden. Dazu wird die Umkehrfunktion
  \begin{equation}
      g^{-1}(W_{avg})=-\log_\lambda (W_{avg})
- \end{equation} angewendet. Dieses Ergebnis wird von den Autoren als \enquote{global mark (IM)} (z.~dt. globale Bewertung) bezeichnet und repräsentiert das endgültige Ergebnis.
+ \end{equation} angewendet. Dieses Ergebnis wird von den Autoren als \enquote{global mark (GM)} (z.~dt. globale Bewertung) bezeichnet und repräsentiert das endgültige Ergebnis.
  
  Durch diese Aggregierung werden Komponenten mit schlechten Ergebnissen stärker gewichtet und haben so einen größeren Einfluss auf das Gesamtergebnis. Allerdings kann dies bei der Dokumentation dazu führen, dass nur wenige schlecht dokumentierte Komponenten die Bewertung stark nach unten ziehen, sodass das Erreichen einer guten Bewertung einen hohen Aufwand erfordert. 
  
