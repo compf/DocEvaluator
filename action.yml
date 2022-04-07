@@ -1,4 +1,4 @@
-name: 'Javadoc_evaluator'
+name: 'DocEvaluator'
 description: 'A tool to check whether the documentation is sufficient'
 author: 'Timo Schoemaker'
 inputs:
