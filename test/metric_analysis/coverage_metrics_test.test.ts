@@ -1,8 +1,4 @@
-import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
-import { SimpleCommentPresentMetric } from "../../src/metric_analysis/metrics/simple_comment_present_metric";
-import { SimplePublicMembersOnlyMetric } from "../../src/metric_analysis/metrics/simple_public_members_only_metric";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
-import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { parseAndTestFile,testParsedFile,parse } from "./shared";
 let MetricNames=MetricManager.MetricNames;
 const commented_class=parse("testDir/java/commented_class.java");

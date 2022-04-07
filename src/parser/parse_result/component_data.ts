@@ -2,7 +2,7 @@
 /**
  * This interface contains basic information about components
  * For example whether the component is public
- * This interface should be implemented by parsers to store important information
+ * This interface should be implemented by parsers to store important language specific information
  */
 export interface ComponentMetaInformation {
     isPublic(): boolean;

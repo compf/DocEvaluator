@@ -20,7 +20,7 @@ export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
         let cls = component as HierarchicalComponent;
         let methods = cls.getChildren().filter((c) => c instanceof MethodComponent).map((c) => c as MethodComponent);
         let commentedLOC = 0;
-        let unCommentedLOC = 0;
+        let uncommentedLOC = 0;
         let ignoreLines = [""];
         if (params != undefined && params.ignore_lines != undefined) {
             ignoreLines = params.ignore_lines;
@@ -28,16 +28,16 @@ export class CommentedLinesRatioMetric extends ChildrenBasedMetric {
         for (let method of methods) {
             let loc = method.getLinesOfCode(ignoreLines);
             if (method.getComment() == null) {
-                unCommentedLOC += loc;
+                uncommentedLOC += loc;
             }
             else {
                 commentedLOC += loc;
             }
         }
-        if (commentedLOC + unCommentedLOC == 0) {
-            unCommentedLOC = 1; // prevent divison by zero
+        if (commentedLOC + uncommentedLOC == 0) {
+            uncommentedLOC = 1; // prevent divison by zero
         }
-        let perc = commentedLOC / (commentedLOC + unCommentedLOC);
+        let perc = commentedLOC / (commentedLOC + uncommentedLOC);
         let result = MIN_SCORE + (MAX_SCORE - MIN_SCORE) * perc;
         this.pushResult(builder, this.processResult(result, []), [], component);
     }

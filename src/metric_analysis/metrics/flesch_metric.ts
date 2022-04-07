@@ -85,7 +85,7 @@ export class FleschMetric extends ComponentBasedMetric {
         return textsToConsider;
     }
     /**
-     * calcuates the readability based on the flesh score
+     * calculates the readability based on the flesh score
      * but could be overriden to use another formula
      * @param vars The stats of the text, like number of words, syllables
      * @returns 

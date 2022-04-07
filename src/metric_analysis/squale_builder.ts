@@ -1,6 +1,5 @@
 import { LogMessage } from "./log_message";
 import { MAX_SCORE, MIN_SCORE } from "./metrics/documentation_analysis_metric";
-import { InvalidMetricResult, MetricResult } from "./metric_result";
 import { MetricResultBuilder } from "./metric_result_builder";
 enum NormalizationDirection { Tool_To_ISO = 1, ISO_To_Tool }
 /**

@@ -20,9 +20,18 @@ export class MethodComponent extends SingleMemberComponent {
     getParams(): { type: string, name: string }[] {
         return this.params;
     }
+    /**
+     * getter for the method body: Note that the method body is simply a string without further processing
+     * @returns the method body in an unstructured way
+     */
     getMethodBody(): string {
         return this.methodBody;
     }
+    /**
+     * returns the number of LOC of this method. Lines can be ignored if they
+     * @param ignoreLines specify strings that should be ignored while counting lines
+     * @returns the number of loc 
+     */
     getLinesOfCode(ignoreLines: string[]): number {
         return this.getMethodBody().split("\n").filter((s) => !ignoreLines.includes(s.trim())).length;
     }

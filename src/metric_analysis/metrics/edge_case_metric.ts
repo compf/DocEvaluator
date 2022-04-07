@@ -31,7 +31,7 @@ export class EdgeCaseMetric extends ComponentBasedMetric {
         let errorCount = 0;
         let params = this.getParams() as ParamsType;
         let logMessages: string[] = [];
-        let typeDescriptionPairs = this.getTypeDescriptionPairs(method, langSpec);
+        let typeDescriptionPairs = this.getTypeDescriptionTuples(method, langSpec);
         for (let pair of typeDescriptionPairs) {
             if (!NLP_Helper.hasOneOfTerms(pair.text, params.terms)) {
                 errorCount++;
@@ -65,7 +65,7 @@ export class EdgeCaseMetric extends ComponentBasedMetric {
         }
         this.hasExpandedTerms = true;
     }
-    private getTypeDescriptionPairs(component: MethodComponent, langSpec: LanguageSpecificHelper): { name: string, type: string, text: string }[] {
+    private getTypeDescriptionTuples(component: MethodComponent, langSpec: LanguageSpecificHelper): { name: string, type: string, text: string }[] {
         let result: { name: string, type: string, text: string }[] = [];
         let docParams = component.getComment()!.getTags();
         let params = component.getParams();

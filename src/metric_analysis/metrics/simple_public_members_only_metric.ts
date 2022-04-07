@@ -3,7 +3,7 @@ import { MIN_SCORE } from "./documentation_analysis_metric";
 import { SimpleCommentPresentMetric } from "./simple_comment_present_metric";
 
 /**
- * This metric only consider public members but otherwise it works the same as the SimpleCommentPresent
+ * This metric only considers public members but otherwise it works the same as the SimpleCommentPresent
  */
 export class SimplePublicMembersOnlyMetric extends SimpleCommentPresentMetric {
     shallConsider(component: Component) {

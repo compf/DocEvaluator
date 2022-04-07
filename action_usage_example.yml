@@ -10,7 +10,7 @@ on:
       - master
       - main
 jobs:
-  build:
+  check_documentation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

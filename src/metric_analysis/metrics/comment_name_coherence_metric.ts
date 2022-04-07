@@ -9,12 +9,12 @@ interface ParamType
 { 
     /**the upper threshold of the allowed comment name coherence, a value larger than this threshold means a too large coherence */
     upper_theshold: number,
-        /**the upper threshold of the allowed comment name coherence, a value larger than this threshold means a too large coherence */
+        /**the upper threshold of the allowed comment name coherence, a value smaller or equal than this threshold means a to low coherence */
      lower_threshold: number, 
      /** The maximum levenshtein distance to determine whether two words are similar*/
      levenshtein_distance: number }
 /**
- * Measures the coherence of comment and name of component
+ * Measures the coherence of comment and name of a method
  * This will ensure that a comment does not simply repeat the component's name but contains additional information
  * On the other hand comments that have nothing to do with the name will be punished
  */

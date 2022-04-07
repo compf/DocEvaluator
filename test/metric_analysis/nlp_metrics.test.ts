@@ -1,16 +1,10 @@
 
-import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
 import { CertainTermCountMetric } from "../../src/metric_analysis/metrics/certain_terms_count_metric";
 import { CommentNameCoherenceMetric } from "../../src/metric_analysis/metrics/comment_name_coherence_metric";
-import { MAX_SCORE, MIN_SCORE } from "../../src/metric_analysis/metrics/documentation_analysis_metric";
 import { DEFAULT_EDGE_CASE_TERMS, EdgeCaseMetric } from "../../src/metric_analysis/metrics/edge_case_metric";
-import { FleschMetric } from "../../src/metric_analysis/metrics/flesch_metric";
-import { Utils } from "../../src/metric_analysis/metrics/util";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
-import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { NLP_Helper } from "../../src/metric_analysis/NLP_Helper";
-import { JavaParser } from "../../src/parser/java_parser";
 import { parseAndTestFile,parse, testParsedFile } from "./shared";
 const languageHelper = LanguageSpecificHelperFactory.loadHelper("java");
 const emptyComment=parse("testDir/java/EmptyCommentTest.java");

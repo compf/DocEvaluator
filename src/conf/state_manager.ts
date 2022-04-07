@@ -8,7 +8,9 @@ export interface StateManager {
      */
     save(num: number): void;
     /**
-     * gets the stored number o null if no number was stored
+     * checks whether the documentation quality loss is too high
+     * @param newResult the new documentation quality result
+     * @package relativeThreshold the maximum allowed difference between old and new value
      * @return the stored number or null if number has not been stored
      */
     relativeLossTooHigh(newResult:number,relativeThreshold:number): boolean;

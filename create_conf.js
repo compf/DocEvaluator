@@ -13,7 +13,7 @@ const yamlTemplate={
         pull_request:{branches:["master","main"]},
     },
     jobs:{
-        build:{
+        check_documentation:{
             "runs-on":"ubuntu-latest",
             steps:[
                 {uses:"actions/checkout@v2"},
@@ -42,7 +42,7 @@ const options=[
 let args=commandLineArgs(options);
 let conf=new EvaluatorConf.EvaluatorConf();
 if(args.type=="yaml"|| args.type=="yml"){
-    let confObj=yamlTemplate.jobs.build.steps[1].with
+    let confObj=yamlTemplate.jobs.check_documentation.steps[1].with
     for(let key of Object.keys(conf)){
         if(typeof(conf[key])=="object"){
             confObj[key]=JSON.stringify(conf[key],null,2);

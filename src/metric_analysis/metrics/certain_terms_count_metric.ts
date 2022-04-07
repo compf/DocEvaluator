@@ -10,9 +10,9 @@ import { Utils } from "./util";
 interface ParamsType { 
     /** the growth factor*/
     k: number, 
-    /** Should the block tags be included in the checking of the certain words* */
+    /** Should the block tags be included in the checking of the certain words?* */
      consider_tags: boolean, 
-     /**ALl words that should be forbidden */
+     /**All words that should be forbidden */
      terms: string[], 
      /** The maximum levenshtein distance to determine whether two words are similar*/
      levenshtein_distance: number, 
@@ -20,7 +20,7 @@ interface ParamsType {
      use_default_terms_too: boolean
      }
 /**
- * Punishes comments with abbreviation as they are usually harder to read 
+ * Punishes comments with specific terms  since they could be not approbiate for comments
  */
 export class CertainTermCountMetric extends ComponentBasedMetric {
     public analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void {

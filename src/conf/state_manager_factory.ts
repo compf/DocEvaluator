@@ -18,6 +18,9 @@ export namespace StateManagerFactory {
                 throw new Error("Could not find state manager " + name);
         }
     }
+    /**
+     * A state manager that does absolutely nothing
+     */
     class NoneStateManager implements StateManager{
         relativeLossTooHigh(newResult: number, relativeThreshold: number): boolean {
             return false;

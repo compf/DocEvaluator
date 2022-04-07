@@ -1,6 +1,5 @@
-import { fstat, unlinkSync } from "fs";
+import {  unlinkSync } from "fs";
 import { env } from "process";
-import { json } from "stream/consumers";
 import { EnvCommentConfLoader, EvaluatorConf, JSONCommentConfLoader, loadConf, sanitize } from "../../src/conf/EvaluatorConf"
 import { StateManagerFactory } from "../../src/conf/state_manager_factory";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";

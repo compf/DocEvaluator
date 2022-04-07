@@ -19,8 +19,8 @@ export abstract class DocumentationAnalysisMetric {
      */
     public abstract analyze(component: Component, builder: AbstractMetricBuilder, langSpec: LanguageSpecificHelper): void
     /**
-     * 
-     * @param component Determines whether a component is worth checking
+     *  Determines whether a component is worth checking
+     * @param component the component to check
      */
     public abstract shallConsider(component: Component): boolean;
 
@@ -44,6 +44,14 @@ export abstract class DocumentationAnalysisMetric {
     protected processResult(result: number, logMessages: string[]): number {
         return result;
     }
+    /**
+     * a helper method to reduce complexity in metrics
+     * adds a result to the builder and used information from the metric
+     * @param builder the MetricResultBuilder
+     * @param score the score of the metric result
+     * @param logMessages  all log messages that have been generated
+     * @param component the component currently analyzed
+     */
     protected pushResult(builder: AbstractMetricBuilder, score: number, logMessages: LogMessage[], component: Component) {
         const componentName=component.constructor.name;
         const uniqueName=this.getUniqueName();
@@ -51,10 +59,22 @@ export abstract class DocumentationAnalysisMetric {
         const creatorTuple={path:filePath,metric:uniqueName,component:componentName};
         builder.processResult(new MetricResult(score, logMessages, creatorTuple));
     }
+    /**push all log messages to the logMessages array
+     * 
+     * @param component the component this log message applies to
+     * @param msg the log message that contains the relevant information
+     * @param logMessages the list of log messages to be returned by the metric
+     */
     protected pushLogMessage(component: Component, msg: string, logMessages: LogMessage[]) {
 
         logMessages.push(new LogMessage(msg, component,this.getUniqueName()));
     }
+    /**
+     * 
+     * @param messages a list of log messages from a metric
+     * @param component a component the log messages apply to
+     * @returns 
+     */
     protected createLogMessages(messages: string[], component: Component) {
         let result: LogMessage[] = []
         for (let msg of messages) {

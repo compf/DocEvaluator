@@ -33,6 +33,10 @@ export class StructuredComment {
     }
 
 }
+/**
+ * all block tags that have important meaning for tags
+ * other block tags can be defined as a string
+ */
 export enum StructuredCommentTagKind {
     PARAM = "@param",
     RETURN = "@return",

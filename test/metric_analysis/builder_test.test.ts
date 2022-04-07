@@ -1,20 +1,15 @@
-import { CommentedLinesRatioMetric } from "../../src/metric_analysis/metrics/commented_lines_ratio_metric";
 import { FileAnalyzer } from "../../src/metric_analysis/file_analyzer";
 import { MedianResultBuilder } from "../../src/metric_analysis/median_result_builder";
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResult } from "../../src/metric_analysis/metric_result";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { SimpleCommentPresentMetric } from "../../src/metric_analysis/metrics/simple_comment_present_metric";
-import { SimpleLargeMethodCommentedMetric } from "../../src/metric_analysis/metrics/simple_large_method_commented_metric";
-import { SimpleMethodDocumentationMetric } from "../../src/metric_analysis/metrics/simple_method_documentation_metric";
 import { SimplePublicMembersOnlyMetric } from "../../src/metric_analysis/metrics/simple_public_members_only_metric";
 import { WeightedMedianResultBuilder } from "../../src/metric_analysis/weighted_median_result_builder";
 import { WeightedMetricResultBuilder } from "../../src/metric_analysis/weighted_metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
-import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 import { PathWeightResolver, SimpleWeightResolver, StubResolver, WeightResolver } from "../../src/metric_analysis/weight_resolver";
 import { LanguageSpecificHelperFactory } from "../../src/metric_analysis/language_specific/language_specific_helper_factory";
-import { FormattingGoodMetric } from "../../src/metric_analysis/metrics/formatting_good_metric";
 import { SqualeResultBuilder } from "../../src/metric_analysis/squale_builder";
 const languageHelper = LanguageSpecificHelperFactory.loadHelper("java");
 

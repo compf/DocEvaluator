@@ -1,6 +1,6 @@
 {
   "name": "doc_evaluator",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "A tool to evaluate the documentation of source code",
   "type": "commonjs",
   "scripts": {

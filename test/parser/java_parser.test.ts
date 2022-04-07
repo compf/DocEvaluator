@@ -6,6 +6,8 @@ import { SingleMemberComponent } from "../../src/parser/parse_result/single_memb
 import { ClassComponent } from "../../src/parser/parse_result/class_component";
 import { GroupedMemberComponent } from "../../src/parser/parse_result/grouped_member_component";
 import { ParserFactory } from "../../src/parser/parser_factory";
+import { LogMessage } from "../../src/metric_analysis/log_message";
+import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 
 let tokens: Token[] = []
 const numberTokensMainJava = 33;
@@ -209,4 +211,18 @@ test("test ellipse parsing/ varargs parsing",()=>{
     expect(param.name).toBe("args");
    
 
+});
+// maybe moving test to another location
+test("test log message line counting",()=>{
+let parser=new JavaParser();
+let root=parser.parse("testDir/java/LineNumberTest.java");
+let cls=root.getChildren()[0] as HierarchicalComponent;
+let msg=new LogMessage("",cls,"") as any;
+expect(msg.lineStart).toBe(1);
+expect(msg.lineEnd).toBe(5);
+
+
+msg=new LogMessage("",cls.getChildren()[0],"");
+expect(msg.lineStart).toBe(6);
+expect(msg.lineEnd).toBe(11);
 });

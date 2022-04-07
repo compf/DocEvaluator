@@ -5,7 +5,9 @@ import { LogMessage } from "../log_message";
 import { MAX_SCORE, MIN_SCORE } from "../metrics/documentation_analysis_metric";
 import { MetricManager } from "../metric_manager";
 import { LanguageSpecificHelper } from "./language_specific_helper";
-
+/**
+ * Provides method to analyze java specific documentation informations
+ */
 export class JavaSpecificHelper extends LanguageSpecificHelper {
     rateDocumentationCompatibility(component: Component, results: number[], logMessages: LogMessage[]): void {
         let methodData = component.getComponentMetaInformation() as JavaMethodData;

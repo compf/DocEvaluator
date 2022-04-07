@@ -39,7 +39,7 @@ export function main(args: string[]) {
 
 
     let finalResult = calculateResult(workingDirectory, conf, objects);
-    printLogsMessages(logMessages);
+    printLogMessages(logMessages);
     console.log("The result was " + finalResult);
    
 
@@ -95,7 +95,7 @@ function initializeObjects(conf: EvaluatorConf, workingDirectory: string): Share
 
     return { parser, fileAnalyzer, builder, metrics,  languageHelper, stateManager };
 }
-function printLogsMessages(logMessages: LogMessage[]) {
+function printLogMessages(logMessages: LogMessage[]) {
     console.log("Log messages:");
     for (let log of logMessages) {
         log.log();

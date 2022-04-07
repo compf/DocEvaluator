@@ -23,10 +23,16 @@ export namespace NLP_Helper {
         let numHardWords = syllables.filter((s) => s.syllables.length > 2).length;
         return { numSentences, numWords, numSyllables, numHardWords };
     }
+    /**
+     * Extract all tokens from a text.
+     * A token could be a word, a number etc.
+     * @param text any text to extract tokens, may not be null
+     * @returns  a list of tokens
+     */
     export function getTokens(text: string): string[] {
         return nlp.tokenize(text).termList().map((x) => x.text);
     }
-
+   
     function countSyllables(words: { text: string, syllables: string[] }[]): number {
         let sum = 0;
         for (let z of words) {
@@ -34,14 +40,23 @@ export namespace NLP_Helper {
         }
         return sum;
     }
+    /**
+     * calculate the levenshtein distance of two words
+     * @param word1  any word
+     * @param word2 any word
+     * @returns a number representing the levenshtein distance
+     */
     export function levenshtein(word1: string, word2: string): number {
         return (new Levenshtein(word1, word2)).distance
     }
-    export function countAbbreviations(text: string): number {
-        return nlp(text).abbreviations().length as unknown as number;
-    }
-    export function hasOneOfTerms(sentence: string, terms: string[]): boolean {
-        let corp = nlp(sentence);
+    /**
+     * Checks whether a text could be matched by one of the provided terms
+     * @param text a text to analyze
+     * @param terms a list of terms that could match this text
+     * @returns true, if a match has been found
+     */
+    export function hasOneOfTerms(text: string, terms: string[]): boolean {
+        let corp = nlp(text);
         corp.cache({ root: true })
         return terms.some((w) => corp.has(w));
     }

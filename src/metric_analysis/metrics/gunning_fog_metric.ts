@@ -26,6 +26,7 @@ export class GunningFogMetric extends FleschMetric {
             finalScore = (-25 / 16) * score * (score - 16);
         }
         else {
+            msgs.push("The comment is maybe a little bit to hard");
             finalScore = 0;
         }
         return finalScore;

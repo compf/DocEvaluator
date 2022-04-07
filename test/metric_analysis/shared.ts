@@ -3,7 +3,6 @@ import { JavaSpecificHelper } from "../../src/metric_analysis/language_specific/
 import { MetricManager } from "../../src/metric_analysis/metric_manager";
 import { MetricResultBuilder } from "../../src/metric_analysis/metric_result_builder";
 import { JavaParser } from "../../src/parser/java_parser";
-import { HierarchicalComponent } from "../../src/parser/parse_result/hierarchical_component";
 import { ParseResult } from "../../src/parser/parse_result/parse_result";
 let languageHelper = new JavaSpecificHelper();
 let javaParser=new JavaParser();

@@ -292,8 +292,8 @@ export class JavadocParser {
         return line.startsWith("@")
     }
     /**
-     * parse the comment text by finding all tags the general description
-     * @param text 
+     * parse the comment text by finding all tags of the general description
+     * @param text the text to analyze
      * @returns a StructuredComment instance
      */
     parseCommentText(text: string): StructuredComment {
@@ -331,7 +331,7 @@ export class JavadocParser {
     }
 }
 /**
- * Visits component and the associated comments
+ * Visits a component and the associated comments
  */
 class CommentComponentPairVisitor extends AbstractParseTreeVisitor<Component | null> implements JavaParserVisitor<Component | null>{
     protected defaultResult(): null | Component {

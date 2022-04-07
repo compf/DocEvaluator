@@ -55,7 +55,7 @@ export class SpellingMetric extends ComponentBasedMetric {
      * calculates how many words are probably misspelled
      * @param text the text to analyze
      * @param logMessages will be uesed to store log messages
-     * @param component the current component, will be used to fimnd whether a word is a name of another component defined in context
+     * @param component the current component, will be used to find whether a word is a name of another component defined in context
      * @returns the number of (probably) misspelled words
      */
     getMisspellingCount(text: string, logMessages: string[], component: Component): number {
