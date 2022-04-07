@@ -48,7 +48,7 @@
 \chapter{Konfiguration des Tools}
 \begin{description}
         \item[include]  Alle Dateien, die bei der Bewertung der Dokumentationsqualität berücksichtigt werden müssen
-        \item[Exclude]  Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen
+        \item[exclude]  Teilmenge von include, enthält Dateien, die nicht weiter betrachtet werden müssen
         \item[metrics]  Alle Metriken, die das Tool verwenden soll. Dies ist ein Array von Objekten mit der Struktur \enquote{(name,weight, unique\_name, params)}, wobei \textit{weight} das Gewicht der jeweiligen Metrik ist (Bei Algorithmen ohne Relevanz des Gewichts wird es ignoriert), \textit{name} der Name der Metrik und \textit{params} ein Objekt mit den Parametern der Metrik
         \item[absolute\_threshold] Mindestwert der Bewertung, die erreicht werden muss, sonst wird die Dokumentationsqualität nicht akzeptiert
        
@@ -112,7 +112,7 @@
     \item[Beschreibung] Prüft, ob alle Methodenparameter und Rückgabewert dokumentiert sind
     \item[Quellen] \cite[S. 5]{HowDocumentationEvolvesoverTime}
 \end{description}
-
+\clearpage
 \item[Anteil dokumentierter Methoden unter
 Berücksichtigung der LOC]
 \begin{description}
@@ -160,7 +160,7 @@ Komponentenname]
      \item[Quellen] Inspiriert von Regel in Checkstyle \cite{checkstyle_doc_metrics}
 \end{description}
 
-
+\clearpage
 \item[Rechtschreibfehler bestrafen] 
 
 \begin{description}
